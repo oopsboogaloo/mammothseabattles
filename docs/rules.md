@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.57**
+> Status: **Draft v0.58**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -201,6 +201,10 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 | Surgeon | **Automatically heals 1 wounded crew member per turn** (no Action needed) *(when: at Upkeep? ❓)* |
 | *(some crew or equipment)* | Peek at the treasure map deck (§8.2.1) |
 - Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
+- **8 Captain cards**, one per ship, currently **identical** in powers (they may differ later).
+- The **crew deck** contains **a Retired Captain**, so a ship that lost her Captain has a small chance of recruiting one back
+  *(powers: the same as a Captain? Q48)*.
+- **All ships are identical**; the only differences between ships come from their crew and damage.
 - **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
@@ -583,8 +587,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
   - ~~Captain at start~~ → every ship starts with a Captain (answered). Starting crew: Captain + 2 random (3 total)?
-  - Captains are all mammoths, no factions (answered). Is there one Captain card per ship (e.g. 8 different mammoth captains), and do
-    Captains differ in powers? Can a lost Captain ever be regained (e.g. recruited at port)?
+  - ~~Captains~~ → 8 identical mammoth Captains; a Retired Captain is in the crew deck (answered). Is the Retired Captain as strong as a Captain (3 cards)?
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
   - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
@@ -669,12 +672,13 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q36.** Is the point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
 - **Q28.** Are all 9 cards revealed at once, or one Part at a time?
 - **Q39a.** Check the derived rows of the full sail-move table (§6.3).
-- ~~Q2. Factions~~ → No factions; crew are prehistoric monsters, captains are mammoths (answered). Do ships differ at all (ship types), or are all identical?
+- ~~Q2. Factions~~ → No factions; crew are prehistoric monsters, captains are mammoths (answered). ~~Ship types~~ → all ships identical (answered).
 - **Q3a / Q3b / Q3c.** Teams (e.g. 4v4)? Minimum player count? Board size for each player count?
 - **Q18.** Board tile size and shape; rules for joining tiles.
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.58 — 8 identical Captains; Retired Captain in the crew deck; all ships identical.
 - v0.57 — no factions: crew are prehistoric monsters, all Captains are mammoths.
 - v0.56 — Surgeon heals 1 wounded crew per turn automatically.
 - v0.55 — crew special powers (e.g. Surgeon heals).
