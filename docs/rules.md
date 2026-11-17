@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.61**
+> Status: **Draft v0.62**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -467,6 +467,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - **Equipment cards** are mostly **single-use**, and can be **played at any time** *(exact timing windows: Q50)*.
 - Example: **Explosive cannon balls**: +2 DD to any attack.
 - Design contrast: **crew = permanent benefit; equipment = one-shot burst**.
+- **Information:** **crew are open** (face up, everyone can see them); **equipment is a hidden hand**.
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -602,7 +603,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   equipment; equipment mostly single-use, play any time). Still open:
   - Confirm the prototype wreck deck is "randomly a **crew** card or an **equipment** card".
   - How many wreck tokens at setup, and where (scenario setup, or chosen in turn)?
-  - Equipment: is there a limit on how many a ship can hold? Kept secret (in hand) or face up? Lost when she sinks (dropped into the new wreck?)
+  - ~~Equipment secret or open?~~ → hidden hand; crew are open (answered). Is there a limit on how many equipment cards a ship can hold? Are they lost when she sinks (dropped into the new wreck?)
+  - Is the **command-card hand** hidden too? (Assumed yes.)
   - "Any time" needs precise windows for the online version, e.g. explosive shot: played after a hit is declared, before rolling.
     Can equipment be played **during another player's attack** (e.g. a defensive item)?
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
@@ -708,6 +710,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.62 — crew open, equipment hidden.
 - v0.61 — wreck searching at Upkeep; wreck deck; equipment cards.
 - v0.60 — shipwrecks and the wreck deck.
 - v0.59 — Retired Captain: strongest crew, won't serve with a Captain (swap).
