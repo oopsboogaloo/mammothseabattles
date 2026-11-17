@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.86**
+> Status: **Draft v0.87**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -673,7 +673,9 @@ The same rules apply either way. **Teammates**:
 - **share goals**: treasure scored by any teammate counts for the team; in **Race**, a checkpoint only needs to be reached **once per team**;
 - **never hit each other** (no friendly fire, §7.1);
 - **can push each other**, but ramming a teammate deals **no DD**;
-- **can pass treasure** between them *(how: Q55)*.
+- **can pass treasure**: **ram your teammate** and knock her treasure loose **without the DD**, placing it in an empty hex next to her
+  (the normal knock-loose rule, §8.2.3); then pick it up as usual.
+- Treasure Hunt **target is 3 per team**, as for a single player (§8.2.5).
 
 Counts that depend on ships use the **number of ships**, not players or teams (e.g. treasures in play, §8.2.1).
 
@@ -764,8 +766,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q55. Teams and Fleets** (answered: teams and Fleets share the same teammate rules; one port per Fleets player; one hand per ship; shared
   treasure; Race checkpoints once per team; teammates push without DD and can pass treasure; Captain + 2 each). Still open:
   - ~~Port per team; table talk~~ → one port per team; teammates talk openly and may show cards (answered).
-  - How is treasure passed: by ramming your teammate (knock it loose without the DD, placing it next to her), or by ending a Part next to each other?
-  - Treasure Hunt target for teams (still 3)?
+  - ~~Passing treasure; team target~~ → ram and knock loose without the DD; target 3 (answered).
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
@@ -867,6 +868,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.87 — teams pass treasure by ramming (no DD); team target 3.
 - v0.86 — teams share one home port and may talk openly and show cards.
 - v0.85 — Teams (§8.6) generalised: player teams and Fleets share teammate rules; Fleets moved to §8.7.
 - v0.84 — Fleets: expert variant; one port per player; one hand per ship; shared goals; teammates push without DD.
