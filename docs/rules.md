@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.11**
+> Status: **Draft v0.12**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -164,7 +164,12 @@ After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 ## 6. Movement & actions
 
 ### 6.1 Sailing: basic rule
-*Movement without the Points of Sail rule: TBD (Q34).*
+Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
+
+| Sail level | Move phase |
+|---|---|
+| Half Sail | 1 hex forward |
+| Full Sail | 2 hexes forward |
 
 ### 6.2 Points of Sail *(optional rule, intended as the standard)*
 <img src="images/points-of-sail.jpg" width="420">
@@ -241,7 +246,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 **Wind (D5)**
 - ~~Q9~~ → Answered: points of sail chart (§6.2).
-- Q34. Without the optional points-of-sail rule, how far do Half and Full Sail move?
+- ~~Q34~~ → Answered: Half = 1, Full = 2 (§6.1).
 - Q35. Is there a lower sail level (Furled / No Sail = 0)? What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
 - Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
 - Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
@@ -290,6 +295,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.12 — basic sailing: Half 1, Full 2.
 - v0.11 — points of sail chart (optional, intended as standard).
 - v0.10 — 🐙 icon = sea monster movement (optional module, deferred).
 - v0.9 — cannon fire: both broadsides, 60° arcs, range 4.
