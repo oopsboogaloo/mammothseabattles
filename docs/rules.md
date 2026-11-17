@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.80**
+> Status: **Draft v0.81**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -238,7 +238,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
   A ship that already has a Captain and recruits her must **swap** (one of the two leaves). For a ship that has lost her Captain,
   she's a lucky find.
 - **All ships are identical**; the only differences between ships come from their crew and damage.
-- **Crew cap: 6** per ship. *(If a ship at 6 gains crew, e.g. from a wreck, does she swap or decline? Q48.)*
+- **Crew cap: 6** per ship. A ship at the cap that gains crew (e.g. from a wreck) may **swap** one of her crew for the new one.
 - **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 drawn at random ❓).
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
@@ -746,7 +746,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - ~~White panel~~ → special powers (answered). The full crew list with powers and card icons is needed. ~~Surgeon~~ → heals 1 wounded crew
     per turn automatically (answered). When: at Upkeep? Can she heal herself? Does she work while wounded?
   - Do powers stop working while that crew member is **wounded**?
-  - Gaining crew: refit (up to 3) and wrecks; any other way? ~~Maximum~~ → 6 (answered). At the cap: swap or decline?
+  - Gaining crew: refit (up to 3) and wrecks; any other way? ~~Maximum~~ → 6 (answered). ~~At the cap~~ → swap (answered).
   - Draw timing: at Upkeep, or at the start of Programming?
 - **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
   no firing through portals or caves). Still open:
@@ -829,6 +829,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.81 — at the crew cap, swap.
 - v0.80 — crew cap 6.
 - v0.79 — core game: searching a wreck gives a crew card.
 - v0.78 — pillar P0 (core must match RoboRally's fun); core vs add-on modules table.
