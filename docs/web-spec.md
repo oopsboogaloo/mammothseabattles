@@ -36,7 +36,7 @@ Purpose (from `online-version.md`): free, **teaches the game**, drives sales of 
 | NFR-9 | **Online-ready.** The same engine runs on a server later (authoritative, hidden information never sent to the wrong player). |
 | NFR-10 | **AI players** use the same interface as humans, and only see what their player can see (no cheating). |
 | NFR-11 | **Performance targets** (proposed): resolve a full turn headless in < 50 ms for 8 ships; ≥ 1,000 AI-vs-AI games per minute on a laptop for simulation; 60 fps board on a recent PC, ≥ 30 fps on iPad. |
-| NFR-13 | **Players own ships, one-to-many.** The data model, views, decisions, AI and UI separate **players** (seats) from **ships**: a player controls 1 or 2 ships (Fleets variant, rules §8.6), up to 8 ships in total. Built in from the start: retrofitting this later would touch everything. |
+| NFR-13 | **Teams, players and ships are separate.** The data model, views, decisions, AI and UI separate **teams**, **players** (seats) and **ships**: a team has 1+ players, a player controls 1 or 2 ships (Teams and Fleets, rules §8.6–8.7), up to 8 ships in total. Team rules (shared port, shared score, no friendly fire) work the same whether teammates are different players or one player's two ships. Built in from the start: retrofitting this later would touch everything. |
 | NFR-12 | **Accessibility.** Card bands are colour **and** icon coded (already true of the art); check colour-blind safety; readable at iPad size. |
 
 ---
