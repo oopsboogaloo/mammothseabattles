@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.14**
+> Status: **Draft v0.15**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -124,6 +124,25 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   - Empty **Steer** slot → no turn.
   - Empty **Action** slot → no action.
 
+### 3.5 Weather cards and weather circuit
+<img src="images/weather/dead-calm.png" width="130"> <img src="images/weather/light-north.png" width="130"> <img src="images/weather/firm-north.png" width="130"> <img src="images/weather/firm-se.png" width="130"> <img src="images/weather/strong-ne.png" width="130"> <img src="images/weather/gale-nw.png" width="130"> <img src="images/weather/new-weather-front.png" width="130">
+
+- Weather cards are **hex-shaped**. Each shows a **wind strength** and a **wind direction** on a 6-point compass
+  (**N, NE, SE, S, SW, NW**). These are the 6 directions of flat-topped hex sides, so the wind always runs along a hex direction.
+- **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next two
+  cards face up**. The circuit also **marks the tides** (§6.4).
+
+| Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
+|---|---|---|---|
+| Dead Calm | — | **No sail move** | 0 |
+| Light (e.g. North) | Light | **−1 all sail moves** | 0 ❓ |
+| Firm (e.g. North, SE) | Firm | none | 1 (Part III) |
+| Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
+| Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail** | 3 (Parts I–III) |
+| New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
+
+Notes: the Gale card is spelled "GAIL" on the current artwork. "DD" is not defined yet (Q38).
+
 ## 4. Setup
 _TBD_
 
@@ -159,7 +178,8 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 **settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
 
 ### 5.4 Upkeep and new turn
-After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
+After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Probably includes advancing the weather
+circuit and the tide (Q37).
 
 ## 6. Movement & actions
 
@@ -189,6 +209,15 @@ so there are 4 points of sail (mirrored port and starboard):
 - The fastest sailing is with the wind to your side and behind you (broad reach).
 - Sailing movement is ship movement, so ships **push** (§5.2 step 1).
 - This is separate from **wind drift** (§5.2 step 5), which the weather may also apply on top.
+
+### 6.3 Weather modifiers
+The current weather card changes sailing moves (§3.5): Dead Calm = no sail move; Light −1 all; Strong +1 Full Sail;
+Gale +1 all, plus DD for each Full Sail. These apply on top of the points of sail (Q39 for how they combine).
+
+### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
+- The tide level is marked on the weather circuit, so it's predictable.
+- Tides **change the board**: some terrain is sea at one tide and an obstacle at another.
+- *Which terrain, how many tide levels, and what happens to a ship caught out: Q40.*
 
 **Making it easy for players** (design goal). Ideas to playtest:
 - Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
@@ -248,9 +277,9 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Wind (D5)**
 - ~~Q9~~ → Answered: points of sail chart (§6.2).
 - ~~Q34~~ → Answered: Half = 1, Full = 2 (§6.1).
-- Q35. ~~Is there a No Sail level? Is it on the cards?~~ Yes, No Sail is a Sail band on the command cards (§3.3). What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
+- Q35. ~~Is there a No Sail level? Is it on the cards?~~ Yes, No Sail is a Sail band (§3.3). ~~Is wind always a hex direction?~~ Yes (§3.5). What sail level do ships start at?
 - Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
-- Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
+- Q10. Wind strengths: Dead Calm / Light / Firm / Strong / Gale (from the weather cards). Do Light and Dead Calm cause no drift? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
 
 **Tides & currents (D4)**
 - Q11. What do tides change: shallows/sandbars/rocks appearing and disappearing, current direction, or both? Is it on a fixed cycle or random?
@@ -267,8 +296,16 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q15. Damage model: hit locations (hull, mast/rigging, rudder, crew)? How does each one affect sailing and steering?
 - Q16. What happens at zero hull (sunk, respawn, out of the game)? Is there ramming damage?
 
+**Weather & tides (§3.5, §6.3, §6.4)**
+- Q37. Weather circuit: how many spaces? Does it advance once per turn at Upkeep? How exactly does it mark the tides (tide spaces on the circuit, or a tide symbol on the cards)?
+- Q38. What is **DD** (Gale: "1 DD per Full Sail")? Damage die? Who takes it, and when?
+- Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
+- Q39a. Combining modifiers with points of sail: does Light −1 make Full Sail windward −2 (2 hexes backwards), or is the minimum 0? Does Gale +1 let Half Sail move 1 hex into the wind? Does Dead Calm stop the Full Sail windward backwards move?
+- Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
+- Q40. Tides: how many levels (Low/Normal/High like Full Metal Planète)? Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
+
 **Board (§3)**
-- Q18. The cannon diagram uses **flat-topped hexes** with the ship facing a hex **side**. Confirm the board tiles use the same orientation. Tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
+- Q18. Flat-topped hexes are confirmed by the cannon diagram and the N/NE/SE/S/SW/NW compass on the weather cards. Tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
 - Q19. Confirm or correct every ❓ in §3.2.
 - Q20. Currents act after ship movement in **every step** (§5.2). Still open: do all current types act at once, or in an order (e.g. fast currents first)?
 - Q21. Is a current's turn absolute (the ship ends facing the arrow) or relative (turn 60° clockwise)?
@@ -296,6 +333,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.15 — weather cards, weather circuit, weather sail modifiers, tides (Full Metal Planète style).
 - v0.14 — No Sail confirmed as a card band.
 - v0.13 — No Sail level (no sailing move; currents and drift still apply).
 - v0.12 — basic sailing: Half 1, Full 2.

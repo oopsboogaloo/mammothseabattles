@@ -13,3 +13,4 @@ A board game in design, with a companion online version.
 
 - [`docs/rules.md`](docs/rules.md) — working rules specification (source of truth)
 - [`docs/research/roborally.md`](docs/research/roborally.md) — notes on RoboRally, the reference game
+- [`docs/research/full-metal-planete.md`](docs/research/full-metal-planete.md) — tide mechanic reference
