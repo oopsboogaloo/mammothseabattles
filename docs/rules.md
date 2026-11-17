@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.30**
+> Status: **Draft v0.31**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -73,7 +73,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
 | **Whirlpool portal** (numbered, e.g. "1") | Two matching whirlpools | **Core feature.** Paired portals; see §3.6. |
-| Sea caves A / B | Cave mouths on islands marked A and B, with exit arrows | Tunnels: enter A, exit at the other A, facing the arrow ❓ |
+| **Sea cave** (lettered, e.g. A, B) | Cave mouths on island edges, marked with letters and arrows | **Core feature.** Paired edge portals that change heading; see §3.2.2. |
 | Island | Land | Impassable; ships hitting it take collision damage? ❓ |
 | Reef / rocks | Pink spiky edges round islands; wreck-strewn rocky hexes with a skull | Hazard: damage, grounding, or sinking? ❓ |
 | Sandbanks | Yellow patterned areas | Shallows: impassable or slowing, **tide-dependent**? ❓ |
@@ -93,6 +93,16 @@ Portals are a **core** feature, not optional; they're a big part of the fun (as 
 - **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal *(what happens instead: Q45)*.
 - Assumed ❓: **arriving** at a whirlpool through the portal doesn't trigger it again (no infinite loop), and a ship that starts on a
   whirlpool and moves off it doesn't trigger it.
+
+### 3.2.2 Sea caves *(core rule)*
+Caves work like whirlpool portals (§3.2.1) with these differences:
+- They're paired by **letter** (A↔A, B↔B), not number.
+- A cave is on a **hex edge** (the cave mouth, on the side of an island hex), not a whole hex.
+- A ship enters a cave by **moving across the cave-mouth edge** into the island. She comes out of the partner cave's mouth
+  into the **sea hex in front of it**.
+- She **changes orientation**: she leaves **facing out of the partner cave mouth** (as the printed arrow shows), not keeping her old heading.
+- Like whirlpools, she presumably **continues any remaining movement** after coming out, **any movement** triggers it, and if
+  the exit hex is **occupied** she doesn't go through ❓ (Q46).
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -447,6 +457,12 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   - Confirm: arriving through a portal doesn't re-trigger it, and starting on a whirlpool and leaving doesn't trigger it.
   - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
   - Can cannon fire through a portal? (Assumed no.)
+- **Q46. Sea caves:**
+  - Confirm the ❓ points in §3.2.2: remaining movement continues, any movement triggers it (including currents, drift and being pushed),
+    and an occupied exit hex blocks it.
+  - Blocked: does the ship stay in front of the entrance, hitting the cave like land (collision damage?)
+  - Can a ship enter a cave mouth while moving **backwards** (Full Sail into the wind)? Which way does she face when she comes out?
+  - Backwards and sideways entry by drift or pushing: does the exit heading still follow the arrow?
 - **Q24. Board edge.** What happens when a ship sails or drifts off the map?
 - **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
 - **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
@@ -469,6 +485,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.31 — sea caves: lettered edge portals that set the exit heading.
 - v0.30 — whirlpool portal rules (core).
 - v0.29 — 9 spawn points; whirlpools confirmed as paired portals.
 - v0.28 — treasure map deck chooses spawn points; peeking is a possible crew ability.
