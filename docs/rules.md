@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.55**
+> Status: **Draft v0.56**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -196,7 +196,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 |---|---|
 | Captain (e.g. *Captain Mammoth*) | Draws 3 command cards; the most powerful crew |
 | Pirate | Draws 1 command card; no special power (basic crew) |
-| Surgeon | Can heal *(how exactly: Q48)* |
+| Surgeon | **Automatically heals 1 wounded crew member per turn** (no Action needed) *(when: at Upkeep? ❓)* |
 | *(some crew or equipment)* | Peek at the treasure map deck (§8.2.1) |
 - Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
 - **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
@@ -585,8 +585,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
   - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
-  - ~~White panel~~ → special powers (answered). The full crew list with powers and card icons is needed. Surgeon: does she heal 1 wounded
-    crew per turn automatically, make Heal actions stronger, or allow healing without using an Action slot?
+  - ~~White panel~~ → special powers (answered). The full crew list with powers and card icons is needed. ~~Surgeon~~ → heals 1 wounded crew
+    per turn automatically (answered). When: at Upkeep? Can she heal herself? Does she work while wounded?
   - Do powers stop working while that crew member is **wounded**?
   - How do you gain crew (recruit at port, rescue, capture)? Maximum crew?
   - Draw timing: at Upkeep, or at the start of Programming?
@@ -672,6 +672,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.56 — Surgeon heals 1 wounded crew per turn automatically.
 - v0.55 — crew special powers (e.g. Surgeon heals).
 - v0.54 — everyone starts with a Captain; sinking loses the Captain (respawn with 3 random crew).
 - v0.53 — on return: fully repaired, 3 crew; treasure drops where she sank.
