@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.8**
+> Status: **Draft v0.9**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -164,7 +164,19 @@ After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 _TBD_
 
 ## 7. Combat / conflict resolution
-_TBD_
+
+### 7.1 Cannon fire
+<img src="images/cannon-fire-arcs.png" width="420">
+
+- **Fire Cannons** (Action phase) fires **both broadsides** at once.
+- **Range: 4 hexes.**
+- **Arc** (from the diagram, with flat-topped hexes and the ship's bow pointing at a hex side): each broadside covers the
+  **60° wedge abeam**, bounded by the forward-quarter and aft-quarter hex directions on that side, **including the
+  hexes on those two boundary lines**. That's 2 + 3 + 4 + 5 = **14 hexes per side, 28 in total**.
+  No fire forward or aft; the hexes directly ahead and astern are always safe.
+- Engine note: in cube coordinates, a broadside arc is the set of hexes within distance 1–4 that lie in the sextant
+  between the two neighbour directions on that side of the ship.
+- *Targets, line of sight and damage: Q33.*
 
 ## 8. Winning & game end
 _TBD_
@@ -202,13 +214,18 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q12. Currents: distances and order of activation (like fast/slow conveyors)? Do they rotate ships?
 
 **Combat & damage (D6, D7)**
-- Q13. Firing arcs on a hex: which hex sides count as port and starboard? Range? Line of sight?
-- Q14. Is cannon fire programmed per step, per side (port/starboard/both/hold)? Is there limited ammo or reloading?
+- ~~Q13~~ → Answered: both broadsides, 60° wedge, range 4 (§7.1).
+- Q14. Any limit on firing besides having the card (ammo, reload, crew needed)? Do other cards fire only one side, or other weapons fire forward ("mostly broadside")?
+- Q33. Cannon resolution:
+  - Does a broadside hit **every** ship in the arc, only the **nearest**, or a target the firer chooses?
+  - Line of sight: do islands, reefs, fog or other ships block shots?
+  - How much damage does a hit do? Does it vary with range? Is there a roll to hit?
+  - Is all firing simultaneous within a Part?
 - Q15. Damage model: hit locations (hull, mast/rigging, rudder, crew)? How does each one affect sailing and steering?
 - Q16. What happens at zero hull (sunk, respawn, out of the game)? Is there ramming damage?
 
 **Board (§3)**
-- Q18. Hex orientation and tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
+- Q18. The cannon diagram uses **flat-topped hexes** with the ship facing a hex **side**. Confirm the board tiles use the same orientation. Tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
 - Q19. Confirm or correct every ❓ in §3.2.
 - Q20. Currents act after ship movement in **every step** (§5.2). Still open: do all current types act at once, or in an order (e.g. fast currents first)?
 - Q21. Is a current's turn absolute (the ship ends facing the arrow) or relative (turn 60° clockwise)?
@@ -236,6 +253,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.9 — cannon fire: both broadsides, 60° arcs, range 4.
 - v0.8 — card numbers are initiative.
 - v0.7 — ship board layout (Parts I–III); order is Move → Steer → Currents → Action → Wind drift; wind strength sets drift count; empty slots defined; sail level persists.
 - v0.6 — command cards (3 bands), 3 × 3 ship board, step order: movement → currents → wind. Currents don't push.
