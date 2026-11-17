@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.85**
+> Status: **Draft v0.86**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -668,7 +668,8 @@ mode is a plug-in objective module on top of a shared rules core.
 ### 8.6 Teams
 Ships can be on **teams**: either **players on a team** (e.g. 4 players in 2 teams of 2) or **one player commanding two ships** (Fleets, §8.7).
 The same rules apply either way. **Teammates**:
-- **share one home port** (refit, scoring, coming back after sinking) ❓ *(confirm for player teams: Q55)*;
+- **share one home port** (refit, scoring, coming back after sinking);
+- **talk openly**: teammates may discuss plans and show each other their hands and programs;
 - **share goals**: treasure scored by any teammate counts for the team; in **Race**, a checkpoint only needs to be reached **once per team**;
 - **never hit each other** (no friendly fire, §7.1);
 - **can push each other**, but ramming a teammate deals **no DD**;
@@ -762,9 +763,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). ~~Entering by drift, current or push~~ → also sinks (answered).
 - **Q55. Teams and Fleets** (answered: teams and Fleets share the same teammate rules; one port per Fleets player; one hand per ship; shared
   treasure; Race checkpoints once per team; teammates push without DD and can pass treasure; Captain + 2 each). Still open:
-  - Player teams: **one home port per team**, or one per player?
-  - **Table talk**: can teammates discuss plans and show each other their cards? (Matters online: team chat, and whether teammates see each
-    other's hands and programs.)
+  - ~~Port per team; table talk~~ → one port per team; teammates talk openly and may show cards (answered).
   - How is treasure passed: by ramming your teammate (knock it loose without the DD, placing it next to her), or by ending a Part next to each other?
   - Treasure Hunt target for teams (still 3)?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
@@ -868,6 +867,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.86 — teams share one home port and may talk openly and show cards.
 - v0.85 — Teams (§8.6) generalised: player teams and Fleets share teammate rules; Fleets moved to §8.7.
 - v0.84 — Fleets: expert variant; one port per player; one hand per ship; shared goals; teammates push without DD.
 - v0.83 — Fleets variant: two ships per player; pillar P7 (players vs ships).
