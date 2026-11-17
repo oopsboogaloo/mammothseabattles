@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.27**
+> Status: **Draft v0.28**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -320,7 +320,14 @@ mode is a plug-in objective module on top of a shared rules core.
 - The map has **N treasure spawn points**.
 
 **8.2.1 Spawning**
-- Treasure appears at **one of the N spawn points, chosen at random**.
+- Treasure appears at **one of the N numbered spawn points, chosen at random** using the **treasure map deck**:
+
+  <img src="images/treasure-map-1.png" width="120"> <img src="images/treasure-map-3.png" width="120">
+
+  - A small deck of hex-shaped **treasure map cards**, numbered 1…N (one per spawn point).
+  - To spawn a treasure, **turn over the top card**: the treasure appears at that numbered spawn point.
+  - The deck is drawn from the top **on purpose**, so that **crew or equipment can let a player peek** at the next card
+    for an information advantage (see Crew, §… TBD).
 - **Treasures in play at once = (number of ships − 1) / 2, rounded up**:
 
 | Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
@@ -397,7 +404,10 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - ~~Q42. Treasure Hunt basics~~ → Answered (§8.2).
 - **Q44. Treasure Hunt follow-ups**:
   - ~~How many at once, and when they spawn~~ → Answered: (ships − 1) / 2 rounded up; a new one spawns at Upkeep after one is scored.
-    How is the spawn point chosen (die roll against numbered points?), and what's N? What if the chosen point is occupied (by a ship or another treasure)?
+    ~~How is the spawn point chosen?~~ → Treasure map deck (answered). Still open:
+    - What's N, and how are spawn points marked on the board? (Are the two "1" whirlpool markers on the example board spawn points rather than linked whirlpools?)
+    - Is a drawn card discarded or shuffled back? What happens when the deck runs out?
+    - What if the chosen point is occupied by a ship or another treasure (draw again?)
   - Land treasure: ending a **Part** adjacent, or ending the whole **turn** (after Part III)?
   - Knocking loose: can the attacker give up 1 DD out of several dealt by one hit? What if no adjacent hex is empty? Can it be placed on a reef or sandbank?
   - Home port guns: range, damage, when they fire (Action phase each Part?), and who they target (all rival ships in range?)
@@ -421,6 +431,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - **Q24. Board edge.** What happens when a ship sails or drifts off the map?
 - **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
 - **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
+  Known so far: some crew or equipment may let a player **peek at the treasure map deck** (§8.2.1).
 - **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
 - **Q35. Starting state.** Starting sail level, heading and position (start at port?), starting hand.
 
@@ -439,6 +450,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.28 — treasure map deck chooses spawn points; peeking is a possible crew ability.
 - v0.27 — treasure respawns at Upkeep only after one is scored; rounding up confirmed.
 - v0.26 — treasures in play = (ships − 1) / 2.
 - v0.25 — Treasure Hunt timed variant, with proposed tie-breaks and turn-limit option.
