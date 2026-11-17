@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.7**
+> Status: **Draft v0.8**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -95,8 +95,9 @@ Each command card is split into **three coloured bands**, one for each kind of o
 | Middle | Yellow | **Steer** | Ease Port (small turn), Hard to Port (large turn) |
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
-Each card also has a **number** in the top-right corner (e.g. 400, 420, 840, 860), and some cards have an
-**octopus icon** in the top-left corner (Q26).
+Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
+RoboRally's priority numbers (see §5.4). The hundreds digit seems to follow the sail band (4xx = Half Sail,
+8xx = Full Sail), so faster cards win initiative. Some cards also have an **octopus icon** in the top-left corner (Q26).
 
 Example cards seen:
 
@@ -151,6 +152,10 @@ Each sub-step is carried out by **all ships simultaneously** (pillar P1):
 
    So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once** (any weaker wind: never?). This works like
    RoboRally's push panels, which only fire in certain registers.
+
+### 5.4 Initiative
+Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
+**settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
 
 ### 5.3 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
@@ -213,7 +218,13 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 **Command cards (§3.3–3.4)**
 - ~~Q25~~ → Answered: only the slot's band counts (ship board art).
-- Q26. What do the **numbers** (400, 420, 840, 860) mean: priority for tie-breaks, card IDs, or something else? The hundreds digit seems to follow the sail (4xx = Half, 8xx = Full). What does the **octopus icon** mean?
+- ~~Q26a~~ → Answered: the numbers are initiative, as in RoboRally.
+- Q26. What does the **octopus icon** mean?
+- Q32. Initiative details:
+  - Which card's number counts in a given Part: the one in the Move slot, or the highest of the three? What if the Move slot is empty?
+  - Does higher go first, as in classic RoboRally?
+  - Is it used **only to settle conflicts** (keeping simultaneous play), or does it set a strict movement order at the table?
+  - Does it also decide the order of Action-phase firing?
 - ~~Q27~~ → Answered: sail stays the same, no steer, no action.
 - Q28. Are all 9 cards revealed at once, or column by column as each step resolves?
 - Q29. Actions happen after currents and before wind drift (answered). Does Fire Cannons fire both broadsides? Are all actions in a Part simultaneous (can two ships sink each other at once)? What's the difference between **Heal** (crew?) and **Repair** (ship?)?
@@ -225,6 +236,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.8 — card numbers are initiative.
 - v0.7 — ship board layout (Parts I–III); order is Move → Steer → Currents → Action → Wind drift; wind strength sets drift count; empty slots defined; sail level persists.
 - v0.6 — command cards (3 bands), 3 × 3 ship board, step order: movement → currents → wind. Currents don't push.
 - v0.5 — design pillars: simultaneous execution, trust, embrace chaos. Removed my wrong claim that RoboRally scales poorly.
