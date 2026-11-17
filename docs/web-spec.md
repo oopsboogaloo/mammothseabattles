@@ -109,9 +109,10 @@ The AI only sees its own player view. Difficulty is set per seat.
 - **Ship models are high-poly, made for 3D printing**, so the pipeline **simplifies** them (mesh decimation, e.g. Blender's Decimate or
   meshoptimizer's `gltfpack`) to a **polygon budget** (proposed: about 10k triangles per ship, plus a lighter level of detail for iPad and
   zoomed-out views; 8 ships must stay smooth on iPad).
-- Print models usually have **no textures or UV maps** and are often one solid piece. The ships will need **painting for the screen**:
-  either simple materials per part (hull, sails, flags) or textures baked in Blender. Each player's ship also needs a **player colour**
-  (sails or flag) so ships are easy to tell apart.
+- The models come in **separate parts** (hull, masts, sails...) with **no textures**. Plan: give each part a **simple material**
+  (wood hull, cloth sails, etc.), which suits the "painted miniature" look. The **sails (or flag) take the player colour** at runtime,
+  so one model serves all 8 players. Textures can be added later if wanted.
+- **Sail state on the model** (No / Half / Full Sail) can be shown by **swapping or scaling the sail parts**, since they're separate.
 - **Offline:** v1 works offline once loaded (installable web app).
 
 ### 3.7 Steam (M3)
@@ -202,8 +203,8 @@ supports Electron. Tauri is lighter but uses each OS's own web view, which rende
 ---
 
 ## 7. Open questions
-- ~~W1~~ → OBJ models (high-poly, for 3D printing; will be simplified) and PNG art. Still: are the models in separate parts (hull, sails)
-  or one piece, and do they have colours or textures? Licensing of any third-party assets.
+- ~~W1~~ → OBJ models (high-poly, for 3D printing; will be simplified) and PNG art. Models are in separate parts with no textures
+  (answered). Licensing of any third-party assets.
 - ~~W2~~ → pass and play plus AI. **Pass-and-play needs a "hand-over" screen** between players while programming, so nobody sees another
   player's hand or program; decisions mid-resolution (damage placement) also need the right player at the device.
 - W3. Languages: English only at first?
