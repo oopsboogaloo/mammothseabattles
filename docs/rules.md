@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.78**
+> Status: **Draft v0.79**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -543,7 +543,8 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - **Searching** happens during **Upkeep**: a ship that **ends the turn on** a wreck (sea), or **next to** it if the wreck is on land,
   searches it and draws a **wreck card**.
 - The wreck token is **removed once searched**.
-- **Wreck deck (prototype):** for now, a wreck gives **at random either a crew card or an equipment card** *(interpretation ❓)*.
+- **Core game / prototype:** searching a wreck gives **a crew card** (from the crew deck). A meaningful reward.
+- **With the equipment add-on:** a wreck gives at random either a crew card or an equipment card.
 - **Wreck deck (eventually):** like Monopoly's Chance cards, **mostly good, lots of variety**: e.g. repair, heal, crew, equipment,
   treasure, "choose another player: they take 1 DD", and the occasional bad result. **Variety is part of the fun.**
 
@@ -662,7 +663,7 @@ mode is a plug-in objective module on top of a shared rules core.
 | Sea monster | §9.1 | Add-on |
 | Equipment cards | §7.10 | Add-on |
 | Crew special powers (Surgeon, Retired Captain, peeking, 🐙 crew...) | §3.6 | Add-on |
-| Wreck deck variety (Chance-style) | §7.9 | Add-on; in the core game a wreck could give a basic crew card or nothing ❓ |
+| Wreck deck variety (Chance-style) | §7.9 | Add-on. **Core game: searching a wreck gives a crew card** |
 | Points of Sail | §6.2 | Optional rule, **intended as standard** |
 
 
@@ -827,6 +828,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.79 — core game: searching a wreck gives a crew card.
 - v0.78 — pillar P0 (core must match RoboRally's fun); core vs add-on modules table.
 - v0.77 — monster hex sinks however you arrive; port guns fire every Action phase at all rivals within 2.
 - v0.76 — sea monster: influence tie = closest ship; its hex sinks ships; must be in arc; fog hides it.
