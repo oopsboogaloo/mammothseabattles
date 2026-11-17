@@ -30,14 +30,17 @@
 - **Practice against bots** so you can learn alone, before or without friends.
 
 ## Decisions made during resolution
-Some rules need a player decision **in the middle of resolution**: holding fire on a target (rules §7.1) and knocking treasure
-loose instead of dealing a DD, including where to place it (rules §8.2.3).
+Some rules need a player decision **in the middle of resolution**:
+- holding fire on a target (rules §7.1)
+- knocking treasure loose instead of dealing a DD, and where to place it (rules §8.2.3)
+- **the damaged player choosing** which slot gets a damage marker and which crew member is wounded or killed (rules §7.3–7.4). This will be the most common prompt.
 
 **Decision: prompt only when it matters.**
 - Resolution runs automatically and **pauses only when a player has a real choice**: an enemy is actually in their arc, or a treasure
   carrier was actually hit or rammed by them.
 - The prompt has a **1-minute timer** and a **default** if the player doesn't answer (defaults to be decided: e.g. fire at all
-  targets; take the DD rather than knock treasure loose).
+  targets; take the DD rather than knock treasure loose; for damage, block the least valuable slot and wound before killing).
+- Possible improvement: let players set **damage preferences** in advance (e.g. "block Action slots first") so most damage needs no prompt.
 - Engine requirement: the rules core must be able to **suspend resolution, ask a specific player a question, and resume**
   deterministically. In BGA terms, that's a short single- or multi-active state in the middle of resolution.
 
