@@ -383,22 +383,6 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
   still to be defined (Q19).
 - *Ramming damage: who takes the 1 DD (Q6b).*
 
-### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
-Ideas to playtest:
-- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
-- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
-- The online version shows each ship's move distance (and a ghost preview) while programming.
-
-
-
-### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
-Ideas to playtest:
-- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
-- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
-- The online version shows each ship's move distance (and a ghost preview) while programming.
-
-
-
 ### 6.6 Currents
 - Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2):
 
@@ -417,6 +401,14 @@ Ideas to playtest:
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
 - *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
+
+### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
+Ideas to playtest:
+- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
+- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
+- The online version shows each ship's move distance (and a ghost preview) while programming.
+
+
 
 ## 7. Combat / conflict resolution
 
