@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.34**
+> Status: **Draft v0.35**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -193,7 +193,7 @@ A turn has **3 steps**. Programming happens once per turn and covers all 3 steps
 Each sub-step is carried out by **all ships simultaneously** (pillar P1):
 
 1. **Move phase**: apply any Sail card (change sail level), then every ship sails according to her current sail level *(and wind? Q9)*.
-   **Ships push** other ships they move into.
+   **Ships push** other ships they move into (§6.5).
 2. **Steer phase**: ships turn according to their Steer card.
 3. **Currents**: ships on currents are moved and/or turned. **Currents do not push**.
 4. **Action phase**: carry out Action cards (Fire Cannons, Repair, Heal, ...).
@@ -290,6 +290,11 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
 - Tides **change the board**: some terrain is sea at one tide and an obstacle at another.
 - *Which terrain, how many tide levels, and what happens to a ship caught out: Q40.*
+
+### 6.5 Pushing
+- Ship movement (sailing, and coming out of a cave) **pushes** any ship in the way. Currents and wind drift do **not** push (§5.2).
+- **Pushes chain**: a pushed ship pushes the next ship in line, and so on.
+- *How far a push goes, what stops a chain (land, reef, board edge), and ramming damage: Q6b.*
 
 **Making it easy for players** (design goal). Ideas to playtest:
 - Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
@@ -486,6 +491,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.35 — pushes chain; new §6.5 Pushing.
 - v0.34 — arriving through a portal doesn't trigger it.
 - v0.33 — blocked cave exit: the emerging ship pushes.
 - v0.32 — blocked whirlpool: the ship carries on.
