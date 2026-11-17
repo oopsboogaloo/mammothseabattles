@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.32**
+> Status: **Draft v0.33**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -102,8 +102,9 @@ Caves work like whirlpool portals (§3.2.1) with these differences:
 - A ship enters a cave by **moving across the cave-mouth edge** into the island. She comes out of the partner cave's mouth
   into the **sea hex in front of it**.
 - She **changes orientation**: she leaves **facing out of the partner cave mouth** (as the printed arrow shows), not keeping her old heading.
-- Like whirlpools, she presumably **continues any remaining movement** after coming out, **any movement** triggers it, and if
-  the exit hex is **occupied** she doesn't go through ❓ (Q46).
+- Like whirlpools, she presumably **continues any remaining movement** after coming out, and **any movement** triggers it ❓ (Q46).
+- **Exit hex occupied**: unlike whirlpools, the cave is **not** blocked. Coming out of the cave is **normal movement** into the exit hex,
+  so the emerging ship **pushes** the ship that's there (in her new heading), following the normal pushing rules (§5.2, Q6b).
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -457,12 +458,12 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   - Confirm: arriving through a portal doesn't re-trigger it, and starting on a whirlpool and leaving doesn't trigger it.
   - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
   - Can cannon fire through a portal? (Assumed no.)
-- **Q46. Sea caves:**
-  - Confirm the ❓ points in §3.2.2: remaining movement continues, any movement triggers it (including currents, drift and being pushed),
-    and an occupied exit hex blocks it.
-  - Blocked: does the ship stay in front of the entrance, hitting the cave like land (collision damage?)
-  - Can a ship enter a cave mouth while moving **backwards** (Full Sail into the wind)? Which way does she face when she comes out?
-  - Backwards and sideways entry by drift or pushing: does the exit heading still follow the arrow?
+- **Q46. Sea caves** (blocking answered: emerging pushes). Still open:
+  - Confirm that remaining movement continues after coming out, and that any movement (currents, drift, being pushed) triggers a cave.
+  - Currents and drift don't push (§5.2). If a ship is carried into a cave by a current or drift and the exit is occupied, does she
+    push anyway, or is she stopped (and where: at the entrance)?
+  - If the occupying ship can't be pushed (land or another obstacle behind her), what happens?
+  - Can a ship enter a cave mouth while moving **backwards** or sideways (drift, push)? Does she still come out facing the arrow?
 - **Q24. Board edge.** What happens when a ship sails or drifts off the map?
 - **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
 - **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
@@ -485,6 +486,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.33 — blocked cave exit: the emerging ship pushes.
 - v0.32 — blocked whirlpool: the ship carries on.
 - v0.31 — sea caves: lettered edge portals that set the exit heading.
 - v0.30 — whirlpool portal rules (core).
