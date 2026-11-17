@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.3**
+> Status: **Draft v0.4**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -40,7 +40,38 @@ interact with each other and with the sea.
 - Age: _TBD_
 
 ## 3. Components
-_TBD — board, pieces, cards, dice, tokens (with counts)._
+
+### 3.1 The board
+![Example board](images/example-board.jpg)
+
+- **Modular**: you build the sea by putting several hex **board tiles** together, so scenarios and
+  board size can vary (this also helps it scale to 8 players, see Q3c).
+- The play area is a **hex grid**. In the example the hexes are pointy-topped, with flat sides on the left and right *(to confirm, Q18)*.
+- **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
+
+### 3.2 Board features seen in the example board
+Interpretations marked ❓ are guesses, to be confirmed by the designer.
+
+| Feature | What it looks like | Interpretation |
+|---|---|---|
+| Straight current | Single arrow along the hexes | Moves the ship 1 hex in the arrow's direction ❓ |
+| Fast current | Double (and triple?) parallel arrows | Moves the ship 2 (3?) hexes, like RoboRally's express belts ❓ |
+| Turning current | Curved arrow | Moves the ship and turns her ❓ |
+| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place (60° per activation?) ❓ |
+| Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
+| Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
+| Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
+| Numbered whirlpool ("1") | Two matching whirlpools | Linked pair: enter one, come out of the other ❓ |
+| Sea caves A / B | Cave mouths on islands marked A and B, with exit arrows | Tunnels: enter A, exit at the other A, facing the arrow ❓ |
+| Island | Land | Impassable; ships hitting it take collision damage? ❓ |
+| Reef / rocks | Pink spiky edges round islands; wreck-strewn rocky hexes with a skull | Hazard: damage, grounding, or sinking? ❓ |
+| Sandbanks | Yellow patterned areas | Shallows: impassable or slowing, **tide-dependent**? ❓ |
+| Striped shallows | Pale green diagonal stripes | Shallow water or kelp, maybe exposed at low tide? ❓ |
+| Rough water | Purple churning hex | Hazard, maybe damage or random drift? ❓ |
+| Fog bank | White cloud (centre) | Blocks line of sight for cannon? ❓ |
+| Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
+| Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
+| Small wreck on sandbar | Upper left | Treasure location? ❓ |
 
 ## 4. Setup
 _TBD_
@@ -93,10 +124,20 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q15. Damage model: hit locations (hull, mast/rigging, rudder, crew)? How does each one affect sailing and steering?
 - Q16. What happens at zero hull (sunk, respawn, out of the game)? Is there ramming damage?
 
+**Board (§3)**
+- Q18. Hex orientation and tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
+- Q19. Confirm or correct every ❓ in §3.2.
+- Q20. Currents: do they act **after every step** (like RoboRally after every register) or once per turn? In what order do the different types act (fast before slow, then turning)?
+- Q21. Is a current's turn absolute (the ship ends facing the arrow) or relative (turn 60° clockwise)?
+- Q22. If a current pushes a ship into another ship, does it push her or just stop (RoboRally: board movement doesn't push)? If it pushes her into an island?
+- Q23. Which features are changed by **tides**? Are the sandbanks and shallows the tidal parts?
+- Q24. Board edge: what happens to a ship that sails or drifts off the map?
+
 **Crew (D8)**
 - Q17. How do you get crew, how many can you hold, and are they permanent or single-use? Can crew be lost to damage?
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.4 — board: modular hex tiles, currents, list of observed features from the example board.
 - v0.3 — player count: 4 to start, target up to 8.
 - v0.2 — overview, list of differences from RoboRally, first batch of open questions.
