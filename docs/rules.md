@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.52**
+> Status: **Draft v0.53**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -429,8 +429,9 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 
 ### 7.8 Sinking and coming back
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
-- **She comes back at her home port.** No player elimination (P6).
-- *Details: Q16.*
+- **She comes back at her home port**, **fully repaired** with **3 healthy crew**. No player elimination (P6).
+- Any **treasure she carried drops in the hex where she sank**, ready for anyone to pick up.
+- *Penalty, hand of cards, facing, sail: Q16.*
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -554,9 +555,10 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - **Critical damage cards**: contents, count, permanent until repaired?
   - ~~After sinking~~ → she comes back at her home port (answered). See Q16.
 - **Q16. Coming back after sinking:**
-  - In what state: fully repaired, 3 healthy crew (like a refit)? Same hand of cards, or a new one?
-  - Penalty: does she miss the rest of this turn and/or the next turn (like the refit's lost turn)?
-  - Carried treasure: does it drop in the hex where she sank (or adjacent sea)? Who places it?
+  - ~~State~~ → fully repaired, 3 crew (answered). Same hand of cards, or a new one?
+  - **Penalty**: does she miss the rest of this turn and/or the next turn? ⚠ Without one, sinking is a **free refit plus a trip home**,
+    better than a voluntary refit, which costs a turn. That could tempt a crippled ship into deliberately sinking (e.g. sailing onto rocks).
+  - ~~Carried treasure~~ → drops where she sank (answered).
   - Facing, sail level on return?
   - What if an enemy ship is in or next to her port when she comes back? (The port guns probably deal with that.)
   - Deathmatch scoring: count sinkings as points? (Q43.)
@@ -655,6 +657,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.53 — on return: fully repaired, 3 crew; treasure drops where she sank.
 - v0.52 — sunk ships come back at home port; pillar P6: no player elimination.
 - v0.51 — one shared command deck.
 - v0.50 — home port refit: full repair, heal, recruit to 3 crew; costs a turn.
