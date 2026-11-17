@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.13**
+> Status: **Draft v0.14**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -248,7 +248,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Wind (D5)**
 - ~~Q9~~ → Answered: points of sail chart (§6.2).
 - ~~Q34~~ → Answered: Half = 1, Full = 2 (§6.1).
-- Q35. ~~Is there a No Sail level?~~ Yes (§6.1). Is No Sail a band on the command cards, or set some other way? What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
+- Q35. ~~Is there a No Sail level? Is it on the cards?~~ Yes, No Sail is a Sail band on the command cards (§3.3). What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
 - Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
 - Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
 
@@ -296,6 +296,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.14 — No Sail confirmed as a card band.
 - v0.13 — No Sail level (no sailing move; currents and drift still apply).
 - v0.12 — basic sailing: Half 1, Full 2.
 - v0.11 — points of sail chart (optional, intended as standard).
