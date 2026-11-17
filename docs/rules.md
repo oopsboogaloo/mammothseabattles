@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.16**
+> Status: **Draft v0.17**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -154,7 +154,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail** | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
-Notes: the Gale card is spelled "GAIL" on the current artwork. "DD" is not defined yet (Q38).
+Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 
 ## 4. Setup
 _TBD_
@@ -254,6 +254,11 @@ Gale +1 all, plus DD for each Full Sail. These apply on top of the points of sai
   between the two neighbour directions on that side of the ship.
 - *Targets, line of sight and damage: Q33.*
 
+### 7.2 Damage dice (DD)
+- Damage is dealt as **Damage Dice (DD)**: whenever damage occurs, the ship **takes DD**.
+- Sources of DD so far: **Gale**: 1 DD per Full Sail (§3.5).
+- *What a DD is, how it's rolled or read, and what it does: Q15, Q38.*
+
 ## 8. Winning & game end
 _TBD_
 
@@ -266,6 +271,7 @@ _TBD_
 ## 9. Glossary
 | Term | Definition |
 |------|------------|
+| DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
 
 ## Open questions
 _Ambiguities and edge cases found while writing the spec, to resolve with the designer._
@@ -315,7 +321,9 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
   - How is the current space marked (a marker token, or the card in a fixed "now" position)?
   - Are all 6 spaces filled, with the current card and the next 2 face up and the rest face down? Or only 3 cards, refilled from the deck as it advances?
   - Which tide do you start at?
-- Q38. What is **DD** (Gale: "1 DD per Full Sail")? Damage die? Who takes it, and when?
+- ~~Q38a~~ → Answered: DD = Damage Die, taken when damage occurs.
+- Q38. Gale "1 DD per Full Sail": is that once for each **Move phase** sailed at Full Sail (up to 3 per turn), or once per turn? Strain on the rigging, so do sails or masts get damaged?
+- Q38b. The damage die itself: what kind of die (d6? custom faces?), what results are on it, and is it **rolled** or **kept** (placed on the ship board as a damage marker)?
 - Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
 - Q39a. Combining modifiers with points of sail: does Light −1 make Full Sail windward −2 (2 hexes backwards), or is the minimum 0? Does Gale +1 let Half Sail move 1 hex into the wind? Does Dead Calm stop the Full Sail windward backwards move?
 - Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
@@ -350,6 +358,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.17 — DD = damage die.
 - v0.16 — weather board: 6-space circuit with High/Mid/Mid/Low/Mid/Mid tides.
 - v0.15 — weather cards, weather circuit, weather sail modifiers, tides (Full Metal Planète style).
 - v0.14 — No Sail confirmed as a card band.
