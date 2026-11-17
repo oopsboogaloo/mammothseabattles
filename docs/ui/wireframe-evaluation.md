@@ -160,3 +160,6 @@ The weights favour what §4.1 and NFR-6/7 stress: nothing hidden, iPad readabili
 - The board placeholder draws **pointy-topped** hexes; the game uses **flat-topped** hexes (rules §3.1). Fix in the mock-up stage.
 - Open question "does a damage marker cancel a card already in that slot?" is already answered in rules §7.3: yes, the card is removed.
 - Rivals' damage markers are public at the table (they sit on visible ship boards); only programmed cards and hands are hidden.
+
+## Decision
+**Layout A chosen** by the designer, with the hand displayed as a fanned hand of cards.

@@ -139,7 +139,16 @@ supports Electron. Tauri is lighter but uses each OS's own web view, which rende
 5. **Looks like the box.** Same card art, ship board and terms as the physical game.
 6. **Mouse and touch equally.** Drag-and-drop *and* tap-to-place; big enough touch targets; no hover-only information.
 
-### 4.2 Screen zones (starting point for the wireframes)
+### 4.2 Chosen layout: **A, bottom dock** (designer's decision after the wireframe review)
+See [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md). The table fills the top; a bottom dock holds the compact 3×3 ship board,
+the **hand shown as a fanned hand of cards** (the designer especially likes this), and Ready / Undo / Clear / Ghost. Weather, rivals and
+crew float over the table corners. Refinements to carry into the mock-up:
+- One-tap "spread hand" option for iPad, where the fan overlaps cards heavily (keep the fan as the default).
+- Currents / Drift labels on the compact ship board, so it reads like the physical board.
+- The dock folds away completely during resolution (≈ 90% table), with a peek button.
+- Flat-topped hexes on the board (the wireframes wrongly drew pointy-topped).
+
+### 4.2.1 Screen zones (from the wireframe brief)
 | Zone | Content | Behaviour |
 |---|---|---|
 | **Board** (most of the screen) | 3D sea, gentle perspective, ships as 3D models, wind arrow, tide state | Pan / zoom / limited rotate; tap a ship to inspect it |
