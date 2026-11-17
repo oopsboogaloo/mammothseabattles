@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.48**
+> Status: **Draft v0.49**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -388,7 +388,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 
 ### 7.3 Ship damage
 - For each point of **Ship damage**, the player places a **damage marker** on one of the **9 slots** of their ship board
-  (Sail, Steer or Action in Parts I–III) *(the owner chooses which ❓)*.
+  (Sail, Steer or Action in Parts I–III). **The damaged player chooses which.**
   - Any card in that slot is **removed**.
   - That slot **can't be used** until repaired. So a blocked Sail slot means the sail stays at its current level that Part; a blocked Steer slot means no turn; a blocked Action slot means no action.
 - **Sinking**: if a ship has **no usable Sail slots, no usable Steer slots, or no usable Action slots** (any whole row blocked),
@@ -397,8 +397,8 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
   each marker takes away a choice.
 
 ### 7.4 Crew damage
-- For each point of **Crew damage**: **wound** a healthy crew member (flip the card) or **kill** a wounded one (remove it)
-  *(who chooses which ❓)*.
+- For each point of **Crew damage**: **wound** a healthy crew member (flip the card) or **kill** a wounded one (remove it).
+  **The damaged player chooses which.**
 - Losing crew means **drawing fewer command cards** (§5.1), so crew damage starves your options over time.
 - **Sinking**: a ship with **no healthy crew** sinks.
 
@@ -531,7 +531,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 - ~~Q15/Q16 core~~ → Answered: Ship damage blocks slots; Crew damage wounds or kills crew; sinking conditions (§7.3–7.4).
 - **Q15b. Damage follow-ups:**
-  - Who chooses which slot is blocked, and which crew is wounded or killed: the damaged player (assumed) or the attacker?
+  - ~~Who chooses~~ → the damaged player (answered).
   - A damage marker in a slot whose Part has already **resolved** this turn: just blocks it from next turn?
   - ~~Repair and Heal~~ → Actions fix Ship or Crew damage (answered). Still open: how much per action (assumed 1)? Can a removed damage marker be
     from any slot, including one in the current Part? Are there other ways to recover (e.g. at home port)?
@@ -625,6 +625,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.49 — the damaged player chooses slots and crew.
 - v0.48 — design pillar P5: damage mostly slows you down.
 - v0.47 — Repair and Heal actions.
 - v0.46 — damage model: Ship damage blocks slots, Crew damage wounds or kills crew; sinking rules; crew cards set cards drawn; hand max 9.
