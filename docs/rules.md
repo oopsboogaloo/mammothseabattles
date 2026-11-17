@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.15**
+> Status: **Draft v0.16**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -132,6 +132,19 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 - **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next two
   cards face up**. The circuit also **marks the tides** (§6.4).
 
+**Weather board**
+
+<img src="images/weather-board.jpg" width="380">
+
+- A ring of **6 hex spaces** for weather cards, advancing **clockwise**.
+- Each space is also a **tide state**: High → Mid → Mid → Low → Mid → Mid → (back to High).
+  That is a **6-step tide cycle** with 3 levels (High / Mid / Low), so the sea is at Mid tide half the time.
+  - Top space = **High**.
+  - Two right-hand spaces = **Mid** (ebbing).
+  - Bottom space = **Low**.
+  - Two left-hand spaces = **Mid** (flooding).
+- *How the current space is marked and how cards are refilled: Q37.*
+
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
 |---|---|---|---|
 | Dead Calm | — | **No sail move** | 0 |
@@ -215,7 +228,7 @@ The current weather card changes sailing moves (§3.5): Dead Calm = no sail move
 Gale +1 all, plus DD for each Full Sail. These apply on top of the points of sail (Q39 for how they combine).
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
-- The tide level is marked on the weather circuit, so it's predictable.
+- **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
 - Tides **change the board**: some terrain is sea at one tide and an obstacle at another.
 - *Which terrain, how many tide levels, and what happens to a ship caught out: Q40.*
 
@@ -297,12 +310,16 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q16. What happens at zero hull (sunk, respawn, out of the game)? Is there ramming damage?
 
 **Weather & tides (§3.5, §6.3, §6.4)**
-- Q37. Weather circuit: how many spaces? Does it advance once per turn at Upkeep? How exactly does it mark the tides (tide spaces on the circuit, or a tide symbol on the cards)?
+- Q37. The weather board has 6 spaces, each marked with a tide state (answered). Still open:
+  - Does it advance **one space per turn** at Upkeep (a 6-turn tide cycle)?
+  - How is the current space marked (a marker token, or the card in a fixed "now" position)?
+  - Are all 6 spaces filled, with the current card and the next 2 face up and the rest face down? Or only 3 cards, refilled from the deck as it advances?
+  - Which tide do you start at?
 - Q38. What is **DD** (Gale: "1 DD per Full Sail")? Damage die? Who takes it, and when?
 - Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
 - Q39a. Combining modifiers with points of sail: does Light −1 make Full Sail windward −2 (2 hexes backwards), or is the minimum 0? Does Gale +1 let Half Sail move 1 hex into the wind? Does Dead Calm stop the Full Sail windward backwards move?
 - Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
-- Q40. Tides: how many levels (Low/Normal/High like Full Metal Planète)? Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
+- Q40. Tides: 3 levels (answered). Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
 
 **Board (§3)**
 - Q18. Flat-topped hexes are confirmed by the cannon diagram and the N/NE/SE/S/SW/NW compass on the weather cards. Tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
@@ -333,6 +350,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.16 — weather board: 6-space circuit with High/Mid/Mid/Low/Mid/Mid tides.
 - v0.15 — weather cards, weather circuit, weather sail modifiers, tides (Full Metal Planète style).
 - v0.14 — No Sail confirmed as a card band.
 - v0.13 — No Sail level (no sailing move; currents and drift still apply).
