@@ -153,12 +153,12 @@ Each sub-step is carried out by **all ships simultaneously** (pillar P1):
    So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once** (any weaker wind: never?). This works like
    RoboRally's push panels, which only fire in certain registers.
 
-### 5.4 Upkeep and new turn
-After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
-
 ### 5.3 Initiative
 Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
 **settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
+
+### 5.4 Upkeep and new turn
+After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 
 ## 6. Actions
 _TBD_
