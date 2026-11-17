@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.33**
+> Status: **Draft v0.34**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -92,8 +92,8 @@ Portals are a **core** feature, not optional; they're a big part of the fun (as 
 - **Any movement triggers it**: sailing, being pushed, currents, wind drift.
 - **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal. She treats the whirlpool
   as a normal hex and **carries on** with any remaining movement.
-- Assumed ❓: **arriving** at a whirlpool through the portal doesn't trigger it again (no infinite loop), and a ship that starts on a
-  whirlpool and moves off it doesn't trigger it.
+- **Only moving onto a whirlpool triggers it** (sailing, drifting or currents, being pushed). **Arriving through the portal does not
+  trigger it again**, and a ship that starts on a whirlpool and moves off it doesn't trigger it either.
 
 ### 3.2.2 Sea caves *(core rule)*
 Caves work like whirlpool portals (§3.2.1) with these differences:
@@ -455,7 +455,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   reefs, rough water, fog, storm, port, wreck).
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
   - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
-  - Confirm: arriving through a portal doesn't re-trigger it, and starting on a whirlpool and leaving doesn't trigger it.
+  - ~~Re-triggering~~ → arriving through a portal doesn't trigger it (answered).
   - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
   - Can cannon fire through a portal? (Assumed no.)
 - **Q46. Sea caves** (blocking answered: emerging pushes). Still open:
@@ -486,6 +486,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.34 — arriving through a portal doesn't trigger it.
 - v0.33 — blocked cave exit: the emerging ship pushes.
 - v0.32 — blocked whirlpool: the ship carries on.
 - v0.31 — sea caves: lettered edge portals that set the exit heading.
