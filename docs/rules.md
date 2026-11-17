@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.45**
+> Status: **Draft v0.46**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -181,6 +181,15 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 
+### 3.6 Crew cards
+<img src="images/crew/pirate.png" width="150"> <img src="images/crew/captain-mammoth.png" width="150">
+
+- Each ship has a crew of **crew cards** (round). Each has a **name** (e.g. *Pirate*, *Captain Mammoth*), artwork, and
+  **command-card icons** (small 3-band card symbols): *Pirate* has 1, *Captain Mammoth* has 3.
+- **Card icons = command cards drawn per turn** from that crew member (§5.1).
+- The white panel on the *Pirate* card is presumably for **ability text** ❓ (Q48).
+- Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
+
 ## 4. Setup
 _TBD_
 
@@ -188,9 +197,11 @@ _TBD_
 A turn has **3 steps**. Programming happens once per turn and covers all 3 steps.
 
 ### 5.1 Programming
-1. Draw command cards *(how many? Q7)*.
+1. **Draw command cards**: one per command-card icon on your crew (§3.6) *(healthy crew only? Q48)*.
+   You **keep unplayed cards** from turn to turn, up to a **maximum hand of 9**.
 2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
 3. Reveal *(all at once, or step by step? Q28)*.
+4. **Used cards return to the deck** *(shuffled in, or placed on the bottom? Q7)*.
 
 ### 5.2 Resolving each Part (I, II, III)
 Each sub-step is carried out by **all ships simultaneously** (pillar P1):
@@ -373,7 +384,31 @@ Ideas to playtest:
 Odds per DD: **0.75 Ship + 0.75 Crew** on average (symmetrical); **1 in 12** misses; **1 in 12** is critical; **3 in 12** deal 3 total damage.
 For the physical game this could be a **custom d12 with icons**; online it's a lookup table.
 
-- *What Ship and Crew damage do, how they're tracked, and the critical damage deck: Q15.*
+### 7.3 Ship damage
+- For each point of **Ship damage**, the player places a **damage marker** on one of the **9 slots** of their ship board
+  (Sail, Steer or Action in Parts I–III) *(the owner chooses which ❓)*.
+  - Any card in that slot is **removed**.
+  - That slot **can't be used** until repaired. So a blocked Sail slot means the sail stays at its current level that Part; a blocked Steer slot means no turn; a blocked Action slot means no action.
+- **Sinking**: if a ship has **no usable Sail slots, no usable Steer slots, or no usable Action slots** (any whole row blocked),
+  she **sinks**.
+- So a ship can survive at most **6 Ship damage** (2 per row), and the next one sinks her. But even **2–3 damage is crippling**:
+  each marker takes away a choice.
+
+### 7.4 Crew damage
+- For each point of **Crew damage**: **wound** a healthy crew member (flip the card) or **kill** a wounded one (remove it)
+  *(who chooses which ❓)*.
+- Losing crew means **drawing fewer command cards** (§5.1), so crew damage starves your options over time.
+- **Sinking**: a ship with **no healthy crew** sinks.
+
+### 7.5 Damage summary
+| | Ship damage | Crew damage |
+|---|---|---|
+| Effect | Blocks programming slots | Fewer cards drawn |
+| Death spiral? | Yes: fewer slots, fewer choices | Yes: fewer cards, fewer choices |
+| Sinks when | Any whole row (Sail/Steer/Action) is blocked | No healthy crew |
+| Fixed by | **Repair** action ❓ | **Heal** action ❓ |
+
+*Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -474,6 +509,8 @@ mode is a plug-in objective module on top of a shared rules core.
 ## 10. Glossary
 | Term | Definition |
 |------|------------|
+| Crew card | A crew member; healthy or wounded; its command-card icons set how many cards you draw (§3.6, §7.4). |
+| Damage marker | Blocks one of the 9 ship-board slots (§7.3). |
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
 ## Open questions
@@ -484,15 +521,21 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 ### A. Core game loop (blocks a playable prototype)
 _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; restored from history and brought up to date._
 
-- **Q15. Damage effects** (the die itself is answered, §7.2):
-  - How are Ship and Crew damage **tracked** (tracks on the ship board? damage cards? a max per ship)?
-  - What do they **do**? E.g. Ship damage limits sail level or speed, and Crew damage limits how many slots you can fill or which
-    actions you can take? (You said damage affects movement.)
-  - **Critical damage cards**: what's in the deck (lost mast, rudder jammed, fire, magazine explosion, man overboard...)? Permanent
-    until repaired? How many cards?
-  - Is it right that **Repair** fixes Ship damage and **Heal** fixes Crew damage? How much each?
-- **Q16. Sinking / defeat.** When is a ship sunk (max Ship damage?), and what happens at max Crew damage? Then what: out of the game,
-  respawn at home port, drop treasure?
+- ~~Q15/Q16 core~~ → Answered: Ship damage blocks slots; Crew damage wounds or kills crew; sinking conditions (§7.3–7.4).
+- **Q15b. Damage follow-ups:**
+  - Who chooses which slot is blocked, and which crew is wounded or killed: the damaged player (assumed) or the attacker?
+  - A damage marker in a slot whose Part has already **resolved** this turn: just blocks it from next turn?
+  - **Repair** and **Heal**: Repair removes 1 damage marker, Heal flips 1 wounded crew back to healthy? Can a ship repair a slot
+    while the Action slot for that Part is the one blocked? Are there other ways (e.g. at home port)?
+  - **Critical damage cards**: contents, count, permanent until repaired?
+  - **After sinking**: out of the game, or respawn at home port (with what crew and damage)? Treasure dropped where it sank?
+    (Matters for Treasure Hunt; in Deathmatch, out may be fine.)
+- **Q48. Crew:**
+  - Starting crew: how many, which (does every ship start with a Captain)? Do mammoth and dinosaur ships get different crew?
+  - Do **wounded** crew still give their card icons? (Assumed no ❓.)
+  - What's the white panel: ability text? (You mentioned crew working like RoboRally upgrade cards.)
+  - How do you gain crew (recruit at port, rescue, capture)? Maximum crew?
+  - Draw timing: at Upkeep, or at the start of Programming?
 - **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
   no firing through portals or caves). Still open:
   - ~~DD per hit~~ → 1 DD (answered). No range falloff (assumed ❓).
@@ -509,8 +552,10 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Ramming = **1 DD** (answered). To whom: the rammed ship only, both ships, or every ship in a chain? Once per ram, or per hex pushed?
     What counts as a ram: any push, or only a ship moving into another (not pushed ships hitting the next one in the chain)?
   - Is a pushed ship's heading unchanged? (Assumed yes.) Does a pusher follow a ship pushed into a whirlpool?
-- **Q7 / Q30. Cards and deck.** How many cards are drawn per turn? Is the deck shared or personal? What's its full makeup (every
-  sail/steer/action band value and the counts)? What happens to unused and played cards?
+- **Q7 / Q30. Cards and deck** (answered: draw = crew icons, hand max 9, unplayed kept, used return to the deck). Still open:
+  - Is the deck **shared** by all players or one per ship? Used cards shuffled in or put on the bottom? What happens when it runs out?
+  - The deck's **full makeup** (every sail/steer/action band value and the counts).
+  - If a draw would take you over 9, do you stop at 9 or discard down?
 - **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
 - **Q31. Upkeep.** Known: spawn treasure (§8.2.1). Also: discard and draw? Advance weather and tide? Anything else?
 - **Q44. Treasure Hunt follow-ups**:
@@ -552,7 +597,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Can a ship enter a cave mouth while moving **backwards** or sideways (drift, push)? Does she still come out facing the arrow?
 - **Q24. Board edge.** What happens when a ship sails or drifts off the map?
 - **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
-- **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
+- **Q17. Crew** → see Q48 (priority A).
   Known so far: some crew or equipment may let a player **peek at the treasure map deck** (§8.2.1).
 - **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
 - **Q35. Starting state.** Starting sail level, heading and position (start at port?), starting hand.
@@ -572,6 +617,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.46 — damage model: Ship damage blocks slots, Crew damage wounds or kills crew; sinking rules; crew cards set cards drawn; hand max 9.
 - v0.45 — cannon hit = 1 DD; ramming = 1 DD.
 - v0.44 — damage die (d12 table). Restored priority-A open questions accidentally deleted in v0.24.
 - v0.43 — initiative ties: roll off.
