@@ -414,16 +414,16 @@ mode is a plug-in objective module on top of a shared rules core.
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
-## 10. Glossary
-| Term | Definition |
-|------|------------|
-| DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
-
 ## 9. Optional modules
 
 ### 9.1 Sea monster *(to be specified)*
 - An optional role. Cards with the 🐙 icon relate to the sea monster's movement.
 - To be covered later: who controls it (a player, or automatic), how 🐙 cards drive it, and what it does to ships.
+
+## 10. Glossary
+| Term | Definition |
+|------|------------|
+| DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
 
 ## Open questions
 _Cleaned up in v0.22: answered items removed (answers are in the relevant sections and the change log). Old Q-numbers are
