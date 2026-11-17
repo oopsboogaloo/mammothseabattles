@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.58**
+> Status: **Draft v0.59**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -202,8 +202,9 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 | *(some crew or equipment)* | Peek at the treasure map deck (§8.2.1) |
 - Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
 - **8 Captain cards**, one per ship, currently **identical** in powers (they may differ later).
-- The **crew deck** contains **a Retired Captain**, so a ship that lost her Captain has a small chance of recruiting one back
-  *(powers: the same as a Captain? Q48)*.
+- The **crew deck** contains **a Retired Captain**: the **strongest crew card** in the game. **She won't serve alongside a Captain.**
+  A ship that already has a Captain and recruits her must **swap** (one of the two leaves). For a ship that has lost her Captain,
+  she's a lucky find.
 - **All ships are identical**; the only differences between ships come from their crew and damage.
 - **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
@@ -587,7 +588,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
   - ~~Captain at start~~ → every ship starts with a Captain (answered). Starting crew: Captain + 2 random (3 total)?
-  - ~~Captains~~ → 8 identical mammoth Captains; a Retired Captain is in the crew deck (answered). Is the Retired Captain as strong as a Captain (3 cards)?
+  - ~~Captains~~ → 8 identical mammoth Captains; a Retired Captain is in the crew deck (answered). Retired Captain is the strongest crew and won't serve with a Captain (answered). Still open:
+    her card icons and power; on a swap, where does the leaving card go (back into the crew deck? removed from the game?); can a ship decline to take her?
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
   - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
@@ -678,6 +680,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.59 — Retired Captain: strongest crew, won't serve with a Captain (swap).
 - v0.58 — 8 identical Captains; Retired Captain in the crew deck; all ships identical.
 - v0.57 — no factions: crew are prehistoric monsters, all Captains are mammoths.
 - v0.56 — Surgeon heals 1 wounded crew per turn automatically.
