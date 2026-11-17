@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.20**
+> Status: **Draft v0.21**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -233,9 +233,9 @@ with a **minimum of 0**. Examples, Full Sail into the wind (normally 1 hex backw
 - Gale (+1) → **2 hexes backwards**.
 
 Half Sail into the wind (normally 0):
-- Gale (+1) → **1 hex** (backwards, assumed ❓).
+- Gale (+1) → **1 hex backwards**.
 
-So modifiers apply to any ship with sail **set** (Half or Full), even if its base move is 0. Assumed ❓: **No Sail is never
+So modifiers apply to any ship with sail **set** (Half or Full), even if its base move is 0. **No Sail is never
 modified**, because there's no sail for the wind to act on; only currents and drift move that ship.
 
 **Windward lookup** (heading straight into the wind; − = backwards):
@@ -247,6 +247,21 @@ modified**, because there's no sail for the wind to act on; only currents and dr
 | Firm | 0 | 0 | −1 |
 | Strong (+1 Full) | 0 | 0 | −2 |
 | Gale (+1 all) | 0 | −1 | −2 |
+
+**Full sail-move table** (Points of Sail + weather; Half / Full, in hexes; − = backwards; No Sail is always 0).
+Worked out from the rules above; the windward row is confirmed by the designer, the other rows follow from the same rules.
+
+| Weather | Windward | Close Hauled | Broad Reach | Running |
+|---|---|---|---|---|
+| Dead Calm | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+| Light (−1 all) | 0 / 0 | 0 / 1 | 1 / 2 | 0 / 1 |
+| Firm | 0 / −1 | 1 / 2 | 2 / 3 | 1 / 2 |
+| Strong (+1 Full) | 0 / −2 | 1 / 3 | 2 / 4 | 1 / 3 |
+| Gale (+1 all) | −1 / −2 | 2 / 3 | 3 / 4 | 2 / 3 |
+
+Without Points of Sail (basic rule, §6.1): Dead Calm 0/0, Light 0/1, Firm 1/2, Strong 1/3, Gale 2/3.
+
+Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
@@ -346,12 +361,10 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q38. Gale "1 DD per Full Sail": is that once for each **Move phase** sailed at Full Sail (up to 3 per turn), or once per turn? Strain on the rigging, so do sails or masts get damaged?
 - Q38b. The damage die itself: what kind of die (d6? custom faces?), what results are on it, and is it **rolled** or **kept** (placed on the ship board as a damage marker)?
 - Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
-- Q39a. Partly answered: modifiers change the move's size, minimum 0 (Light on Full Sail windward = 0). Still open:
+- Q39a. Answered: modifiers change the move's size, minimum 0 (Light on Full Sail windward = 0). Still open:
   - ~~Gale +1 on Full Sail windward~~ → 2 hexes backwards (answered).
-  - ~~Gale on Half Sail windward~~ → 1 (answered). Confirm it's **backwards**.
-  - Confirm **No Sail is never modified** by weather.
-  - Confirm **Strong** (+1 Full) on Full Sail windward = 2 backwards, like Gale.
-  - Dead Calm: presumably also cancels the backwards move?
+  - ~~All windward cases~~ → Answered: Gale Half = 1 backwards; No Sail never modified; Strong Full = 2 backwards; Dead Calm = 0.
+  - Check the other rows of the full sail-move table in §6.3 (they follow from the same rules).
 - Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
 - Q40. Tides: 3 levels (answered). Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
 
@@ -384,6 +397,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.21 — windward cases confirmed; full sail-move table.
 - v0.20 — Gale on Half Sail windward = 1; windward lookup table.
 - v0.19 — Gale on Full Sail windward = 2 hexes backwards.
 - v0.18 — weather modifiers change move size, minimum 0.
