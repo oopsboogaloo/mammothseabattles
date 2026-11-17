@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.69**
+> Status: **Draft v0.70**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -416,6 +416,7 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
 - While stuck she **can't sail or steer**, and **can't be moved or turned** by anything (currents, pushing, drift), but **can still use
   her Action slots** (fire, repair, heal).
+- A stuck ship is **on land** (the dried-out hex), so for other ships her hex is **beach land**: it stops them, and she **can't be pushed**.
 - *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
 
@@ -743,7 +744,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
 - **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
-  - ~~While stuck~~ → actions only, no sail or steer (answered). ~~Moved off by currents, pushing or drift?~~ → No (answered). A stuck ship can't be pushed, so does she block a push chain like land?
+  - ~~While stuck~~ → actions only, no sail or steer (answered). ~~Moved off by currents, pushing or drift?~~ → No (answered). ~~Pushing a stuck ship~~ → she's on land, so her hex counts as land (answered).
   - Do tides change currents?
 - ~~Q51. Terrain follow-ups~~ → Answered: stopped ships can still be moved later; damage and death reefs apply however she got there;
   cannons fire over land (§3.2.0, §7.1). ~~Wall reefs and cannon~~ → don't block (answered).
@@ -789,6 +790,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.70 — a stuck ship's hex counts as land.
 - v0.69 — rough water checked at the end of each Part; End of Part step added.
 - v0.68 — rough water (2 DD); stuck ships immovable; wall reefs don't block cannon.
 - v0.67 — fog rules; current sub-steps; eddies spin; stuck ships can still act.
