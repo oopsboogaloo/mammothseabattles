@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.24**
+> Status: **Draft v0.25**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -345,6 +345,17 @@ mode is a plug-in objective module on top of a shared rules core.
 | 3–6 | 3 |
 | 7–8 | 2 |
 
+**8.2.6 Variant: Timed game**
+- Play for a **fixed time** (e.g. 2 hours). When time runs out, the player who has **scored the most treasure wins**.
+- When time is up: finish the current turn (all 3 Parts) so everyone gets the same number of turns.
+- **Tie-breaks** (proposed, to playtest; pick one or chain them in order):
+  1. A player **carrying** treasure beats one who isn't.
+  2. The carrier **nearest their home port**.
+  3. **Sudden death**: play on until a tied player scores.
+- **Turn-limit option** (proposed): end after a fixed number of turns instead of wall-clock time. The weather board's
+  6-turn tide cycle gives natural lengths: **2 tide cycles = 12 turns** for a short game, **3 = 18** for a long one. A turn limit
+  is predictable, needs no timer, and suits the online version, especially asynchronous play.
+
 ### 8.3 M3 Deathmatch
 - Ship combat, usually in teams. *Open: Q43.*
 
@@ -382,6 +393,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   - Port: where is it placed (board edge? player chooses at setup?) What counts as "reaching" it (entering the port hex, or ending adjacent)? Is it also where sunk ships respawn?
   - Can treasure be scored at another player's port? (Assumed no.)
   - 2 players: does "best of 5" mean first to 3?
+  - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
 
 ### B. Needed for a full game
 - **Q10. Wind drift.** How far is one drift (1 hex downwind?), and does it push? Is it confirmed that Light and Dead Calm never drift?
@@ -416,6 +428,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.25 — Treasure Hunt timed variant, with proposed tie-breaks and turn-limit option.
 - v0.24 — Treasure Hunt: spawn points, pickup, 1-treasure limit, knock-loose instead of DD, home ports, targets.
 - v0.23 — game modes: Race, Treasure Hunt (core), Deathmatch, Capture the Flag, Solo/Co-op (deferred).
 - v0.22 — open questions cleaned up and prioritised.
