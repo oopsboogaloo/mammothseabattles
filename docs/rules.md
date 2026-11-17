@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.76**
+> Status: **Draft v0.77**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -265,7 +265,7 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
 3. **Currents**: in three 1-hex sub-steps (triple → double + triple → all), moving and/or turning ships. Eddies spin ships.
    **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
 4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
-   Then home port guns fire *(timing assumed ❓)*, and the **sea monster** attacks if in play (§9.1).
+   Then home port guns fire, and the **sea monster** attacks if in play (§9.1).
 5. **Wind drift**: each drifting ship moves **1 hex downwind** (heading unchanged). **Drift doesn't push**: a ship drifting into an
    occupied hex stays put. Terrain, portals and caves still apply. Which winds drift depends on the Part:
 
@@ -618,7 +618,8 @@ mode is a plug-in objective module on top of a shared rules core.
 
 **8.2.4 Home port & scoring**
 - Each player has a **home port**, **placed on the edge of the map at setup**. It is **indestructible** and **has guns**
-  with **range 2 hexes** dealing **1 DD**, so other ships keep their distance *(timing and targets: Q44)*.
+  with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
+  at **every rival ship** within range.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
 - Treasure is **scored, and safe, once it reaches the carrier's home port**. It can't be stolen after that.
 
@@ -661,7 +662,7 @@ mode is a plug-in objective module on top of a shared rules core.
   **closest to the monster** decides *(still tied: roll off ❓)*.
   It **ignores all board elements**: it isn't blocked by land and isn't affected by currents, wind, tides, terrain, portals or caves.
 - **Attack**: each Part, **after the Action phase**, it deals **1 DD to every ship next to it**.
-- **Deadly hex**: a ship that **enters the monster's hex sinks**, and if the monster **moves onto a ship**, that ship **sinks**.
+- **Deadly hex**: a ship that **enters the monster's hex sinks**, however she gets there (sailing, drift, current or push), and if the monster **moves onto a ship**, that ship **sinks**.
 - **Shooting it**: the monster **can be shot** like a ship: it must be **in your broadside arc**, and **fog hides it**. It **can't be killed**, but each DD that hits it is
   **added to the shooter's influence next turn**. Hurting it lets you steer it.
 - It **can't be pushed**.
@@ -709,8 +710,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
     Can equipment be played **during another player's attack** (e.g. a defensive item)?
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
-- ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). Does entering its hex by drift,
-  current or push also sink? (Assumed yes, like death reefs.)
+- ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). ~~Entering by drift, current or push~~ → also sinks (answered).
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
@@ -753,8 +753,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - How are spawn points marked on the board (tokens per scenario)?
   - ~~Treasure already there~~ → only one treasure per point; draw again (answered).
   - Knocking loose: what if no adjacent hex is empty? Can it be placed on a reef or sandbank?
-  - ~~Port gun range / placement / reaching it~~ → range 2; map edge at setup; must enter (answered). ~~Gun damage~~ → 1 DD (answered). When they fire
-    (every Action phase, assumed), and targets (all rival ships in range, assumed)? All directions, not broadside arcs?
+  - ~~Port gun range / placement / reaching it~~ → range 2; map edge at setup; must enter (answered). ~~Port guns~~ → 1 DD, every Action phase, all directions, all rival ships within 2 (answered).
+    In what order relative to ship fire (after all ships, assumed)? Can fog hide a ship from port guns? (Assumed yes.)
   - Can treasure be scored at another player's port? (Assumed no.)
   - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
 
@@ -811,6 +811,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.77 — monster hex sinks however you arrive; port guns fire every Action phase at all rivals within 2.
 - v0.76 — sea monster: influence tie = closest ship; its hex sinks ships; must be in arc; fog hides it.
 - v0.75 — sea monster rules (influence, movement, attack, shooting); port guns 1 DD; one treasure per spawn point; refit turn still draws.
 - v0.74 — sea monster basics; ramming DD to the first ship only; refit turn = no actions; home port on map edge, guns range 2, must enter.
