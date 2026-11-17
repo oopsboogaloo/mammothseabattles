@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.64**
+> Status: **Draft v0.65**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -77,16 +77,37 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
 | **Whirlpool portal** (numbered, e.g. "1") | Two matching whirlpools | **Core feature.** Paired portals; see §3.6. |
 | **Sea cave** (lettered, e.g. A, B) | Cave mouths on island edges, marked with letters and arrows | **Core feature.** Paired edge portals that change heading; see §3.2.2. |
-| Island | Land | Impassable; ships hitting it take collision damage? ❓ |
-| Reef / rocks | Pink spiky edges round islands | Hazard: damage, grounding, or sinking? ❓ |
-| Wreck on rocks | Rocky hex with a wrecked ship and a skull | Probably a **starting shipwreck** (§7.9), on a rocky hazard hex? ❓ |
-| Sandbanks | Yellow patterned areas | Shallows: impassable or slowing, **tide-dependent**? ❓ |
-| Striped shallows | Pale green diagonal stripes | Shallow water or kelp, maybe exposed at low tide? ❓ |
+| Island | Land | **Confirmed** (§3.2.0): cliff land (2 DD) or beach land (stop) |
+| Wall reef | Pink spiky edges round islands | **Confirmed** (§3.2.0): blocks the edge, 2 DD |
+| Death reef | Rocky hex with a wrecked ship and a skull | **Confirmed** (§3.2.0): kills ships that enter |
+| Sandbanks | Yellow patterned areas | **Confirmed** (§3.2.0): land except at High tide |
+| Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
 | Rough water | Purple churning hex | Hazard, maybe damage or random drift? ❓ |
 | Fog bank | White cloud (centre) | Blocks line of sight for cannon? ❓ |
 | Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
 | Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
+
+### 3.2.0 Terrain *(confirmed)*
+"Stops you" means the ship **doesn't enter** the hex (or cross the edge): she stays in the last hex she was in, and **any remaining
+movement is lost** *(assumed ❓)*. Being pushed into terrain has the same effect as moving into it (§6.5).
+
+| Terrain | Looks like | Effect |
+|---|---|---|
+| **Cliff land** | Land with purple cliffs | **Stops you + 2 DD** |
+| **Beach land** | Land with yellow sand | **Stops you** (no damage) |
+| **Sandbank** | Yellow sand patterns over water | **As beach land**, except at **High tide**, when it's **water** |
+| **Underwater reef** | Pale green stripes | **Water**, except at **Low tide**, when it's **as beach land** (sand) |
+| **Death reef** | Rocky hex with a **skull** icon | **Kills any ship that enters it** (sinks) |
+| **Wall reef** | Spiky reef along a **hex edge** | **Blocks** movement across that edge; trying to cross = **stopped + 2 DD** |
+
+**Tide summary** (Full Metal Planète-style staggered thresholds, §6.4):
+
+| Tide | Sandbank | Underwater reef |
+|---|---|---|
+| High | water | water |
+| Mid | land (beach) | water |
+| Low | land (beach) | land (beach) |
 
 ### 3.2.1 Whirlpool portals *(core rule)*
 Portals are a **core** feature, not optional; they're a big part of the fun (as in RoboRally).
@@ -349,8 +370,8 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
-- Tides **change the board**: some terrain is sea at one tide and an obstacle at another.
-- *Which terrain, how many tide levels, and what happens to a ship caught out: Q40.*
+- Tides **change the board**: **sandbanks** are water only at High tide, and **underwater reefs** are land only at Low tide (§3.2.0).
+- *What happens to a ship on a hex when it becomes land: Q40.*
 
 ### 6.5 Pushing
 - Ship movement (sailing, and coming out of a cave) **pushes** any ship in the way. Currents and wind drift do **not** push (§5.2).
@@ -680,12 +701,17 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q39. Wind direction convention.** Does "North Wind" blow towards the north (card arrow) or from the north (sailing usage)?
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
-- **Q40 / Q23. Tides.** Which terrain is tidal (sandbanks, striped shallows, both, with staggered thresholds)? What happens to a
-  ship on a hex that dries out (grounded? damaged)? Do tides change currents?
+- **Q40. Tides** (answered: sandbanks are water at High tide only; underwater reefs are land at Low tide only). Still open: what happens to a
+  ship on a hex when the tide turns it to land (grounded until the tide turns? damaged? moved to the nearest water)? Do tides change currents?
+- **Q51. Terrain follow-ups:**
+  - "Stops you": is remaining movement lost (assumed), or can a later phase (steer, currents) still move her?
+  - Do cliffs and wall reefs deal 2 DD when the ship is **drifted** or **carried by a current** into them too? (Pushed: yes, per §6.5.)
+  - Death reef by drift, current or push: also sinks? Do death reefs appear only on printed tiles, or also as tokens?
+  - Do land, cliffs or wall reefs block cannon fire (line of sight, Q33)?
 - **Q20 / Q21 / Q22. Currents.** Do all currents act at once, or fast ones first? Is a current's turn absolute or relative?
   Does a ship carried by a current into an occupied hex just stay put? What if she's carried into land or a reef?
-- **Q19. Board features.** Confirm or correct the ❓ interpretations in §3.2 (eddies, gyres, maelstrom, whirlpool pairs, caves A/B,
-  reefs, rough water, fog, storm, port, wreck).
+- **Q19. Board features.** Terrain, portals and caves are done. Still to define: eddies (solid and dashed), gyres and loop currents,
+  maelstrom, rough water (purple), fog, storm, port town.
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
   - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
   - ~~Re-triggering~~ → arriving through a portal doesn't trigger it (answered).
@@ -719,6 +745,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.65 — terrain: cliffs, beaches, sandbanks, underwater reefs, death reefs, wall reefs; tide effects.
 - v0.64 — push distance and obstacles; starboard steering; deck coverage; initiative for conflicts; cannon damage applied immediately; start Captain + 2; crew deck ≥ 50.
 - v0.63 — command hand hidden; no equipment limit; equipment kept when sunk.
 - v0.62 — crew open, equipment hidden.
