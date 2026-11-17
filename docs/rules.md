@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.12**
+> Status: **Draft v0.13**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -91,7 +91,7 @@ Each command card is split into **three coloured bands**, one for each kind of o
 
 | Band | Colour | Order type | Values seen so far |
 |---|---|---|---|
-| Top | Blue | **Sail** | Half Sail, Full Sail |
+| Top | Blue | **Sail** | No Sail, Half Sail, Full Sail |
 | Middle | Yellow | **Steer** | Ease Port (small turn), Hard to Port (large turn) |
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
@@ -168,6 +168,7 @@ Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
 
 | Sail level | Move phase |
 |---|---|
+| No Sail | 0 (the ship is still moved by currents and wind drift) |
 | Half Sail | 1 hex forward |
 | Full Sail | 2 hexes forward |
 
@@ -178,12 +179,12 @@ This is a real sailing effect, and it's what makes the game unique. How far a sh
 **sail level** and her **heading relative to the wind**. With flat-topped hexes a ship faces one of 6 hex sides,
 so there are 4 points of sail (mirrored port and starboard):
 
-| Point of sail | Heading vs wind | Half Sail | Full Sail |
-|---|---|---|---|
-| **Windward** (in irons) | Straight into the wind (0°) | **0** (can't sail into the wind) | **1 hex backwards** (taken aback) |
-| **Close Hauled** | 60° off the wind | 1 forward | 2 forward |
-| **Broad Reach** | 120° off the wind | 2 forward | **3 forward** (fastest) |
-| **Running** | Straight downwind (180°) | 1 forward | 2 forward |
+| Point of sail | Heading vs wind | No Sail | Half Sail | Full Sail |
+|---|---|---|---|---|
+| **Windward** (in irons) | Straight into the wind (0°) | 0 | **0** (can't sail into the wind) | **1 hex backwards** (taken aback) |
+| **Close Hauled** | 60° off the wind | 0 | 1 forward | 2 forward |
+| **Broad Reach** | 120° off the wind | 0 | 2 forward | **3 forward** (fastest) |
+| **Running** | Straight downwind (180°) | 0 | 1 forward | 2 forward |
 
 - The fastest sailing is with the wind to your side and behind you (broad reach).
 - Sailing movement is ship movement, so ships **push** (§5.2 step 1).
@@ -247,7 +248,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Wind (D5)**
 - ~~Q9~~ → Answered: points of sail chart (§6.2).
 - ~~Q34~~ → Answered: Half = 1, Full = 2 (§6.1).
-- Q35. Is there a lower sail level (Furled / No Sail = 0)? What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
+- Q35. ~~Is there a No Sail level?~~ Yes (§6.1). Is No Sail a band on the command cards, or set some other way? What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
 - Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
 - Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
 
@@ -295,6 +296,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.13 — No Sail level (no sailing move; currents and drift still apply).
 - v0.12 — basic sailing: Half 1, Full 2.
 - v0.11 — points of sail chart (optional, intended as standard).
 - v0.10 — 🐙 icon = sea monster movement (optional module, deferred).
