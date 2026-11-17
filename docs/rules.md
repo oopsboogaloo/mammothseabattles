@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.38**
+> Status: **Draft v0.39**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -214,7 +214,15 @@ Each sub-step is carried out by **all ships simultaneously** (pillar P1):
 ### 5.3 Initiative
 Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
 **settle conflicts**: when two ships' movements interfere, the ship with initiative resolves first, then the other.
-Confirmed uses: **simultaneous whirlpool entry** (§3.2.1). *(Which card's number counts, and whether higher wins: Q32. Other conflicts: Q8.)*
+**Which number counts** depends on the phase:
+
+| Phase | Initiative from |
+|---|---|
+| Move phase (sailing conflicts, e.g. simultaneous whirlpool entry, §3.2.1) | the card in the **Move (Sail)** slot |
+| Action phase (cannon fire order) | the card in the **Action** slot |
+
+So the same physical card can have a different effect on priority depending on where you place it, which is one more thing to weigh when programming.
+*(Whether higher wins, empty slots, and other conflicts: Q32, Q8.)*
 
 ### 5.4 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
@@ -499,6 +507,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.39 — initiative: Move slot card for movement, Action slot card for cannon.
 - v0.38 — cannons hit all enemy ships in both arcs.
 - v0.37 — simultaneous whirlpool entry resolved by initiative.
 - v0.36 — cannons don't fire through portals or caves.
