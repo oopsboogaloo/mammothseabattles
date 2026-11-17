@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.74**
+> Status: **Draft v0.75**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -265,6 +265,7 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
 3. **Currents**: in three 1-hex sub-steps (triple → double + triple → all), moving and/or turning ships. Eddies spin ships.
    **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
 4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
+   Then home port guns fire *(timing assumed ❓)*, and the **sea monster** attacks if in play (§9.1).
 5. **Wind drift**: each drifting ship moves **1 hex downwind** (heading unchanged). **Drift doesn't push**: a ship drifting into an
    occupied hex stays put. Terrain, portals and caves still apply. Which winds drift depends on the Part:
 
@@ -522,6 +523,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
   - **Fully heal**: flip all wounded crew to healthy.
   - **Recruit** back up to **3 crew**.
 - **Cost: the next turn**: she spends the following turn in port and **can't do anything** (no sailing, steering or actions).
+  She **still draws cards** as normal.
 - The home port's guns (§8.2.4) protect her while she refits.
 
 ### 7.8 Sinking and coming back
@@ -590,6 +592,7 @@ mode is a plug-in objective module on top of a shared rules core.
     for an information advantage (§3.6).
   - When the deck runs out, **reshuffle** it.
   - If the spawn point is **occupied by a ship**, that's fine: the treasure appears there and **can be claimed immediately**.
+  - **Only one treasure per spawn point**: if the drawn point already has a treasure, **draw again**.
 - **Treasures in play at once = (number of ships − 1) / 2, rounded up**:
 
 | Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
@@ -615,7 +618,7 @@ mode is a plug-in objective module on top of a shared rules core.
 
 **8.2.4 Home port & scoring**
 - Each player has a **home port**, **placed on the edge of the map at setup**. It is **indestructible** and **has guns**
-  with **range 2 hexes**, so other ships keep their distance *(gun damage, timing and targets: Q44)*.
+  with **range 2 hexes** dealing **1 DD**, so other ships keep their distance *(timing and targets: Q44)*.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
 - Treasure is **scored, and safe, once it reaches the carrier's home port**. It can't be stolen after that.
 
@@ -650,17 +653,23 @@ mode is a plug-in objective module on top of a shared rules core.
 
 ## 9. Optional modules
 
-### 9.1 Sea monster *(to be specified)*
-- An optional module. Cards with the 🐙 icon relate to the sea monster's movement.
-- **Movement**: the monster moves **during Upkeep**, **1 hex**. The player with the **most 🐙 icons** decides the direction *(icons counted
-  where: hand, cards programmed this turn? ties? Q54)*.
-- **Attack**: **each Part**, the monster deals **1 DD to every ship next to it** *(at which point in the Part? Q54)*.
-- Still to cover: its starting position, whether terrain, portals or caves affect it, whether it can be shot or pushed, and whether it blocks ships.
+### 9.1 Sea monster *(optional module)*
+- **Setup**: placed as the scenario's setup says.
+- **Influence**: a player's influence over the monster = the **🐙 icons on the command cards they programmed this turn**, plus the
+  occasional crew member with a 🐙 icon, plus **every DD they hit the monster with last turn** (see Shooting below).
+- **Movement**: during **Upkeep**, the monster moves **1 hex**; the player with the **most influence** chooses the direction *(ties: Q54)*.
+  It **ignores all board elements**: it isn't blocked by land and isn't affected by currents, wind, tides, terrain, portals or caves.
+- **Attack**: each Part, **after the Action phase**, it deals **1 DD to every ship next to it**.
+- **Shooting it**: the monster **can be shot** (it's a valid cannon target). It **can't be killed**, but each DD that hits it is
+  **added to the shooter's influence next turn**. Hurting it lets you steer it.
+- It **can't be pushed**.
+- *Open: Q54.*
 
 ## 10. Glossary
 | Term | Definition |
 |------|------------|
 | Crew card | A crew member; healthy or wounded; its command-card icons set how many cards you draw (§3.6, §7.4). |
+| Influence | A player's control over the sea monster: programmed 🐙 icons + DD dealt to it last turn (§9.1). |
 | Shipwreck | A token; start-of-game wrecks plus one per sunk ship; searched at Upkeep for a wreck card (§7.9). |
 | Equipment | Mostly single-use cards, playable any time, e.g. Explosive cannon balls (+2 DD) (§7.10). |
 | Damage marker | Blocks one of the 9 ship-board slots (§7.3). |
@@ -698,12 +707,12 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
     Can equipment be played **during another player's attack** (e.g. a defensive item)?
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
-- **Q54. Sea monster** (optional module, §9.1):
-  - "Most 🐙 icons": counted on what: cards in hand, cards programmed this turn, cards played this turn? Ties?
-  - When in the Part does it attack (end of Part?)
-  - Starting position; is it blocked by land; does it use portals and caves; can it be shot, pushed, killed? Does it block ships?
+- **Q54. Sea monster** (mostly answered, §9.1). Still open:
+  - Influence ties: who decides? (Roll off, like initiative?)
+  - Does it occupy a hex: can ships enter its hex, and does it block movement? What happens if it moves onto a ship?
+  - Does shooting it need it to be in your broadside arc (like a ship)? Does fog hide it?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
-  - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). Does she still draw cards at the end of it?
+  - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
   - Optional: can she refit partly (e.g. just recruit) without losing the turn?
   - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
@@ -742,10 +751,10 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q44. Treasure Hunt follow-ups** (answered: deck reshuffles; an occupied spawn point is fine; land treasure is dug up at end of turn;
   sea, land or mixed setups). Still open:
   - How are spawn points marked on the board (tokens per scenario)?
-  - A new treasure spawning where a treasure already lies: both there, or draw again?
+  - ~~Treasure already there~~ → only one treasure per point; draw again (answered).
   - Knocking loose: what if no adjacent hex is empty? Can it be placed on a reef or sandbank?
-  - ~~Port gun range / placement / reaching it~~ → range 2; map edge at setup; must enter (answered). Gun damage (1 DD?), when they fire
-    (every Action phase?), and targets (all rival ships in range?)?
+  - ~~Port gun range / placement / reaching it~~ → range 2; map edge at setup; must enter (answered). ~~Gun damage~~ → 1 DD (answered). When they fire
+    (every Action phase, assumed), and targets (all rival ships in range, assumed)? All directions, not broadside arcs?
   - Can treasure be scored at another player's port? (Assumed no.)
   - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
 
@@ -802,6 +811,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.75 — sea monster rules (influence, movement, attack, shooting); port guns 1 DD; one treasure per spawn point; refit turn still draws.
 - v0.74 — sea monster basics; ramming DD to the first ship only; refit turn = no actions; home port on map edge, guns range 2, must enter.
 - v0.73 — treasure deck reshuffle; occupied spawn ok; land treasure at end of turn; rammed ship takes the DD; refit costs the next turn; weather board one space per turn; storm 3 DD (provisional).
 - v0.72 — wind blows the way the arrow points.
