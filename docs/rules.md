@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.29**
+> Status: **Draft v0.30**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -72,7 +72,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
-| **Whirlpool portal** (numbered, e.g. "1") | Two matching whirlpools | **Confirmed: paired by number and act as portals.** Enter one, come out at its partner (details Q45). |
+| **Whirlpool portal** (numbered, e.g. "1") | Two matching whirlpools | **Core feature.** Paired portals; see §3.6. |
 | Sea caves A / B | Cave mouths on islands marked A and B, with exit arrows | Tunnels: enter A, exit at the other A, facing the arrow ❓ |
 | Island | Land | Impassable; ships hitting it take collision damage? ❓ |
 | Reef / rocks | Pink spiky edges round islands; wreck-strewn rocky hexes with a skull | Hazard: damage, grounding, or sinking? ❓ |
@@ -83,6 +83,16 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
 | Small wreck on sandbar | Upper left | Treasure location? ❓ |
+
+### 3.2.1 Whirlpool portals *(core rule)*
+Portals are a **core** feature, not optional; they're a big part of the fun (as in RoboRally).
+- Whirlpools come in **pairs, matched by number**.
+- **Entering** a whirlpool hex teleports the ship **immediately** to the partner whirlpool.
+- She **keeps her heading** and **carries on with any remaining movement** from the partner hex.
+- **Any movement triggers it**: sailing, being pushed, currents, wind drift.
+- **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal *(what happens instead: Q45)*.
+- Assumed ❓: **arriving** at a whirlpool through the portal doesn't trigger it again (no infinite loop), and a ship that starts on a
+  whirlpool and moves off it doesn't trigger it.
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -431,12 +441,12 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   Does a ship carried by a current into an occupied hex just stay put? What if she's carried into land or a reef?
 - **Q19. Board features.** Confirm or correct the ❓ interpretations in §3.2 (eddies, gyres, maelstrom, whirlpool pairs, caves A/B,
   reefs, rough water, fog, storm, port, wreck).
-- **Q45. Whirlpool portals:**
-  - Does a ship teleport when she **enters** the whirlpool hex during movement (and keep moving from the partner with any movement left), or only when she **ends** a phase on it?
-  - Which way does she face when she comes out: same heading, or a fixed exit direction?
-  - What if the partner hex is occupied: push, blocked, collision damage?
-  - Do currents and wind drift trigger it too?
-  - Can cannon fire through it? (Assumed no.)
+- **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
+  - Blocked: she stays on the entry whirlpool. Does she then carry on with remaining movement as if it were a normal hex,
+    or does her movement stop there?
+  - Confirm: arriving through a portal doesn't re-trigger it, and starting on a whirlpool and leaving doesn't trigger it.
+  - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
+  - Can cannon fire through a portal? (Assumed no.)
 - **Q24. Board edge.** What happens when a ship sails or drifts off the map?
 - **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
 - **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
@@ -459,6 +469,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.30 — whirlpool portal rules (core).
 - v0.29 — 9 spawn points; whirlpools confirmed as paired portals.
 - v0.28 — treasure map deck chooses spawn points; peeking is a possible crew ability.
 - v0.27 — treasure respawns at Upkeep only after one is scored; rounding up confirmed.
