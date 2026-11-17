@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.47**
+> Status: **Draft v0.48**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -41,6 +41,8 @@ interact with each other and with the sea.
   sorting out minor collisions in good faith. Rules should stay simple enough to make that easy.
 - **P3. Embrace chaos.** Collisions, currents and plans going wrong are the fun. Don't over-engineer
   the rules to remove chaos; a relaxed, slightly anarchic vibe is the goal.
+- **P5. Damage mostly slows you down.** Damage takes away options (blocked slots, fewer cards) rather than knocking you
+  out quickly. Sinking needs heavy, focused damage, so ships stay in the game and the race stays live.
 - **P4. The online version enforces what the table trusts.** The digital version needs a deterministic
   conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
 
@@ -623,6 +625,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.48 — design pillar P5: damage mostly slows you down.
 - v0.47 — Repair and Heal actions.
 - v0.46 — damage model: Ship damage blocks slots, Crew damage wounds or kills crew; sinking rules; crew cards set cards drawn; hand max 9.
 - v0.45 — cannon hit = 1 DD; ramming = 1 DD.
