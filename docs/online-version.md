@@ -1,6 +1,6 @@
 # Online version: goals & product spec
 
-> Draft. Captures the designer's goals. Implementation decisions come later.
+> Draft. Captures the designer's goals. Technical spec and roadmap: [`web-spec.md`](web-spec.md). **v1 is local play against AI**; online play, sign-in and Steam follow.
 
 ## Purpose
 - The online version is **free**. Its job is to **drive sales of the physical game**.
