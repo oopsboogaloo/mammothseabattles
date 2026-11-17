@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.60**
+> Status: **Draft v0.61**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -266,6 +266,7 @@ so replays and tests can be reproduced.)*
 
 ### 5.4 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
+- **Searching shipwrecks** (§7.9).
 - **Spawning treasure** to replace any scored this turn (Treasure Hunt, §8.2.1).
 - Probably also advancing the weather circuit and the tide (Q37).
 
@@ -454,13 +455,18 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - *Hand of cards, facing, sail: Q16.*
 
 ### 7.9 Shipwrecks
-- **The map starts with shipwrecks** placed on it, and **every ship that sinks leaves a new shipwreck** where she sank.
-- A ship can **search** a shipwreck *(how: Q50)*. Searching draws a card from the **wreck deck**, which might give:
-  - a **random crew** member,
-  - random **equipment**,
-  - an **unexpected treasure**,
-  - or **something bad**.
-- A shipwreck is **removed once searched**.
+- **Shipwreck tokens** are placed on the map at setup, and **every ship that sinks leaves a new shipwreck token** where she sank.
+- **Searching** happens during **Upkeep**: a ship that **ends the turn on** a wreck (sea), or **next to** it if the wreck is on land,
+  searches it and draws a **wreck card**.
+- The wreck token is **removed once searched**.
+- **Wreck deck (prototype):** for now, a wreck gives **at random either a crew card or an equipment card** *(interpretation ❓)*.
+- **Wreck deck (eventually):** like Monopoly's Chance cards, **mostly good, lots of variety**: e.g. repair, heal, crew, equipment,
+  treasure, "choose another player: they take 1 DD", and the occasional bad result. **Variety is part of the fun.**
+
+### 7.10 Equipment
+- **Equipment cards** are mostly **single-use**, and can be **played at any time** *(exact timing windows: Q50)*.
+- Example: **Explosive cannon balls**: +2 DD to any attack.
+- Design contrast: **crew = permanent benefit; equipment = one-shot burst**.
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -564,7 +570,8 @@ mode is a plug-in objective module on top of a shared rules core.
 | Term | Definition |
 |------|------------|
 | Crew card | A crew member; healthy or wounded; its command-card icons set how many cards you draw (§3.6, §7.4). |
-| Shipwreck | A searchable marker; start-of-game wrecks plus one per sunk ship; searching draws a wreck card (§7.9). |
+| Shipwreck | A token; start-of-game wrecks plus one per sunk ship; searched at Upkeep for a wreck card (§7.9). |
+| Equipment | Mostly single-use cards, playable any time, e.g. Explosive cannon balls (+2 DD) (§7.10). |
 | Damage marker | Blocks one of the 9 ship-board slots (§7.3). |
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
@@ -591,15 +598,15 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Facing, sail level on return?
   - What if an enemy ship is in or next to her port when she comes back? (The port guns probably deal with that.)
   - Deathmatch scoring: count sinkings as points? (Q43.)
-- **Q50. Shipwrecks:**
-  - How do you search: pass through the hex (like treasure), end a Part on or next to it, or use an Action?
-  - How many shipwrecks does the map start with, and where (printed on tiles, or tokens per scenario)? Are the skull-and-wreck hexes on the
-    example board starting wrecks?
-  - The wreck deck: size and contents (how many crew / equipment / treasure / bad results)? What are the bad results (e.g. sea monster,
-    curse, hidden reef damage)?
-  - **Equipment** is a new component: what is it, how many can a ship hold, and is it lost when she sinks?
-  - "Unexpected treasure": does it count towards the treasures-in-play total (§8.2.1)?
-  - A new wreck and dropped treasure land in the same hex. Fine to have both?
+- **Q50. Shipwrecks & equipment** (answered: search at Upkeep by ending on or next to a wreck; tokens; prototype deck = random crew or
+  equipment; equipment mostly single-use, play any time). Still open:
+  - Confirm the prototype wreck deck is "randomly a **crew** card or an **equipment** card".
+  - How many wreck tokens at setup, and where (scenario setup, or chosen in turn)?
+  - Equipment: is there a limit on how many a ship can hold? Kept secret (in hand) or face up? Lost when she sinks (dropped into the new wreck?)
+  - "Any time" needs precise windows for the online version, e.g. explosive shot: played after a hit is declared, before rolling.
+    Can equipment be played **during another player's attack** (e.g. a defensive item)?
+  - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
+  - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - "Costs a full turn": does she skip the **next** turn (no cards programmed, stays in port)? Or is it the turn she arrived on (she must
     end it in port, so the turn is effectively spent)? Does she still draw cards?
@@ -701,6 +708,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.61 — wreck searching at Upkeep; wreck deck; equipment cards.
 - v0.60 — shipwrecks and the wreck deck.
 - v0.59 — Retired Captain: strongest crew, won't serve with a Captain (swap).
 - v0.58 — 8 identical Captains; Retired Captain in the crew deck; all ships identical.

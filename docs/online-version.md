@@ -40,6 +40,9 @@ Some rules need a player decision **in the middle of resolution**:
   carrier was actually hit or rammed by them.
 - The prompt has a **1-minute timer** and a **default** if the player doesn't answer (defaults to be decided: e.g. fire at all
   targets; take the DD rather than knock treasure loose; for damage, block the least valuable slot and wound before killing).
+- **Equipment played "at any time"** (rules §7.10) is the hardest case online. Plan: define fixed **windows** (e.g. after programming,
+  after a hit is declared, before the damage roll) and only open a window for players who **hold a card that can be played in it**.
+  Otherwise everyone's hidden hand would leak information through pauses, and games would stall.
 - Possible improvement: let players set **damage preferences** in advance (e.g. "block Action slots first") so most damage needs no prompt.
 - Engine requirement: the rules core must be able to **suspend resolution, ask a specific player a question, and resume**
   deterministically. In BGA terms, that's a short single- or multi-active state in the middle of resolution.
