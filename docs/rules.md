@@ -666,7 +666,11 @@ mode is a plug-in objective module on top of a shared rules core.
 - **Shooting it**: the monster **can be shot** like a ship: it must be **in your broadside arc**, and **fog hides it**. It **can't be killed**, but each DD that hits it is
   **added to the shooter's influence next turn**. Hurting it lets you steer it.
 - It **can't be pushed**.
-- *Open: Q54.*
+- **Design intent** (unplaytested):
+  - Influence comes **mostly from programmed command cards**, so it's spread round the table and rarely concentrated in one player.
+  - 🐙 crew are **rare** and give only **+1**.
+  - The monster moves only **1 hex per turn**, so it's **area denial** more than an assassin.
+  - **Playtest watch-list**: one player steering it onto a leader repeatedly; shooting it to gain influence becoming a dominant strategy.
 
 ## 10. Glossary
 | Term | Definition |
