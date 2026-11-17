@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.46**
+> Status: **Draft v0.47**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -406,7 +406,13 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 | Effect | Blocks programming slots | Fewer cards drawn |
 | Death spiral? | Yes: fewer slots, fewer choices | Yes: fewer cards, fewer choices |
 | Sinks when | Any whole row (Sail/Steer/Action) is blocked | No healthy crew |
-| Fixed by | **Repair** action ❓ | **Heal** action ❓ |
+| Fixed by | **Repair** action | **Heal** action |
+
+### 7.6 Repair and Heal (Action phase)
+- **Repair**: fixes Ship damage, i.e. removes a damage marker *(how many per action, assumed 1 ❓)*.
+- **Heal**: fixes Crew damage, i.e. flips a wounded crew member back to healthy *(assumed 1 ❓; can it revive dead crew? assumed no)*.
+- Both are **Action-band** orders, so they compete with **Fire Cannons** for the Action slots. Repair can only be programmed while at least
+  one Action slot is usable.
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -525,8 +531,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q15b. Damage follow-ups:**
   - Who chooses which slot is blocked, and which crew is wounded or killed: the damaged player (assumed) or the attacker?
   - A damage marker in a slot whose Part has already **resolved** this turn: just blocks it from next turn?
-  - **Repair** and **Heal**: Repair removes 1 damage marker, Heal flips 1 wounded crew back to healthy? Can a ship repair a slot
-    while the Action slot for that Part is the one blocked? Are there other ways (e.g. at home port)?
+  - ~~Repair and Heal~~ → Actions fix Ship or Crew damage (answered). Still open: how much per action (assumed 1)? Can a removed damage marker be
+    from any slot, including one in the current Part? Are there other ways to recover (e.g. at home port)?
   - **Critical damage cards**: contents, count, permanent until repaired?
   - **After sinking**: out of the game, or respawn at home port (with what crew and damage)? Treasure dropped where it sank?
     (Matters for Treasure Hunt; in Deathmatch, out may be fine.)
@@ -617,6 +623,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.47 — Repair and Heal actions.
 - v0.46 — damage model: Ship damage blocks slots, Crew damage wounds or kills crew; sinking rules; crew cards set cards drawn; hand max 9.
 - v0.45 — cannon hit = 1 DD; ramming = 1 DD.
 - v0.44 — damage die (d12 table). Restored priority-A open questions accidentally deleted in v0.24.
