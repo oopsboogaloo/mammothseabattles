@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.5**
+> Status: **Draft v0.6**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -84,11 +84,57 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
 | Small wreck on sandbar | Upper left | Treasure location? ❓ |
 
+### 3.3 Command cards
+<img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
+
+Each command card is split into **three coloured bands**, one for each kind of order:
+
+| Band | Colour | Order type | Values seen so far |
+|---|---|---|---|
+| Top | Blue | **Sail** | Half Sail, Full Sail |
+| Middle | Yellow | **Steer** | Ease Port (small turn), Hard to Port (large turn) |
+| Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
+
+Each card also has a **number** in the top-right corner (e.g. 400, 420, 840, 860), and some cards have an
+**octopus icon** in the top-left corner (Q26).
+
+Example cards seen:
+
+| No. | Sail | Steer | Action | Icon |
+|---|---|---|---|---|
+| 400 | Half Sail | Ease Port | Fire Cannons | 🐙 |
+| 420 | Half Sail | Ease Port | Heal | |
+| 840 | Full Sail | Hard to Port | Heal | 🐙 |
+| 860 | Full Sail | Hard to Port | Repair | |
+
+### 3.4 Ship board
+Each player has a **ship board** with a **3 × 3 grid of programming slots**:
+3 rows (**Sail / Steer / Action**) × 3 columns (**Step 1 / Step 2 / Step 3**).
+
+- A card placed in a row uses **only that row's band**. The same card could be a Half Sail order, an Ease Port order or a
+  Fire Cannons order, depending on where you place it. *(Inferred; to confirm, Q25.)*
+- So you can raise or lower sail, turn the wheel and give an action order **independently** of each other.
+- **Up to 9 cards** per turn (3 rows × 3 steps). Slots can be left empty (Q27).
+
 ## 4. Setup
 _TBD_
 
 ## 5. Turn structure
-_TBD — phases/steps of a turn, turn order._
+A turn has **3 steps**. Programming happens once per turn and covers all 3 steps.
+
+### 5.1 Programming
+1. Draw command cards *(how many? Q7)*.
+2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
+3. Reveal *(all at once, or step by step? Q28)*.
+
+### 5.2 Resolving each step (repeat for steps 1, 2, 3)
+All ships act **simultaneously** in each sub-step (pillar P1):
+
+1. **Ship movement**: all ships carry out their Sail and Steer orders. **Ships push** other ships they move into.
+2. **Currents**: all ships on currents are moved and/or turned by them. **Currents do not push**: board movement
+   only moves the ship on the current, like RoboRally conveyors.
+3. **Wind drift**: all ships drift with the wind (Q9, Q10).
+4. *Action orders (fire / repair / heal): when in the step? Q29.*
 
 ## 6. Actions
 _TBD_
@@ -115,9 +161,11 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q3c. Scaling to 8: how much does the board grow? (Downtime isn't a concern; see pillar P1.)
 
 **Programming (D2, D3)**
-- Q4. Does each of the 3 steps get one sail card, one steer card and one cannon card? Are they separate decks or one shared hand?
-- Q5. Within a step, what order do steering, sailing and cannon resolve in? (For example: steer → sail → board → fire.)
-- Q6. Is "sail" a distance (move N hexes forward) and "steer" a heading change (60° turns)?
+- ~~Q4~~ → Answered: one shared deck of 3-band cards; a 3 × 3 ship board, one slot per order type per step (§3.4).
+- ~~Q5~~ → Partly answered: movement → currents → wind drift (§5.2). Action timing is Q29.
+- Q6. What exactly do Half Sail and Full Sail do: how many hexes, before wind? Is there a "No Sail" / furled or "Drop Anchor" order? Is sail a **persistent setting** (stays raised until lowered) or only for this step?
+- Q6a. Steering: is Ease 60° (one hex side) and Hard 120°? Do the turn and the sailing happen together (curving), or turn first then sail, or sail then turn? Are there starboard versions of every port card?
+- Q6b. Pushing: how far is a ship pushed (1 hex, or as far as the pusher keeps moving)? Can a pushed ship push others in a chain? What happens when a ship is pushed into land, a reef or the board edge?
 - Q7. Hand size: how many cards are drawn per turn? Is it a personal deck (2016 style) or dealt from a shared deck (classic)?
 - Q8. Execution is simultaneous (P1). When two ships' moves conflict in the same step (both entering one hex, ramming head-on, swapping hexes), what happens at the table? For example: both stop, both take damage, the bigger or faster ship wins, or the players agree on the spot. The online version needs a written rule.
 
@@ -138,17 +186,26 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Board (§3)**
 - Q18. Hex orientation and tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
 - Q19. Confirm or correct every ❓ in §3.2.
-- Q20. Currents: do they act **after every step** (like RoboRally after every register) or once per turn? In what order do the different types act (fast before slow, then turning)?
+- Q20. Currents act after ship movement in **every step** (§5.2). Still open: do all current types act at once, or in an order (e.g. fast currents first)?
 - Q21. Is a current's turn absolute (the ship ends facing the arrow) or relative (turn 60° clockwise)?
-- Q22. If a current pushes a ship into another ship, does it push her or just stop (RoboRally: board movement doesn't push)? If it pushes her into an island?
+- ~~Q22~~ → Answered: currents do not push (§5.2). Still open: does the ship just stay put, and what about a current carrying her into an island or reef?
 - Q23. Which features are changed by **tides**? Are the sandbanks and shallows the tidal parts?
 - Q24. Board edge: what happens to a ship that sails or drifts off the map?
+
+**Command cards (§3.3–3.4)**
+- Q25. Confirm: a card is slid or placed so that only the band for its row counts?
+- Q26. What do the **numbers** (400, 420, 840, 860) mean: priority for tie-breaks, card IDs, or something else? The hundreds digit seems to follow the sail (4xx = Half, 8xx = Full). What does the **octopus icon** mean?
+- Q27. An empty slot means what? No sail change / hold course / no action?
+- Q28. Are all 9 cards revealed at once, or column by column as each step resolves?
+- Q29. When do action orders happen within a step: before movement, after movement, or after currents and wind? Does Fire Cannons fire both broadsides? What's the difference between **Heal** (crew?) and **Repair** (ship?)?
+- Q30. Full list of band values in the deck (all sail, steer and action types) and the deck's makeup and size.
 
 **Crew (D8)**
 - Q17. How do you get crew, how many can you hold, and are they permanent or single-use? Can crew be lost to damage?
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.6 — command cards (3 bands), 3 × 3 ship board, step order: movement → currents → wind. Currents don't push.
 - v0.5 — design pillars: simultaneous execution, trust, embrace chaos. Removed my wrong claim that RoboRally scales poorly.
 - v0.4 — board: modular hex tiles, currents, list of observed features from the example board.
 - v0.3 — player count: 4 to start, target up to 8.
