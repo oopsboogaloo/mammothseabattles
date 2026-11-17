@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.83**
+> Status: **Draft v0.84**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -665,15 +665,21 @@ mode is a plug-in objective module on top of a shared rules core.
 ### 8.4 M4 Capture the Flag
 - Teams. *Open: Q43.*
 
-### 8.6 Variant: Fleets (two ships per player)
+### 8.6 Variant: Fleets (two ships per player): the **expert** version
 For experienced players: **each player commands 2 ships**. Inspired by the designer's way of playing RoboRally with two robots each, which makes
-2-player games full and rich (it becomes heavy beyond 3–4 players).
+2-player games full and rich (it gets heavy beyond 3–4 players). **Firmly the extreme version**; not for everyone.
 - **Recommended for 2 players** (4 ships on the sea); possible with 3–4 players (6–8 ships). Maximum 8 ships in total.
-- Each ship is a full ship: her own **ship board, crew, damage, sail level, programming and initiative**.
-- The two ships are **teammates**: no friendly fire (§7.1).
+- Each ship is a full ship: her own **ship board, crew (Captain + 2 at the start), hand of command cards, damage, sail level, programming
+  and initiative**.
+- **One home port per player**, shared by both ships (refit, scoring, coming back after sinking).
+- The two ships are **teammates**:
+  - no friendly fire (§7.1);
+  - they **can push each other**, but ramming a teammate deals **no DD**;
+  - they **can pass treasure** between them *(how: Q55)*.
+- **Shared goals**: treasure scored by either ship counts towards the player's total. In **Race**, a checkpoint only needs to be reached **once
+  per team**, by either ship.
 - Counts that depend on ships use the **number of ships**, not players (e.g. treasures in play, §8.2.1).
-- Applies to any game mode.
-- *Details still to decide: Q55.*
+- *Later variant to explore:* **combined hand**: the player draws one hand for both ships and splits it between the two ship boards.
 
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
@@ -751,13 +757,10 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
 - ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). ~~Entering by drift, current or push~~ → also sinks (answered).
-- **Q55. Fleets variant (two ships per player):**
-  - **Hands**: does each ship have her own hand (drawn from her own crew), or does the player draw one combined hand and split the cards
-    between both ship boards? (RoboRally two-robot play usually gives each robot its own hand.)
-  - **Home port**: one shared port per player, or one per ship? Can both ships refit or come back there?
-  - **Treasure Hunt**: does a treasure scored by either ship count towards the player's total? Is the target the same (3), or higher?
-  - Can ships of the same player **ram/push** each other (yes, presumably, but without the DD)? Knock treasure loose from each other? Pass treasure?
-  - Starting crew: Captain + 2 for each ship (2 Captains per player)?
+- **Q55. Fleets variant** (answered: expert variant; one port per player; one hand per ship; shared treasure; Race checkpoints once per team;
+  teammates push without DD and can pass treasure; Captain + 2 each). Still open:
+  - How is treasure passed: by ramming your teammate (knock it loose without the DD, placing it next to her), or by ending a Part next to each other?
+  - Is the Treasure Hunt target still 3 for two-ship players?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
@@ -859,6 +862,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.84 — Fleets: expert variant; one port per player; one hand per ship; shared goals; teammates push without DD.
 - v0.83 — Fleets variant: two ships per player; pillar P7 (players vs ships).
 - v0.82 — setup (start in port, sail down, choose heading); critical = reroll + 1 extra DD (placeholder); Upkeep order proposed; stranding checked when the tide changes.
 - v0.81 — at the crew cap, swap.

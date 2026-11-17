@@ -151,7 +151,7 @@ crew float over the table corners. Refinements to carry into the mock-up:
 
 **Fleets variant (two ships per player):** the dock shows **one ship at a time with a ship switcher** (two tabs with each ship's name,
 colour and ready status); the board highlights the selected ship and both ghost previews. On wide desktop screens both ship boards may fit
-side by side; to be tested in the mock-up. Whether hands are per ship or shared depends on rules Q55.
+side by side; to be tested in the mock-up. Each ship has her **own hand** (rules §8.6), so the switcher swaps both the ship board and the hand.
 
 ### 4.2.1 Screen zones (from the wireframe brief)
 | Zone | Content | Behaviour |
