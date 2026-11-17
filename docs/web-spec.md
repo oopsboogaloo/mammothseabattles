@@ -36,6 +36,7 @@ Purpose (from `online-version.md`): free, **teaches the game**, drives sales of 
 | NFR-9 | **Online-ready.** The same engine runs on a server later (authoritative, hidden information never sent to the wrong player). |
 | NFR-10 | **AI players** use the same interface as humans, and only see what their player can see (no cheating). |
 | NFR-11 | **Performance targets** (proposed): resolve a full turn headless in < 50 ms for 8 ships; ≥ 1,000 AI-vs-AI games per minute on a laptop for simulation; 60 fps board on a recent PC, ≥ 30 fps on iPad. |
+| NFR-13 | **Players own ships, one-to-many.** The data model, views, decisions, AI and UI separate **players** (seats) from **ships**: a player controls 1 or 2 ships (Fleets variant, rules §8.6), up to 8 ships in total. Built in from the start: retrofitting this later would touch everything. |
 | NFR-12 | **Accessibility.** Card bands are colour **and** icon coded (already true of the art); check colour-blind safety; readable at iPad size. |
 
 ---
@@ -147,6 +148,10 @@ crew float over the table corners. Refinements to carry into the mock-up:
 - Currents / Drift labels on the compact ship board, so it reads like the physical board.
 - The dock folds away completely during resolution (≈ 90% table), with a peek button.
 - Flat-topped hexes on the board (the wireframes wrongly drew pointy-topped).
+
+**Fleets variant (two ships per player):** the dock shows **one ship at a time with a ship switcher** (two tabs with each ship's name,
+colour and ready status); the board highlights the selected ship and both ghost previews. On wide desktop screens both ship boards may fit
+side by side; to be tested in the mock-up. Whether hands are per ship or shared depends on rules Q55.
 
 ### 4.2.1 Screen zones (from the wireframe brief)
 | Zone | Content | Behaviour |

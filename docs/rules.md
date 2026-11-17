@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.82**
+> Status: **Draft v0.83**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -45,6 +45,8 @@ interact with each other and with the sea.
   the rules to remove chaos; a relaxed, slightly anarchic vibe is the goal.
 - **P5. Damage mostly slows you down.** Damage takes away options (blocked slots, fewer cards) rather than knocking you
   out quickly. Sinking needs heavy, focused damage, so ships stay in the game and the race stays live.
+- **P7. Players, not ships.** A player may command **more than one ship** (Fleets variant, §8.6), so rules always say which they mean:
+  "ship" for anything on the sea or a ship board, "player" for hands of equipment, decisions, scoring and winning.
 - **P6. No player elimination.** A sunk ship comes back at her home port (§7.8). Nobody sits out.
 - **P4. The online version enforces what the table trusts.** The digital version needs a deterministic
   conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
@@ -663,6 +665,16 @@ mode is a plug-in objective module on top of a shared rules core.
 ### 8.4 M4 Capture the Flag
 - Teams. *Open: Q43.*
 
+### 8.6 Variant: Fleets (two ships per player)
+For experienced players: **each player commands 2 ships**. Inspired by the designer's way of playing RoboRally with two robots each, which makes
+2-player games full and rich (it becomes heavy beyond 3–4 players).
+- **Recommended for 2 players** (4 ships on the sea); possible with 3–4 players (6–8 ships). Maximum 8 ships in total.
+- Each ship is a full ship: her own **ship board, crew, damage, sail level, programming and initiative**.
+- The two ships are **teammates**: no friendly fire (§7.1).
+- Counts that depend on ships use the **number of ships**, not players (e.g. treasures in play, §8.2.1).
+- Applies to any game mode.
+- *Details still to decide: Q55.*
+
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
@@ -739,6 +751,13 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
 - ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). ~~Entering by drift, current or push~~ → also sinks (answered).
+- **Q55. Fleets variant (two ships per player):**
+  - **Hands**: does each ship have her own hand (drawn from her own crew), or does the player draw one combined hand and split the cards
+    between both ship boards? (RoboRally two-robot play usually gives each robot its own hand.)
+  - **Home port**: one shared port per player, or one per ship? Can both ships refit or come back there?
+  - **Treasure Hunt**: does a treasure scored by either ship count towards the player's total? Is the target the same (3), or higher?
+  - Can ships of the same player **ram/push** each other (yes, presumably, but without the DD)? Knock treasure loose from each other? Pass treasure?
+  - Starting crew: Captain + 2 for each ship (2 Captains per player)?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
@@ -840,6 +859,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.83 — Fleets variant: two ships per player; pillar P7 (players vs ships).
 - v0.82 — setup (start in port, sail down, choose heading); critical = reroll + 1 extra DD (placeholder); Upkeep order proposed; stranding checked when the tide changes.
 - v0.81 — at the crew cap, swap.
 - v0.80 — crew cap 6.
