@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.9**
+> Status: **Draft v0.10**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -97,7 +97,8 @@ Each command card is split into **three coloured bands**, one for each kind of o
 
 Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
 RoboRally's priority numbers (see §5.3). The hundreds digit seems to follow the sail band (4xx = Half Sail,
-8xx = Full Sail), so faster cards win initiative. Some cards also have an **octopus icon** in the top-left corner (Q26).
+8xx = Full Sail), so faster cards win initiative. Some cards also have an **octopus icon 🐙** in the top-left corner. It is used to **move the sea monster**, an
+**optional role/module** to be specified later (see §10).
 
 Example cards seen:
 
@@ -181,6 +182,12 @@ _TBD_
 ## 8. Winning & game end
 _TBD_
 
+## 10. Optional modules
+
+### 10.1 Sea monster *(to be specified)*
+- An optional role. Cards with the 🐙 icon relate to the sea monster's movement.
+- To be covered later: who controls it (a player, or automatic), how 🐙 cards drive it, and what it does to ships.
+
 ## 9. Glossary
 | Term | Definition |
 |------|------------|
@@ -236,7 +243,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Command cards (§3.3–3.4)**
 - ~~Q25~~ → Answered: only the slot's band counts (ship board art).
 - ~~Q26a~~ → Answered: the numbers are initiative, as in RoboRally.
-- Q26. What does the **octopus icon** mean?
+- ~~Q26~~ → Answered: 🐙 = sea monster movement (optional role, §10.1, deferred).
 - Q32. Initiative details:
   - Which card's number counts in a given Part: the one in the Move slot, or the highest of the three? What if the Move slot is empty?
   - Does higher go first, as in classic RoboRally?
@@ -253,6 +260,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.10 — 🐙 icon = sea monster movement (optional module, deferred).
 - v0.9 — cannon fire: both broadsides, 60° arcs, range 4.
 - v0.8 — card numbers are initiative.
 - v0.7 — ship board layout (Parts I–III); order is Move → Steer → Currents → Action → Wind drift; wind strength sets drift count; empty slots defined; sail level persists.
