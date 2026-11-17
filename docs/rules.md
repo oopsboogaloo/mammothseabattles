@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.19**
+> Status: **Draft v0.20**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -232,7 +232,21 @@ with a **minimum of 0**. Examples, Full Sail into the wind (normally 1 hex backw
 - Light (−1) → **0**.
 - Gale (+1) → **2 hexes backwards**.
 
-*Still to confirm: does a 0 move (e.g. Half Sail windward) stay 0 under a Gale? Q39a.*
+Half Sail into the wind (normally 0):
+- Gale (+1) → **1 hex** (backwards, assumed ❓).
+
+So modifiers apply to any ship with sail **set** (Half or Full), even if its base move is 0. Assumed ❓: **No Sail is never
+modified**, because there's no sail for the wind to act on; only currents and drift move that ship.
+
+**Windward lookup** (heading straight into the wind; − = backwards):
+
+| Weather | No Sail | Half Sail | Full Sail |
+|---|---|---|---|
+| Dead Calm | 0 | 0 | 0 |
+| Light (−1 all) | 0 | 0 | 0 |
+| Firm | 0 | 0 | −1 |
+| Strong (+1 Full) | 0 | 0 | −2 |
+| Gale (+1 all) | 0 | −1 | −2 |
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
@@ -334,8 +348,9 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
 - Q39a. Partly answered: modifiers change the move's size, minimum 0 (Light on Full Sail windward = 0). Still open:
   - ~~Gale +1 on Full Sail windward~~ → 2 hexes backwards (answered).
-  - Gale +1 on Half Sail windward (normally 0): stays 0, or 1 backwards?
-  - Does a +1 ever turn a 0 into a move? (Suggested rule: **a 0 move stays 0**.)
+  - ~~Gale on Half Sail windward~~ → 1 (answered). Confirm it's **backwards**.
+  - Confirm **No Sail is never modified** by weather.
+  - Confirm **Strong** (+1 Full) on Full Sail windward = 2 backwards, like Gale.
   - Dead Calm: presumably also cancels the backwards move?
 - Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
 - Q40. Tides: 3 levels (answered). Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
@@ -369,6 +384,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.20 — Gale on Half Sail windward = 1; windward lookup table.
 - v0.19 — Gale on Full Sail windward = 2 hexes backwards.
 - v0.18 — weather modifiers change move size, minimum 0.
 - v0.17 — DD = damage die.
