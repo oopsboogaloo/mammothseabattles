@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.49**
+> Status: **Draft v0.50**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -408,13 +408,21 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 | Effect | Blocks programming slots | Fewer cards drawn |
 | Death spiral? | Yes: fewer slots, fewer choices | Yes: fewer cards, fewer choices |
 | Sinks when | Any whole row (Sail/Steer/Action) is blocked | No healthy crew |
-| Fixed by | **Repair** action | **Heal** action |
+| Fixed by | **Repair** action; full refit at home port (§7.7) | **Heal** action; full refit at home port (§7.7) |
 
 ### 7.6 Repair and Heal (Action phase)
 - **Repair**: fixes Ship damage, i.e. removes a damage marker *(how many per action, assumed 1 ❓)*.
 - **Heal**: fixes Crew damage, i.e. flips a wounded crew member back to healthy *(assumed 1 ❓; can it revive dead crew? assumed no)*.
 - Both are **Action-band** orders, so they compete with **Fire Cannons** for the Action slots. Repair can only be programmed while at least
   one Action slot is usable.
+
+### 7.7 Refit at home port
+- A ship that **ends a turn at her home port** can **refit**:
+  - **Fully repair**: remove all damage markers *(and critical damage cards? ❓)*.
+  - **Fully heal**: flip all wounded crew to healthy.
+  - **Recruit** back up to **3 crew**.
+- **Cost: a full turn** *(meaning she spends the next turn in port without programming? ❓, Q49)*.
+- The home port's guns (§8.2.4) protect her while she refits.
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -534,12 +542,19 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - ~~Who chooses~~ → the damaged player (answered).
   - A damage marker in a slot whose Part has already **resolved** this turn: just blocks it from next turn?
   - ~~Repair and Heal~~ → Actions fix Ship or Crew damage (answered). Still open: how much per action (assumed 1)? Can a removed damage marker be
-    from any slot, including one in the current Part? Are there other ways to recover (e.g. at home port)?
+    from any slot, including one in the current Part? ~~Other ways to recover~~ → home port refit (§7.7).
   - **Critical damage cards**: contents, count, permanent until repaired?
   - **After sinking**: out of the game, or respawn at home port (with what crew and damage)? Treasure dropped where it sank?
     (Matters for Treasure Hunt; in Deathmatch, out may be fine.)
+- **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
+  - "Costs a full turn": does she skip the **next** turn (no cards programmed, stays in port)? Or is it the turn she arrived on (she must
+    end it in port, so the turn is effectively spent)? Does she still draw cards?
+  - "At home port": in the port hex, or adjacent to it?
+  - Optional: can she refit partly (e.g. just recruit) without losing the turn?
+  - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
+  - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
-  - Starting crew: how many, which (does every ship start with a Captain)? Do mammoth and dinosaur ships get different crew?
+  - Starting crew: 3 (implied by refitting "back up to 3")? Which ones (does every ship start with a Captain)? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
   - What's the white panel: ability text? (You mentioned crew working like RoboRally upgrade cards.)
   - How do you gain crew (recruit at port, rescue, capture)? Maximum crew?
@@ -625,6 +640,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.50 — home port refit: full repair, heal, recruit to 3 crew; costs a turn.
 - v0.49 — the damaged player chooses slots and crew.
 - v0.48 — design pillar P5: damage mostly slows you down.
 - v0.47 — Repair and Heal actions.
