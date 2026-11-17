@@ -96,7 +96,7 @@ Each command card is split into **three coloured bands**, one for each kind of o
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
 Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
-RoboRally's priority numbers (see §5.4). The hundreds digit seems to follow the sail band (4xx = Half Sail,
+RoboRally's priority numbers (see §5.3). The hundreds digit seems to follow the sail band (4xx = Half Sail,
 8xx = Full Sail), so faster cards win initiative. Some cards also have an **octopus icon** in the top-left corner (Q26).
 
 Example cards seen:
@@ -153,12 +153,12 @@ Each sub-step is carried out by **all ships simultaneously** (pillar P1):
    So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once** (any weaker wind: never?). This works like
    RoboRally's push panels, which only fire in certain registers.
 
-### 5.4 Initiative
+### 5.4 Upkeep and new turn
+After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
+
+### 5.3 Initiative
 Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
 **settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
-
-### 5.3 Upkeep and new turn
-After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 
 ## 6. Actions
 _TBD_
