@@ -5,7 +5,7 @@ A board game in design, with a companion online version.
 ## Project aims
 
 1. **Design and test the board game rules** — rules spec, player-facing instructions, playtesting.
-2. **Playable online version** — free, complements the physical game; its main job is to **teach the game** and drive sales of the physical game.
+2. **Playable online version** (own site + Board Game Arena) — free, complements the physical game; its main job is to **teach the game** and drive sales of the physical game.
 3. **Reusable board game engine** — for future games.
 4. **Online turn-based infrastructure** — how to build, host and run turn-based multiplayer.
 
