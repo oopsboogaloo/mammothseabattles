@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.72**
+> Status: **Draft v0.73**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -84,7 +84,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
 | Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
-| Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
+| Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
 | Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
 
@@ -102,6 +102,7 @@ and **death reefs sink any ship that enters them, however she got there**.
 | **Underwater reef** | Pale green stripes | **Water**, except at **Low tide**, when it's **as beach land** (sand) |
 | **Death reef** | Rocky hex with a **skull** icon | **Kills any ship that enters it** (sinks) |
 | **Wall reef** | Spiky reef along a **hex edge** | **Blocks** movement across that edge; trying to cross = **stopped + 2 DD**. Does **not** block cannon fire |
+| **Storm** *(provisional)* | Dark cloud with lightning | **3 DD** to a ship in it at the **end of a Part**. Something bad; may change |
 | **Rough water** | Red/purple churning water | Passable; **2 DD** to a ship that is in it at the **end of a Part** (after wind drift) |
 
 **Tide summary** (Full Metal Planète-style staggered thresholds, §6.4):
@@ -199,6 +200,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   - Two right-hand spaces = **Mid** (ebbing).
   - Bottom space = **Low**.
   - Two left-hand spaces = **Mid** (flooding).
+- The weather board **advances one space per turn**, so the tide cycle is **6 turns**. The **next two turns' weather is visible to everyone**.
 - *How the current space is marked and how cards are refilled: Q37.*
 
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
@@ -274,7 +276,7 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
 
    So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once**; **Light and Dead Calm never drift**.
    This works like RoboRally's push panels, which only fire in certain registers.
-6. **End of Part**: ships in **rough water** take 2 DD (§3.2.0).
+6. **End of Part**: ships in **rough water** take 2 DD; ships in a **storm** take 3 DD (§3.2.0).
 
 **Stuck** ships (§6.7) skip steps 1–3 and 5 but still act in step 4.
 
@@ -309,7 +311,7 @@ so replays and tests can be reproduced.)*
 After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
 - **Searching shipwrecks** (§7.9).
 - **Spawning treasure** to replace any scored this turn (Treasure Hunt, §8.2.1).
-- Probably also advancing the weather circuit and the tide (Q37).
+- **Advancing the weather board** one space (new weather and tide).
 
 ## 6. Movement & actions
 
@@ -464,7 +466,7 @@ Ideas to playtest:
 | Source | DD |
 |---|---|
 | Cannon hit (each enemy ship in the arcs) | **1 DD** |
-| Ramming | **1 DD** (to whom: Q6b) |
+| Ramming | **1 DD** to the **rammed** ship |
 | Gale, per Full Sail | **1 DD** (§3.5) |
 
 **Damage die (d12)**, provisional, will be playtested:
@@ -519,7 +521,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
   - **Fully repair**: remove all damage markers *(and critical damage cards? ❓)*.
   - **Fully heal**: flip all wounded crew to healthy.
   - **Recruit** back up to **3 crew**.
-- **Cost: a full turn** *(meaning she spends the next turn in port without programming? ❓, Q49)*.
+- **Cost: the next turn**: she spends the following turn in port and doesn't sail *(can she still use her Action slots? Q49)*.
 - The home port's guns (§8.2.4) protect her while she refits.
 
 ### 7.8 Sinking and coming back
@@ -585,7 +587,9 @@ mode is a plug-in objective module on top of a shared rules core.
     The spec uses numbers for now.
   - To spawn a treasure, **turn over the top card**: the treasure appears at that numbered spawn point.
   - The deck is drawn from the top **on purpose**, so that **crew or equipment can let a player peek** at the next card
-    for an information advantage (see Crew, §… TBD).
+    for an information advantage (§3.6).
+  - When the deck runs out, **reshuffle** it.
+  - If the spawn point is **occupied by a ship**, that's fine: the treasure appears there and **can be claimed immediately**.
 - **Treasures in play at once = (number of ships − 1) / 2, rounded up**:
 
 | Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
@@ -599,7 +603,8 @@ mode is a plug-in objective module on top of a shared rules core.
 
 **8.2.2 Picking up**
 - **Treasure in a water hex**: picked up by **passing through** the hex (you don't need to end your move there).
-- **Treasure on land**: picked up by **ending a turn adjacent** to that land hex *(turn or Part? Q44)*.
+- **Treasure on land**: picked up by **ending a turn adjacent** to that land hex (end of Part III), which represents going ashore and digging.
+- **Game-length dial**: spawn points can be set up as **all sea** (fast game), **all land** (slower), or a **mix**.
 - **A ship can carry only 1 treasure.** *(Does a full ship sail through a treasure hex without picking it up? Assumed yes.)*
 
 **8.2.3 Stealing / knocking loose**
@@ -689,8 +694,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
-  - "Costs a full turn": does she skip the **next** turn (no cards programmed, stays in port)? Or is it the turn she arrived on (she must
-    end it in port, so the turn is effectively spent)? Does she still draw cards?
+  - ~~Which turn~~ → the next turn (answered). During it, can she still use her Action slots? Does she still draw cards?
   - "At home port": in the port hex, or adjacent to it?
   - Optional: can she refit partly (e.g. just recruit) without losing the turn?
   - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
@@ -716,8 +720,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   ties roll off; movement conflicts in initiative order; cannon damage applied immediately, so sunk ships don't fire (§5.3).
   Still open: are all initiative numbers on the cards unique?
 - **Q6b. Ramming** (answered: pushes chain; push distance = the pushing movement; pushed into an obstacle = moving into it; ramming = 1 DD). Still open:
-  - Who takes the ramming DD: the rammed ship, both, or every ship in a chain? Once per ram, or per hex pushed?
-  - What counts as a ram: only a ship sailing into another, or also pushed ships hitting the next one?
+  - ~~Who takes it~~ → the rammed ship (answered). In a chain, only the first ship hit, or every pushed ship? Once per ram, or per hex pushed?
 - **Q7 / Q30. Cards and deck** (answered: draw = crew icons, hand max 9, unplayed kept, used return to the deck). Still open:
   - ~~Shared or personal?~~ → One shared deck (answered). Used cards shuffled in, or put on the bottom (or a discard pile reshuffled when the deck runs out)?
   - Deck size must cover the worst case: 8 ships × up to 9 cards in hand + cards on ship boards. So roughly **100+ cards**?
@@ -727,25 +730,21 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q31. Upkeep order** (designer: not decided yet). Known steps: search wrecks, spawn treasure, home port refit; probably draw cards and
   advance weather and tide. *Proposed order to playtest:* 1) refit at home port 2) search wrecks 3) spawn treasure 4) advance weather
   and tide 5) draw command cards.
-- **Q44. Treasure Hunt follow-ups**:
-  - ~~How many at once, and when they spawn~~ → Answered: (ships − 1) / 2 rounded up; a new one spawns at Upkeep after one is scored.
-    ~~How is the spawn point chosen?~~ → Treasure map deck (answered). Still open:
-    - ~~What's N~~ → 9. How are spawn points marked on the board (printed on tiles, or tokens placed at setup per scenario)?
-    - Is a drawn card discarded or shuffled back? What happens when the deck runs out?
-    - What if the chosen point is occupied by a ship or another treasure (draw again?)
-  - Land treasure: ending a **Part** adjacent, or ending the whole **turn** (after Part III)?
-  - Knocking loose: can the attacker give up 1 DD out of several dealt by one hit? What if no adjacent hex is empty? Can it be placed on a reef or sandbank?
-  - Home port guns: range, damage, when they fire (Action phase each Part?), and who they target (all rival ships in range?)
-  - Port: where is it placed (board edge? player chooses at setup?) What counts as "reaching" it (entering the port hex, or ending adjacent)? Is it also where sunk ships respawn?
+- **Q44. Treasure Hunt follow-ups** (answered: deck reshuffles; an occupied spawn point is fine; land treasure is dug up at end of turn;
+  sea, land or mixed setups). Still open:
+  - How are spawn points marked on the board (tokens per scenario)?
+  - A new treasure spawning where a treasure already lies: both there, or draw again?
+  - Knocking loose: what if no adjacent hex is empty? Can it be placed on a reef or sandbank?
+  - Home port guns: range, damage, when they fire, who they target?
+  - Home port placement; what counts as "reaching" it (entering the port hex, or ending next to it)?
   - Can treasure be scored at another player's port? (Assumed no.)
-  - 2 players: does "best of 5" mean first to 3?
   - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
 
 ### B. Needed for a full game
 - ~~Q10. Wind drift~~ → 1 hex downwind, no pushing, Light and Dead Calm never drift (answered).
 - **Q38. Gale damage.** Is "1 DD per Full Sail" per Move phase at Full Sail (up to 3 per turn) or once per turn?
 - ~~Q39. Wind direction~~ → blows the way the arrow points (answered). Card naming may need changing (§3.5).
-- **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
+- **Q37 / Q39b. Weather board** (answered: one space per turn; next two visible). Still open: How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
 - **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
   - ~~While stuck~~ → actions only, no sail or steer (answered). ~~Moved off by currents, pushing or drift?~~ → No (answered). ~~Pushing a stuck ship~~ → she's on land, so her hex counts as land (answered).
@@ -794,6 +793,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.73 — treasure deck reshuffle; occupied spawn ok; land treasure at end of turn; rammed ship takes the DD; refit costs the next turn; weather board one space per turn; storm 3 DD (provisional).
 - v0.72 — wind blows the way the arrow points.
 - v0.71 — wind drift: 1 hex downwind, no pushing.
 - v0.70 — a stuck ship's hex counts as land.
