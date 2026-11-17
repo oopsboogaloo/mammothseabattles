@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.40**
+> Status: **Draft v0.41**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -221,8 +221,10 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 | Move phase (sailing conflicts, e.g. simultaneous whirlpool entry, §3.2.1) | the card in the **Move (Sail)** slot |
 | Action phase (cannon fire order) | the card in the **Action** slot |
 
+**Higher number goes first.** Because Full Sail cards are numbered 8xx and Half Sail 4xx, faster ships generally win movement conflicts.
+
 So the same physical card can have a different effect on priority depending on where you place it, which is one more thing to weigh when programming.
-*(Whether higher wins, empty slots, and other conflicts: Q32, Q8.)*
+*(Empty slots and other conflicts: Q32, Q8.)*
 
 ### 5.4 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
@@ -509,6 +511,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.41 — higher initiative goes first.
 - v0.40 — no friendly fire; firer may spare any target.
 - v0.39 — initiative: Move slot card for movement, Action slot card for cannon.
 - v0.38 — cannons hit all enemy ships in both arcs.
