@@ -31,7 +31,7 @@ Purpose (from `online-version.md`): free, **teaches the game**, drives sales of 
 | NFR-4 | **Test coverage: total.** 100% line and branch coverage of engine, rules and AI, enforced in CI (the build fails below 100%). UI covered by component, end-to-end and visual tests (§8). |
 | NFR-5 | **Platforms.** Web on desktop PC (Chrome, Edge, Firefox, Safari) is primary. **iPad (Safari)** supported. Android tablet (Galaxy Note) tested, best effort. **Phones out of scope.** **Steam** desktop build later. Mouse **and** touch. |
 | NFR-6 | **One screen.** The game fits a single screen with **no scroll bars**; panels and menus fold out. Must work from 16:9 desktop down to 4:3 iPad. |
-| NFR-7 | **3D board.** A gentle-perspective 3D view of the board, so the ships stand out as 3D models (designer's existing models and art). |
+| NFR-7 | **It feels like a board game on a table.** A gentle-perspective 3D view of a **flat, printed game board** (the designer's tile art), with the **ships as 3D miniatures** standing on it. **No 3D terrain**: islands, reefs and currents are printed art, just as on the physical board. |
 | NFR-8 | **Generic engine.** The core engine knows nothing about ships or the sea. Mammoth Sea Battles is a **rules plug-in**, so future expansions and other board games reuse the engine. |
 | NFR-9 | **Online-ready.** The same engine runs on a server later (authoritative, hidden information never sent to the wrong player). |
 | NFR-10 | **AI players** use the same interface as humans, and only see what their player can see (no cheating). |
@@ -98,7 +98,7 @@ The AI only sees its own player view. Difficulty is set per seat.
 - Can sweep a parameter (e.g. crew cap 4–8) and compare the results.
 
 ### 3.6 Client (web)
-- **Rendering:** **Three.js** for the 3D board (proposed). It has a smaller download than Babylon.js, and community reports favour it on mobile.
+- **Rendering:** **Three.js** for the 3D tabletop (proposed). It has a smaller download than Babylon.js, and community reports favour it on mobile.
   Neither has a clear benchmark win, so **the M0 spike will measure both** on iPad and Galaxy Note before we commit.
   ([LogRocket comparison](https://blog.logrocket.com/three-js-vs-babylon-js/), [Utsubo 2026 comparison](https://www.utsubo.com/blog/threejs-vs-babylonjs-vs-playcanvas-comparison),
   [Babylon forum: mobile first-frame](https://forum.babylonjs.com/t/babylonjs-takes-longer-to-render-the-first-frame-on-mobile-compared-to-threejs/41213))
@@ -123,10 +123,12 @@ supports Electron. Tauri is lighter but uses each OS's own web view, which rende
 
 ### 4.1 Principles
 1. **It lives or dies on the interface.** Design it properly and test it before building.
-2. **One screen, no scrolling.** Everything you need is visible; secondary information folds out.
-3. **Teach by showing.** Ghost previews, step-by-step replay with captions, and only legal options offered.
-4. **Looks like the box.** Same card art, ship board and terms as the physical game.
-5. **Mouse and touch equally.** Drag-and-drop *and* tap-to-place; big enough touch targets; no hover-only information.
+2. **It feels like playing a board game.** Boards look like boards, cards like cards, tokens like tokens, dice like dice, all on a tabletop.
+   No video-game terrain or effects that the physical game doesn't have; animation is restrained (pieces slide, cards flip, dice roll).
+3. **One screen, no scrolling.** Everything you need is visible; secondary information folds out.
+4. **Teach by showing.** Ghost previews, step-by-step replay with captions, and only legal options offered.
+5. **Looks like the box.** Same card art, ship board and terms as the physical game.
+6. **Mouse and touch equally.** Drag-and-drop *and* tap-to-place; big enough touch targets; no hover-only information.
 
 ### 4.2 Screen zones (starting point for the wireframes)
 | Zone | Content | Behaviour |
@@ -156,11 +158,17 @@ supports Electron. Tauri is lighter but uses each OS's own web view, which rende
 3. Pick one, refine it into **clickable mock-ups**, and **test with real players** (family!) before building.
 4. Keep the wireframes in `docs/ui/` with the evaluation notes.
 
-### 4.5 3D board
+### 4.5 The 3D tabletop
+- **The scene is a tabletop.** The sea map is a **flat board** made of the printed tile textures, lying on a table. **Islands, reefs, currents
+  and whirlpools are printed art**, not 3D geometry.
+- **Ships are 3D miniatures** (the designer's models) standing on the board; they're the only tall objects, so they stand out.
+  Other pieces (treasure, wrecks, damage markers, home ports, spawn markers) are **tokens**, flat or slightly raised like card counters.
+- The **ship board, cards, crew cards and weather board** also look like their physical versions (the actual art), shown as UI panels around the table.
 - **Camera:** gentle tilt (to be tuned in the spike, roughly 30–45° from vertical), a default view that fits the whole map, and limited orbit.
-- The map is built from **hex tile data**; hex overlays for arcs, previews and hazards.
-- Ships are 3D models with a **heading indicator**, sail state shown on the model, and damage and treasure badges.
-- Animations: sailing, pushing, teleporting, drifting, broadsides, splashes and sinking. They're **skippable**, with speed control.
+- **Overlays** (arcs, ghost previews, hazards) are drawn like translucent markings on the board, and can be switched off.
+- **Animations** stay physical: ships slide hex to hex and turn, are pushed, vanish and reappear at portals, puff smoke for a broadside,
+  tip over and sink; dice roll; cards flip. All are **skippable**, with speed control.
+- Bonus: a flat textured board is cheap to render, which helps iPad performance.
 
 ---
 
