@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.56**
+> Status: **Draft v0.57**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -31,7 +31,7 @@ interact with each other and with the sea.
 | D6 | Cannons mostly mounted **broadside** | Laser fires forward |
 | D7 | Different damage model | Hand-size loss (classic) / damage cards in deck (2016) |
 | D8 | **Crew** works a bit like upgrade/option cards | Option or upgrade cards |
-| D9 | Two factions: mammoths vs dinosaurs | Generic robots |
+| D9 | Crews of anthropomorphic **prehistoric monsters**; every Captain is a **mammoth**. **No factions** | Generic robots |
 
 ### 1.3 Design pillars
 - **P1. Simultaneous everything.** Everyone programs at the same time, and then **everyone executes
@@ -187,6 +187,8 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 ### 3.6 Crew cards
 <img src="images/crew/pirate.png" width="150"> <img src="images/crew/captain-mammoth.png" width="150">
 
+- **All crew are prehistoric monsters** (dinosaurs and other prehistoric creatures). **All Captains are mammoths.**
+  There are **no factions**: any crew member can serve on any ship.
 - Each ship has a crew of **crew cards** (round). Each has a **name** (e.g. *Pirate*, *Captain Mammoth*), artwork, and
   **command-card icons** (small 3-band card symbols): *Pirate* has 1, *Captain Mammoth* has 3.
 - **Card icons = command cards drawn per turn** from that crew member (§5.1).
@@ -581,7 +583,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
   - ~~Captain at start~~ → every ship starts with a Captain (answered). Starting crew: Captain + 2 random (3 total)?
-  - Is there one Captain per faction/ship (*Captain Mammoth*, a dinosaur captain...)? Can a lost Captain ever be regained (e.g. recruited at port)?
+  - Captains are all mammoths, no factions (answered). Is there one Captain card per ship (e.g. 8 different mammoth captains), and do
+    Captains differ in powers? Can a lost Captain ever be regained (e.g. recruited at port)?
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
   - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
@@ -666,12 +669,13 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q36.** Is the point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
 - **Q28.** Are all 9 cards revealed at once, or one Part at a time?
 - **Q39a.** Check the derived rows of the full sail-move table (§6.3).
-- **Q2.** Are mammoths and dinosaurs asymmetric, or only cosmetic?
+- ~~Q2. Factions~~ → No factions; crew are prehistoric monsters, captains are mammoths (answered). Do ships differ at all (ship types), or are all identical?
 - **Q3a / Q3b / Q3c.** Teams (e.g. 4v4)? Minimum player count? Board size for each player count?
 - **Q18.** Board tile size and shape; rules for joining tiles.
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.57 — no factions: crew are prehistoric monsters, all Captains are mammoths.
 - v0.56 — Surgeon heals 1 wounded crew per turn automatically.
 - v0.55 — crew special powers (e.g. Surgeon heals).
 - v0.54 — everyone starts with a Captain; sinking loses the Captain (respawn with 3 random crew).
