@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.35**
+> Status: **Draft v0.36**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -317,6 +317,7 @@ Ideas to playtest:
   No fire forward or aft; the hexes directly ahead and astern are always safe.
 - Engine note: in cube coordinates, a broadside arc is the set of hexes within distance 1–4 that lie in the sextant
   between the two neighbour directions on that side of the ship.
+- **Cannon fire does not pass through whirlpool portals or sea caves.**
 - *Targets, line of sight and damage: Q33.*
 
 ### 7.2 Damage dice (DD)
@@ -463,7 +464,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
   - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
   - ~~Re-triggering~~ → arriving through a portal doesn't trigger it (answered).
   - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
-  - Can cannon fire through a portal? (Assumed no.)
+  - ~~Cannon through portals~~ → No (answered, §7.1).
 - **Q46. Sea caves** (blocking answered: emerging pushes). Still open:
   - Confirm that remaining movement continues after coming out, and that any movement (currents, drift, being pushed) triggers a cave.
   - Currents and drift don't push (§5.2). If a ship is carried into a cave by a current or drift and the exit is occupied, does she
@@ -492,6 +493,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.36 — cannons don't fire through portals or caves.
 - v0.35 — pushes chain; new §6.5 Pushing.
 - v0.34 — arriving through a portal doesn't trigger it.
 - v0.33 — blocked cave exit: the emerging ship pushes.
