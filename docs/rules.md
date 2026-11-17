@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.50**
+> Status: **Draft v0.51**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -204,6 +204,8 @@ A turn has **3 steps**. Programming happens once per turn and covers all 3 steps
 2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
 3. Reveal *(all at once, or step by step? Q28)*.
 4. **Used cards return to the deck** *(shuffled in, or placed on the bottom? Q7)*.
+
+There is **one shared command deck** for all players (like classic RoboRally), not a deck per ship.
 
 ### 5.2 Resolving each Part (I, II, III)
 Each sub-step is carried out by **all ships simultaneously** (pillar P1):
@@ -576,7 +578,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
     What counts as a ram: any push, or only a ship moving into another (not pushed ships hitting the next one in the chain)?
   - Is a pushed ship's heading unchanged? (Assumed yes.) Does a pusher follow a ship pushed into a whirlpool?
 - **Q7 / Q30. Cards and deck** (answered: draw = crew icons, hand max 9, unplayed kept, used return to the deck). Still open:
-  - Is the deck **shared** by all players or one per ship? Used cards shuffled in or put on the bottom? What happens when it runs out?
+  - ~~Shared or personal?~~ → One shared deck (answered). Used cards shuffled in, or put on the bottom (or a discard pile reshuffled when the deck runs out)?
+  - Deck size must cover the worst case: 8 ships × up to 9 cards in hand + cards on ship boards. So roughly **100+ cards**?
   - The deck's **full makeup** (every sail/steer/action band value and the counts).
   - If a draw would take you over 9, do you stop at 9 or discard down?
 - **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
@@ -640,6 +643,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.51 — one shared command deck.
 - v0.50 — home port refit: full repair, heal, recruit to 3 crew; costs a turn.
 - v0.49 — the damaged player chooses slots and crew.
 - v0.48 — design pillar P5: damage mostly slows you down.
