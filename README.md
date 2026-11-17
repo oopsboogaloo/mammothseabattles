@@ -11,6 +11,8 @@ A board game in design, with a companion online version.
 
 ## Documents
 
+- [`docs/HANDOVER.md`](docs/HANDOVER.md) — **start here**: current state, conventions and next steps
+
 - [`docs/rulebook.md`](docs/rulebook.md) — player-facing rulebook (playtest draft)
 - [`docs/web-spec.md`](docs/web-spec.md) — digital version spec: requirements, architecture, UI, testing
 - [`docs/ui/wireframe-evaluation.md`](docs/ui/wireframe-evaluation.md) — UI wireframes (4 layouts) and evaluation
