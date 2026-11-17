@@ -33,7 +33,7 @@ interact with each other and with the sea.
 | D8 | **Crew** works a bit like upgrade/option cards | Option or upgrade cards |
 | D9 | Two factions: mammoths vs dinosaurs | Generic robots |
 
-## 1.3 Design pillars
+### 1.3 Design pillars
 - **P1. Simultaneous everything.** Everyone programs at the same time, and then **everyone executes
   each step at the same time**: all players move their own ships together. There is no going round the
   table, ship by ship. This is why the game scales to 8 players: adding players adds almost no waiting time.
@@ -120,7 +120,7 @@ Each command card is split into **three coloured bands**, one for each kind of o
 Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
 RoboRally's priority numbers (see §5.3). The hundreds digit seems to follow the sail band (4xx = Half Sail,
 8xx = Full Sail), so faster cards win initiative. Some cards also have an **octopus icon 🐙** in the top-left corner. It is used to **move the sea monster**, an
-**optional role/module** to be specified later (see §10).
+**optional role/module** to be specified later (see §9).
 
 Example cards seen:
 
@@ -296,7 +296,8 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - **Pushes chain**: a pushed ship pushes the next ship in line, and so on.
 - *How far a push goes, what stops a chain (land, reef, board edge), and ramming damage: Q6b.*
 
-**Making it easy for players** (design goal). Ideas to playtest:
+### 6.6 Teaching aids for sailing *(design goal: make wind easy)*
+Ideas to playtest:
 - Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
 - A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
 - The online version shows each ship's move distance (and a ghost preview) while programming.
@@ -411,18 +412,18 @@ mode is a plug-in objective module on top of a shared rules core.
 - Teams. *Open: Q43.*
 
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
-- Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§10.1). Not to be designed until the core game is finished.
+- Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
-## 10. Optional modules
-
-### 10.1 Sea monster *(to be specified)*
-- An optional role. Cards with the 🐙 icon relate to the sea monster's movement.
-- To be covered later: who controls it (a player, or automatic), how 🐙 cards drive it, and what it does to ships.
-
-## 9. Glossary
+## 10. Glossary
 | Term | Definition |
 |------|------------|
 | DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
+
+## 9. Optional modules
+
+### 9.1 Sea monster *(to be specified)*
+- An optional role. Cards with the 🐙 icon relate to the sea monster's movement.
+- To be covered later: who controls it (a player, or automatic), how 🐙 cards drive it, and what it does to ships.
 
 ## Open questions
 _Cleaned up in v0.22: answered items removed (answers are in the relevant sections and the change log). Old Q-numbers are
