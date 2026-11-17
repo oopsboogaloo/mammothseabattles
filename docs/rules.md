@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.63**
+> Status: **Draft v0.64**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -121,7 +121,7 @@ Each command card is split into **three coloured bands**, one for each kind of o
 | Band | Colour | Order type | Values seen so far |
 |---|---|---|---|
 | Top | Blue | **Sail** | No Sail, Half Sail, Full Sail |
-| Middle | Yellow | **Steer** | Ease Port (small turn), Hard to Port (large turn) |
+| Middle | Yellow | **Steer** | Ease Port / Ease Starboard (60°), Hard to Port / Hard to Starboard (120°) |
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
 Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
@@ -207,7 +207,8 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
   A ship that already has a Captain and recruits her must **swap** (one of the two leaves). For a ship that has lost her Captain,
   she's a lucky find.
 - **All ships are identical**; the only differences between ships come from their crew and damage.
-- **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
+- **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 drawn at random ❓).
+- The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
 _TBD_
@@ -222,7 +223,8 @@ A turn has **3 steps**. Programming happens once per turn and covers all 3 steps
 3. Reveal *(all at once, or step by step? Q28)*.
 4. **Used cards return to the deck** *(shuffled in, or placed on the bottom? Q7)*.
 
-There is **one shared command deck** for all players (like classic RoboRally), not a deck per ship.
+There is **one shared command deck** for all players (like classic RoboRally), not a deck per ship. It covers **every combination
+of Sail × Steer × Action bands, or a good sample**, and will be large enough for 8 players.
 
 ### 5.2 Resolving each Part (I, II, III)
 Each sub-step is carried out by **all ships simultaneously** (pillar P1):
@@ -258,6 +260,12 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 **Higher number goes first.** Because Full Sail cards are numbered 8xx and Half Sail 4xx, faster ships generally win movement conflicts.
 
 So the same physical card can have a different effect on priority depending on where you place it, which is one more thing to weigh when programming.
+**Movement conflicts** (two ships entering the same hex, meeting head-on, swapping hexes) are resolved by **initiative**: the higher
+moves first, then the other moves against the new situation, pushing as normal.
+
+**Cannon fire** is resolved **in initiative order, and damage is applied immediately**: a ship sunk by a higher-initiative broadside
+**doesn't fire**.
+
 **Tie-break: roll off.** If ships have equal initiative (in practice, both have an empty slot = 0), the tied players **roll a die**;
 the highest roll goes first (re-roll ties). Ties should be rare. *(Online: rolls come from the game's seeded random-number generator,
 so replays and tests can be reproduced.)*
@@ -347,7 +355,10 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 ### 6.5 Pushing
 - Ship movement (sailing, and coming out of a cave) **pushes** any ship in the way. Currents and wind drift do **not** push (§5.2).
 - **Pushes chain**: a pushed ship pushes the next ship in line, and so on.
-- *How far a push goes, what stops a chain (land, reef, board edge), and ramming damage: Q6b.*
+- **Distance**: a pushed ship moves **as far as the pushing movement continues**, hex for hex.
+- **Pushed into an obstacle** (land, reef, board edge, other features) has **the same effect as moving into it**. Hex effects are
+  still to be defined (Q19).
+- *Ramming damage: who takes the 1 DD (Q6b).*
 
 ### 6.6 Teaching aids for sailing *(design goal: make wind easy)*
 Ideas to playtest:
@@ -618,7 +629,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
   - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
-  - ~~Captain at start~~ → every ship starts with a Captain (answered). Starting crew: Captain + 2 random (3 total)?
+  - ~~Starting crew~~ → Captain + 2 (answered). Are the 2 drawn at random?
+  - Crew deck: at least 50 cards, most with a skill (answered); list to be designed.
   - ~~Captains~~ → 8 identical mammoth Captains; a Retired Captain is in the crew deck (answered). Retired Captain is the strongest crew and won't serve with a Captain (answered). Still open:
     her card icons and power; on a swap, where does the leaving card go (back into the crew deck? removed from the game?); can a ship decline to take her?
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
@@ -633,25 +645,21 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   no firing through portals or caves). Still open:
   - ~~DD per hit~~ → 1 DD (answered). No range falloff (assumed ❓).
   - Line of sight: do islands, reefs, fog or **other ships** block shots?
-- **Q32. Initiative** (answered: Move-slot card for movement, Action-slot card for cannon; higher first; empty slot = 0; ties roll off). Still open:
-  - **Cannon order**: is damage applied immediately in initiative order, so a ship sunk (or knocked loose) by a higher-initiative broadside
-    doesn't get to fire? Or is it resolved in order but applied simultaneously?
-  - Are all initiative numbers on the cards unique (so ties only happen with empty slots)?
-- **Q8. Movement conflicts**: two ships trying to enter the same hex, meeting head-on, or swapping hexes. Is it just "higher initiative moves
-  first, then the other, pushing as normal"?
-- **Q6b. Pushing and ramming** (answered: pushes chain, §6.5). Still open:
-  - How far does a pushed ship go: 1 hex per hex the pusher keeps moving (RoboRally style)?
-  - What happens when the chain hits land, a reef or the board edge: the whole chain stops (RoboRally walls), or damage or grounding?
-  - Ramming = **1 DD** (answered). To whom: the rammed ship only, both ships, or every ship in a chain? Once per ram, or per hex pushed?
-    What counts as a ram: any push, or only a ship moving into another (not pushed ships hitting the next one in the chain)?
-  - Is a pushed ship's heading unchanged? (Assumed yes.) Does a pusher follow a ship pushed into a whirlpool?
+- ~~Q32 / Q8. Initiative and conflicts~~ → Answered: Move-slot card for movement, Action-slot card for cannon; higher first; empty slot = 0;
+  ties roll off; movement conflicts in initiative order; cannon damage applied immediately, so sunk ships don't fire (§5.3).
+  Still open: are all initiative numbers on the cards unique?
+- **Q6b. Ramming** (answered: pushes chain; push distance = the pushing movement; pushed into an obstacle = moving into it; ramming = 1 DD). Still open:
+  - Who takes the ramming DD: the rammed ship, both, or every ship in a chain? Once per ram, or per hex pushed?
+  - What counts as a ram: only a ship sailing into another, or also pushed ships hitting the next one?
 - **Q7 / Q30. Cards and deck** (answered: draw = crew icons, hand max 9, unplayed kept, used return to the deck). Still open:
   - ~~Shared or personal?~~ → One shared deck (answered). Used cards shuffled in, or put on the bottom (or a discard pile reshuffled when the deck runs out)?
   - Deck size must cover the worst case: 8 ships × up to 9 cards in hand + cards on ship boards. So roughly **100+ cards**?
-  - The deck's **full makeup** (every sail/steer/action band value and the counts).
+  - ~~Makeup~~ → every combination or a good sample, enough cards (answered); exact list later.
   - If a draw would take you over 9, do you stop at 9 or discard down?
-- **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
-- **Q31. Upkeep.** Known: spawn treasure (§8.2.1). Also: discard and draw? Advance weather and tide? Anything else?
+- ~~Q6a. Steering~~ → Ease 60°, Hard 120°, port and starboard versions (answered). Any other steer values (e.g. 180° about-turn)?
+- **Q31. Upkeep order** (designer: not decided yet). Known steps: search wrecks, spawn treasure, home port refit; probably draw cards and
+  advance weather and tide. *Proposed order to playtest:* 1) refit at home port 2) search wrecks 3) spawn treasure 4) advance weather
+  and tide 5) draw command cards.
 - **Q44. Treasure Hunt follow-ups**:
   - ~~How many at once, and when they spawn~~ → Answered: (ships − 1) / 2 rounded up; a new one spawns at Upkeep after one is scored.
     ~~How is the spawn point chosen?~~ → Treasure map deck (answered). Still open:
@@ -711,6 +719,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.64 — push distance and obstacles; starboard steering; deck coverage; initiative for conflicts; cannon damage applied immediately; start Captain + 2; crew deck ≥ 50.
 - v0.63 — command hand hidden; no equipment limit; equipment kept when sunk.
 - v0.62 — crew open, equipment hidden.
 - v0.61 — wreck searching at Upkeep; wreck deck; equipment cards.
