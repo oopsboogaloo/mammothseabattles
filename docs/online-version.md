@@ -29,6 +29,18 @@
 - **Show what's coming.** The weather board shows the next two weather cards and tides, as in the physical game.
 - **Practice against bots** so you can learn alone, before or without friends.
 
+## Decisions made during resolution
+Some rules need a player decision **in the middle of resolution**: holding fire on a target (rules §7.1) and knocking treasure
+loose instead of dealing a DD, including where to place it (rules §8.2.3).
+
+**Decision: prompt only when it matters.**
+- Resolution runs automatically and **pauses only when a player has a real choice**: an enemy is actually in their arc, or a treasure
+  carrier was actually hit or rammed by them.
+- The prompt has a **timer** and a **default** if the player doesn't answer (to be decided: e.g. fire at all targets; take the DD rather
+  than knock treasure loose).
+- Engine requirement: the rules core must be able to **suspend resolution, ask a specific player a question, and resume**
+  deterministically. In BGA terms, that's a short single- or multi-active state in the middle of resolution.
+
 ## Open questions
 - O1. Platforms: browser only, or mobile apps too?
 - O2. Accounts: needed at all? (Guest play with invite links is the lowest-friction option.)
@@ -70,4 +82,5 @@ not yet checked against the live pages):
 
 **Open questions**
 - O6. Publisher situation: self-publishing, crowdfunding, or pitching to a publisher? This affects the BGA route and timing.
+- O8. Defaults and timer length for prompts during resolution (real-time vs async games).
 - O7. Build the BGA version ourselves (become BGA developers) or license it to a volunteer BGA developer?
