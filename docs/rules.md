@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.10**
+> Status: **Draft v0.11**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -161,8 +161,35 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 ### 5.4 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 
-## 6. Actions
-_TBD_
+## 6. Movement & actions
+
+### 6.1 Sailing: basic rule
+*Movement without the Points of Sail rule: TBD (Q34).*
+
+### 6.2 Points of Sail *(optional rule, intended as the standard)*
+<img src="images/points-of-sail.jpg" width="420">
+
+This is a real sailing effect, and it's what makes the game unique. How far a ship sails in the Move phase depends on her
+**sail level** and her **heading relative to the wind**. With flat-topped hexes a ship faces one of 6 hex sides,
+so there are 4 points of sail (mirrored port and starboard):
+
+| Point of sail | Heading vs wind | Half Sail | Full Sail |
+|---|---|---|---|
+| **Windward** (in irons) | Straight into the wind (0°) | **0** (can't sail into the wind) | **1 hex backwards** (taken aback) |
+| **Close Hauled** | 60° off the wind | 1 forward | 2 forward |
+| **Broad Reach** | 120° off the wind | 2 forward | **3 forward** (fastest) |
+| **Running** | Straight downwind (180°) | 1 forward | 2 forward |
+
+- The fastest sailing is with the wind to your side and behind you (broad reach).
+- Sailing movement is ship movement, so ships **push** (§5.2 step 1).
+- This is separate from **wind drift** (§5.2 step 5), which the weather may also apply on top.
+
+**Making it easy for players** (design goal). Ideas to playtest:
+- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
+- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
+- The online version shows each ship's move distance (and a ghost preview) while programming.
+
+
 
 ## 7. Combat / conflict resolution
 
@@ -213,7 +240,10 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q8. Execution is simultaneous (P1). When two ships' moves conflict in the same step (both entering one hex, ramming head-on, swapping hexes), what happens at the table? For example: both stop, both take damage, the bigger or faster ship wins, or the players agree on the spot. The online version needs a written rule.
 
 **Wind (D5)**
-- Q9. How does wind modify sailing? For example, sailing distance depends on heading relative to wind (into the wind / close-hauled / beam reach / running), as in sail-and-wind games.
+- ~~Q9~~ → Answered: points of sail chart (§6.2).
+- Q34. Without the optional points-of-sail rule, how far do Half and Full Sail move?
+- Q35. Is there a lower sail level (Furled / No Sail = 0)? What sail level do ships start at? Is the wind direction always one of the 6 hex-side directions?
+- Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
 - Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
 
 **Tides & currents (D4)**
@@ -260,6 +290,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.11 — points of sail chart (optional, intended as standard).
 - v0.10 — 🐙 icon = sea monster movement (optional module, deferred).
 - v0.9 — cannon fire: both broadsides, 60° arcs, range 4.
 - v0.8 — card numbers are initiative.
