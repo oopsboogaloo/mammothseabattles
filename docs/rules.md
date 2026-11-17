@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.6**
+> Status: **Draft v0.7**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -108,13 +108,19 @@ Example cards seen:
 | 860 | Full Sail | Hard to Port | Repair | |
 
 ### 3.4 Ship board
-Each player has a **ship board** with a **3 × 3 grid of programming slots**:
-3 rows (**Sail / Steer / Action**) × 3 columns (**Step 1 / Step 2 / Step 3**).
+<img src="images/ship-board.webp" width="420">
 
-- A card placed in a row uses **only that row's band**. The same card could be a Half Sail order, an Ease Port order or a
-  Fire Cannons order, depending on where you place it. *(Inferred; to confirm, Q25.)*
-- So you can raise or lower sail, turn the wheel and give an action order **independently** of each other.
-- **Up to 9 cards** per turn (3 rows × 3 steps). Slots can be left empty (Q27).
+Each player has a **ship board** with **3 Parts (I, II, III)**, one per step of the turn. Each Part has three card slots, in this order:
+**Move (Sail) → Steer → Action**. The slot art highlights the band that counts (blue top / yellow middle / red bottom), so
+**a card placed in a slot uses only that slot's band**. The same card can be a Sail, Steer or Action order depending on where you put it.
+
+The board also works as the turn-sequence reminder, printing Currents and Wind drift between the slots (see §5.2).
+
+- **Up to 9 cards** per turn (3 Parts × 3 slots).
+- **Empty slots**:
+  - Empty **Move** slot → the **sail stays at its current level**. Sail level is a **persistent setting** carried from Part to Part and turn to turn.
+  - Empty **Steer** slot → no turn.
+  - Empty **Action** slot → no action.
 
 ## 4. Setup
 _TBD_
@@ -127,14 +133,27 @@ A turn has **3 steps**. Programming happens once per turn and covers all 3 steps
 2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
 3. Reveal *(all at once, or step by step? Q28)*.
 
-### 5.2 Resolving each step (repeat for steps 1, 2, 3)
-All ships act **simultaneously** in each sub-step (pillar P1):
+### 5.2 Resolving each Part (I, II, III)
+Each sub-step is carried out by **all ships simultaneously** (pillar P1):
 
-1. **Ship movement**: all ships carry out their Sail and Steer orders. **Ships push** other ships they move into.
-2. **Currents**: all ships on currents are moved and/or turned by them. **Currents do not push**: board movement
-   only moves the ship on the current, like RoboRally conveyors.
-3. **Wind drift**: all ships drift with the wind (Q9, Q10).
-4. *Action orders (fire / repair / heal): when in the step? Q29.*
+1. **Move phase**: apply any Sail card (change sail level), then every ship sails according to her current sail level *(and wind? Q9)*.
+   **Ships push** other ships they move into.
+2. **Steer phase**: ships turn according to their Steer card.
+3. **Currents**: ships on currents are moved and/or turned. **Currents do not push**.
+4. **Action phase**: carry out Action cards (Fire Cannons, Repair, Heal, ...).
+5. **Wind drift**: depends on wind strength and the Part:
+
+| Part | Wind strengths that drift |
+|---|---|
+| I | Gale |
+| II | Gale, Strong |
+| III | Gale, Strong, Firm |
+
+   So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once** (any weaker wind: never?). This works like
+   RoboRally's push panels, which only fire in certain registers.
+
+### 5.3 Upkeep and new turn
+After Part III: **Upkeep**, then a new turn begins *(contents of upkeep: Q31)*.
 
 ## 6. Actions
 _TBD_
@@ -163,15 +182,15 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Programming (D2, D3)**
 - ~~Q4~~ → Answered: one shared deck of 3-band cards; a 3 × 3 ship board, one slot per order type per step (§3.4).
 - ~~Q5~~ → Partly answered: movement → currents → wind drift (§5.2). Action timing is Q29.
-- Q6. What exactly do Half Sail and Full Sail do: how many hexes, before wind? Is there a "No Sail" / furled or "Drop Anchor" order? Is sail a **persistent setting** (stays raised until lowered) or only for this step?
-- Q6a. Steering: is Ease 60° (one hex side) and Hard 120°? Do the turn and the sailing happen together (curving), or turn first then sail, or sail then turn? Are there starboard versions of every port card?
+- Q6. Sail is a persistent level (answered). What levels exist (e.g. Furled / Half / Full) and how many hexes does each move per Move phase? How does wind affect this? What is the starting sail level?
+- Q6a. Steering happens **after** sailing, as a separate phase (answered). Is Ease 60° (one hex side) and Hard 120°? Are there starboard versions of every port card?
 - Q6b. Pushing: how far is a ship pushed (1 hex, or as far as the pusher keeps moving)? Can a pushed ship push others in a chain? What happens when a ship is pushed into land, a reef or the board edge?
 - Q7. Hand size: how many cards are drawn per turn? Is it a personal deck (2016 style) or dealt from a shared deck (classic)?
 - Q8. Execution is simultaneous (P1). When two ships' moves conflict in the same step (both entering one hex, ramming head-on, swapping hexes), what happens at the table? For example: both stop, both take damage, the bigger or faster ship wins, or the players agree on the spot. The online version needs a written rule.
 
 **Wind (D5)**
 - Q9. How does wind modify sailing? For example, sailing distance depends on heading relative to wind (into the wind / close-hauled / beam reach / running), as in sail-and-wind games.
-- Q10. Does wind direction or strength change during the game, and how (die, card, track)?
+- Q10. Wind strengths so far: Gale / Strong / Firm (drift 3 / 2 / 1 times per turn). Are there weaker levels (Light, Calm)? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
 
 **Tides & currents (D4)**
 - Q11. What do tides change: shallows/sandbars/rocks appearing and disappearing, current direction, or both? Is it on a fixed cycle or random?
@@ -193,11 +212,12 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q24. Board edge: what happens to a ship that sails or drifts off the map?
 
 **Command cards (§3.3–3.4)**
-- Q25. Confirm: a card is slid or placed so that only the band for its row counts?
+- ~~Q25~~ → Answered: only the slot's band counts (ship board art).
 - Q26. What do the **numbers** (400, 420, 840, 860) mean: priority for tie-breaks, card IDs, or something else? The hundreds digit seems to follow the sail (4xx = Half, 8xx = Full). What does the **octopus icon** mean?
-- Q27. An empty slot means what? No sail change / hold course / no action?
+- ~~Q27~~ → Answered: sail stays the same, no steer, no action.
 - Q28. Are all 9 cards revealed at once, or column by column as each step resolves?
-- Q29. When do action orders happen within a step: before movement, after movement, or after currents and wind? Does Fire Cannons fire both broadsides? What's the difference between **Heal** (crew?) and **Repair** (ship?)?
+- Q29. Actions happen after currents and before wind drift (answered). Does Fire Cannons fire both broadsides? Are all actions in a Part simultaneous (can two ships sink each other at once)? What's the difference between **Heal** (crew?) and **Repair** (ship?)?
+- Q31. What happens in **Upkeep**: discard and draw, wind change, tide change, crew, treasure?
 - Q30. Full list of band values in the deck (all sail, steer and action types) and the deck's makeup and size.
 
 **Crew (D8)**
@@ -205,6 +225,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.7 — ship board layout (Parts I–III); order is Move → Steer → Currents → Action → Wind drift; wind strength sets drift count; empty slots defined; sail level persists.
 - v0.6 — command cards (3 bands), 3 × 3 ship board, step order: movement → currents → wind. Currents don't push.
 - v0.5 — design pillars: simultaneous execution, trust, embrace chaos. Removed my wrong claim that RoboRally scales poorly.
 - v0.4 — board: modular hex tiles, currents, list of observed features from the example board.
