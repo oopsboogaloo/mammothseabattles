@@ -20,3 +20,22 @@ A board game in design, with a companion online version.
 - [`docs/core-rules-summary.md`](docs/core-rules-summary.md) — core rules on one page
 - [`docs/research/roborally.md`](docs/research/roborally.md) — notes on RoboRally, the reference game
 - [`docs/research/full-metal-planete.md`](docs/research/full-metal-planete.md) — tide mechanic reference
+
+## Code
+
+TypeScript monorepo (see [`docs/web-spec.md`](docs/web-spec.md) §3).
+
+| Package | Purpose |
+|---|---|
+| `packages/engine` | Generic board-game kernel: seeded RNG, decisions during resolution |
+| `packages/hex` | Flat-topped hex grid maths: directions, distance, lines, broadside wedges |
+| `packages/msb-rules` | Mammoth Sea Battles rules: sailing and wind, damage dice, initiative, ship and crew damage, cannon fire |
+
+```sh
+npm install
+npm test            # run tests
+npm run check       # type-check + tests with the 100% coverage gate (as in CI)
+```
+
+Rules code must be pure and deterministic: `test/purity.test.ts` fails the build if engine or rules code uses
+`Math.random`, the clock, the DOM, the network or Node I/O.
