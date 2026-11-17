@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.44**
+> Status: **Draft v0.45**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -337,6 +337,7 @@ Ideas to playtest:
   No fire forward or aft; the hexes directly ahead and astern are always safe.
 - Engine note: in cube coordinates, a broadside arc is the set of hexes within distance 1–4 that lie in the sextant
   between the two neighbour directions on that side of the ship.
+- **Each target hit takes 1 DD** (§7.2).
 - **Targets: every enemy ship in both arcs is hit**, so one Fire Cannons order can hit several ships.
   - **No friendly fire**: teammates are never hit.
   - **Holding fire**: the firing player may choose **not to fire at any particular target** (e.g. to spare a temporary ally in free-for-all,
@@ -347,7 +348,13 @@ Ideas to playtest:
 ### 7.2 Damage dice (DD)
 - Damage is dealt as **Damage Dice (DD)**: whenever damage occurs, the ship **takes DD**, i.e. a **12-sided damage die is rolled** for each DD.
 - There are **two types of damage**: **Ship** (hull/rigging) and **Crew**. One roll deals **0–2 of each**, or a **Critical hit**.
-- Sources of DD so far: cannon hits (§7.1, amount Q33), ramming (Q6b), **Gale**: 1 DD per Full Sail (§3.5).
+- **Sources of DD:**
+
+| Source | DD |
+|---|---|
+| Cannon hit (each enemy ship in the arcs) | **1 DD** |
+| Ramming | **1 DD** (to whom: Q6b) |
+| Gale, per Full Sail | **1 DD** (§3.5) |
 
 **Damage die (d12)**, provisional, will be playtested:
 
@@ -488,7 +495,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   respawn at home port, drop treasure?
 - **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
   no firing through portals or caves). Still open:
-  - How many DD per hit? Is there range falloff?
+  - ~~DD per hit~~ → 1 DD (answered). No range falloff (assumed ❓).
   - Line of sight: do islands, reefs, fog or **other ships** block shots?
 - **Q32. Initiative** (answered: Move-slot card for movement, Action-slot card for cannon; higher first; empty slot = 0; ties roll off). Still open:
   - **Cannon order**: is damage applied immediately in initiative order, so a ship sunk (or knocked loose) by a higher-initiative broadside
@@ -499,7 +506,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q6b. Pushing and ramming** (answered: pushes chain, §6.5). Still open:
   - How far does a pushed ship go: 1 hex per hex the pusher keeps moving (RoboRally style)?
   - What happens when the chain hits land, a reef or the board edge: the whole chain stops (RoboRally walls), or damage or grounding?
-  - Ramming damage: how many DD, to whom (the rammed ship, both, every ship in the chain)? Once per push, or per hex pushed?
+  - Ramming = **1 DD** (answered). To whom: the rammed ship only, both ships, or every ship in a chain? Once per ram, or per hex pushed?
+    What counts as a ram: any push, or only a ship moving into another (not pushed ships hitting the next one in the chain)?
   - Is a pushed ship's heading unchanged? (Assumed yes.) Does a pusher follow a ship pushed into a whirlpool?
 - **Q7 / Q30. Cards and deck.** How many cards are drawn per turn? Is the deck shared or personal? What's its full makeup (every
   sail/steer/action band value and the counts)? What happens to unused and played cards?
@@ -564,6 +572,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.45 — cannon hit = 1 DD; ramming = 1 DD.
 - v0.44 — damage die (d12 table). Restored priority-A open questions accidentally deleted in v0.24.
 - v0.43 — initiative ties: roll off.
 - v0.42 — empty slot = initiative 0; tie-break options.
