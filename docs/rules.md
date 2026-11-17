@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.53**
+> Status: **Draft v0.54**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -192,6 +192,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - **Card icons = command cards drawn per turn** from that crew member (§5.1).
 - The white panel on the *Pirate* card is presumably for **ability text** ❓ (Q48).
 - Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
+- **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
 _TBD_
@@ -429,7 +430,10 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 
 ### 7.8 Sinking and coming back
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
-- **She comes back at her home port**, **fully repaired** with **3 healthy crew**. No player elimination (P6).
+- **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
+  Captain, are lost**). No player elimination (P6).
+- **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
+  a *Pirate* draws 1), so a ship rebuilt with 3 random crew is much weaker than one with her Captain.
 - Any **treasure she carried drops in the hex where she sank**, ready for anyone to pick up.
 - *Penalty, hand of cards, facing, sail: Q16.*
 
@@ -556,8 +560,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - ~~After sinking~~ → she comes back at her home port (answered). See Q16.
 - **Q16. Coming back after sinking:**
   - ~~State~~ → fully repaired, 3 crew (answered). Same hand of cards, or a new one?
-  - **Penalty**: does she miss the rest of this turn and/or the next turn? ⚠ Without one, sinking is a **free refit plus a trip home**,
-    better than a voluntary refit, which costs a turn. That could tempt a crippled ship into deliberately sinking (e.g. sailing onto rocks).
+  - ~~Penalty~~ → losing the Captain and getting 3 random crew (answered). Does she also miss a turn? (Probably not needed.)
   - ~~Carried treasure~~ → drops where she sank (answered).
   - Facing, sail level on return?
   - What if an enemy ship is in or next to her port when she comes back? (The port guns probably deal with that.)
@@ -570,7 +573,10 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
   - Does refitting also clear critical damage cards?
 - **Q48. Crew:**
-  - Starting crew: 3 (implied by refitting "back up to 3")? Which ones (does every ship start with a Captain)? Do mammoth and dinosaur ships get different crew?
+  - ~~Captain at start~~ → every ship starts with a Captain (answered). Starting crew: Captain + 2 random (3 total)?
+  - Is there one Captain per faction/ship (*Captain Mammoth*, a dinosaur captain...)? Can a lost Captain ever be regained (e.g. recruited at port)?
+  - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
+  - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
   - What's the white panel: ability text? (You mentioned crew working like RoboRally upgrade cards.)
   - How do you gain crew (recruit at port, rescue, capture)? Maximum crew?
@@ -657,6 +663,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.54 — everyone starts with a Captain; sinking loses the Captain (respawn with 3 random crew).
 - v0.53 — on return: fully repaired, 3 crew; treasure drops where she sank.
 - v0.52 — sunk ships come back at home port; pillar P6: no player elimination.
 - v0.51 — one shared command deck.
