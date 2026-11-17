@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.71**
+> Status: **Draft v0.72**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -180,6 +180,9 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 ### 3.5 Weather cards and weather circuit
 <img src="images/weather/dead-calm.png" width="130"> <img src="images/weather/light-north.png" width="130"> <img src="images/weather/firm-north.png" width="130"> <img src="images/weather/firm-se.png" width="130"> <img src="images/weather/strong-ne.png" width="130"> <img src="images/weather/gale-nw.png" width="130"> <img src="images/weather/new-weather-front.png" width="130">
 
+- **Wind blows in the direction the card's arrow points.** A "North Wind" card blows **towards the north**, so downwind = north
+  and drift moves ships north. ⚠ Sailors name winds by where they come **from**, so a real "north wind" blows south. Consider
+  renaming the cards (e.g. "Wind to the North" / "Northward", or just the arrow) to avoid arguments at the table.
 - Weather cards are **hex-shaped**. Each shows a **wind strength** and a **wind direction** on a 6-point compass
   (**N, NE, SE, S, SW, NW**). These are the 6 directions of flat-topped hex sides, so the wind always runs along a hex direction.
 - **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next two
@@ -741,7 +744,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 ### B. Needed for a full game
 - ~~Q10. Wind drift~~ → 1 hex downwind, no pushing, Light and Dead Calm never drift (answered).
 - **Q38. Gale damage.** Is "1 DD per Full Sail" per Move phase at Full Sail (up to 3 per turn) or once per turn?
-- **Q39. Wind direction convention.** Does "North Wind" blow towards the north (card arrow) or from the north (sailing usage)?
+- ~~Q39. Wind direction~~ → blows the way the arrow points (answered). Card naming may need changing (§3.5).
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
 - **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
@@ -791,6 +794,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.72 — wind blows the way the arrow points.
 - v0.71 — wind drift: 1 hex downwind, no pushing.
 - v0.70 — a stuck ship's hex counts as land.
 - v0.69 — rough water checked at the end of each Part; End of Part step added.
