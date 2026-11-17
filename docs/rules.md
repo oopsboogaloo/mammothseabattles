@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.75**
+> Status: **Draft v0.76**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -657,10 +657,12 @@ mode is a plug-in objective module on top of a shared rules core.
 - **Setup**: placed as the scenario's setup says.
 - **Influence**: a player's influence over the monster = the **🐙 icons on the command cards they programmed this turn**, plus the
   occasional crew member with a 🐙 icon, plus **every DD they hit the monster with last turn** (see Shooting below).
-- **Movement**: during **Upkeep**, the monster moves **1 hex**; the player with the **most influence** chooses the direction *(ties: Q54)*.
+- **Movement**: during **Upkeep**, the monster moves **1 hex**; the player with the **most influence** chooses the direction. **Tie**: the tied player whose ship is
+  **closest to the monster** decides *(still tied: roll off ❓)*.
   It **ignores all board elements**: it isn't blocked by land and isn't affected by currents, wind, tides, terrain, portals or caves.
 - **Attack**: each Part, **after the Action phase**, it deals **1 DD to every ship next to it**.
-- **Shooting it**: the monster **can be shot** (it's a valid cannon target). It **can't be killed**, but each DD that hits it is
+- **Deadly hex**: a ship that **enters the monster's hex sinks**, and if the monster **moves onto a ship**, that ship **sinks**.
+- **Shooting it**: the monster **can be shot** like a ship: it must be **in your broadside arc**, and **fog hides it**. It **can't be killed**, but each DD that hits it is
   **added to the shooter's influence next turn**. Hurting it lets you steer it.
 - It **can't be pushed**.
 - *Open: Q54.*
@@ -707,10 +709,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
     Can equipment be played **during another player's attack** (e.g. a defensive item)?
   - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
   - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
-- **Q54. Sea monster** (mostly answered, §9.1). Still open:
-  - Influence ties: who decides? (Roll off, like initiative?)
-  - Does it occupy a hex: can ships enter its hex, and does it block movement? What happens if it moves onto a ship?
-  - Does shooting it need it to be in your broadside arc (like a ship)? Does fog hide it?
+- ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). Does entering its hex by drift,
+  current or push also sink? (Assumed yes, like death reefs.)
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
   - "At home port": in the port hex, or adjacent to it?
@@ -811,6 +811,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.76 — sea monster: influence tie = closest ship; its hex sinks ships; must be in arc; fog hides it.
 - v0.75 — sea monster rules (influence, movement, attack, shooting); port guns 1 DD; one treasure per spawn point; refit turn still draws.
 - v0.74 — sea monster basics; ramming DD to the first ship only; refit turn = no actions; home port on map edge, guns range 2, must enter.
 - v0.73 — treasure deck reshuffle; occupied spawn ok; land treasure at end of turn; rammed ship takes the DD; refit costs the next turn; weather board one space per turn; storm 3 DD (provisional).
