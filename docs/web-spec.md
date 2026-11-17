@@ -11,7 +11,7 @@
 |---|---|
 | **M0 Design** | Wireframes generated and evaluated; tech spike (3D board on PC, iPad, Galaxy Note) |
 | **M1 Engine** | Headless rules engine, 100% test coverage, simulation CLI, basic AI |
-| **M2 v1: local play** | Browser game: 1 human vs AI players (plus hot-seat for several humans), core rules + Treasure Hunt |
+| **M2 v1: local play** | Browser game: humans (**pass and play** on one device) and AI players, core rules + Treasure Hunt |
 | **M3 Steam** | Desktop build of v1 for Steam |
 | **M4 Online** | Play with friends via invite link, **no sign-in**, no matchmaking; AI can fill seats |
 | **M5 Accounts** | **Mandatory sign-in** to build an email list (physical game, Kickstarter) |
@@ -103,7 +103,9 @@ The AI only sees its own player view. Difficulty is set per seat.
   ([LogRocket comparison](https://blog.logrocket.com/three-js-vs-babylon-js/), [Utsubo 2026 comparison](https://www.utsubo.com/blog/threejs-vs-babylonjs-vs-playcanvas-comparison),
   [Babylon forum: mobile first-frame](https://forum.babylonjs.com/t/babylonjs-takes-longer-to-render-the-first-frame-on-mobile-compared-to-threejs/41213))
 - **UI layer:** HTML/CSS overlay components (React proposed) for cards, panels and menus, over the 3D canvas.
-- **Assets:** ship models as **glTF/GLB** (compressed), 2D art as optimised textures. *Need from the designer: model and art file formats and sizes.*
+- **Assets:** the designer supplies **OBJ models and PNG art**. An **asset pipeline** converts OBJ (+ its MTL/PNG textures) to **GLB**
+  (glTF binary, the web's standard 3D format: one file, compressed meshes, faster loading), and PNGs to compressed web textures
+  (resized, with mipmaps). The pipeline is a build script, so updated art just gets re-run.
 - **Offline:** v1 works offline once loaded (installable web app).
 
 ### 3.7 Steam (M3)
@@ -194,9 +196,11 @@ supports Electron. Tauri is lighter but uses each OS's own web view, which rende
 ---
 
 ## 7. Open questions
-- W1. Asset formats and sizes (3D models, card art, tiles); licensing of any third-party assets.
-- W2. Local multiplayer in v1: hot-seat with hidden programming (pass the device), or human vs AI only?
+- ~~W1~~ → OBJ models and PNG art. Still: polygon counts and texture sizes of the ship models; licensing of any third-party assets.
+- ~~W2~~ → pass and play plus AI. **Pass-and-play needs a "hand-over" screen** between players while programming, so nobody sees another
+  player's hand or program; decisions mid-resolution (damage placement) also need the right player at the device.
 - W3. Languages: English only at first?
 - W4. Analytics in v1 (anonymous, opt-in) to learn where new players struggle?
 - W5. Email list (M5): data protection consent and privacy policy will be needed.
-- W6. Rules gaps that block M1 (from `rules.md`): starting heading and sail, critical hits, Upkeep order, the current diagram, board tile format.
+- W6. Rules gaps that block M1: ~~starting state, critical hits, Upkeep order~~ (decided, placeholders where noted); still **the current
+  diagram** and **the board tile format**.

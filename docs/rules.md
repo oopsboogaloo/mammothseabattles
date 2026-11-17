@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.81**
+> Status: **Draft v0.82**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -243,7 +243,11 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
-_TBD_
+1. Build the map from tiles (scenario). Place home ports on the map edge, spawn points and wreck tokens (scenario).
+2. Spawn the starting treasures (§8.2.1).
+3. Each player: ship board, Captain + 2 random crew, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
+4. Weather board filled; current card and the next two face up.
+5. Draw command cards (§5.1).
 
 ## 5. Turn structure
 A turn has **3 steps**. Programming happens once per turn and covers all 3 steps.
@@ -312,10 +316,15 @@ so replays and tests can be reproduced.)*
 *(Other conflicts: Q8.)*
 
 ### 5.4 Upkeep and new turn
-After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
-- **Searching shipwrecks** (§7.9).
-- **Spawning treasure** to replace any scored this turn (Treasure Hunt, §8.2.1).
-- **Advancing the weather board** one space (new weather and tide).
+After Part III: **Upkeep**, then a new turn begins. Order *(proposed by Claude, to playtest)*:
+
+1. **Sea monster moves** *(add-on, §9.1)*: first, because its influence comes from the cards programmed in the turn just played.
+2. **Refit** ships that ended the turn in their home port (§7.7).
+3. **Search wrecks** (§7.9). After refit, so crew gained from a wreck isn't wiped out by the refit's "recruit up to 3".
+4. **Spawn treasure** for each one scored this turn (§8.2.1).
+5. **Advance the weather board** one space: new wind and **new tide**. **Check stranding now**: ships on hexes that have become land are
+   **stuck**, and stuck ships on hexes that are water again are **freed** (§6.7).
+6. **Draw command cards** (§5.1). Last, so players draw knowing the new weather and can plan the next turn with it.
 
 ## 6. Movement & actions
 
@@ -485,9 +494,10 @@ Ideas to playtest:
 | 9 | 0 | 2 | |
 | 10 | 1 | 2 | |
 | 11 | 2 | 1 | |
-| 12 | — | — | **Critical hit**: draw a **critical damage card** (bad!) |
+| 12 | — | — | **Critical hit**: *for now* **roll this DD again, plus 1 extra DD** (a critical damage card deck may replace this later) |
 
 Odds per DD: **0.75 Ship + 0.75 Crew** on average (symmetrical); **1 in 12** misses; **1 in 12** is critical; **3 in 12** deal 3 total damage.
+A critical rolled while resolving a critical adds further dice (chains are possible but rare: 1 in 12 per die).
 For the physical game this could be a **custom d12 with icons**; online it's a lookup table.
 
 ### 7.3 Ship damage
@@ -763,9 +773,9 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - ~~Makeup~~ → every combination or a good sample, enough cards (answered); exact list later.
   - If a draw would take you over 9, do you stop at 9 or discard down?
 - ~~Q6a. Steering~~ → Ease 60°, Hard 120°, port and starboard versions (answered). Any other steer values (e.g. 180° about-turn)?
-- **Q31. Upkeep order** (designer: not decided yet). Known steps: search wrecks, spawn treasure, home port refit; probably draw cards and
+- ~~Q31. Upkeep order~~ → proposed order in §5.4, to playtest. (Old note: Known steps: search wrecks, spawn treasure, home port refit; probably draw cards and
   advance weather and tide. *Proposed order to playtest:* 1) refit at home port 2) search wrecks 3) spawn treasure 4) advance weather
-  and tide 5) draw command cards.
+  and tide 5) draw command cards.)
 - **Q44. Treasure Hunt follow-ups** (answered: deck reshuffles; an occupied spawn point is fine; land treasure is dug up at end of turn;
   sea, land or mixed setups). Still open:
   - How are spawn points marked on the board (tokens per scenario)?
@@ -812,7 +822,8 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q17. Crew** → see Q48 (priority A).
   Known so far: some crew or equipment may let a player **peek at the treasure map deck** (§8.2.1).
 - **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
-- **Q35. Starting state.** Starting sail level, heading and position (start at port?), starting hand.
+- ~~Q35. Starting state~~ → ships start **in their home port** with sail **down (No Sail)**; each player **chooses her starting heading**;
+  starting hand = normal draw (answered).
 
 - **Q41. Race:** How are checkpoints placed (scenario setup)? How is a checkpoint "reached": end a Part on it, or pass through it?
   What happens to a sunk ship (respawn at the last checkpoint?) and to a ship that has to be removed?
@@ -829,6 +840,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.82 — setup (start in port, sail down, choose heading); critical = reroll + 1 extra DD (placeholder); Upkeep order proposed; stranding checked when the tide changes.
 - v0.81 — at the crew cap, swap.
 - v0.80 — crew cap 6.
 - v0.79 — core game: searching a wreck gives a crew card.

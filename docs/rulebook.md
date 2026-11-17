@@ -45,7 +45,7 @@ cannons roar. Plans go wrong. That's the fun.
    **half as many treasures as ships** (rounded down, minimum 1): 1 treasure with 2–3 ships, 2 with 4–5, 3 with 6–7, 4 with 8.
 5. Each player takes a **Captain** and **2 random crew**, face up in front of them.
 6. Shuffle the **weather cards** onto the weather board. The current card and the **next two** are face up.
-7. Ships start **in their home port**. 🛠 *Starting heading and sail level to be decided.*
+7. Ships start **in their home port** with **sail down (No Sail)**, pointing whichever way their player chooses.
 8. Each player draws **command cards**: one for each card icon on their crew (§4).
 
 ---
@@ -112,12 +112,14 @@ Do Parts I, II and III in order. In each Part, **everyone acts at the same time*
 - An **empty** slot counts as **0**. On a tie, roll off.
 
 ### 5.3 Upkeep
-🛠 *Final order to be decided. Playtest this order:*
+🛠 *Playtest order:*
 1. **Refit** ships that ended the turn in their home port (§10).
 2. **Search wrecks** (§9).
 3. **New treasure** appears for each one scored this turn.
-4. **Advance the weather board** one space: new wind, new tide.
-5. **Draw** command cards (§4).
+4. **Advance the weather board** one space: new wind, new tide. Ships caught by the tide are now stranded (or freed) (§7).
+5. **Draw** command cards (§4), knowing the new weather.
+
+*(With the Sea Monster add-on, it moves first.)*
 
 ---
 
@@ -232,7 +234,7 @@ Roll a 12-sided die for each damage die. **You** decide where the damage goes.
 | 9 | – | 2 |
 | 10 | 1 | 2 |
 | 11 | 2 | 1 |
-| 12 | **Critical hit!** 🛠 *Critical cards to come.* |
+| 12 | **Critical hit!** Roll this die again **and** one extra die. 🛠 *Critical cards may replace this.* |
 
 - **Ship damage**: put a **damage marker** on any slot of your ship board. Remove any card there. That slot can't be used until repaired.
 - **Crew damage**: **wound** a healthy crew member (flip the card) or **kill** a wounded one. Wounded crew don't give you cards.
@@ -259,6 +261,7 @@ There's a **Retired Captain** somewhere in the crew deck: the best crew member o
 
 ## 10. Home port
 
+- **Start:** you begin the game here.
 - **Safe harbour:** your port can't be harmed, and its guns fire at rivals within 2 hexes.
 - **Refit:** end a turn in your port to fully repair, fully heal, and recruit back up to 3 crew. You **miss the next turn** (you still draw cards).
 - **Score:** sail into your port carrying treasure to score it. It's safe forever.
