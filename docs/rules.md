@@ -251,26 +251,28 @@ There is **one shared command deck** for all players (like classic RoboRally), n
 of Sail × Steer × Action bands, or a good sample**, and will be large enough for 8 players.
 
 ### 5.2 Resolving each Part (I, II, III)
-Each sub-step is carried out by **all ships simultaneously** (pillar P1):
+All ships act **at the same time** in each phase (pillar P1). When they interfere, **initiative** decides the order (§5.3).
 
-1. **Move phase**: apply any Sail card (change sail level), then every ship sails according to her current sail level *(and wind? Q9)*.
-   **Ships push** other ships they move into (§6.5).
-2. **Steer phase**: ships turn according to their Steer card.
-3. **Currents**: ships on currents are moved and/or turned. **Currents do not push**.
-4. **Action phase**: carry out Action cards (Fire Cannons, Repair, Heal, ...).
-5. **Wind drift**: depends on wind strength and the Part (table below).
+1. **Move phase**: apply any Sail card (change sail level). Then every ship sails according to her sail level, the **points of sail**
+   and the **weather** (§6.1–6.3). **Ships push** ships they move into (§6.5). Terrain (§3.2.0), portals and caves (§3.2.1–3.2.2) apply.
+   Conflicts: Sail-slot initiative.
+2. **Steer phase**: ships turn according to their Steer card (Ease 60°, Hard 120°).
+3. **Currents**: in three 1-hex sub-steps (triple → double + triple → all), moving and/or turning ships. Eddies spin ships.
+   **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
+4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
+5. **Wind drift**, depending on wind strength and the Part:
+
+   | Part | Wind strengths that drift |
+   |---|---|
+   | I | Gale |
+   | II | Gale, Strong |
+   | III | Gale, Strong, Firm |
+
+   So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once**; Light and Dead Calm never drift *(assumed ❓, Q10)*.
+   This works like RoboRally's push panels, which only fire in certain registers.
 6. **End of Part**: ships in **rough water** take 2 DD (§3.2.0).
 
-Wind drift by Part:
-
-| Part | Wind strengths that drift |
-|---|---|
-| I | Gale |
-| II | Gale, Strong |
-| III | Gale, Strong, Firm |
-
-   So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once** (any weaker wind: never?). This works like
-   RoboRally's push panels, which only fire in certain registers.
+**Stuck** ships (§6.7) skip steps 1–3 and 5 but still act in step 4.
 
 ### 5.3 Initiative
 Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
