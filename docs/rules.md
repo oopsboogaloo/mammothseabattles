@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.26**
+> Status: **Draft v0.27**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -191,8 +191,9 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 **settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
 
 ### 5.4 Upkeep and new turn
-After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Probably includes advancing the weather
-circuit and the tide (Q37).
+After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
+- **Spawning treasure** to replace any scored this turn (Treasure Hunt, §8.2.1).
+- Probably also advancing the weather circuit and the tide (Q37).
 
 ## 6. Movement & actions
 
@@ -320,14 +321,16 @@ mode is a plug-in objective module on top of a shared rules core.
 
 **8.2.1 Spawning**
 - Treasure appears at **one of the N spawn points, chosen at random**.
-- **Treasures in play at once = (number of ships − 1) / 2, rounded up** (rounding assumed ❓; rounding down would give 0 at 2 players):
+- **Treasures in play at once = (number of ships − 1) / 2, rounded up**:
 
 | Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
 |---|---|---|---|---|---|---|---|
 | Treasures | 1 | 1 | 2 | 2 | 3 | 3 | 4 |
 
   (The same as **half the number of ships, rounded down**.)
-- *When a new one spawns, and whether treasure carried by a ship counts towards the total: Q44.*
+- Treasure **being carried or knocked loose still counts** as in play. A **new treasure spawns only when one is scored**,
+  and it appears during the next **Upkeep** (§5.4).
+- At setup, the starting treasures are spawned the same way *(assumed ❓)*.
 
 **8.2.2 Picking up**
 - **Treasure in a water hex**: picked up by **passing through** the hex (you don't need to end your move there).
@@ -393,9 +396,8 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - ~~Q1. Objective~~ → Answered: multiple game modes; Treasure Hunt is the core game (§8).
 - ~~Q42. Treasure Hunt basics~~ → Answered (§8.2).
 - **Q44. Treasure Hunt follow-ups**:
-  - ~~How many at once~~ → (ships − 1) / 2. Confirm rounding up. Does the count include treasure **being carried**
-    (i.e. a new one spawns only when one is **scored**)? When does a new one spawn (when one is scored? at Upkeep? when one is lost)?
-    How is the spawn point chosen (die roll against numbered points?), and what's N?
+  - ~~How many at once, and when they spawn~~ → Answered: (ships − 1) / 2 rounded up; a new one spawns at Upkeep after one is scored.
+    How is the spawn point chosen (die roll against numbered points?), and what's N? What if the chosen point is occupied (by a ship or another treasure)?
   - Land treasure: ending a **Part** adjacent, or ending the whole **turn** (after Part III)?
   - Knocking loose: can the attacker give up 1 DD out of several dealt by one hit? What if no adjacent hex is empty? Can it be placed on a reef or sandbank?
   - Home port guns: range, damage, when they fire (Action phase each Part?), and who they target (all rival ships in range?)
@@ -437,6 +439,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.27 — treasure respawns at Upkeep only after one is scored; rounding up confirmed.
 - v0.26 — treasures in play = (ships − 1) / 2.
 - v0.25 — Treasure Hunt timed variant, with proposed tie-breaks and turn-limit option.
 - v0.24 — Treasure Hunt: spawn points, pickup, 1-treasure limit, knock-loose instead of DD, home ports, targets.
