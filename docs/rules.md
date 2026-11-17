@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.70**
+> Status: **Draft v0.71**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -201,7 +201,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
 |---|---|---|---|
 | Dead Calm | — | **No sail move** | 0 |
-| Light (e.g. North) | Light | **−1 all sail moves** | 0 ❓ |
+| Light (e.g. North) | Light | **−1 all sail moves** | 0 |
 | Firm (e.g. North, SE) | Firm | none | 1 (Part III) |
 | Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail** | 3 (Parts I–III) |
@@ -260,7 +260,8 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
 3. **Currents**: in three 1-hex sub-steps (triple → double + triple → all), moving and/or turning ships. Eddies spin ships.
    **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
 4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
-5. **Wind drift**, depending on wind strength and the Part:
+5. **Wind drift**: each drifting ship moves **1 hex downwind** (heading unchanged). **Drift doesn't push**: a ship drifting into an
+   occupied hex stays put. Terrain, portals and caves still apply. Which winds drift depends on the Part:
 
    | Part | Wind strengths that drift |
    |---|---|
@@ -268,7 +269,7 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
    | II | Gale, Strong |
    | III | Gale, Strong, Firm |
 
-   So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once**; Light and Dead Calm never drift *(assumed ❓, Q10)*.
+   So in one turn a **Gale drifts ships 3 times, Strong twice, Firm once**; **Light and Dead Calm never drift**.
    This works like RoboRally's push panels, which only fire in certain registers.
 6. **End of Part**: ships in **rough water** take 2 DD (§3.2.0).
 
@@ -738,7 +739,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
 
 ### B. Needed for a full game
-- **Q10. Wind drift.** How far is one drift (1 hex downwind?), and does it push? Is it confirmed that Light and Dead Calm never drift?
+- ~~Q10. Wind drift~~ → 1 hex downwind, no pushing, Light and Dead Calm never drift (answered).
 - **Q38. Gale damage.** Is "1 DD per Full Sail" per Move phase at Full Sail (up to 3 per turn) or once per turn?
 - **Q39. Wind direction convention.** Does "North Wind" blow towards the north (card arrow) or from the north (sailing usage)?
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
@@ -790,6 +791,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.71 — wind drift: 1 hex downwind, no pushing.
 - v0.70 — a stuck ship's hex counts as land.
 - v0.69 — rough water checked at the end of each Part; End of Part step added.
 - v0.68 — rough water (2 DD); stuck ships immovable; wall reefs don't block cannon.
