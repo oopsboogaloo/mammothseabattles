@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.42**
+> Status: **Draft v0.43**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -226,14 +226,9 @@ Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultan
 **Higher number goes first.** Because Full Sail cards are numbered 8xx and Half Sail 4xx, faster ships generally win movement conflicts.
 
 So the same physical card can have a different effect on priority depending on where you place it, which is one more thing to weigh when programming.
-**Tie-breaks** are needed for equal initiative, at least when two ships both have an empty slot (0). *(Rule: Q47.)*
-Options:
-1. **Priority token** (recommended): a token held by one player, passed clockwise at Upkeep. On a tie, the ship nearest
-   the token holder going clockwise wins. Fair over a game, easy at the table, trivial online. RoboRally 2023 uses a passed
-   priority token ([Renegade](https://renegadegamestudios.com/robo-rally)).
-2. **Fixed ship number**: each ship board has a unique tie-break number 1–8. Simple, but gives a permanent edge.
-3. **Roll a die**: chaotic (fits P3) but slow for the online version and hard to reproduce in tests.
-4. **No winner**: tied ships both act as if blocked (e.g. neither enters the contested hex). Chaotic, no extra component.
+**Tie-break: roll off.** If ships have equal initiative (in practice, both have an empty slot = 0), the tied players **roll a die**;
+the highest roll goes first (re-roll ties). Ties should be rare. *(Online: rolls come from the game's seeded random-number generator,
+so replays and tests can be reproduced.)*
 
 *(Other conflicts: Q8.)*
 
@@ -522,6 +517,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.43 — initiative ties: roll off.
 - v0.42 — empty slot = initiative 0; tie-break options.
 - v0.41 — higher initiative goes first.
 - v0.40 — no friendly fire; firer may spare any target.
