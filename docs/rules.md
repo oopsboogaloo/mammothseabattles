@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.43**
+> Status: **Draft v0.44**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -345,9 +345,28 @@ Ideas to playtest:
 - *Line of sight, damage per hit and timing: Q33.*
 
 ### 7.2 Damage dice (DD)
-- Damage is dealt as **Damage Dice (DD)**: whenever damage occurs, the ship **takes DD**.
-- Sources of DD so far: **Gale**: 1 DD per Full Sail (§3.5).
-- *What a DD is, how it's rolled or read, and what it does: Q15, Q38.*
+- Damage is dealt as **Damage Dice (DD)**: whenever damage occurs, the ship **takes DD**, i.e. a **12-sided damage die is rolled** for each DD.
+- There are **two types of damage**: **Ship** (hull/rigging) and **Crew**. One roll deals **0–2 of each**, or a **Critical hit**.
+- Sources of DD so far: cannon hits (§7.1, amount Q33), ramming (Q6b), **Gale**: 1 DD per Full Sail (§3.5).
+
+**Damage die (d12)**, provisional, will be playtested:
+
+| Roll | Ship | Crew | |
+|---|---|---|---|
+| 1 | 0 | 0 | Miss |
+| 2–3 | 1 | 0 | |
+| 4–5 | 0 | 1 | |
+| 6–7 | 1 | 1 | |
+| 8 | 2 | 0 | |
+| 9 | 0 | 2 | |
+| 10 | 1 | 2 | |
+| 11 | 2 | 1 | |
+| 12 | — | — | **Critical hit**: draw a **critical damage card** (bad!) |
+
+Odds per DD: **0.75 Ship + 0.75 Crew** on average (symmetrical); **1 in 12** misses; **1 in 12** is critical; **3 in 12** deal 3 total damage.
+For the physical game this could be a **custom d12 with icons**; online it's a lookup table.
+
+- *What Ship and Crew damage do, how they're tracked, and the critical damage deck: Q15.*
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -448,7 +467,7 @@ mode is a plug-in objective module on top of a shared rules core.
 ## 10. Glossary
 | Term | Definition |
 |------|------------|
-| DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
+| DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
 ## Open questions
 _Cleaned up in v0.22: answered items removed (answers are in the relevant sections and the change log). Old Q-numbers are
@@ -456,8 +475,36 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 **C** is detail or polish._
 
 ### A. Core game loop (blocks a playable prototype)
-- ~~Q1. Objective~~ → Answered: multiple game modes; Treasure Hunt is the core game (§8).
-- ~~Q42. Treasure Hunt basics~~ → Answered (§8.2).
+_Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; restored from history and brought up to date._
+
+- **Q15. Damage effects** (the die itself is answered, §7.2):
+  - How are Ship and Crew damage **tracked** (tracks on the ship board? damage cards? a max per ship)?
+  - What do they **do**? E.g. Ship damage limits sail level or speed, and Crew damage limits how many slots you can fill or which
+    actions you can take? (You said damage affects movement.)
+  - **Critical damage cards**: what's in the deck (lost mast, rudder jammed, fire, magazine explosion, man overboard...)? Permanent
+    until repaired? How many cards?
+  - Is it right that **Repair** fixes Ship damage and **Heal** fixes Crew damage? How much each?
+- **Q16. Sinking / defeat.** When is a ship sunk (max Ship damage?), and what happens at max Crew damage? Then what: out of the game,
+  respawn at home port, drop treasure?
+- **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
+  no firing through portals or caves). Still open:
+  - How many DD per hit? Is there range falloff?
+  - Line of sight: do islands, reefs, fog or **other ships** block shots?
+- **Q32. Initiative** (answered: Move-slot card for movement, Action-slot card for cannon; higher first; empty slot = 0; ties roll off). Still open:
+  - **Cannon order**: is damage applied immediately in initiative order, so a ship sunk (or knocked loose) by a higher-initiative broadside
+    doesn't get to fire? Or is it resolved in order but applied simultaneously?
+  - Are all initiative numbers on the cards unique (so ties only happen with empty slots)?
+- **Q8. Movement conflicts**: two ships trying to enter the same hex, meeting head-on, or swapping hexes. Is it just "higher initiative moves
+  first, then the other, pushing as normal"?
+- **Q6b. Pushing and ramming** (answered: pushes chain, §6.5). Still open:
+  - How far does a pushed ship go: 1 hex per hex the pusher keeps moving (RoboRally style)?
+  - What happens when the chain hits land, a reef or the board edge: the whole chain stops (RoboRally walls), or damage or grounding?
+  - Ramming damage: how many DD, to whom (the rammed ship, both, every ship in the chain)? Once per push, or per hex pushed?
+  - Is a pushed ship's heading unchanged? (Assumed yes.) Does a pusher follow a ship pushed into a whirlpool?
+- **Q7 / Q30. Cards and deck.** How many cards are drawn per turn? Is the deck shared or personal? What's its full makeup (every
+  sail/steer/action band value and the counts)? What happens to unused and played cards?
+- **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
+- **Q31. Upkeep.** Known: spawn treasure (§8.2.1). Also: discard and draw? Advance weather and tide? Anything else?
 - **Q44. Treasure Hunt follow-ups**:
   - ~~How many at once, and when they spawn~~ → Answered: (ships − 1) / 2 rounded up; a new one spawns at Upkeep after one is scored.
     ~~How is the spawn point chosen?~~ → Treasure map deck (answered). Still open:
@@ -517,6 +564,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.44 — damage die (d12 table). Restored priority-A open questions accidentally deleted in v0.24.
 - v0.43 — initiative ties: roll off.
 - v0.42 — empty slot = initiative 0; tie-break options.
 - v0.41 — higher initiative goes first.
