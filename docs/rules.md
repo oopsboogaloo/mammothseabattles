@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.23**
+> Status: **Draft v0.24**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -313,11 +313,37 @@ mode is a plug-in objective module on top of a shared rules core.
 - *Open: Q41.*
 
 ### 8.2 M2 Treasure Hunt (core game)
-- Treasure **spawns at random locations**.
-- A ship **picks up** treasure and must **bring it back to port** to score it.
-- Treasure **can be stolen** from ships carrying it.
-- The first player to score the target (**3 or 5**, to be playtested; may depend on player count) wins.
-- *Open: Q42.*
+
+**Setup**
+- Each player has a **home port** (§8.2.4). *(Placement: Q44.)*
+- The map has **N treasure spawn points**.
+
+**8.2.1 Spawning**
+- Treasure appears at **one of the N spawn points, chosen at random**. *(How many at once and when: Q44.)*
+
+**8.2.2 Picking up**
+- **Treasure in a water hex**: picked up by **passing through** the hex (you don't need to end your move there).
+- **Treasure on land**: picked up by **ending a turn adjacent** to that land hex *(turn or Part? Q44)*.
+- **A ship can carry only 1 treasure.** *(Does a full ship sail through a treasure hex without picking it up? Assumed yes.)*
+
+**8.2.3 Stealing / knocking loose**
+- When a ship carrying treasure is **rammed** or **hit by cannon**, the attacker may **give up a damage die (DD)** they would
+  deal and **knock the treasure loose** instead.
+- The **attacker** places the treasure in an **empty hex adjacent to the victim**, sea or land, as they choose.
+- Anyone can then pick it up as normal (§8.2.2). In practice the attacker places it where they can grab it, or where a rival can't.
+
+**8.2.4 Home port & scoring**
+- Each player has a **home port**. It is **indestructible** and **has guns**, so other ships keep their distance.
+- Treasure is **scored, and safe, once it reaches the carrier's home port**. It can't be stolen after that.
+
+**8.2.5 Winning**
+- The first player to score the **target** wins. The default is **3**; adjust for game length and player count:
+
+| Players | Suggested target |
+|---|---|
+| 2 | "Best of 5" (i.e. first to 3?) ❓ |
+| 3–6 | 3 |
+| 7–8 | 2 |
 
 ### 8.3 M3 Deathmatch
 - Ship combat, usually in teams. *Open: Q43.*
@@ -346,25 +372,16 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ### A. Core game loop (blocks a playable prototype)
 - ~~Q1. Objective~~ → Answered: multiple game modes; Treasure Hunt is the core game (§8).
-- **Q42. Treasure Hunt details** (core game, so priority A):
-  - How does treasure spawn: when, how many at a time, how is the location chosen (die, card, spawn points)?
-  - How is it picked up: end a Part on the hex, or pass through it? Does it cost an action?
-  - How many treasures can a ship carry?
-  - How is it **stolen**: by ramming or pushing, a broadside hit, boarding, sinking the carrier? Does it drop into the sea?
-  - Which port: one shared port, or each player's home port? Is the port a safe zone?
-  - Target: 3 or 5, fixed or by player count?
-- **Q15 / Q38b. Damage model.** What is the damage die (d6? custom faces? what results)? Is it rolled, or kept on the ship board?
-  Are there hit locations (hull, masts/sails, rudder, crew)? How does damage affect movement?
-- **Q16. Sinking.** What happens when a ship is destroyed: out of the game, respawn at port, lose treasure?
-- **Q33. Broadside resolution.** Does it hit every ship in the arc, the nearest only, or a chosen target? How many DD per hit?
-  Is there range falloff or a roll to hit? Do islands, reefs, fog or ships block line of sight? Is all firing in a Part simultaneous?
-- **Q7 / Q30. Cards and deck.** How many cards are drawn per turn? Is the deck shared or personal? What's its full makeup (every
-  sail/steer/action band value and the counts)? What happens to unused and played cards?
-- **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
-- **Q8 / Q32. Conflicts and initiative.** Which card's initiative counts in a Part (the Move slot? the highest?), and does higher
-  win? What exactly happens when two ships try to enter the same hex, meet head-on, or swap hexes?
-- **Q6b. Pushing.** How far does a pushed ship go? Do pushes chain? What happens when a ship is pushed into land, a reef or the edge? Is there collision or ramming damage?
-- **Q31. Upkeep.** What happens between turns: discard and draw, weather and tide advance, anything else?
+- ~~Q42. Treasure Hunt basics~~ → Answered (§8.2).
+- **Q44. Treasure Hunt follow-ups**:
+  - How many treasures are on the map at once? When does a new one spawn (when one is scored? at Upkeep? when one is lost)?
+    How is the spawn point chosen (die roll against numbered points?), and what's N?
+  - Land treasure: ending a **Part** adjacent, or ending the whole **turn** (after Part III)?
+  - Knocking loose: can the attacker give up 1 DD out of several dealt by one hit? What if no adjacent hex is empty? Can it be placed on a reef or sandbank?
+  - Home port guns: range, damage, when they fire (Action phase each Part?), and who they target (all rival ships in range?)
+  - Port: where is it placed (board edge? player chooses at setup?) What counts as "reaching" it (entering the port hex, or ending adjacent)? Is it also where sunk ships respawn?
+  - Can treasure be scored at another player's port? (Assumed no.)
+  - 2 players: does "best of 5" mean first to 3?
 
 ### B. Needed for a full game
 - **Q10. Wind drift.** How far is one drift (1 hex downwind?), and does it push? Is it confirmed that Light and Dead Calm never drift?
@@ -399,6 +416,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.24 — Treasure Hunt: spawn points, pickup, 1-treasure limit, knock-loose instead of DD, home ports, targets.
 - v0.23 — game modes: Race, Treasure Hunt (core), Deathmatch, Capture the Flag, Solo/Co-op (deferred).
 - v0.22 — open questions cleaned up and prioritised.
 - v0.21 — windward cases confirmed; full sail-move table.
