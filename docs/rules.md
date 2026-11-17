@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.2**
+> Status: **Draft v0.3**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -34,7 +34,8 @@ interact with each other and with the sea.
 | D9 | Two factions: mammoths vs dinosaurs | Generic robots |
 
 ## 2. Players & duration
-- Players: _TBD_
+- Players: **2–4 for the first version; the target is up to 8**. Rules, components and the
+  online engine should be designed so 8 is possible, even though playtesting starts at 4.
 - Play time: _TBD_
 - Age: _TBD_
 
@@ -66,7 +67,10 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 **Game modes and factions**
 - Q1. Are battle and race separate modes/scenarios, or is it always both (treasure race with fighting allowed)?
 - Q2. Are mammoths and dinosaurs mechanically different (asymmetric), or only cosmetically?
-- Q3. Player count? Teams? (Mammoths vs dinosaurs suggests teams are possible.)
+- ~~Q3. Player count?~~ → Answered: start with 4, target up to 8 (see §2).
+- Q3a. Teams? Mammoths vs dinosaurs suggests teams are possible (e.g. 4v4 at 8 players).
+- Q3b. What's the minimum? Does 2 players work, or 3?
+- Q3c. Scaling to 8: does the board grow (modular sea tiles?), and how do we keep downtime and chaos down? At 8, RoboRally gets long and swingy.
 
 **Programming (D2, D3)**
 - Q4. Does each of the 3 steps get one sail card, one steer card and one cannon card? Are they separate decks or one shared hand?
@@ -94,4 +98,5 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.3 — player count: 4 to start, target up to 8.
 - v0.2 — overview, list of differences from RoboRally, first batch of open questions.
