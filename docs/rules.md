@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.54**
+> Status: **Draft v0.55**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -190,7 +190,14 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - Each ship has a crew of **crew cards** (round). Each has a **name** (e.g. *Pirate*, *Captain Mammoth*), artwork, and
   **command-card icons** (small 3-band card symbols): *Pirate* has 1, *Captain Mammoth* has 3.
 - **Card icons = command cards drawn per turn** from that crew member (§5.1).
-- The white panel on the *Pirate* card is presumably for **ability text** ❓ (Q48).
+- **Some crew have special powers** (printed in the white panel), like RoboRally's upgrade cards. Known examples:
+
+| Crew | Power |
+|---|---|
+| Captain (e.g. *Captain Mammoth*) | Draws 3 command cards; the most powerful crew |
+| Pirate | Draws 1 command card; no special power (basic crew) |
+| Surgeon | Can heal *(how exactly: Q48)* |
+| *(some crew or equipment)* | Peek at the treasure map deck (§8.2.1) |
 - Crew cards have a **healthy** side and a **wounded** side (flip to wound, §7.4).
 - **Every ship starts the game with a Captain.** Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
@@ -578,7 +585,9 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
   - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
   - Do **wounded** crew still give their card icons? (Assumed no ❓.)
-  - What's the white panel: ability text? (You mentioned crew working like RoboRally upgrade cards.)
+  - ~~White panel~~ → special powers (answered). The full crew list with powers and card icons is needed. Surgeon: does she heal 1 wounded
+    crew per turn automatically, make Heal actions stronger, or allow healing without using an Action slot?
+  - Do powers stop working while that crew member is **wounded**?
   - How do you gain crew (recruit at port, rescue, capture)? Maximum crew?
   - Draw timing: at Upkeep, or at the start of Programming?
 - **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
@@ -663,6 +672,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.55 — crew special powers (e.g. Surgeon heals).
 - v0.54 — everyone starts with a Captain; sinking loses the Captain (respawn with 3 random crew).
 - v0.53 — on return: fully repaired, 3 crew; treasure drops where she sank.
 - v0.52 — sunk ships come back at home port; pillar P6: no player elimination.
