@@ -12,3 +12,4 @@ A board game in design, with a companion online version.
 ## Documents
 
 - [`docs/rules.md`](docs/rules.md) — working rules specification (source of truth)
+- [`docs/research/roborally.md`](docs/research/roborally.md) — notes on RoboRally, the reference game
