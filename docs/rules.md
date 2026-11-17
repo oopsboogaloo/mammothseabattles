@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.36**
+> Status: **Draft v0.37**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -92,6 +92,9 @@ Portals are a **core** feature, not optional; they're a big part of the fun (as 
 - **Any movement triggers it**: sailing, being pushed, currents, wind drift.
 - **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal. She treats the whirlpool
   as a normal hex and **carries on** with any remaining movement.
+- **Simultaneous entry** (two ships entering the two whirlpools of a pair at once): resolved by **initiative**. The ship with
+  priority goes through first, and the other then resolves against the new situation (e.g. her exit is now occupied, so she's blocked
+  and carries on as normal).
 - **Only moving onto a whirlpool triggers it** (sailing, drifting or currents, being pushed). **Arriving through the portal does not
   trigger it again**, and a ship that starts on a whirlpool and moves off it doesn't trigger it either.
 
@@ -210,7 +213,8 @@ Each sub-step is carried out by **all ships simultaneously** (pillar P1):
 
 ### 5.3 Initiative
 Cards carry **initiative numbers**, as in RoboRally. Ships still move **simultaneously** (P1); initiative is used to
-**settle conflicts**, e.g. two ships trying to enter the same hex *(exact use: Q8, Q32)*.
+**settle conflicts**: when two ships' movements interfere, the ship with initiative resolves first, then the other.
+Confirmed uses: **simultaneous whirlpool entry** (§3.2.1). *(Which card's number counts, and whether higher wins: Q32. Other conflicts: Q8.)*
 
 ### 5.4 Upkeep and new turn
 After Part III: **Upkeep**, then a new turn begins *(full contents: Q31)*. Includes:
@@ -463,7 +467,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
   - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
   - ~~Re-triggering~~ → arriving through a portal doesn't trigger it (answered).
-  - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
+  - ~~Simultaneous entry~~ → resolved by initiative (answered).
   - ~~Cannon through portals~~ → No (answered, §7.1).
 - **Q46. Sea caves** (blocking answered: emerging pushes). Still open:
   - Confirm that remaining movement continues after coming out, and that any movement (currents, drift, being pushed) triggers a cave.
@@ -493,6 +497,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.37 — simultaneous whirlpool entry resolved by initiative.
 - v0.36 — cannons don't fire through portals or caves.
 - v0.35 — pushes chain; new §6.5 Pushing.
 - v0.34 — arriving through a portal doesn't trigger it.
