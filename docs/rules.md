@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.59**
+> Status: **Draft v0.60**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -78,14 +78,15 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | **Whirlpool portal** (numbered, e.g. "1") | Two matching whirlpools | **Core feature.** Paired portals; see §3.6. |
 | **Sea cave** (lettered, e.g. A, B) | Cave mouths on island edges, marked with letters and arrows | **Core feature.** Paired edge portals that change heading; see §3.2.2. |
 | Island | Land | Impassable; ships hitting it take collision damage? ❓ |
-| Reef / rocks | Pink spiky edges round islands; wreck-strewn rocky hexes with a skull | Hazard: damage, grounding, or sinking? ❓ |
+| Reef / rocks | Pink spiky edges round islands | Hazard: damage, grounding, or sinking? ❓ |
+| Wreck on rocks | Rocky hex with a wrecked ship and a skull | Probably a **starting shipwreck** (§7.9), on a rocky hazard hex? ❓ |
 | Sandbanks | Yellow patterned areas | Shallows: impassable or slowing, **tide-dependent**? ❓ |
 | Striped shallows | Pale green diagonal stripes | Shallow water or kelp, maybe exposed at low tide? ❓ |
 | Rough water | Purple churning hex | Hazard, maybe damage or random drift? ❓ |
 | Fog bank | White cloud (centre) | Blocks line of sight for cannon? ❓ |
 | Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
-| Small wreck on sandbar | Upper left | Treasure location? ❓ |
+| Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
 
 ### 3.2.1 Whirlpool portals *(core rule)*
 Portals are a **core** feature, not optional; they're a big part of the fun (as in RoboRally).
@@ -449,7 +450,17 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
   a *Pirate* draws 1), so a ship rebuilt with 3 random crew is much weaker than one with her Captain.
 - Any **treasure she carried drops in the hex where she sank**, ready for anyone to pick up.
-- *Penalty, hand of cards, facing, sail: Q16.*
+- She leaves a **shipwreck** where she sank (§7.9).
+- *Hand of cards, facing, sail: Q16.*
+
+### 7.9 Shipwrecks
+- **The map starts with shipwrecks** placed on it, and **every ship that sinks leaves a new shipwreck** where she sank.
+- A ship can **search** a shipwreck *(how: Q50)*. Searching draws a card from the **wreck deck**, which might give:
+  - a **random crew** member,
+  - random **equipment**,
+  - an **unexpected treasure**,
+  - or **something bad**.
+- A shipwreck is **removed once searched**.
 
 *Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
 
@@ -553,6 +564,7 @@ mode is a plug-in objective module on top of a shared rules core.
 | Term | Definition |
 |------|------------|
 | Crew card | A crew member; healthy or wounded; its command-card icons set how many cards you draw (§3.6, §7.4). |
+| Shipwreck | A searchable marker; start-of-game wrecks plus one per sunk ship; searching draws a wreck card (§7.9). |
 | Damage marker | Blocks one of the 9 ship-board slots (§7.3). |
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
@@ -579,6 +591,15 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
   - Facing, sail level on return?
   - What if an enemy ship is in or next to her port when she comes back? (The port guns probably deal with that.)
   - Deathmatch scoring: count sinkings as points? (Q43.)
+- **Q50. Shipwrecks:**
+  - How do you search: pass through the hex (like treasure), end a Part on or next to it, or use an Action?
+  - How many shipwrecks does the map start with, and where (printed on tiles, or tokens per scenario)? Are the skull-and-wreck hexes on the
+    example board starting wrecks?
+  - The wreck deck: size and contents (how many crew / equipment / treasure / bad results)? What are the bad results (e.g. sea monster,
+    curse, hidden reef damage)?
+  - **Equipment** is a new component: what is it, how many can a ship hold, and is it lost when she sinks?
+  - "Unexpected treasure": does it count towards the treasures-in-play total (§8.2.1)?
+  - A new wreck and dropped treasure land in the same hex. Fine to have both?
 - **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
   - "Costs a full turn": does she skip the **next** turn (no cards programmed, stays in port)? Or is it the turn she arrived on (she must
     end it in port, so the turn is effectively spent)? Does she still draw cards?
@@ -680,6 +701,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.60 — shipwrecks and the wreck deck.
 - v0.59 — Retired Captain: strongest crew, won't serve with a Captain (swap).
 - v0.58 — 8 identical Captains; Retired Captain in the crew deck; all ships identical.
 - v0.57 — no factions: crew are prehistoric monsters, all Captains are mammoths.
