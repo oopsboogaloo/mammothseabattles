@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.66**
+> Status: **Draft v0.67**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -384,7 +384,8 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - *Ramming damage: who takes the 1 DD (Q6b).*
 
 ### 6.6 Currents
-- Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2):
+- Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2). *A players' diagram showing every
+  current type is coming from the designer.*
 
 | Arrow | Effect |
 |---|---|
@@ -395,10 +396,19 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 
 - Currents **don't push** other ships (§5.2), but a ship carried into a **cliff** or **wall reef** takes the damage (§3.2.0), and into a
   **death reef** sinks.
-- *Eddies, gyres, the maelstrom, order of activation: Q20, Q19.*
+- **Eddies** (circular arrows within a hex) **spin** the ship in place.
+- **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
+  1. **Triple** currents move 1 hex.
+  2. **Double and triple** currents move 1 hex.
+  3. **All** currents (single, double, triple) move 1 hex.
+
+  So triple currents move 3, double 2 and single 1, all finishing together, and a ship can be carried from one current onto another
+  between sub-steps. Conflicts within a sub-step are resolved in **Sail (Move-slot) initiative order**.
+- *Turning amounts, eddy spin amount, gyres and the maelstrom: designer's diagram (Q20).*
 
 ### 6.7 Stranded by the tide
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
+- While stuck she **can't sail or steer**, but **can still use her Action slots** (fire, repair, heal).
 - *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
 
@@ -430,7 +440,8 @@ Ideas to playtest:
     or to avoid a ship they'd rather not provoke). Everything else in the arcs is hit.
 - **Cannon fire does not pass through whirlpool portals or sea caves.**
 - Cannons **fire over land and cliffs** (they don't block line of sight).
-- **Fog prevents aiming** *(exact rule: Q33)*. Fog has no other effect.
+- **Fog**: a ship **in fog can't fire** (can't aim) and **can't be hit**, and **cannon fire can't pass through fog**. Fog has no other effect.
+  The mechanic may be reused: **fog tokens** could be placed for various reasons (scenarios, weather, equipment).
 - *Line of sight, damage per hit and timing: Q33.*
 
 ### 7.2 Damage dice (DD)
@@ -725,16 +736,16 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
 - **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
-  - While stuck: can she still steer, fire, repair or heal? Can currents, pushing or drift move her off?
+  - ~~While stuck~~ → actions only, no sail or steer (answered). Can currents, pushing or drift move her off (assumed no, she's aground)?
   - Do tides change currents?
 - ~~Q51. Terrain follow-ups~~ → Answered: stopped ships can still be moved later; damage and death reefs apply however she got there;
   cannons fire over land (§3.2.0, §7.1). Still open: do **wall reefs** block cannon fire?
-- **Q52. Fog:** "prevents aiming" means: ships **in** fog can't be hit? Ships in fog can't fire? Fire can't pass **through** fog?
+- ~~Q52. Fog~~ → can't fire from, into or through fog (answered).
 - **Q20 / Q21 / Q22. Currents** (answered: 1/2/3 hexes by arrow count; curved arrows move and turn; land and reefs apply). Still open:
-  - Do all currents act at once, or fast ones first? Is a multi-hex current moved hex by hex (so it can carry her onto the next current, portal or reef)?
-  - Turning: how much (60° per curve?), and when: before or after the move? Does she end **facing the arrow** (absolute) or turn by a set amount (relative)?
-  - A ship carried into an occupied hex stays put (currents don't push)?
-  - **Eddies** (circular arrows in one hex, solid and dashed) and **gyres** / loop currents: turn in place? Carry round the loop? What does dashed mean?
+  - ~~Order / multi-hex~~ → three sub-steps, RoboRally express-belt style; conflicts by Sail initiative (answered). ~~Eddies~~ → spin the ship (answered).
+  - **Awaiting the designer's current diagram**: turning amounts and timing, absolute vs relative turns, how far an eddy spins, dashed eddies,
+    gyres and loop currents, the maelstrom.
+  - A ship carried into an occupied hex stays put (currents don't push)? (Assumed yes.)
 - **Q19. Board features.** Terrain, portals and caves are done. Still to define: eddies (solid and dashed), gyres and loop currents,
   maelstrom, rough water (purple), fog, storm, port town.
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
@@ -770,6 +781,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.67 — fog rules; current sub-steps; eddies spin; stuck ships can still act.
 - v0.66 — currents 1/2/3 and turning; terrain applies however a ship arrives; cannons fire over land; fog prevents aiming; tide stranding.
 - v0.65 — terrain: cliffs, beaches, sandbanks, underwater reefs, death reefs, wall reefs; tide effects.
 - v0.64 — push distance and obstacles; starboard steering; deck coverage; initiative for conflicts; cannon damage applied immediately; start Captain + 2; crew deck ≥ 50.
