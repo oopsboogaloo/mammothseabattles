@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.39**
+> Status: **Draft v0.40**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -329,8 +329,10 @@ Ideas to playtest:
   No fire forward or aft; the hexes directly ahead and astern are always safe.
 - Engine note: in cube coordinates, a broadside arc is the set of hexes within distance 1–4 that lie in the sextant
   between the two neighbour directions on that side of the ship.
-- **Targets: every enemy ship in both arcs is hit.** There's no choosing a target; one Fire Cannons order can hit several ships.
-  - "Enemy" means every other ship in free-for-all; in team modes, teammates aren't hit (assumed ❓: no friendly fire).
+- **Targets: every enemy ship in both arcs is hit**, so one Fire Cannons order can hit several ships.
+  - **No friendly fire**: teammates are never hit.
+  - **Holding fire**: the firing player may choose **not to fire at any particular target** (e.g. to spare a temporary ally in free-for-all,
+    or to avoid a ship they'd rather not provoke). Everything else in the arcs is hit.
 - **Cannon fire does not pass through whirlpool portals or sea caves.**
 - *Line of sight, damage per hit and timing: Q33.*
 
@@ -507,6 +509,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.40 — no friendly fire; firer may spare any target.
 - v0.39 — initiative: Move slot card for movement, Action slot card for cannon.
 - v0.38 — cannons hit all enemy ships in both arcs.
 - v0.37 — simultaneous whirlpool entry resolved by initiative.
