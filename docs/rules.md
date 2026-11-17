@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.31**
+> Status: **Draft v0.32**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -90,7 +90,8 @@ Portals are a **core** feature, not optional; they're a big part of the fun (as 
 - **Entering** a whirlpool hex teleports the ship **immediately** to the partner whirlpool.
 - She **keeps her heading** and **carries on with any remaining movement** from the partner hex.
 - **Any movement triggers it**: sailing, being pushed, currents, wind drift.
-- **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal *(what happens instead: Q45)*.
+- **Blocked**: if the partner whirlpool is occupied, the ship **does not travel** through the portal. She treats the whirlpool
+  as a normal hex and **carries on** with any remaining movement.
 - Assumed ❓: **arriving** at a whirlpool through the portal doesn't trigger it again (no infinite loop), and a ship that starts on a
   whirlpool and moves off it doesn't trigger it.
 
@@ -452,8 +453,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - **Q19. Board features.** Confirm or correct the ❓ interpretations in §3.2 (eddies, gyres, maelstrom, whirlpool pairs, caves A/B,
   reefs, rough water, fog, storm, port, wreck).
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
-  - Blocked: she stays on the entry whirlpool. Does she then carry on with remaining movement as if it were a normal hex,
-    or does her movement stop there?
+  - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
   - Confirm: arriving through a portal doesn't re-trigger it, and starting on a whirlpool and leaving doesn't trigger it.
   - Two ships entering the two partner whirlpools at the same moment: do they swap, or are both blocked?
   - Can cannon fire through a portal? (Assumed no.)
@@ -485,6 +485,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.32 — blocked whirlpool: the ship carries on.
 - v0.31 — sea caves: lettered edge portals that set the exit heading.
 - v0.30 — whirlpool portal rules (core).
 - v0.29 — 9 spawn points; whirlpools confirmed as paired portals.
