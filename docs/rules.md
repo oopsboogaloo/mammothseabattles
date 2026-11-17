@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.22**
+> Status: **Draft v0.23**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -295,8 +295,38 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - Sources of DD so far: **Gale**: 1 DD per Full Sail (§3.5).
 - *What a DD is, how it's rolled or read, and what it does: Q15, Q38.*
 
-## 8. Winning & game end
-_TBD_
+## 8. Game modes & winning
+The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
+(checkpoints, treasure, flags) and **win/end conditions**. That way new modes are cheap to add, and in the engine each
+mode is a plug-in objective module on top of a shared rules core.
+
+| # | Mode | Players | Objective (summary) | Status |
+|---|---|---|---|---|
+| M1 | **Race** | Free-for-all | Reach the **checkpoints in order**; first to finish wins. The simplest mode, and the one to teach with. | Defined below |
+| M2 | **Treasure Hunt** | Free-for-all | **Core game.** Pick up treasure and **return it to port**; first to **3 or 5** treasure wins. Treasure **spawns randomly** and **can be stolen**. | Defined below |
+| M3 | **Deathmatch** | Usually teams | Fight. | Outline |
+| M4 | **Capture the Flag** | Teams | Take the enemy flag back to base. | Outline |
+| M5 | **Solo / Co-op Adventure** | 1+ vs the game | Explore, fight **ghost ships and monsters**. | **Deferred** until the core game is finished. Hardest mode (needs AI-controlled enemies). |
+
+### 8.1 M1 Race
+- Checkpoints are placed on the board and must be reached **in order**. The first ship to reach the last checkpoint wins.
+- *Open: Q41.*
+
+### 8.2 M2 Treasure Hunt (core game)
+- Treasure **spawns at random locations**.
+- A ship **picks up** treasure and must **bring it back to port** to score it.
+- Treasure **can be stolen** from ships carrying it.
+- The first player to score the target (**3 or 5**, to be playtested; may depend on player count) wins.
+- *Open: Q42.*
+
+### 8.3 M3 Deathmatch
+- Ship combat, usually in teams. *Open: Q43.*
+
+### 8.4 M4 Capture the Flag
+- Teams. *Open: Q43.*
+
+### 8.5 M5 Solo / Co-op Adventure *(deferred)*
+- Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§10.1). Not to be designed until the core game is finished.
 
 ## 10. Optional modules
 
@@ -315,7 +345,14 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 **C** is detail or polish._
 
 ### A. Core game loop (blocks a playable prototype)
-- **Q1. Objective.** How do you win? Treasure race, battle, or both? Separate modes or one game? When does the game end?
+- ~~Q1. Objective~~ → Answered: multiple game modes; Treasure Hunt is the core game (§8).
+- **Q42. Treasure Hunt details** (core game, so priority A):
+  - How does treasure spawn: when, how many at a time, how is the location chosen (die, card, spawn points)?
+  - How is it picked up: end a Part on the hex, or pass through it? Does it cost an action?
+  - How many treasures can a ship carry?
+  - How is it **stolen**: by ramming or pushing, a broadside hit, boarding, sinking the carrier? Does it drop into the sea?
+  - Which port: one shared port, or each player's home port? Is the port a safe zone?
+  - Target: 3 or 5, fixed or by player count?
 - **Q15 / Q38b. Damage model.** What is the damage die (d6? custom faces? what results)? Is it rolled, or kept on the ship board?
   Are there hit locations (hull, masts/sails, rudder, crew)? How does damage affect movement?
 - **Q16. Sinking.** What happens when a ship is destroyed: out of the game, respawn at port, lose treasure?
@@ -347,6 +384,11 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
 - **Q35. Starting state.** Starting sail level, heading and position (start at port?), starting hand.
 
+- **Q41. Race:** How are checkpoints placed (scenario setup)? How is a checkpoint "reached": end a Part on it, or pass through it?
+  What happens to a sunk ship (respawn at the last checkpoint?) and to a ship that has to be removed?
+- **Q43. Deathmatch / Capture the Flag:** Scoring (kills? last ship or team afloat? time limit)? Respawn? Flag pickup and steal
+  rules (probably the same as treasure)?
+
 ### C. Detail and polish
 - **Q36.** Is the point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
 - **Q28.** Are all 9 cards revealed at once, or one Part at a time?
@@ -357,6 +399,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.23 — game modes: Race, Treasure Hunt (core), Deathmatch, Capture the Flag, Solo/Co-op (deferred).
 - v0.22 — open questions cleaned up and prioritised.
 - v0.21 — windward cases confirmed; full sail-move table.
 - v0.20 — Gale on Half Sail windward = 1; windward lookup table.
