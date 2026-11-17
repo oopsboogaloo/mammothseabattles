@@ -68,9 +68,9 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 
 | Feature | What it looks like | Interpretation |
 |---|---|---|
-| Current | Single arrow | **Confirmed** (§6.7): moves the ship 1 hex |
-| Fast current | Double / triple arrows | **Confirmed** (§6.7): moves the ship 2 / 3 hexes |
-| Turning current | Curved arrow | **Confirmed** (§6.7): moves the ship and turns her |
+| Current | Single arrow | **Confirmed** (§6.6): moves the ship 1 hex |
+| Fast current | Double / triple arrows | **Confirmed** (§6.6): moves the ship 2 / 3 hexes |
+| Turning current | Curved arrow | **Confirmed** (§6.6): moves the ship and turns her |
 | Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place (60° per activation?) ❓ |
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
@@ -383,7 +383,23 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
   still to be defined (Q19).
 - *Ramming damage: who takes the 1 DD (Q6b).*
 
-### 6.7 Currents
+### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
+Ideas to playtest:
+- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
+- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
+- The online version shows each ship's move distance (and a ghost preview) while programming.
+
+
+
+### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
+Ideas to playtest:
+- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
+- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
+- The online version shows each ship's move distance (and a ghost preview) while programming.
+
+
+
+### 6.6 Currents
 - Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2):
 
 | Arrow | Effect |
@@ -397,18 +413,10 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
   **death reef** sinks.
 - *Eddies, gyres, the maelstrom, order of activation: Q20, Q19.*
 
-### 6.8 Stranded by the tide
+### 6.7 Stranded by the tide
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
 - *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
-
-### 6.6 Teaching aids for sailing *(design goal: make wind easy)*
-Ideas to playtest:
-- Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
-- A **ship token or base with sail numbers printed round its edge**: set it against the wind arrow and read off the move.
-- The online version shows each ship's move distance (and a ghost preview) while programming.
-
-
 
 ## 7. Combat / conflict resolution
 
