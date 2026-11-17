@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.77**
+> Status: **Draft v0.78**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -34,6 +34,8 @@ interact with each other and with the sea.
 | D9 | Crews of anthropomorphic **prehistoric monsters**; every Captain is a **mammoth**. **No factions** | Generic robots |
 
 ### 1.3 Design pillars
+- **P0. Priority: the core must be as fun as RoboRally at its chaotic best.** The core is **programmed movement + damage**
+  (sailing, wind, currents, pushing, cannons, damage). Everything else is an add-on, and only matters once the core sings.
 - **P1. Simultaneous everything.** Everyone programs at the same time, and then **everyone executes
   each step at the same time**: all players move their own ships together. There is no going round the
   table, ship by ship. This is why the game scales to 8 players: adding players adds almost no waiting time.
@@ -653,6 +655,16 @@ mode is a plug-in objective module on top of a shared rules core.
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
 ## 9. Optional modules
+**Core game** = §3–8 minus the modules below. Crew in the core game are **basic crew** (card icons only, no powers), plus Captains.
+
+| Module | Section | Status |
+|---|---|---|
+| Sea monster | §9.1 | Add-on |
+| Equipment cards | §7.10 | Add-on |
+| Crew special powers (Surgeon, Retired Captain, peeking, 🐙 crew...) | §3.6 | Add-on |
+| Wreck deck variety (Chance-style) | §7.9 | Add-on; in the core game a wreck could give a basic crew card or nothing ❓ |
+| Points of Sail | §6.2 | Optional rule, **intended as standard** |
+
 
 ### 9.1 Sea monster *(optional module)*
 - **Setup**: placed as the scenario's setup says.
@@ -815,6 +827,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.78 — pillar P0 (core must match RoboRally's fun); core vs add-on modules table.
 - v0.77 — monster hex sinks however you arrive; port guns fire every Action phase at all rivals within 2.
 - v0.76 — sea monster: influence tie = closest ship; its hex sinks ships; must be in arc; fog hides it.
 - v0.75 — sea monster rules (influence, movement, attack, shooting); port guns 1 DD; one treasure per spawn point; refit turn still draws.
