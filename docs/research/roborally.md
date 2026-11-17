@@ -60,6 +60,9 @@ Not yet checked against the official PDFs, because the publishers' hosts are blo
 
 ## Known pain points (worth designing around)
 - **Death spiral**: in classic, damage makes you play worse, which leads to more damage.
-- **Downtime/chaos**: games with many players can run long, and the results can feel random.
+- **Scaling (designer's view)**: it scales *very well* to 8 **when each register is executed simultaneously**.
+  The official resolution order (priority or antenna) means going ship by ship, which is the
+  slow way. Many groups play it simultaneously, trusting each other and accepting the chaos. That's the vibe
+  Mammoth Sea Battles wants.
 - **Kingmaking / runaway leader** in race games.
 - Classic **priority numbers** create a hidden-information tiebreak that feels random to players.

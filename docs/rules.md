@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.4**
+> Status: **Draft v0.5**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -32,6 +32,17 @@ interact with each other and with the sea.
 | D7 | Different damage model | Hand-size loss (classic) / damage cards in deck (2016) |
 | D8 | **Crew** works a bit like upgrade/option cards | Option or upgrade cards |
 | D9 | Two factions: mammoths vs dinosaurs | Generic robots |
+
+## 1.3 Design pillars
+- **P1. Simultaneous everything.** Everyone programs at the same time, and then **everyone executes
+  each step at the same time**: all players move their own ships together. There is no going round the
+  table, ship by ship. This is why the game scales to 8 players: adding players adds almost no waiting time.
+- **P2. Trust at the table.** Physical play relies on players moving their own ships honestly and
+  sorting out minor collisions in good faith. Rules should stay simple enough to make that easy.
+- **P3. Embrace chaos.** Collisions, currents and plans going wrong are the fun. Don't over-engineer
+  the rules to remove chaos; a relaxed, slightly anarchic vibe is the goal.
+- **P4. The online version enforces what the table trusts.** The digital version needs a deterministic
+  conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
 
 ## 2. Players & duration
 - Players: **2–4 for the first version; the target is up to 8**. Rules, components and the
@@ -101,14 +112,14 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - ~~Q3. Player count?~~ → Answered: start with 4, target up to 8 (see §2).
 - Q3a. Teams? Mammoths vs dinosaurs suggests teams are possible (e.g. 4v4 at 8 players).
 - Q3b. What's the minimum? Does 2 players work, or 3?
-- Q3c. Scaling to 8: does the board grow (modular sea tiles?), and how do we keep downtime and chaos down? At 8, RoboRally gets long and swingy.
+- Q3c. Scaling to 8: how much does the board grow? (Downtime isn't a concern; see pillar P1.)
 
 **Programming (D2, D3)**
 - Q4. Does each of the 3 steps get one sail card, one steer card and one cannon card? Are they separate decks or one shared hand?
 - Q5. Within a step, what order do steering, sailing and cannon resolve in? (For example: steer → sail → board → fire.)
 - Q6. Is "sail" a distance (move N hexes forward) and "steer" a heading change (60° turns)?
 - Q7. Hand size: how many cards are drawn per turn? Is it a personal deck (2016 style) or dealt from a shared deck (classic)?
-- Q8. Who moves first when ships interfere with each other: priority numbers, a token, initiative, or truly simultaneous?
+- Q8. Execution is simultaneous (P1). When two ships' moves conflict in the same step (both entering one hex, ramming head-on, swapping hexes), what happens at the table? For example: both stop, both take damage, the bigger or faster ship wins, or the players agree on the spot. The online version needs a written rule.
 
 **Wind (D5)**
 - Q9. How does wind modify sailing? For example, sailing distance depends on heading relative to wind (into the wind / close-hauled / beam reach / running), as in sail-and-wind games.
@@ -138,6 +149,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.5 — design pillars: simultaneous execution, trust, embrace chaos. Removed my wrong claim that RoboRally scales poorly.
 - v0.4 — board: modular hex tiles, currents, list of observed features from the example board.
 - v0.3 — player count: 4 to start, target up to 8.
 - v0.2 — overview, list of differences from RoboRally, first batch of open questions.
