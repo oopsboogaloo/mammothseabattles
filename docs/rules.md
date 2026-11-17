@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.21**
+> Status: **Draft v0.22**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -310,93 +310,54 @@ _TBD_
 | DD | Damage Die: taken by a ship whenever damage occurs (§7.2). |
 
 ## Open questions
-_Ambiguities and edge cases found while writing the spec, to resolve with the designer._
+_Cleaned up in v0.22: answered items removed (answers are in the relevant sections and the change log). Old Q-numbers are
+kept so earlier references still work. Ordered by priority: **A** blocks the core game, **B** is needed for a full game,
+**C** is detail or polish._
 
-**Game modes and factions**
-- Q1. Are battle and race separate modes/scenarios, or is it always both (treasure race with fighting allowed)?
-- Q2. Are mammoths and dinosaurs mechanically different (asymmetric), or only cosmetically?
-- ~~Q3. Player count?~~ → Answered: start with 4, target up to 8 (see §2).
-- Q3a. Teams? Mammoths vs dinosaurs suggests teams are possible (e.g. 4v4 at 8 players).
-- Q3b. What's the minimum? Does 2 players work, or 3?
-- Q3c. Scaling to 8: how much does the board grow? (Downtime isn't a concern; see pillar P1.)
+### A. Core game loop (blocks a playable prototype)
+- **Q1. Objective.** How do you win? Treasure race, battle, or both? Separate modes or one game? When does the game end?
+- **Q15 / Q38b. Damage model.** What is the damage die (d6? custom faces? what results)? Is it rolled, or kept on the ship board?
+  Are there hit locations (hull, masts/sails, rudder, crew)? How does damage affect movement?
+- **Q16. Sinking.** What happens when a ship is destroyed: out of the game, respawn at port, lose treasure?
+- **Q33. Broadside resolution.** Does it hit every ship in the arc, the nearest only, or a chosen target? How many DD per hit?
+  Is there range falloff or a roll to hit? Do islands, reefs, fog or ships block line of sight? Is all firing in a Part simultaneous?
+- **Q7 / Q30. Cards and deck.** How many cards are drawn per turn? Is the deck shared or personal? What's its full makeup (every
+  sail/steer/action band value and the counts)? What happens to unused and played cards?
+- **Q6a. Steering.** Is Ease 60° and Hard 120°? Are there starboard versions of each card? Are there other steer values?
+- **Q8 / Q32. Conflicts and initiative.** Which card's initiative counts in a Part (the Move slot? the highest?), and does higher
+  win? What exactly happens when two ships try to enter the same hex, meet head-on, or swap hexes?
+- **Q6b. Pushing.** How far does a pushed ship go? Do pushes chain? What happens when a ship is pushed into land, a reef or the edge? Is there collision or ramming damage?
+- **Q31. Upkeep.** What happens between turns: discard and draw, weather and tide advance, anything else?
 
-**Programming (D2, D3)**
-- ~~Q4~~ → Answered: one shared deck of 3-band cards; a 3 × 3 ship board, one slot per order type per step (§3.4).
-- ~~Q5~~ → Partly answered: movement → currents → wind drift (§5.2). Action timing is Q29.
-- Q6. Sail is a persistent level (answered). What levels exist (e.g. Furled / Half / Full) and how many hexes does each move per Move phase? How does wind affect this? What is the starting sail level?
-- Q6a. Steering happens **after** sailing, as a separate phase (answered). Is Ease 60° (one hex side) and Hard 120°? Are there starboard versions of every port card?
-- Q6b. Pushing: how far is a ship pushed (1 hex, or as far as the pusher keeps moving)? Can a pushed ship push others in a chain? What happens when a ship is pushed into land, a reef or the board edge?
-- Q7. Hand size: how many cards are drawn per turn? Is it a personal deck (2016 style) or dealt from a shared deck (classic)?
-- Q8. Execution is simultaneous (P1). When two ships' moves conflict in the same step (both entering one hex, ramming head-on, swapping hexes), what happens at the table? For example: both stop, both take damage, the bigger or faster ship wins, or the players agree on the spot. The online version needs a written rule.
+### B. Needed for a full game
+- **Q10. Wind drift.** How far is one drift (1 hex downwind?), and does it push? Is it confirmed that Light and Dead Calm never drift?
+- **Q38. Gale damage.** Is "1 DD per Full Sail" per Move phase at Full Sail (up to 3 per turn) or once per turn?
+- **Q39. Wind direction convention.** Does "North Wind" blow towards the north (card arrow) or from the north (sailing usage)?
+- **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
+  from the deck? Starting tide? Does New Weather Front replace the visible cards too?
+- **Q40 / Q23. Tides.** Which terrain is tidal (sandbanks, striped shallows, both, with staggered thresholds)? What happens to a
+  ship on a hex that dries out (grounded? damaged)? Do tides change currents?
+- **Q20 / Q21 / Q22. Currents.** Do all currents act at once, or fast ones first? Is a current's turn absolute or relative?
+  Does a ship carried by a current into an occupied hex just stay put? What if she's carried into land or a reef?
+- **Q19. Board features.** Confirm or correct the ❓ interpretations in §3.2 (eddies, gyres, maelstrom, whirlpool pairs, caves A/B,
+  reefs, rough water, fog, storm, port, wreck).
+- **Q24. Board edge.** What happens when a ship sails or drifts off the map?
+- **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
+- **Q17. Crew.** How do you get crew, how many can a ship hold, are they permanent or single-use, and can damage kill crew?
+- **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
+- **Q35. Starting state.** Starting sail level, heading and position (start at port?), starting hand.
 
-**Wind (D5)**
-- ~~Q9~~ → Answered: points of sail chart (§6.2).
-- ~~Q34~~ → Answered: Half = 1, Full = 2 (§6.1).
-- Q35. ~~Is there a No Sail level? Is it on the cards?~~ Yes, No Sail is a Sail band (§3.3). ~~Is wind always a hex direction?~~ Yes (§3.5). What sail level do ships start at?
-- Q36. Points of sail is checked using the heading at the **start** of the Move phase (steering comes after). Right?
-- Q10. Wind strengths: Dead Calm / Light / Firm / Strong / Gale (from the weather cards). Do Light and Dead Calm cause no drift? How far does one drift move a ship (1 hex downwind?), and does drift push? Is wind global or does it vary by area? How do wind direction and strength change (die, card, track, at upkeep)?
-
-**Tides & currents (D4)**
-- Q11. What do tides change: shallows/sandbars/rocks appearing and disappearing, current direction, or both? Is it on a fixed cycle or random?
-- Q12. Currents: distances and order of activation (like fast/slow conveyors)? Do they rotate ships?
-
-**Combat & damage (D6, D7)**
-- ~~Q13~~ → Answered: both broadsides, 60° wedge, range 4 (§7.1).
-- Q14. Any limit on firing besides having the card (ammo, reload, crew needed)? Do other cards fire only one side, or other weapons fire forward ("mostly broadside")?
-- Q33. Cannon resolution:
-  - Does a broadside hit **every** ship in the arc, only the **nearest**, or a target the firer chooses?
-  - Line of sight: do islands, reefs, fog or other ships block shots?
-  - How much damage does a hit do? Does it vary with range? Is there a roll to hit?
-  - Is all firing simultaneous within a Part?
-- Q15. Damage model: hit locations (hull, mast/rigging, rudder, crew)? How does each one affect sailing and steering?
-- Q16. What happens at zero hull (sunk, respawn, out of the game)? Is there ramming damage?
-
-**Weather & tides (§3.5, §6.3, §6.4)**
-- Q37. The weather board has 6 spaces, each marked with a tide state (answered). Still open:
-  - Does it advance **one space per turn** at Upkeep (a 6-turn tide cycle)?
-  - How is the current space marked (a marker token, or the card in a fixed "now" position)?
-  - Are all 6 spaces filled, with the current card and the next 2 face up and the rest face down? Or only 3 cards, refilled from the deck as it advances?
-  - Which tide do you start at?
-- ~~Q38a~~ → Answered: DD = Damage Die, taken when damage occurs.
-- Q38. Gale "1 DD per Full Sail": is that once for each **Move phase** sailed at Full Sail (up to 3 per turn), or once per turn? Strain on the rigging, so do sails or masts get damaged?
-- Q38b. The damage die itself: what kind of die (d6? custom faces?), what results are on it, and is it **rolled** or **kept** (placed on the ship board as a damage marker)?
-- Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
-- Q39a. Answered: modifiers change the move's size, minimum 0 (Light on Full Sail windward = 0). Still open:
-  - ~~Gale +1 on Full Sail windward~~ → 2 hexes backwards (answered).
-  - ~~All windward cases~~ → Answered: Gale Half = 1 backwards; No Sail never modified; Strong Full = 2 backwards; Dead Calm = 0.
-  - Check the other rows of the full sail-move table in §6.3 (they follow from the same rules).
-- Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
-- Q40. Tides: 3 levels (answered). Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
-
-**Board (§3)**
-- Q18. Flat-topped hexes are confirmed by the cannon diagram and the N/NE/SE/S/SW/NW compass on the weather cards. Tiles: what shape and size is one board tile (e.g. 7-hex "flowers", or larger)? Are there rules for joining tiles, such as edges having to match?
-- Q19. Confirm or correct every ❓ in §3.2.
-- Q20. Currents act after ship movement in **every step** (§5.2). Still open: do all current types act at once, or in an order (e.g. fast currents first)?
-- Q21. Is a current's turn absolute (the ship ends facing the arrow) or relative (turn 60° clockwise)?
-- ~~Q22~~ → Answered: currents do not push (§5.2). Still open: does the ship just stay put, and what about a current carrying her into an island or reef?
-- Q23. Which features are changed by **tides**? Are the sandbanks and shallows the tidal parts?
-- Q24. Board edge: what happens to a ship that sails or drifts off the map?
-
-**Command cards (§3.3–3.4)**
-- ~~Q25~~ → Answered: only the slot's band counts (ship board art).
-- ~~Q26a~~ → Answered: the numbers are initiative, as in RoboRally.
-- ~~Q26~~ → Answered: 🐙 = sea monster movement (optional role, §10.1, deferred).
-- Q32. Initiative details:
-  - Which card's number counts in a given Part: the one in the Move slot, or the highest of the three? What if the Move slot is empty?
-  - Does higher go first, as in classic RoboRally?
-  - Is it used **only to settle conflicts** (keeping simultaneous play), or does it set a strict movement order at the table?
-  - Does it also decide the order of Action-phase firing?
-- ~~Q27~~ → Answered: sail stays the same, no steer, no action.
-- Q28. Are all 9 cards revealed at once, or column by column as each step resolves?
-- Q29. Actions happen after currents and before wind drift (answered). Does Fire Cannons fire both broadsides? Are all actions in a Part simultaneous (can two ships sink each other at once)? What's the difference between **Heal** (crew?) and **Repair** (ship?)?
-- Q31. What happens in **Upkeep**: discard and draw, wind change, tide change, crew, treasure?
-- Q30. Full list of band values in the deck (all sail, steer and action types) and the deck's makeup and size.
-
-**Crew (D8)**
-- Q17. How do you get crew, how many can you hold, and are they permanent or single-use? Can crew be lost to damage?
+### C. Detail and polish
+- **Q36.** Is the point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
+- **Q28.** Are all 9 cards revealed at once, or one Part at a time?
+- **Q39a.** Check the derived rows of the full sail-move table (§6.3).
+- **Q2.** Are mammoths and dinosaurs asymmetric, or only cosmetic?
+- **Q3a / Q3b / Q3c.** Teams (e.g. 4v4)? Minimum player count? Board size for each player count?
+- **Q18.** Board tile size and shape; rules for joining tiles.
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.22 — open questions cleaned up and prioritised.
 - v0.21 — windward cases confirmed; full sail-move table.
 - v0.20 — Gale on Half Sail windward = 1; windward lookup table.
 - v0.19 — Gale on Full Sail windward = 2 hexes backwards.
