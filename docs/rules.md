@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.25**
+> Status: **Draft v0.26**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -319,7 +319,15 @@ mode is a plug-in objective module on top of a shared rules core.
 - The map has **N treasure spawn points**.
 
 **8.2.1 Spawning**
-- Treasure appears at **one of the N spawn points, chosen at random**. *(How many at once and when: Q44.)*
+- Treasure appears at **one of the N spawn points, chosen at random**.
+- **Treasures in play at once = (number of ships − 1) / 2, rounded up** (rounding assumed ❓; rounding down would give 0 at 2 players):
+
+| Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|
+| Treasures | 1 | 1 | 2 | 2 | 3 | 3 | 4 |
+
+  (The same as **half the number of ships, rounded down**.)
+- *When a new one spawns, and whether treasure carried by a ship counts towards the total: Q44.*
 
 **8.2.2 Picking up**
 - **Treasure in a water hex**: picked up by **passing through** the hex (you don't need to end your move there).
@@ -385,7 +393,8 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 - ~~Q1. Objective~~ → Answered: multiple game modes; Treasure Hunt is the core game (§8).
 - ~~Q42. Treasure Hunt basics~~ → Answered (§8.2).
 - **Q44. Treasure Hunt follow-ups**:
-  - How many treasures are on the map at once? When does a new one spawn (when one is scored? at Upkeep? when one is lost)?
+  - ~~How many at once~~ → (ships − 1) / 2. Confirm rounding up. Does the count include treasure **being carried**
+    (i.e. a new one spawns only when one is **scored**)? When does a new one spawn (when one is scored? at Upkeep? when one is lost)?
     How is the spawn point chosen (die roll against numbered points?), and what's N?
   - Land treasure: ending a **Part** adjacent, or ending the whole **turn** (after Part III)?
   - Knocking loose: can the attacker give up 1 DD out of several dealt by one hit? What if no adjacent hex is empty? Can it be placed on a reef or sandbank?
@@ -428,6 +437,7 @@ kept so earlier references still work. Ordered by priority: **A** blocks the cor
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.26 — treasures in play = (ships − 1) / 2.
 - v0.25 — Treasure Hunt timed variant, with proposed tie-breaks and turn-limit option.
 - v0.24 — Treasure Hunt: spawn points, pickup, 1-treasure limit, knock-loose instead of DD, home ports, targets.
 - v0.23 — game modes: Race, Treasure Hunt (core), Deathmatch, Capture the Flag, Solo/Co-op (deferred).
