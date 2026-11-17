@@ -1,0 +1,192 @@
+[
+  {
+    "file": "layout-a-bottom-dock-resolution.html",
+    "size": "desktop-1920x1080",
+    "png": "layout-a-bottom-dock-resolution--desktop-1920x1080.png",
+    "noScroll": true,
+    "scroll": [
+      1920,
+      1080
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": null,
+    "cardH": 0,
+    "minFont": 11.34,
+    "boardPct": 57
+  },
+  {
+    "file": "layout-a-bottom-dock.html",
+    "size": "desktop-1920x1080",
+    "png": "layout-a-bottom-dock--desktop-1920x1080.png",
+    "noScroll": true,
+    "scroll": [
+      1920,
+      1080
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 131,
+    "cardH": 262,
+    "minFont": 11.88,
+    "boardPct": 58
+  },
+  {
+    "file": "layout-b-player-mat-right.html",
+    "size": "desktop-1920x1080",
+    "png": "layout-b-player-mat-right--desktop-1920x1080.png",
+    "noScroll": true,
+    "scroll": [
+      1920,
+      1080
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 151,
+    "cardH": 251,
+    "minFont": 11.88,
+    "boardPct": 45
+  },
+  {
+    "file": "layout-c-drawer.html",
+    "size": "desktop-1920x1080",
+    "png": "layout-c-drawer--desktop-1920x1080.png",
+    "noScroll": true,
+    "scroll": [
+      1920,
+      1080
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 137,
+    "cardH": 206,
+    "minFont": 11.88,
+    "boardPct": 46
+  },
+  {
+    "file": "layout-d-two-rails.html",
+    "size": "desktop-1920x1080",
+    "png": "layout-d-two-rails--desktop-1920x1080.png",
+    "noScroll": true,
+    "scroll": [
+      1920,
+      1080
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 110,
+    "cardH": 239,
+    "minFont": 11.88,
+    "boardPct": 41
+  },
+  {
+    "file": "layout-a-bottom-dock-resolution.html",
+    "size": "ipad-1024x768",
+    "png": "layout-a-bottom-dock-resolution--ipad-1024x768.png",
+    "noScroll": true,
+    "scroll": [
+      1024,
+      768
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": null,
+    "cardH": 0,
+    "minFont": 11,
+    "boardPct": 50
+  },
+  {
+    "file": "layout-a-bottom-dock.html",
+    "size": "ipad-1024x768",
+    "png": "layout-a-bottom-dock--ipad-1024x768.png",
+    "noScroll": true,
+    "scroll": [
+      1024,
+      768
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 51,
+    "cardH": 186,
+    "minFont": 11,
+    "boardPct": 54
+  },
+  {
+    "file": "layout-b-player-mat-right.html",
+    "size": "ipad-1024x768",
+    "png": "layout-b-player-mat-right--ipad-1024x768.png",
+    "noScroll": true,
+    "scroll": [
+      1024,
+      768
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 64,
+    "cardH": 178,
+    "minFont": 11,
+    "boardPct": 36
+  },
+  {
+    "file": "layout-c-drawer.html",
+    "size": "ipad-1024x768",
+    "png": "layout-c-drawer--ipad-1024x768.png",
+    "noScroll": true,
+    "scroll": [
+      1024,
+      768
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 74,
+    "cardH": 146,
+    "minFont": 11,
+    "boardPct": 44
+  },
+  {
+    "file": "layout-d-two-rails.html",
+    "size": "ipad-1024x768",
+    "png": "layout-d-two-rails--ipad-1024x768.png",
+    "noScroll": true,
+    "scroll": [
+      1024,
+      768
+    ],
+    "outside": [],
+    "outsideCount": 0,
+    "clipped": [],
+    "smallTargets": 0,
+    "smallList": [],
+    "minCardSlice": 57,
+    "cardH": 170,
+    "minFont": 11,
+    "boardPct": 43
+  }
+]

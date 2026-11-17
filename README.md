@@ -13,6 +13,7 @@ A board game in design, with a companion online version.
 
 - [`docs/rulebook.md`](docs/rulebook.md) — player-facing rulebook (playtest draft)
 - [`docs/web-spec.md`](docs/web-spec.md) — digital version spec: requirements, architecture, UI, testing
+- [`docs/ui/wireframe-evaluation.md`](docs/ui/wireframe-evaluation.md) — UI wireframes (4 layouts) and evaluation
 
 - [`docs/online-version.md`](docs/online-version.md) — online version goals and teaching approach
 
