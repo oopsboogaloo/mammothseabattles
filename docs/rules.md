@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.67**
+> Status: **Draft v0.68**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -82,7 +82,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Death reef | Rocky hex with a wrecked ship and a skull | **Confirmed** (§3.2.0): kills ships that enter |
 | Sandbanks | Yellow patterned areas | **Confirmed** (§3.2.0): land except at High tide |
 | Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
-| Rough water | Purple churning hex | Hazard, maybe damage or random drift? ❓ |
+| Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you end a phase in it |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
@@ -101,7 +101,8 @@ and **death reefs sink any ship that enters them, however she got there**.
 | **Sandbank** | Yellow sand patterns over water | **As beach land**, except at **High tide**, when it's **water** |
 | **Underwater reef** | Pale green stripes | **Water**, except at **Low tide**, when it's **as beach land** (sand) |
 | **Death reef** | Rocky hex with a **skull** icon | **Kills any ship that enters it** (sinks) |
-| **Wall reef** | Spiky reef along a **hex edge** | **Blocks** movement across that edge; trying to cross = **stopped + 2 DD** |
+| **Wall reef** | Spiky reef along a **hex edge** | **Blocks** movement across that edge; trying to cross = **stopped + 2 DD**. Does **not** block cannon fire |
+| **Rough water** | Red/purple churning water | Passable; **2 DD** to a ship that **ends a phase in it** *(which phases count: Q53)* |
 
 **Tide summary** (Full Metal Planète-style staggered thresholds, §6.4):
 
@@ -408,7 +409,8 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 
 ### 6.7 Stranded by the tide
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
-- While stuck she **can't sail or steer**, but **can still use her Action slots** (fire, repair, heal).
+- While stuck she **can't sail or steer**, and **can't be moved or turned** by anything (currents, pushing, drift), but **can still use
+  her Action slots** (fire, repair, heal).
 - *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
 
@@ -736,16 +738,18 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
 - **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
-  - ~~While stuck~~ → actions only, no sail or steer (answered). Can currents, pushing or drift move her off (assumed no, she's aground)?
+  - ~~While stuck~~ → actions only, no sail or steer (answered). ~~Moved off by currents, pushing or drift?~~ → No (answered). A stuck ship can't be pushed, so does she block a push chain like land?
   - Do tides change currents?
 - ~~Q51. Terrain follow-ups~~ → Answered: stopped ships can still be moved later; damage and death reefs apply however she got there;
-  cannons fire over land (§3.2.0, §7.1). Still open: do **wall reefs** block cannon fire?
+  cannons fire over land (§3.2.0, §7.1). ~~Wall reefs and cannon~~ → don't block (answered).
+- **Q53. Rough water:** "end of a phase" means each of Move, Steer, Currents, Action and Drift (so up to 5 × 2 DD per Part)? Or only
+  movement phases (Move, Currents, Drift)? Or only the end of each Part? (5 checks per Part could be very deadly.)
 - ~~Q52. Fog~~ → can't fire from, into or through fog (answered).
 - **Q20 / Q21 / Q22. Currents** (answered: 1/2/3 hexes by arrow count; curved arrows move and turn; land and reefs apply). Still open:
   - ~~Order / multi-hex~~ → three sub-steps, RoboRally express-belt style; conflicts by Sail initiative (answered). ~~Eddies~~ → spin the ship (answered).
   - **Awaiting the designer's current diagram**: turning amounts and timing, absolute vs relative turns, how far an eddy spins, dashed eddies,
     gyres and loop currents, the maelstrom.
-  - A ship carried into an occupied hex stays put (currents don't push)? (Assumed yes.)
+  - ~~Carried into an occupied hex~~ → stays put (answered).
 - **Q19. Board features.** Terrain, portals and caves are done. Still to define: eddies (solid and dashed), gyres and loop currents,
   maelstrom, rough water (purple), fog, storm, port town.
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
@@ -781,6 +785,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.68 — rough water (2 DD); stuck ships immovable; wall reefs don't block cannon.
 - v0.67 — fog rules; current sub-steps; eddies spin; stuck ships can still act.
 - v0.66 — currents 1/2/3 and turning; terrain applies however a ship arrives; cannons fire over land; fog prevents aiming; tide stranding.
 - v0.65 — terrain: cliffs, beaches, sandbanks, underwater reefs, death reefs, wall reefs; tide effects.
