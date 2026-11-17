@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.65**
+> Status: **Draft v0.66**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -68,9 +68,9 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 
 | Feature | What it looks like | Interpretation |
 |---|---|---|
-| Straight current | Single arrow along the hexes | Moves the ship 1 hex in the arrow's direction ❓ |
-| Fast current | Double (and triple?) parallel arrows | Moves the ship 2 (3?) hexes, like RoboRally's express belts ❓ |
-| Turning current | Curved arrow | Moves the ship and turns her ❓ |
+| Current | Single arrow | **Confirmed** (§6.7): moves the ship 1 hex |
+| Fast current | Double / triple arrows | **Confirmed** (§6.7): moves the ship 2 / 3 hexes |
+| Turning current | Curved arrow | **Confirmed** (§6.7): moves the ship and turns her |
 | Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place (60° per activation?) ❓ |
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
@@ -83,14 +83,16 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Sandbanks | Yellow patterned areas | **Confirmed** (§3.2.0): land except at High tide |
 | Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
 | Rough water | Purple churning hex | Hazard, maybe damage or random drift? ❓ |
-| Fog bank | White cloud (centre) | Blocks line of sight for cannon? ❓ |
+| Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | Damage or random wind; does it move? ❓ |
 | Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
 | Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
 
 ### 3.2.0 Terrain *(confirmed)*
-"Stops you" means the ship **doesn't enter** the hex (or cross the edge): she stays in the last hex she was in, and **any remaining
-movement is lost** *(assumed ❓)*. Being pushed into terrain has the same effect as moving into it (§6.5).
+"Stops you" means the ship **doesn't enter** the hex (or cross the edge): she stays in the last hex she was in, and the rest of
+**that movement** is lost. She **can still be moved later** in the turn by currents, pushing or wind drift.
+**However a ship gets there**, the effect is the same: sailing, being pushed, currents and drift all take cliff and wall-reef damage,
+and **death reefs sink any ship that enters them, however she got there**.
 
 | Terrain | Looks like | Effect |
 |---|---|---|
@@ -381,6 +383,25 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
   still to be defined (Q19).
 - *Ramming damage: who takes the 1 DD (Q6b).*
 
+### 6.7 Currents
+- Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2):
+
+| Arrow | Effect |
+|---|---|
+| Single | Move 1 hex |
+| Double | Move 2 hexes |
+| Triple | Move 3 hexes |
+| Turning (curved) | Move **and turn** as the arrow turns |
+
+- Currents **don't push** other ships (§5.2), but a ship carried into a **cliff** or **wall reef** takes the damage (§3.2.0), and into a
+  **death reef** sinks.
+- *Eddies, gyres, the maelstrom, order of activation: Q20, Q19.*
+
+### 6.8 Stranded by the tide
+- A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
+- *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
+  into water.
+
 ### 6.6 Teaching aids for sailing *(design goal: make wind easy)*
 Ideas to playtest:
 - Print the chart on every ship board, or on a **wind-rose card** that sits beside the board pointing downwind.
@@ -408,6 +429,8 @@ Ideas to playtest:
   - **Holding fire**: the firing player may choose **not to fire at any particular target** (e.g. to spare a temporary ally in free-for-all,
     or to avoid a ship they'd rather not provoke). Everything else in the arcs is hit.
 - **Cannon fire does not pass through whirlpool portals or sea caves.**
+- Cannons **fire over land and cliffs** (they don't block line of sight).
+- **Fog prevents aiming** *(exact rule: Q33)*. Fog has no other effect.
 - *Line of sight, damage per hit and timing: Q33.*
 
 ### 7.2 Damage dice (DD)
@@ -701,15 +724,17 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 - **Q39. Wind direction convention.** Does "North Wind" blow towards the north (card arrow) or from the north (sailing usage)?
 - **Q37 / Q39b. Weather board.** One space per turn? How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
   from the deck? Starting tide? Does New Weather Front replace the visible cards too?
-- **Q40. Tides** (answered: sandbanks are water at High tide only; underwater reefs are land at Low tide only). Still open: what happens to a
-  ship on a hex when the tide turns it to land (grounded until the tide turns? damaged? moved to the nearest water)? Do tides change currents?
-- **Q51. Terrain follow-ups:**
-  - "Stops you": is remaining movement lost (assumed), or can a later phase (steer, currents) still move her?
-  - Do cliffs and wall reefs deal 2 DD when the ship is **drifted** or **carried by a current** into them too? (Pushed: yes, per §6.5.)
-  - Death reef by drift, current or push: also sinks? Do death reefs appear only on printed tiles, or also as tokens?
-  - Do land, cliffs or wall reefs block cannon fire (line of sight, Q33)?
-- **Q20 / Q21 / Q22. Currents.** Do all currents act at once, or fast ones first? Is a current's turn absolute or relative?
-  Does a ship carried by a current into an occupied hex just stay put? What if she's carried into land or a reef?
+- **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
+  - While stuck: can she still steer, fire, repair or heal? Can currents, pushing or drift move her off?
+  - Do tides change currents?
+- ~~Q51. Terrain follow-ups~~ → Answered: stopped ships can still be moved later; damage and death reefs apply however she got there;
+  cannons fire over land (§3.2.0, §7.1). Still open: do **wall reefs** block cannon fire?
+- **Q52. Fog:** "prevents aiming" means: ships **in** fog can't be hit? Ships in fog can't fire? Fire can't pass **through** fog?
+- **Q20 / Q21 / Q22. Currents** (answered: 1/2/3 hexes by arrow count; curved arrows move and turn; land and reefs apply). Still open:
+  - Do all currents act at once, or fast ones first? Is a multi-hex current moved hex by hex (so it can carry her onto the next current, portal or reef)?
+  - Turning: how much (60° per curve?), and when: before or after the move? Does she end **facing the arrow** (absolute) or turn by a set amount (relative)?
+  - A ship carried into an occupied hex stays put (currents don't push)?
+  - **Eddies** (circular arrows in one hex, solid and dashed) and **gyres** / loop currents: turn in place? Carry round the loop? What does dashed mean?
 - **Q19. Board features.** Terrain, portals and caves are done. Still to define: eddies (solid and dashed), gyres and loop currents,
   maelstrom, rough water (purple), fog, storm, port town.
 - **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
@@ -745,6 +770,7 @@ _Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; rest
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.66 — currents 1/2/3 and turning; terrain applies however a ship arrives; cannons fire over land; fog prevents aiming; tide stranding.
 - v0.65 — terrain: cliffs, beaches, sandbanks, underwater reefs, death reefs, wall reefs; tide effects.
 - v0.64 — push distance and obstacles; starboard steering; deck coverage; initiative for conflicts; cannon damage applied immediately; start Captain + 2; crew deck ≥ 50.
 - v0.63 — command hand hidden; no equipment limit; equipment kept when sunk.
