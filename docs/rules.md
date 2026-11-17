@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.17**
+> Status: **Draft v0.18**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -225,7 +225,11 @@ so there are 4 points of sail (mirrored port and starboard):
 
 ### 6.3 Weather modifiers
 The current weather card changes sailing moves (§3.5): Dead Calm = no sail move; Light −1 all; Strong +1 Full Sail;
-Gale +1 all, plus DD for each Full Sail. These apply on top of the points of sail (Q39 for how they combine).
+Gale +1 all, plus DD for each Full Sail. These apply on top of the points of sail.
+
+**Combining rule:** weather modifiers change the **size** of the sail move (number of hexes), whatever its direction,
+with a **minimum of 0**. Example: Full Sail into the wind is 1 hex backwards; with Light (−1) it becomes **0**.
+*Still to confirm for Gale (+1): does Full Sail windward become 2 backwards, and does a 0 move (Half Sail windward) stay 0? Q39a.*
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
@@ -325,7 +329,11 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 - Q38. Gale "1 DD per Full Sail": is that once for each **Move phase** sailed at Full Sail (up to 3 per turn), or once per turn? Strain on the rigging, so do sails or masts get damaged?
 - Q38b. The damage die itself: what kind of die (d6? custom faces?), what results are on it, and is it **rolled** or **kept** (placed on the ship board as a damage marker)?
 - Q39. Wind direction convention: is a "North Wind" one blowing **towards** the north (the way the card arrow points) or **from** the north (the sailors' convention)? We need to match the arrow, and sailors will read it the other way.
-- Q39a. Combining modifiers with points of sail: does Light −1 make Full Sail windward −2 (2 hexes backwards), or is the minimum 0? Does Gale +1 let Half Sail move 1 hex into the wind? Does Dead Calm stop the Full Sail windward backwards move?
+- Q39a. Partly answered: modifiers change the move's size, minimum 0 (Light on Full Sail windward = 0). Still open:
+  - Gale +1 on Full Sail windward: 2 hexes backwards?
+  - Gale +1 on Half Sail windward (normally 0): stays 0, or 1 backwards?
+  - Does a +1 ever turn a 0 into a move? (Suggested rule: **a 0 move stays 0**.)
+  - Dead Calm: presumably also cancels the backwards move?
 - Q39b. New Weather Front: are the visible circuit cards replaced as well, or only future ones?
 - Q40. Tides: 3 levels (answered). Which terrain is tidal: the yellow sandbanks, the striped shallows, or both (with staggered thresholds like FMP's marsh and reef)? Does a ship caught on a tidal hex when it dries out get grounded (stuck until the tide returns), damaged, or both? Do tides change currents too?
 
@@ -358,6 +366,7 @@ _Ambiguities and edge cases found while writing the spec, to resolve with the de
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.18 — weather modifiers change move size, minimum 0.
 - v0.17 — DD = damage die.
 - v0.16 — weather board: 6-space circuit with High/Mid/Mid/Low/Mid/Mid tides.
 - v0.15 — weather cards, weather circuit, weather sail modifiers, tides (Full Metal Planète style).
