@@ -39,6 +39,7 @@ const COLUMNS: Record<string, string[]> = {
   'equipment-cards': ['id', 'name', 'text', 'copies', 'art_file', 'notes'],
   'crew-cards': ['id', 'name', 'card_icons', 'power_text', 'status', 'art_file', 'wounded_art_file', 'copies', 'notes'],
   'treasure-map-cards': ['id', 'spawn_point_number', 'status', 'art_file', 'copies', 'notes'],
+  'crew-card-ideas': ['id', 'name', 'group', 'creature', 'card_icons', 'power_text', 'flavour_text', 'use', 'notes'],
 };
 
 /** Every id is filled in and no two rows share one. */
@@ -85,6 +86,9 @@ describe('card data files', () => {
       for (const r of rows) expect(validCopies(r.copies, name === 'crew-cards'), `copies of ${r.id}`).toBe(true);
     }
     expect(readCsv('equipment-cards').every((r) => r.name !== '' && r.text !== '')).toBe(true);
+    const ideas = readCsv('crew-card-ideas');
+    expect(uniqueIds(ideas)).toBe(true);
+    for (const r of ideas) expect(r.name !== '' && r.power_text !== '' && /^\d+$/.test(r.card_icons ?? ''), `crew idea ${r.id}`).toBe(true);
     expect(readCsv('treasure-map-cards').map((r) => r.spawn_point_number)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9']);
   });
 });
