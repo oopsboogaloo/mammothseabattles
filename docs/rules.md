@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.91**
+> Status: **Draft v0.92**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -219,7 +219,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Light (e.g. North) | Light | **−1 all sail moves** | 0 |
 | Firm (e.g. North, SE) | Firm | none | 1 (Part III) |
 | Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
-| Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail**, taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
+| Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
@@ -266,7 +266,7 @@ A turn has **3 steps**. Programming happens once per turn and covers all 3 steps
    You **keep unplayed cards** from turn to turn. **Hand limit 9**: draw, program, then **discard down to 9** if needed.
 2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
 3. **Reveal one Part at a time**, as each Part resolves.
-4. **Used cards return to the deck** *(shuffled in, or placed on the bottom? Q7)*.
+4. **Used cards** are gathered, **roughly shuffled**, and put on the **bottom of the deck** (online: shuffle them, then place them under the deck).
 
 There is **one shared command deck** for all players (like classic RoboRally), not a deck per ship. It covers **every combination
 of Sail × Steer × Action bands, or a good sample**, and will be large enough for 8 players.
@@ -403,7 +403,7 @@ Worked out from the rules above; the windward row is confirmed by the designer, 
 
 Without Points of Sail (basic rule, §6.1): Dead Calm 0/0, Light 0/1, Firm 1/2, Strong 1/3, Gale 2/3.
 
-Remember: Gale also gives **1 DD per Full Sail**, taken at Upkeep (§3.5, Q38).
+Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at Upkeep (§3.5).
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
@@ -558,6 +558,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
 - **Board edge**: leaving the map sinks a ship in the hex she was about to leave (§3.1).
 - **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in an **adjacent hex**.
+- **She comes back at Upkeep** (not straight away) *(whether she also misses the next turn, and her hand: Q16)*.
 - **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
   Captain, are lost**). No player elimination (P6).
 - **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
@@ -616,7 +617,7 @@ mode is a plug-in objective module on top of a shared rules core.
 
   <img src="images/treasure-map-1.png" width="120"> <img src="images/treasure-map-3.png" width="120">
 
-  - **N = 9 spawn points** (for now).
+  - **N = 9 spawn points** (for now), **placed as tokens by the scenario**.
   - A small deck of hex-shaped **treasure map cards**, numbered 1…9 (one per spawn point).
   - *Naming:* spawn points may get **non-numeric symbols** to avoid confusion with the numbered whirlpool portals.
     The spec uses numbers for now.
@@ -763,31 +764,29 @@ _Rewritten in v0.90 after the designer answered the v0.89 list. Only unanswered 
 the change log. ❓ in a rule section marks my reading of an answer, to confirm. Old Q-numbers are kept._
 
 ### A. Needed for the prototype
-1. **Q7 Used cards**: shuffled straight back into the deck, put on the bottom, or onto a discard pile that's reshuffled when the deck runs out?
-2. **Q15b Repair / Heal amount**: does one action fix exactly 1 point? (Assumed.)
-3. **Q16 Timing after sinking**: does she come back straight away or at Upkeep? Does she miss the rest of that turn, or the next? Does she keep
-   her hand of command cards, or discard it and draw a new one from her new crew?
-4. **Q44 Spawn points**: how are the 9 spawn points marked: tokens placed by the scenario, or printed on tiles? No scoring at another team's port? (Assumed.)
-5. **Q38 Gale damage count**: taken at Upkeep (answered), but is it 1 DD for **each Part** sailed at Full Sail (up to 3), or 1 DD if she
-   ended the turn at Full Sail?
+1. **Q15b Repair / Heal amount**: does one action fix exactly 1 point? (Assumed.)
+2. **Q16 After sinking**: she comes back at Upkeep (answered). Does she also **miss the next turn**? Does she **keep her hand** of command
+   cards, or discard it and draw a new one from her new crew?
+3. **Q44**: no scoring at another team's port? (Assumed.)
 
 ### B. Needed for a full game
-7. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
-8. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
-9. **Q3c Board size** for each player count.
+4. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
+5. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
+6. **Q3c Board size** for each player count.
 
 ### C. Detail
-10. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
+7. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-11. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+8. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
     does she heal (Upkeep?), and can she heal herself?
-12. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+9. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
     attack? Wreck deck contents beyond crew and equipment, including bad results.
-13. **Sea monster**: equal-distance influence tie (roll off?).
+10. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.92 — used cards roughly shuffled onto the bottom of the deck; sunk ships come back at Upkeep; spawn points are scenario tokens; Gale 1 DD per Part at Full Sail.
 - v0.91 — confirmed: knock-loose hex rule, weather board shows current + next, caves push on exit however entered, partial refit.
 - v0.90 — designer answered the v0.89 list: board edge sinks; unique initiative; discard down to 9; ships don't block fire; damage timing; wounded crew; partial refit; return heading and blocked port; spawn and knock-loose hexes; Gale DD at Upkeep; weather board; caves; port town is a home port; Race checkpoints; timer; wreck count; haul her out; other weapons from crew and equipment; reveal one Part at a time; minimum 2 players. Added a designer to-do list.
 - v0.89 — open-questions review fixes: restored spawn marking, Repair/Heal amount, respawn timing and hand; critical-hit text made consistent; new Q56, Q57.
