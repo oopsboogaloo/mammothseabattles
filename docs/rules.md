@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.101**
+> Status: **Draft v0.102**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -589,14 +589,17 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 *Critical hits (d12 = 12): for now, roll that DD again plus 1 extra DD (§7.2). A critical damage card deck may replace this (Q56).*
 
 ### 7.11 Flotsam *(equipment add-on, designer's choice in v0.95)*
-Equipment is single-use, so it needs to be more plentiful. **Flotsam tokens** float on the sea; **sailing through** one removes it and
-draws an **equipment card**. Flotsam appears in two ways:
-- **Battle debris:** when a ship is damaged, place a flotsam token in the hex **directly astern** of her (behind her).
-  Chasing a damaged ship pays off. *(Exact trigger and blocked-hex rule: Q58.)*
-- **Weather:** some **weather cards** bring flotsam *(which cards, how many tokens, and where they're placed: Q58)*.
-- **Cap: a fixed pool of N flotsam tokens.** Flotsam is only placed while there are tokens **left in the pool**; when the pool is empty, none
-  is placed until a token is picked up and returns to it *(my reading ❓; N to be decided)*.
-- *Whether flotsam moves with currents and drift: Q58.*
+Equipment is single-use, so it needs to be more plentiful. **Flotsam tokens** float on the sea; a ship that **moves over** one (any
+movement) removes it and draws an **equipment card**. Flotsam **doesn't drift**: currents and wind leave it where it is.
+
+Flotsam appears in two ways:
+- **Battle debris:** when a ship takes **Ship damage** (not Crew damage), place a flotsam token in the hex **directly astern** of her
+  (behind her). If that hex is **blocked** (land, a ship, treasure or flotsam), **no flotsam** is placed. Chasing a damaged ship pays off.
+  *(One token per damage event, assumed ❓; Q58.)*
+- **Weather:** weather cards marked with a **flotsam icon** bring flotsam *(designer to mark the cards; how many tokens and where: Q58)*.
+
+**Pool:** a fixed pool of flotsam tokens; flotsam is only placed while tokens are left in the pool, and picked-up tokens return to it.
+The pool size will vary with **map size and player count** (set by the scenario); **5 for now**, to playtest.
 
 ### 7.12 The Derelict *(add-on, adopted v0.97)*
 An abandoned ship drifting with valuable cargo: a moving prize that the wind and currents control.
@@ -785,6 +788,7 @@ _Things the designer has said they'll do or supply._
 - **Gale card**: add "1 DD per Full Sail, taken at Upkeep" to the card text (§3.5).
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
+- **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 
 ## Open questions
@@ -805,23 +809,14 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-- **Q58 Flotsam** (§7.11):
-  - Battle debris: does any damage drop flotsam, or only Ship damage? From any source (cannon, ram, cliffs, rough water, storm), or only
-    attacks by other ships? One token per hit, or per point of damage?
-  - If the hex astern holds land, a ship, treasure or flotsam: no token, or the nearest free sea hex?
-  - Weather: which weather cards bring flotsam (e.g. Storm, Gale, a new "Flotsam" card), how many tokens, and where (upwind map edge,
-    spawn points)?
-  - ~~Cap~~ → a fixed pool of N tokens (answered). What is N (suggestion: 8, one per ship at most)? Picked-up tokens return to the pool? (Assumed.)
-  - Does flotsam move with currents and wind drift, like a ship at No Sail?
-  - Pickup only by sailing through it, or also by drifting or being pushed through it?
-5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
-    does she heal (Upkeep?), and can she heal herself?
-6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
-    attack? Wreck deck contents beyond crew and equipment, including bad results.
-7. **Sea monster**: equal-distance influence tie (roll off?).
+- **Q58 Flotsam** (§7.11; answered: Ship damage only, blocked hex = none, flagged weather cards, pool 5 for now, no drift, any movement
+  picks it up). Still open:
+  - One token per damage event (assumed), or one per point of Ship damage? Ship damage from any source (cliffs, storm...) or only attacks?
+  - Weather cards with the flotsam icon: how many tokens do they bring, and where are they placed?
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.102 — flotsam details: Ship damage only, blocked hex = none, weather icon, pool 5, no drift, picked up by any movement.
 - v0.101 — the Derelict carries only equipment when the maximum treasures are in play; Q59 closed.
 - v0.100 — the Derelict sinks after 4 DD.
 - v0.99 — the Derelict is placed on the upwind edge by the player in last place.
