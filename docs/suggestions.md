@@ -34,3 +34,15 @@ them workable online (web-spec §4, `online-version.md`).
 - Most suggestions are played on your **own ship at a fixed moment**, which suits the online version. Cards that react to someone else's
   attack (Lucky Fossil, and the existing Armour Plating) need a defined window.
 - More cards with a **fun drawback** (Rum Ration, the existing Fireworks) would suit the chaotic, Chance-card feel the designer wants.
+
+## Flotsam: how it spawns
+
+Options considered for making equipment more plentiful (rules §7.11). **Designer's choice: options 3 and 4 together** (battle debris
+astern of a damaged ship, plus weather cards).
+
+1. **Drifts in on the wind:** at Upkeep, place flotsam on the upwind map edge; currents and drift carry it like a ship at No Sail.
+2. **Treasure map deck:** at Upkeep, draw a treasure map card and place flotsam at that spawn point.
+3. ✅ **Battle debris:** a damaged ship drops flotsam in the hex directly astern. More fighting means more equipment.
+4. ✅ **Weather cards:** some weather cards bring flotsam. Predictable, because the next card is visible.
+
+Suggested additions: a cap (one flotsam per two ships), and pickup only by sailing through it, so collecting it is a choice.

@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.94**
+> Status: **Draft v0.95**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -588,6 +588,14 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 
 *Critical hits (d12 = 12): for now, roll that DD again plus 1 extra DD (§7.2). A critical damage card deck may replace this (Q56).*
 
+### 7.11 Flotsam *(equipment add-on, designer's choice in v0.95)*
+Equipment is single-use, so it needs to be more plentiful. **Flotsam tokens** float on the sea; **sailing through** one removes it and
+draws an **equipment card**. Flotsam appears in two ways:
+- **Battle debris:** when a ship is damaged, place a flotsam token in the hex **directly astern** of her (behind her).
+  Chasing a damaged ship pays off. *(Exact trigger and blocked-hex rule: Q58.)*
+- **Weather:** some **weather cards** bring flotsam *(which cards, how many tokens, and where they're placed: Q58)*.
+- *Cap, and whether flotsam moves with currents and drift: Q58.*
+
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
 (checkpoints, treasure, flags) and **win/end conditions**. That way new modes are cheap to add, and in the engine each
@@ -777,6 +785,15 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
+- **Q58 Flotsam** (§7.11):
+  - Battle debris: does any damage drop flotsam, or only Ship damage? From any source (cannon, ram, cliffs, rough water, storm), or only
+    attacks by other ships? One token per hit, or per point of damage?
+  - If the hex astern holds land, a ship, treasure or flotsam: no token, or the nearest free sea hex?
+  - Weather: which weather cards bring flotsam (e.g. Storm, Gale, a new "Flotsam" card), how many tokens, and where (upwind map edge,
+    spawn points)?
+  - A cap on flotsam in play (suggestion: one per two ships)?
+  - Does flotsam move with currents and wind drift, like a ship at No Sail?
+  - Pickup only by sailing through it, or also by drifting or being pushed through it?
 5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
     does she heal (Upkeep?), and can she heal herself?
 6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
@@ -785,6 +802,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.95 — flotsam (§7.11): battle debris astern of damaged ships plus weather cards; gives equipment cards. Details in Q58.
 - v0.94 — confirmed: random starting crew; starting treasures via the treasure map deck; 2-player target first to 3; sandbar wreck is a starting wreck.
 - v0.93 — Repair/Heal fix 1 each; a sunk ship doesn't miss a turn and draws a new hand; no scoring at other ports.
 - v0.92 — used cards roughly shuffled onto the bottom of the deck; sunk ships come back at Upkeep; spawn points are scenario tokens; Gale 1 DD per Part at Full Sail.
