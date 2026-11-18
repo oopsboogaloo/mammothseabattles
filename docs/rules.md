@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.89**
+> Status: **Draft v0.90**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -52,8 +52,8 @@ interact with each other and with the sea.
   conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
 
 ## 2. Players & duration
-- Players: **2–4 for the first version; the target is up to 8**. Rules, components and the
-  online engine should be designed so 8 is possible, even though playtesting starts at 4.
+- Players: **minimum 2**; **2–4 for the first version; the target is up to 8**. A **single-player version** is wanted eventually (see M5).
+- Rules, components and the online engine should be designed so 8 is possible, even though playtesting starts at 4.
 - Play time: _TBD_
 - Age: _TBD_
 
@@ -64,7 +64,8 @@ interact with each other and with the sea.
 
 - **Modular**: you build the sea by putting several hex **board tiles** together, so scenarios and
   board size can vary (this also helps it scale to 8 players, see Q3c).
-- The play area is a **hex grid**. In the example the hexes are pointy-topped, with flat sides on the left and right *(to confirm, Q18)*.
+- The play area is a **hex grid** of **flat-topped** hexes (§3.5 compass; cannon diagram).
+- **Board edge**: a ship that would leave the map (sailing, pushed, current or drift) **sinks in the hex she was about to leave** (§7.8).
 - **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
 
 ### 3.2 Board features seen in the example board
@@ -89,7 +90,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
-| Port town | Harbour town (bottom) | Repair, recruit crew, deliver treasure, start point? ❓ |
+| Port town | Harbour town (bottom) | **Confirmed**: just one of the **home ports** (§8.2.4) |
 | Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
 
 ### 3.2.0 Terrain *(confirmed)*
@@ -138,9 +139,11 @@ Caves work like whirlpool portals (§3.2.1) with these differences:
 - A ship enters a cave by **moving across the cave-mouth edge** into the island. She comes out of the partner cave's mouth
   into the **sea hex in front of it**.
 - She **changes orientation**: she leaves **facing out of the partner cave mouth** (as the printed arrow shows), not keeping her old heading.
-- Like whirlpools, she presumably **continues any remaining movement** after coming out, and **any movement** triggers it ❓ (Q46).
+- Like whirlpools, she **continues any remaining movement** after coming out, and **any movement** (sailing, current, drift, push) triggers it.
+- A ship can enter a cave **backwards or sideways** (drift, push); she still comes out **facing the arrow**.
 - **Exit hex occupied**: unlike whirlpools, the cave is **not** blocked. Coming out of the cave is **normal movement** into the exit hex,
-  so the emerging ship **pushes** the ship that's there (in her new heading), following the normal pushing rules (§5.2, Q6b).
+  so the emerging ship **pushes** the ship that's there (in her new heading), following the normal pushing rules (§6.5). This applies
+  however she entered, even carried in by a current or drift, which normally don't push *(my reading of "as with regular movement" ❓)*.
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -205,7 +208,10 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   - Bottom space = **Low**.
   - Two left-hand spaces = **Mid** (flooding).
 - The weather board **advances one space per turn**, so the tide cycle is **6 turns**. The **next two turns' weather is visible to everyone**.
-- *How the current space is marked and how cards are refilled: Q37.*
+- **All 6 spaces hold a weather card**; only the **next 2** are face up *(designer: "only 2 show at a time"; whether that's now + next or the next 2 after now: ❓)*.
+- **"Now" is marked by a rotating arrow** in the middle of the board *(designer to-do; a pencil for now)*.
+- **Starting tide: random.**
+- **New Weather Front** replaces the face-up cards too.
 
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
 |---|---|---|---|
@@ -213,7 +219,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Light (e.g. North) | Light | **−1 all sail moves** | 0 |
 | Firm (e.g. North, SE) | Firm | none | 1 (Part III) |
 | Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
-| Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail** | 3 (Parts I–III) |
+| Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD per Full Sail**, taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
@@ -242,6 +248,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - **All ships are identical**; the only differences between ships come from their crew and damage.
 - **Crew cap: 6** per ship. A ship at the cap that gains crew (e.g. from a wreck) may **swap** one of her crew for the new one.
 - **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 drawn at random ❓).
+- **Wounded crew** give **no card icons** and their **powers stop** until healed. **Captains can be wounded and killed** like any crew.
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
@@ -255,10 +262,10 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 A turn has **3 steps**. Programming happens once per turn and covers all 3 steps.
 
 ### 5.1 Programming
-1. **Draw command cards**: one per command-card icon on your crew (§3.6) *(healthy crew only? Q48)*.
-   You **keep unplayed cards** from turn to turn, up to a **maximum hand of 9**.
+1. **Draw command cards**: one per command-card icon on your **healthy** crew (§3.6).
+   You **keep unplayed cards** from turn to turn. **Hand limit 9**: draw, program, then **discard down to 9** if needed.
 2. All players at the same time place cards face down into their ship board's 3 × 3 slots (up to 9).
-3. Reveal *(all at once, or step by step? Q28)*.
+3. **Reveal one Part at a time**, as each Part resolves.
 4. **Used cards return to the deck** *(shuffled in, or placed on the bottom? Q7)*.
 
 There is **one shared command deck** for all players (like classic RoboRally), not a deck per ship. It covers **every combination
@@ -342,7 +349,8 @@ Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
 ### 6.2 Points of Sail *(optional rule, intended as the standard)*
 <img src="images/points-of-sail.jpg" width="420">
 
-This is a real sailing effect, and it's what makes the game unique. How far a ship sails in the Move phase depends on her
+This is a real sailing effect, and it's what makes the game unique. The point of sail is judged from the ship's heading at the **start of
+the Move phase**. How far a ship sails in the Move phase depends on her
 **sail level** and her **heading relative to the wind**. With flat-topped hexes a ship faces one of 6 hex sides,
 so there are 4 points of sail (mirrored port and starboard):
 
@@ -395,7 +403,7 @@ Worked out from the rules above; the windward row is confirmed by the designer, 
 
 Without Points of Sail (basic rule, §6.1): Dead Calm 0/0, Light 0/1, Firm 1/2, Strong 1/3, Gale 2/3.
 
-Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
+Remember: Gale also gives **1 DD per Full Sail**, taken at Upkeep (§3.5, Q38).
 
 ### 6.4 Tides *(inspired by Full Metal Planète, see [`research/full-metal-planete.md`](research/full-metal-planete.md))*
 - **3 tide levels: High, Mid, Low**, cycling High, Mid, Mid, Low, Mid, Mid on the weather board (§3.5). Like Full Metal Planète's Low/Normal/High.
@@ -438,7 +446,7 @@ Remember: Gale also gives **1 DD per Full Sail** (§3.5, Q38).
 - While stuck she **can't sail or steer**, and **can't be moved or turned** by anything (currents, pushing, drift), but **can still use
   her Action slots** (fire, repair, heal).
 - A stuck ship is **on land** (the dried-out hex), so for other ships her hex is **beach land**: it stops them, and she **can't be pushed**.
-- *Possible addition (if stranding proves too punitive):* **Haul her out**: spend a **whole turn** to move the ship **1 hex**, hopefully
+- **Haul her out** (adopted): spend a **whole turn** to move the ship **1 hex**, hopefully
   into water.
 
 ### 6.8 Teaching aids for sailing *(design goal: make wind easy)*
@@ -467,6 +475,8 @@ Ideas to playtest:
   - **No friendly fire**: teammates are never hit.
   - **Holding fire**: the firing player may choose **not to fire at any particular target** (e.g. to spare a temporary ally in free-for-all,
     or to avoid a ship they'd rather not provoke). Everything else in the arcs is hit.
+- **Other ships don't block** cannon fire: every enemy in the arc is hit.
+- **Other weapons** (forward, aft, special) come only from **crew and equipment**; there's no ammunition or reload limit.
 - **Cannon fire does not pass through whirlpool portals or sea caves.**
 - Cannons **fire over land and cliffs** (they don't block line of sight).
 - **Fog**: a ship **in fog can't fire** (can't aim) and **can't be hit**, and **cannon fire can't pass through fog**. Fog has no other effect.
@@ -504,6 +514,7 @@ A critical rolled while resolving a critical adds further dice (chains are possi
 For the physical game this could be a **custom d12 with icons**; online it's a lookup table.
 
 ### 7.3 Ship damage
+- A marker on a slot whose Part has **already resolved** this turn simply blocks it **from next turn**.
 - For each point of **Ship damage**, the player places a **damage marker** on one of the **9 slots** of their ship board
   (Sail, Steer or Action in Parts I–III). **The damaged player chooses which.**
   - Any card in that slot is **removed**.
@@ -528,7 +539,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 | Fixed by | **Repair** action; full refit at home port (§7.7) | **Heal** action; full refit at home port (§7.7) |
 
 ### 7.6 Repair and Heal (Action phase)
-- **Repair**: fixes Ship damage, i.e. removes a damage marker *(how many per action, assumed 1 ❓)*.
+- **Repair**: fixes Ship damage, i.e. removes a damage marker from **any slot**, including one in the current Part *(1 per action, assumed ❓)*.
 - **Heal**: fixes Crew damage, i.e. flips a wounded crew member back to healthy *(assumed 1 ❓; can it revive dead crew? assumed no)*.
 - Both are **Action-band** orders, so they compete with **Fire Cannons** for the Action slots. Repair can only be programmed while at least
   one Action slot is usable.
@@ -537,13 +548,16 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - A ship that **ends a turn at her home port** can **refit**:
   - **Fully repair**: remove all damage markers.
   - **Fully heal**: flip all wounded crew to healthy.
-  - **Recruit** back up to **3 crew**.
+  - **Recruit** back up to **3 crew**, drawn **at random** from the crew deck.
+  - A ship may do **only part** of a refit (e.g. just recruit), but it **still costs the next turn**.
 - **Cost: the next turn**: she spends the following turn in port and **can't do anything** (no sailing, steering or actions).
   She **still draws cards** as normal.
 - The home port's guns (§8.2.4) protect her while she refits.
 
 ### 7.8 Sinking and coming back
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
+- **Board edge**: leaving the map sinks a ship in the hex she was about to leave (§3.1).
+- **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in an **adjacent hex**.
 - **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
   Captain, are lost**). No player elimination (P6).
 - **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
@@ -553,6 +567,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - *Timing of her return, her hand of cards, facing and sail: Q16.*
 
 ### 7.9 Shipwrecks
+- **Number at setup = number of ships** *(placement: scenario or players? Q50)*.
 - **Shipwreck tokens** are placed on the map at setup, and **every ship that sinks leaves a new shipwreck token** where she sank.
 - **Searching** happens during **Upkeep**: a ship that **ends the turn on** a wreck (sea), or **next to** it if the wreck is on land,
   searches it and draws a **wreck card**.
@@ -586,8 +601,9 @@ mode is a plug-in objective module on top of a shared rules core.
 | M5 | **Solo / Co-op Adventure** | 1+ vs the game | Explore, fight **ghost ships and monsters**. | **Deferred** until the core game is finished. Hardest mode (needs AI-controlled enemies). |
 
 ### 8.1 M1 Race
-- Checkpoints are placed on the board and must be reached **in order**. The first ship to reach the last checkpoint wins.
-- *Open: Q41.*
+- Checkpoints are **placed by agreement at setup** and must be reached **in order**, by **passing through** them. The first ship (or team,
+  §8.6) to reach the last checkpoint wins.
+- A sunk ship comes back at her **last checkpoint reached** (instead of her home port).
 
 ### 8.2 M2 Treasure Hunt (core game)
 
@@ -609,7 +625,8 @@ mode is a plug-in objective module on top of a shared rules core.
     for an information advantage (§3.6).
   - When the deck runs out, **reshuffle** it.
   - If the spawn point is **occupied by a ship**, that's fine: the treasure appears there and **can be claimed immediately**.
-  - **Only one treasure per spawn point**: if the drawn point already has a treasure, **draw again**.
+  - **Only one treasure per spawn point**: if the drawn point already has a treasure, **draw again**. If **every** spawn point already has
+    treasure, **skip** the spawn.
 - **Treasures in play at once = (number of ships − 1) / 2, rounded up**:
 
 | Ships | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
@@ -630,13 +647,14 @@ mode is a plug-in objective module on top of a shared rules core.
 **8.2.3 Stealing / knocking loose**
 - When a ship carrying treasure is **rammed** or **hit by cannon**, the attacker may **give up a damage die (DD)** they would
   deal and **knock the treasure loose** instead.
-- The **attacker** places the treasure in an **empty hex adjacent to the victim**, sea or land, as they choose.
+- The **attacker** places the treasure in a hex **adjacent to the victim**, sea or land (including reefs and sandbanks), as they choose. The
+  hex **must not already hold treasure** but **may hold a ship** *(my reading ❓)*.
 - Anyone can then pick it up as normal (§8.2.2). In practice the attacker places it where they can grab it, or where a rival can't.
 
 **8.2.4 Home port & scoring**
 - Each player has a **home port**, **placed on the edge of the map at setup**. It is **indestructible** and **has guns**
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
-  at **every rival ship** within range.
+  at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
 - Treasure is **scored, and safe, once it reaches the carrier's home port**. It can't be stolen after that.
 
@@ -650,7 +668,7 @@ mode is a plug-in objective module on top of a shared rules core.
 | 7–8 | 2 |
 
 **8.2.6 Variant: Timed game**
-- Play for a **fixed time** (e.g. 2 hours). When time runs out, the player who has **scored the most treasure wins**.
+- Play to a **timer** (a fixed time, e.g. 2 hours; the designer's choice over a turn limit). When time runs out, the player who has **scored the most treasure wins**.
 - When time is up: finish the current turn (all 3 Parts) so everyone gets the same number of turns.
 - **Tie-breaks** (proposed, to playtest; pick one or chain them in order):
   1. A player **carrying** treasure beats one who isn't.
@@ -731,75 +749,51 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 | Damage marker | Blocks one of the 9 ship-board slots (§7.3). |
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
+## Designer to-do
+_Things the designer has said they'll do or supply._
+- **Current-types diagram** (turning amounts, eddies, gyres, maelstrom) for players and for this spec (Q19/Q20).
+- **Board tile diagram**: tile size and shape, how tiles join (Q18).
+- **Gale card**: add "1 DD per Full Sail, taken at Upkeep" to the card text (§3.5).
+- **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
+- **Check the derived rows** of the full sail-move table (§6.3).
+- **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
+
 ## Open questions
-_Rewritten in v0.88 (checked against review in v0.89): only unanswered questions are listed (answers live in the rule sections and the change log). Old Q-numbers are kept.
-**A** = needed for the digital prototype and first playtests, **B** = needed for a full game, **C** = detail, **D** = add-ons._
+_Rewritten in v0.90 after the designer answered the v0.89 list. Only unanswered questions are listed; answers are in the rule sections and
+the change log. ❓ in a rule section marks my reading of an answer, to confirm. Old Q-numbers are kept._
 
 ### A. Needed for the prototype
-1. **Q19 / Q20 Currents** *(awaiting the designer's diagram)*: turning amounts; turn before or after the move; absolute (face the arrow) or
-   relative; how far an eddy spins; dashed eddies; gyres and loop currents round islands; the maelstrom. Do tides change currents (Q40)?
-2. **Q18 Board tiles** *(awaiting the designer's diagram)*: tile size and shape, how they join; this sets the map data format.
-3. **Q24 Board edge**: what happens to a ship that sails, is pushed or drifts off the map?
-4. **Q30 Command deck**: the full card list (band combinations and initiative numbers) and deck size (8 ships may need 100+ cards).
-   Are all initiative numbers unique?
-5. **Q7 Hand limit and recycling**: if a draw would take you over 9, stop at 9 or draw and discard down? Do used cards get shuffled
-   straight back into the deck, go on the bottom, or go to a discard pile that's reshuffled when the deck runs out?
-6. **Q33 Line of fire**: do **other ships** block cannon fire (does the nearest ship shield those behind)?
-7. **Q15b Damage and repair**: a damage marker on a slot whose Part has already resolved this turn just blocks it from next turn? Can Repair
-   remove a marker from any slot, including one in the current Part? Does one Repair or Heal fix exactly 1 point (assumed, §7.6)?
-8. **Q48 Crew basics**:
-   - Can the Captain be wounded and killed like any crew member?
-   - Wounded crew give no card icons? (Assumed.)
-   - Do crew powers stop while wounded?
-9. **Q49 Refit**: can a ship refit partly (e.g. only recruit) without losing the turn? Are recruits random from the crew deck?
-10. **Q16 Coming back after sinking**:
-    - **When** does she come back: straight away, or at Upkeep? Can she act in the rest of the turn she sank in, and does she miss the next turn?
-    - Does she **keep her hand** of command cards, or discard it and draw a new one (from her new crew)?
-    - Facing and sail level on return? What if an enemy ship is in the port hex?
-11. **Q44 Treasure Hunt leftovers**:
-    - How are the 9 spawn points **marked** on the board: tokens placed by the scenario, or printed on tiles?
-    - Knocking loose with no empty adjacent hex: what happens?
-    - Can treasure be placed on a reef or sandbank?
-    - Port guns fire after all ships (assumed)? Does fog hide a ship from them (assumed yes)?
-    - No scoring at another team's port (assumed)?
-12. **Q38 Gale damage**: 1 DD for each Move phase at Full Sail (up to 3 a turn), or once per turn?
-13. **Q37 Weather board**:
-    - How is "now" marked?
-    - Are all 6 spaces filled, or 3 cards refilled from the deck?
-    - What is the starting tide?
-    - Does New Weather Front replace the face-up cards too?
+1. **Q7 Used cards**: shuffled straight back into the deck, put on the bottom, or onto a discard pile that's reshuffled when the deck runs out?
+2. **Q15b Repair / Heal amount**: does one action fix exactly 1 point? (Assumed.)
+3. **Q16 Timing after sinking**: does she come back straight away or at Upkeep? Does she miss the rest of that turn, or the next? Does she keep
+   her hand of command cards, or discard it and draw a new one from her new crew?
+4. **Q44 Spawn points**: how are the 9 spawn points marked: tokens placed by the scenario, or printed on tiles? No scoring at another team's port? (Assumed.)
+5. **Q38 Gale damage count**: taken at Upkeep (answered), but is it 1 DD for **each Part** sailed at Full Sail (up to 3), or 1 DD if she
+   ended the turn at Full Sail?
+6. **Confirm my readings** (marked ❓ in the sections):
+   - Knocking treasure loose: the hex must have no treasure but may hold a ship (§8.2.3).
+   - Weather board: which 2 cards show: the current one and the next, or the next 2 after the current one (§3.5)?
+   - Caves: a ship carried in by a current or drift still pushes on the way out (§3.2.2).
+   - Refit: "yes, no, yes" read as partial refit allowed, still costs the turn, recruits are random (§7.7).
 
 ### B. Needed for a full game
-14. **Q46 Sea caves**:
-    - Does remaining movement continue after coming out?
-    - Does any movement (current, drift, push) trigger a cave?
-    - Carried in by a current or drift with the exit occupied: push or stop?
-    - Exit ship can't be pushed: what happens?
-    - Can a ship enter backwards or sideways, and does she still exit facing the arrow?
-15. **Q57 Port town**: what does the town on the example board do?
-16. **Q41 Race**: placing checkpoints; "reached" = pass through or end a Part on it; sunk ship returns to port or last checkpoint?
-17. **Q43 Deathmatch / Capture the Flag**: scoring (sinkings?), end condition, flag rules (as treasure?).
-18. **Q44 Timed variant**: clock, turn limit or both; which tie-breaks?
-19. **Q50 Wreck tokens**: how many at setup, and placed by the scenario or by players?
-20. **Stranding**: adopt "haul her out" (a whole turn to move 1 hex)?
-21. **Q14 Other weapons**: any forward or aft weapons ("mostly broadside")? Any limit on firing?
+7. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
+8. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
+9. **Q3c Board size** for each player count.
 
-### C. Detail and polish
-22. **Q36** Point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
-23. **Q28** Reveal all 9 cards at once, or one Part at a time?
-24. **Q39a** Check the derived rows of the sail-move table (§6.3).
-25. **Q3b / Q3c** Minimum player count; board size per player count.
-26. **Q56 Critical hits**: replace the placeholder (re-roll + 1 DD) with a critical damage deck? If so: contents, and does refit clear them?
+### C. Detail
+10. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-27. **Q48 Crew deck**: the full list (≥ 50 cards: icons, powers, counts). Retired Captain: card icons, power; on a swap, where does the
-    leaving card go; can a ship decline her? Surgeon: when does she heal, can she heal herself, does she work while wounded?
-28. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
-    attack? Contents of the wreck deck beyond crew and equipment, including bad results.
-29. **Sea monster**: equal-distance influence tie (roll off?).
+11. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+    does she heal (Upkeep?), and can she heal herself?
+12. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+    attack? Wreck deck contents beyond crew and equipment, including bad results.
+13. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.90 — designer answered the v0.89 list: board edge sinks; unique initiative; discard down to 9; ships don't block fire; damage timing; wounded crew; partial refit; return heading and blocked port; spawn and knock-loose hexes; Gale DD at Upkeep; weather board; caves; port town is a home port; Race checkpoints; timer; wreck count; haul her out; other weapons from crew and equipment; reveal one Part at a time; minimum 2 players. Added a designer to-do list.
 - v0.89 — open-questions review fixes: restored spawn marking, Repair/Heal amount, respawn timing and hand; critical-hit text made consistent; new Q56, Q57.
 - v0.88 — open questions rewritten: only unanswered ones, numbered and prioritised.
 - v0.87 — teams pass treasure by ramming (no DD); team target 3.
