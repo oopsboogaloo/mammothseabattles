@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.88**
+> Status: **Draft v0.89**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -498,7 +498,8 @@ Ideas to playtest:
 | 11 | 2 | 1 | |
 | 12 | — | — | **Critical hit**: *for now* **roll this DD again, plus 1 extra DD** (a critical damage card deck may replace this later) |
 
-Odds per DD: **0.75 Ship + 0.75 Crew** on average (symmetrical); **1 in 12** misses; **1 in 12** is critical; **3 in 12** deal 3 total damage.
+Odds per d12 roll: **1 in 12** misses; **1 in 12** is critical; **3 in 12** deal 3 total damage. Ship and Crew are symmetrical. Including the
+extra dice criticals add, each DD averages about **0.9 Ship + 0.9 Crew**.
 A critical rolled while resolving a critical adds further dice (chains are possible but rare: 1 in 12 per die).
 For the physical game this could be a **custom d12 with icons**; online it's a lookup table.
 
@@ -534,7 +535,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 
 ### 7.7 Refit at home port
 - A ship that **ends a turn at her home port** can **refit**:
-  - **Fully repair**: remove all damage markers *(and critical damage cards? ❓)*.
+  - **Fully repair**: remove all damage markers.
   - **Fully heal**: flip all wounded crew to healthy.
   - **Recruit** back up to **3 crew**.
 - **Cost: the next turn**: she spends the following turn in port and **can't do anything** (no sailing, steering or actions).
@@ -549,7 +550,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
   a *Pirate* draws 1), so a ship rebuilt with 3 random crew is much weaker than one with her Captain.
 - Any **treasure she carried drops in the hex where she sank**, ready for anyone to pick up.
 - She leaves a **shipwreck** where she sank (§7.9).
-- *Hand of cards, facing, sail: Q16.*
+- *Timing of her return, her hand of cards, facing and sail: Q16.*
 
 ### 7.9 Shipwrecks
 - **Shipwreck tokens** are placed on the map at setup, and **every ship that sinks leaves a new shipwreck token** where she sank.
@@ -569,7 +570,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - **No limit** on equipment held.
 - Equipment is **kept when a ship sinks** (it isn't lost or dropped).
 
-*Critical hits (d12 = 12) draw a critical damage card: contents TBD (Q15).*
+*Critical hits (d12 = 12): for now, roll that DD again plus 1 extra DD (§7.2). A critical damage card deck may replace this (Q56).*
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -731,7 +732,7 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
 ## Open questions
-_Rewritten in v0.88: only unanswered questions are listed (answers live in the rule sections and the change log). Old Q-numbers are kept.
+_Rewritten in v0.88 (checked against review in v0.89): only unanswered questions are listed (answers live in the rule sections and the change log). Old Q-numbers are kept.
 **A** = needed for the digital prototype and first playtests, **B** = needed for a full game, **C** = detail, **D** = add-ons._
 
 ### A. Needed for the prototype
@@ -744,16 +745,19 @@ _Rewritten in v0.88: only unanswered questions are listed (answers live in the r
 5. **Q7 Hand limit and recycling**: if a draw would take you over 9, stop at 9 or draw and discard down? Do used cards get shuffled
    straight back into the deck, go on the bottom, or go to a discard pile that's reshuffled when the deck runs out?
 6. **Q33 Line of fire**: do **other ships** block cannon fire (does the nearest ship shield those behind)?
-7. **Q15b Damage timing**: a damage marker on a slot whose Part has already resolved this turn just blocks it from next turn? Can Repair
-   remove a marker from any slot, including one in the current Part?
+7. **Q15b Damage and repair**: a damage marker on a slot whose Part has already resolved this turn just blocks it from next turn? Can Repair
+   remove a marker from any slot, including one in the current Part? Does one Repair or Heal fix exactly 1 point (assumed, §7.6)?
 8. **Q48 Crew basics**:
    - Can the Captain be wounded and killed like any crew member?
    - Wounded crew give no card icons? (Assumed.)
    - Do crew powers stop while wounded?
-9. **Q49 Refit**: is "in port" being in the port hex? Can a ship refit partly (e.g. only recruit) without losing the turn? Are recruits random from
-   the crew deck?
-10. **Q16 Coming back after sinking**: facing and sail level on return? What if an enemy ship is in the port hex?
+9. **Q49 Refit**: can a ship refit partly (e.g. only recruit) without losing the turn? Are recruits random from the crew deck?
+10. **Q16 Coming back after sinking**:
+    - **When** does she come back: straight away, or at Upkeep? Can she act in the rest of the turn she sank in, and does she miss the next turn?
+    - Does she **keep her hand** of command cards, or discard it and draw a new one (from her new crew)?
+    - Facing and sail level on return? What if an enemy ship is in the port hex?
 11. **Q44 Treasure Hunt leftovers**:
+    - How are the 9 spawn points **marked** on the board: tokens placed by the scenario, or printed on tiles?
     - Knocking loose with no empty adjacent hex: what happens?
     - Can treasure be placed on a reef or sandbank?
     - Port guns fire after all ships (assumed)? Does fog hide a ship from them (assumed yes)?
@@ -772,7 +776,7 @@ _Rewritten in v0.88: only unanswered questions are listed (answers live in the r
     - Carried in by a current or drift with the exit occupied: push or stop?
     - Exit ship can't be pushed: what happens?
     - Can a ship enter backwards or sideways, and does she still exit facing the arrow?
-15. **Q19 Port town**: what does the town on the example board do?
+15. **Q57 Port town**: what does the town on the example board do?
 16. **Q41 Race**: placing checkpoints; "reached" = pass through or end a Part on it; sunk ship returns to port or last checkpoint?
 17. **Q43 Deathmatch / Capture the Flag**: scoring (sinkings?), end condition, flag rules (as treasure?).
 18. **Q44 Timed variant**: clock, turn limit or both; which tie-breaks?
@@ -785,7 +789,7 @@ _Rewritten in v0.88: only unanswered questions are listed (answers live in the r
 23. **Q28** Reveal all 9 cards at once, or one Part at a time?
 24. **Q39a** Check the derived rows of the sail-move table (§6.3).
 25. **Q3b / Q3c** Minimum player count; board size per player count.
-26. **Critical hits**: replace the placeholder (re-roll + 1 DD) with a critical damage deck? If so: contents, and does refit clear them?
+26. **Q56 Critical hits**: replace the placeholder (re-roll + 1 DD) with a critical damage deck? If so: contents, and does refit clear them?
 
 ### D. Add-ons
 27. **Q48 Crew deck**: the full list (≥ 50 cards: icons, powers, counts). Retired Captain: card icons, power; on a swap, where does the
@@ -796,6 +800,7 @@ _Rewritten in v0.88: only unanswered questions are listed (answers live in the r
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.89 — open-questions review fixes: restored spawn marking, Repair/Heal amount, respawn timing and hand; critical-hit text made consistent; new Q56, Q57.
 - v0.88 — open questions rewritten: only unanswered ones, numbered and prioritised.
 - v0.87 — teams pass treasure by ramming (no DD); team target 3.
 - v0.86 — teams share one home port and may talk openly and show cards.
