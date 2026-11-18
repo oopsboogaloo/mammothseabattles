@@ -26,7 +26,7 @@
 - **Replay with explanations.** Resolution is animated step by step (Move → Steer → Currents → Action → Drift), with a
   short caption for each effect ("Broad reach in a Strong wind: Full Sail = 4 hexes", "Current: 1 hex NE", "Pushed by *Woolly Revenge*").
 - **Show the wind and arcs.** A wind rose showing each heading's speed around the selected ship; broadside arcs shown on hover.
-- **Show what's coming.** The weather board shows the next two weather cards and tides, as in the physical game.
+- **Show what's coming.** The weather board shows the current and next weather card and tide, as in the physical game.
 - **Practice against bots** so you can learn alone, before or without friends.
 
 ## Decisions made during resolution
