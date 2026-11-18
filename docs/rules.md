@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.93**
+> Status: **Draft v0.94**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -91,7 +91,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
 | Port town | Harbour town (bottom) | **Confirmed**: just one of the **home ports** (§8.2.4) |
-| Small wreck on sandbar | Upper left | Probably a **starting shipwreck** (§7.9)? ❓ |
+| Small wreck on sandbar | Upper left | **Confirmed**: a **starting shipwreck** (§7.9) |
 
 ### 3.2.0 Terrain *(confirmed)*
 "Stops you" means the ship **doesn't enter** the hex (or cross the edge): she stays in the last hex she was in, and the rest of
@@ -247,7 +247,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
   she's a lucky find.
 - **All ships are identical**; the only differences between ships come from their crew and damage.
 - **Crew cap: 6** per ship. A ship at the cap that gains crew (e.g. from a wreck) may **swap** one of her crew for the new one.
-- **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 drawn at random ❓).
+- **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 **drawn at random**).
 - **Wounded crew** give **no card icons** and their **powers stop** until healed. **Captains can be wounded and killed** like any crew.
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
@@ -637,7 +637,7 @@ mode is a plug-in objective module on top of a shared rules core.
   (The same as **half the number of ships, rounded down**.)
 - Treasure **being carried or knocked loose still counts** as in play. A **new treasure spawns only when one is scored**,
   and it appears during the next **Upkeep** (§5.4).
-- At setup, the starting treasures are spawned the same way *(assumed ❓)*.
+- At setup, the starting treasures are spawned the same way, with the treasure map deck.
 
 **8.2.2 Picking up**
 - **Treasure in a water hex**: picked up by **passing through** the hex (you don't need to end your move there).
@@ -664,7 +664,7 @@ mode is a plug-in objective module on top of a shared rules core.
 
 | Players | Suggested target |
 |---|---|
-| 2 | "Best of 5" (i.e. first to 3?) ❓ |
+| 2 | "Best of 5", i.e. **first to 3** |
 | 3–6 | 3 |
 | 7–8 | 2 |
 
@@ -773,10 +773,6 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
-  - The 2 starting crew besides the Captain are drawn at random (§3.6).
-  - Starting treasures are spawned with the treasure map deck, like later ones (§8.2.1).
-  - 2-player target "best of 5" means first to 3 (§8.2.5).
-  - The small wreck on a sandbar on the example board is a starting shipwreck (§3.2).
   - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
@@ -789,6 +785,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.94 — confirmed: random starting crew; starting treasures via the treasure map deck; 2-player target first to 3; sandbar wreck is a starting wreck.
 - v0.93 — Repair/Heal fix 1 each; a sunk ship doesn't miss a turn and draws a new hand; no scoring at other ports.
 - v0.92 — used cards roughly shuffled onto the bottom of the deck; sunk ships come back at Upkeep; spawn points are scenario tokens; Gale 1 DD per Part at Full Sail.
 - v0.91 — confirmed: knock-loose hex rule, weather board shows current + next, caves push on exit however entered, partial refit.
