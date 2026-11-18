@@ -66,5 +66,5 @@ A drifting prize that the wind and currents control. ✅ **Adopted into `rules.m
 **Why it works:** its path is predictable but has to be read from the wind and currents; it draws everyone to one spot; a ship boarding it is a
 sitting target for a whole turn; and it's a trial run for the ghost ships of the future solo and co-op mode.
 
-**Decided (v0.97):** brought by **Dead Calm**; sinks after **4 damage**; its treasure **counts** towards the treasures in play.
+**Decided (v0.97–0.98):** announced by **Dead Calm**, arriving with the next weather card that has wind, on its upwind edge; sinks after **4 damage**; its treasure **counts** towards the treasures in play.
 Remaining details are rules question Q59.

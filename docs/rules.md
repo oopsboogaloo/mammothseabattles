@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.97**
+> Status: **Draft v0.98**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -600,8 +600,9 @@ draws an **equipment card**. Flotsam appears in two ways:
 
 ### 7.12 The Derelict *(add-on, adopted v0.97)*
 An abandoned ship drifting with valuable cargo: a moving prize that the wind and currents control.
-- **Appears:** when a **Dead Calm** weather card comes into play, place the Derelict on the **upwind map edge** *(with no wind, which
-  edge? Q59)*. At most one Derelict on the board at a time.
+- **Appears:** a **Dead Calm** weather card announces it; the Derelict arrives when the **next weather card with wind** comes into play,
+  on that wind's **upwind map edge**. (If the next card is another Dead Calm, it waits for the first card with wind.) Because the weather
+  board shows the current and next card, players can see it coming. At most one Derelict on the board at a time.
 - **Moves:** like a ship at **No Sail**: currents carry it and wind drift pushes it. It never sails or steers.
 - **Obstacle:** sailing into it pushes it, with no DD. Currents and drift don't push it.
 - **Boarding:** a ship that **ends a turn next to it** boards and loots it: **2 equipment cards + 1 treasure** (the treasure only if her
@@ -802,7 +803,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### D. Add-ons
 - **Q59 Derelict** (§7.12):
-  - Dead Calm has no wind, so which edge is "upwind"? (Suggestion: the edge the previous wind blew from, or the edge furthest from all ships.)
+  - ~~Which edge~~ → it arrives with the next card that has wind, on its upwind edge (answered). Where along that edge (e.g. opposite the
+    middle of the map, or a roll)?
   - "4 damage": 4 DD hits (no roll), or 4 points of damage rolled on the d12?
   - Since its treasure counts towards the treasures in play: if the maximum are already in play, does the Derelict carry no treasure?
 - **Q58 Flotsam** (§7.11):
@@ -822,6 +824,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.98 — the Derelict arrives with the next weather card that has wind, on its upwind edge.
 - v0.97 — the Derelict adopted (§7.12): brought by Dead Calm, sinks after 4 damage, its treasure counts.
 - v0.96 — flotsam capped by a fixed pool of N tokens.
 - v0.95 — flotsam (§7.11): battle debris astern of damaged ships plus weather cards; gives equipment cards. Details in Q58.
