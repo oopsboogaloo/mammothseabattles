@@ -39,7 +39,7 @@ const COLUMNS: Record<string, string[]> = {
   'equipment-cards': ['id', 'name', 'text', 'copies', 'art_file', 'notes'],
   'crew-cards': ['id', 'name', 'card_icons', 'power_text', 'status', 'art_file', 'wounded_art_file', 'copies', 'notes'],
   'treasure-map-cards': ['id', 'spawn_point_number', 'status', 'art_file', 'copies', 'notes'],
-  'crew-card-ideas': ['id', 'name', 'group', 'creature', 'card_icons', 'power_text', 'use', 'notes'],
+  'crew-card-ideas': ['id', 'name', 'group', 'creature', 'card_icons', 'power_text', 'flavour_text', 'use', 'notes'],
 };
 
 /** Every id is filled in and no two rows share one. */
