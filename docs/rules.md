@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.106**
+> Status: **Draft v0.107**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -328,12 +328,14 @@ so replays and tests can be reproduced.)*
 After Part III: **Upkeep**, then a new turn begins. Order *(proposed by Claude, to playtest)*:
 
 1. **Sea monster moves** *(add-on, §9.1)*: first, because its influence comes from the cards programmed in the turn just played.
-2. **Refit** ships that ended the turn in their home port (§7.7).
-3. **Search wrecks** (§7.9). After refit, so crew gained from a wreck isn't wiped out by the refit's "recruit up to 3".
-4. **Spawn treasure** for each one scored this turn (§8.2.1).
-5. **Advance the weather board** one space: new wind and **new tide**. **Check stranding now**: ships on hexes that have become land are
+2. **Sunk ships come back** at their home port (§7.8) *(placement in the order proposed in v0.107)*.
+3. **Refit** ships that ended the turn in their home port (§7.7).
+4. **Search wrecks** (§7.9). After refit, so crew gained from a wreck isn't wiped out by the refit's "recruit up to 3".
+5. **Spawn treasure** for each one scored this turn (§8.2.1).
+6. **Gale damage**: 1 DD for each Part a ship sailed at Full Sail in a Gale (§3.5) *(placement proposed in v0.107)*.
+7. **Advance the weather board** one space: new wind and **new tide**. **Check stranding now**: ships on hexes that have become land are
    **stuck**, and stuck ships on hexes that are water again are **freed** (§6.7).
-6. **Draw command cards** (§5.1). Last, so players draw knowing the new weather and can plan the next turn with it.
+8. **Draw command cards** (§5.1). Last, so players draw knowing the new weather and can plan the next turn with it.
 
 ## 6. Movement & actions
 
@@ -726,7 +728,7 @@ The same rules apply either way. **Teammates**:
 - **share goals**: treasure scored by any teammate counts for the team; in **Race**, a checkpoint only needs to be reached **once per team**;
 - **never hit each other** (no friendly fire, §7.1);
 - **can push each other**, but ramming a teammate deals **no DD**;
-- **can pass treasure**: **ram your teammate** and knock her treasure loose **without the DD**, placing it in an empty hex next to her
+- **can pass treasure**: **ram your teammate** and knock her treasure loose **without the DD**, placing it in a hex next to her that holds no treasure
   (the normal knock-loose rule, §8.2.3); then pick it up as usual.
 - Treasure Hunt **target is 3 per team**, as for a single player (§8.2.5).
 
@@ -819,6 +821,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.107 — Upkeep order: sunk ships return (step 2) and Gale damage (step 6) placed, as proposals. Rulebook updated to playtest draft 0.2.
 - v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed). Restored three add-on questions (crew deck, equipment timing, sea monster tie) accidentally dropped in v0.102.
 - v0.105 — weather flotsam placed by the player in last place, more than 5 hexes from any ship.
 - v0.104 — flotsam-icon weather cards bring one token.
