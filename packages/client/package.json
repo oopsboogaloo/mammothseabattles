@@ -1,0 +1,21 @@
+{
+  "name": "@msb/client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "assets": "node scripts/build-assets.mjs"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "playwright": "^1.65.1",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.8"
+  }
+}

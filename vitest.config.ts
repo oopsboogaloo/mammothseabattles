@@ -16,6 +16,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['packages/*/src/**/*.ts'],
+      // The client is UI, covered by its own checks (web-spec §6), not by the rules coverage gate.
+      exclude: ['packages/client/**'],
       // NFR-4: total coverage of engine, hex and rules. The build fails below 100%.
       thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 },
     },
