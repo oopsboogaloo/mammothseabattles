@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.92**
+> Status: **Draft v0.93**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -539,8 +539,8 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 | Fixed by | **Repair** action; full refit at home port (§7.7) | **Heal** action; full refit at home port (§7.7) |
 
 ### 7.6 Repair and Heal (Action phase)
-- **Repair**: fixes Ship damage, i.e. removes a damage marker from **any slot**, including one in the current Part *(1 per action, assumed ❓)*.
-- **Heal**: fixes Crew damage, i.e. flips a wounded crew member back to healthy *(assumed 1 ❓; can it revive dead crew? assumed no)*.
+- **Repair**: fixes Ship damage, i.e. removes a damage marker from **any slot**, including one in the current Part *(**1 per action**).
+- **Heal**: fixes Crew damage, i.e. flips **1** wounded crew member back to healthy (it can't revive dead crew).
 - Both are **Action-band** orders, so they compete with **Fire Cannons** for the Action slots. Repair can only be programmed while at least
   one Action slot is usable.
 
@@ -558,14 +558,14 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
 - **Board edge**: leaving the map sinks a ship in the hex she was about to leave (§3.1).
 - **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in an **adjacent hex**.
-- **She comes back at Upkeep** (not straight away) *(whether she also misses the next turn, and her hand: Q16)*.
+- **She comes back at Upkeep** (not straight away) and plays the **next turn as normal** (she doesn't miss it).
+- She **discards her hand** of command cards and **draws a new hand** from her new crew.
 - **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
   Captain, are lost**). No player elimination (P6).
 - **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
   a *Pirate* draws 1), so a ship rebuilt with 3 random crew is much weaker than one with her Captain.
 - Any **treasure she carried drops in the hex where she sank**, ready for anyone to pick up.
 - She leaves a **shipwreck** where she sank (§7.9).
-- *Timing of her return, her hand of cards, facing and sail: Q16.*
 
 ### 7.9 Shipwrecks
 - **Number at setup = number of ships** *(placement: scenario or players? Q50)*.
@@ -657,7 +657,7 @@ mode is a plug-in objective module on top of a shared rules core.
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
   at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
-- Treasure is **scored, and safe, once it reaches the carrier's home port**. It can't be stolen after that.
+- Treasure is **scored, and safe, once it reaches the carrier's (team's) home port**; it **can't be scored at anyone else's port**. It can't be stolen after that.
 
 **8.2.5 Winning**
 - The first player to score the **target** wins. The default is **3**; adjust for game length and player count:
@@ -760,32 +760,36 @@ _Things the designer has said they'll do or supply._
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 
 ## Open questions
-_Rewritten in v0.90 after the designer answered the v0.89 list. Only unanswered questions are listed; answers are in the rule sections and
+_Rewritten in v0.90, updated v0.93. Only unanswered questions are listed; answers are in the rule sections and
 the change log. ❓ in a rule section marks my reading of an answer, to confirm. Old Q-numbers are kept._
 
 ### A. Needed for the prototype
-1. **Q15b Repair / Heal amount**: does one action fix exactly 1 point? (Assumed.)
-2. **Q16 After sinking**: she comes back at Upkeep (answered). Does she also **miss the next turn**? Does she **keep her hand** of command
-   cards, or discard it and draw a new one from her new crew?
-3. **Q44**: no scoring at another team's port? (Assumed.)
+_None: all prototype questions are answered (apart from the designer's diagrams and card lists, see Designer to-do)._
 
 ### B. Needed for a full game
-4. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
-5. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
-6. **Q3c Board size** for each player count.
+1. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
+2. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
+3. **Q3c Board size** for each player count.
 
 ### C. Detail
-7. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
+- **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
+  - The 2 starting crew besides the Captain are drawn at random (§3.6).
+  - Starting treasures are spawned with the treasure map deck, like later ones (§8.2.1).
+  - 2-player target "best of 5" means first to 3 (§8.2.5).
+  - The small wreck on a sandbar on the example board is a starting shipwreck (§3.2).
+  - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
+4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-8. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
     does she heal (Upkeep?), and can she heal herself?
-9. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
     attack? Wreck deck contents beyond crew and equipment, including bad results.
-10. **Sea monster**: equal-distance influence tie (roll off?).
+7. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.93 — Repair/Heal fix 1 each; a sunk ship doesn't miss a turn and draws a new hand; no scoring at other ports.
 - v0.92 — used cards roughly shuffled onto the bottom of the deck; sunk ships come back at Upkeep; spawn points are scenario tokens; Gale 1 DD per Part at Full Sail.
 - v0.91 — confirmed: knock-loose hex rule, weather board shows current + next, caves push on exit however entered, partial refit.
 - v0.90 — designer answered the v0.89 list: board edge sinks; unique initiative; discard down to 9; ships don't block fire; damage timing; wounded crew; partial refit; return heading and blocked port; spawn and knock-loose hexes; Gale DD at Upkeep; weather board; caves; port town is a home port; Race checkpoints; timer; wreck count; haul her out; other weapons from crew and equipment; reveal one Part at a time; minimum 2 players. Added a designer to-do list.
