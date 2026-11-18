@@ -1,0 +1,6 @@
+﻿id,name,card_icons,power_text,status,art_file,wounded_art_file,copies,notes
+captain-mammoth,Captain Mammoth,3,,Finished card,crew/captain-mammoth.webp,crew/wounded.webp,8,"No text panel on the card. Rules 3.6: 8 identical Captains, one per ship."
+pirate,Pirate,1,,Finished card,crew/pirate.webp,crew/wounded.webp,,Pink dinosaur in a tricorn hat. No text panel.
+pirate-2,Pirate,1,,Finished card,crew/pirate-2.webp,crew/wounded.webp,,Green dinosaur. The white text panel is blank.
+surgeon,Surgeon,,Automatically heals 1 wounded crew member per turn,"In the rules only, no card art",,,,Rules 3.6. Card icons not decided.
+retired-captain,Retired Captain,,,"In the rules only, no card art",,,,Rules 3.6: strongest crew card; will not serve alongside a Captain. Icons and power not decided.

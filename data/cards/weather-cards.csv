@@ -1,0 +1,29 @@
+﻿id,name,wind_strength,wind_direction,sail_move_modifier,modifier_applies_to,text_1,text_2,text_3,copies,art_file,notes
+light-n,Light North Wind,Light,N,-1,All sail moves,,,,1,weather/light-n.webp,
+light-ne,Light NE Wind,Light,NE,-1,All sail moves,,,,1,weather/light-ne.webp,
+light-se,Light SE Wind,Light,SE,-1,All sail moves,,,,1,weather/light-se.webp,
+light-s,Light South Wind,Light,S,-1,All sail moves,,,,1,weather/light-s.webp,
+light-sw,Light SW Wind,Light,SW,-1,All sail moves,,,,1,weather/light-sw.webp,
+light-nw,Light NW Wind,Light,NW,-1,All sail moves,,,,1,weather/light-nw.webp,
+firm-n,Firm North Wind,Firm,N,,,,,,1,weather/firm-n.webp,
+firm-ne,Firm NE Wind,Firm,NE,,,,,,1,weather/firm-ne.webp,
+firm-se,Firm SE Wind,Firm,SE,,,,,,1,weather/firm-se.webp,
+firm-s,Firm South Wind,Firm,S,,,,,,1,weather/firm-s.webp,
+firm-sw,Firm SW Wind,Firm,SW,,,,,,1,weather/firm-sw.webp,
+firm-nw,Firm NW Wind,Firm,NW,,,,,,1,weather/firm-nw.webp,
+strong-n,Strong North Wind,Strong,N,1,Full Sail moves,,,,1,weather/strong-n.webp,
+strong-ne,Strong NE Wind,Strong,NE,1,Full Sail moves,,,,1,weather/strong-ne.webp,
+strong-se,Strong SE Wind,Strong,SE,1,Full Sail moves,,,,1,weather/strong-se.webp,
+strong-s,Strong South Wind,Strong,S,1,Full Sail moves,,,,1,weather/strong-s.webp,
+strong-sw,Strong SW Wind,Strong,SW,1,Full Sail moves,,,,1,weather/strong-sw.webp,
+strong-nw,Strong NW Wind,Strong,NW,1,Full Sail moves,,,,1,weather/strong-nw.webp,
+gale-n,Gale North Wind,Gale,N,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-n.webp,Strength is spelled GAIL on the art.
+gale-ne,Gale NE Wind,Gale,NE,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-ne.webp,Strength is spelled GAIL on the art.
+gale-se,Gale SE Wind,Gale,SE,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-se.webp,Strength is spelled GAIL on the art.
+gale-s,Gale South Wind,Gale,S,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-s.webp,Strength is spelled GAIL on the art.
+gale-sw,Gale SW Wind,Gale,SW,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-sw.webp,Strength is spelled GAIL on the art.
+gale-nw,Gale NW Wind,Gale,NW,1,All sail moves,1 DD per Full Sail,,,1,weather/gale-nw.webp,Strength is spelled GAIL on the art.
+dead-calm,Dead Calm,Dead Calm,,,,No sail move,,,1,weather/dead-calm.webp,Compass shown with no arrow.
+new-front,New Weather Front,,,,,Reshuffle the weather deck and place new cards including this one,,,1,weather/new-front.webp,
+lightning-storm,Lightning Storm,,,,,2 DD at each turn start,Draw another card each turn for wind direction and strength,,1,weather/lightning-storm.webp,Not yet in rules.md.
+hurricane,Hurricane,,,,,Water level is as high tide this turn,1 DD at each turn start,Draw another card each turn for wind direction and strength,1,weather/hurricane.webp,Not yet in rules.md.

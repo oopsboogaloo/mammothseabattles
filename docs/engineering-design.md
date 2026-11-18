@@ -192,13 +192,15 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 ### 7.2 Other content
 | Content | Source | Notes |
 |---|---|---|
-| Command cards | The 45 cards already transcribed in `client/src/data/content.ts` | Moves to `msb-data`. Needs the answers on the two 360s, Anchor, Row and Hard About (mock-up README, questions 1–2) |
-| Weather cards | The 28 transcribed cards | Lightning Storm and Hurricane need rules (question 4) |
+| Command cards | `data/cards/command-cards.csv` (45 cards) | Replaces the copy in `client/src/data/content.ts`. Needs the answers on the two 360s, Anchor, Row and Hard About (mock-up README, questions 1–2) |
+| Weather cards | `data/cards/weather-cards.csv` (28 cards) | Lightning Storm and Hurricane need rules (question 4) |
 | Crew | Captain (draws 3 cards) and basic crew; core game has no powers (rules §9) | The core crew deck list is a rules gap (Q48) |
 | Treasure map cards | 1–9 | |
 | Scenarios | Map + seat count + home ports used + wrecks + win target | One per map and player count to start |
 
-Content is typed TypeScript modules generated from, or validated against, JSON. Validation runs in tests and at build time (web-spec §5). I propose plain validator functions rather than a schema library, to keep the pure packages free of dependencies.
+**Cards are authored as CSV files in [`data/cards/`](../data/cards/README.md)**, one per card type, so the designer can edit them in Excel.
+A build step in `msb-data` reads the CSVs, validates them and generates typed TypeScript modules; the engine and client import those
+modules and never parse CSV at run time. Maps and scenarios stay as JSON (§7.1). Validation runs in tests and at build time (web-spec §5). I propose plain validator functions rather than a schema library, to keep the pure packages free of dependencies.
 
 ## 8. Events
 
