@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.103**
+> Status: **Draft v0.104**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -597,7 +597,7 @@ Flotsam appears in two ways:
   (behind her). If that hex is **blocked** (land, a ship, treasure or flotsam), **no flotsam** is placed. Chasing a damaged ship pays off.
   **One token per damage event** (a second token couldn't be placed anyway: the hex astern would already be blocked). Ship damage from
   any source counts, attacks or hazards like cliffs and storms *(assumed ❓)*.
-- **Weather:** weather cards marked with a **flotsam icon** bring flotsam *(designer to mark the cards; how many tokens and where: Q58)*.
+- **Weather:** a weather card marked with a **flotsam icon** brings **one** flotsam token when it comes into play *(designer to mark the cards; where it's placed: Q58)*.
 
 **Pool:** a fixed pool of flotsam tokens; flotsam is only placed while tokens are left in the pool, and picked-up tokens return to it.
 The pool size will vary with **map size and player count** (set by the scenario); **5 for now**, to playtest.
@@ -813,10 +813,12 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q58 Flotsam** (§7.11; answered: Ship damage only, blocked hex = none, flagged weather cards, pool 5 for now, no drift, any movement
   picks it up). Still open:
   - ~~Per event or per point~~ → per damage event (answered). Confirm Ship damage from hazards (cliffs, storms) also drops flotsam (assumed).
-  - Weather cards with the flotsam icon: how many tokens do they bring, and where are they placed?
+  - ~~How many~~ → one token per flotsam-icon weather card (answered). Where is it placed? (Suggestion: like the Derelict, the player in last
+    place puts it on the upwind edge.)
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.104 — flotsam-icon weather cards bring one token.
 - v0.103 — flotsam: one token per damage event.
 - v0.102 — flotsam details: Ship damage only, blocked hex = none, weather icon, pool 5, no drift, picked up by any movement.
 - v0.101 — the Derelict carries only equipment when the maximum treasures are in play; Q59 closed.
