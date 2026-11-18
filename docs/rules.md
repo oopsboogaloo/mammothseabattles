@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.87**
+> Status: **Draft v0.88**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -731,143 +731,71 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 | DD | Damage Die: a d12 rolled for each point of damage taken; gives Ship and/or Crew damage or a Critical hit (§7.2). |
 
 ## Open questions
-_Cleaned up in v0.22: answered items removed (answers are in the relevant sections and the change log). Old Q-numbers are
-kept so earlier references still work. Ordered by priority: **A** blocks the core game, **B** is needed for a full game,
-**C** is detail or polish._
+_Rewritten in v0.88: only unanswered questions are listed (answers live in the rule sections and the change log). Old Q-numbers are kept.
+**A** = needed for the digital prototype and first playtests, **B** = needed for a full game, **C** = detail, **D** = add-ons._
 
-### A. Core game loop (blocks a playable prototype)
-_Rebuilt in v0.44: a v0.24 edit had accidentally deleted most of this list; restored from history and brought up to date._
-
-- ~~Q15/Q16 core~~ → Answered: Ship damage blocks slots; Crew damage wounds or kills crew; sinking conditions (§7.3–7.4).
-- **Q15b. Damage follow-ups:**
-  - ~~Who chooses~~ → the damaged player (answered).
-  - A damage marker in a slot whose Part has already **resolved** this turn: just blocks it from next turn?
-  - ~~Repair and Heal~~ → Actions fix Ship or Crew damage (answered). Still open: how much per action (assumed 1)? Can a removed damage marker be
-    from any slot, including one in the current Part? ~~Other ways to recover~~ → home port refit (§7.7).
-  - **Critical damage cards**: contents, count, permanent until repaired?
-  - ~~After sinking~~ → she comes back at her home port (answered). See Q16.
-- **Q16. Coming back after sinking:**
-  - ~~State~~ → fully repaired, 3 crew (answered). Same hand of cards, or a new one?
-  - ~~Penalty~~ → losing the Captain and getting 3 random crew (answered). Does she also miss a turn? (Probably not needed.)
-  - ~~Carried treasure~~ → drops where she sank (answered).
-  - Facing, sail level on return?
-  - What if an enemy ship is in or next to her port when she comes back? (The port guns probably deal with that.)
-  - Deathmatch scoring: count sinkings as points? (Q43.)
-- **Q50. Shipwrecks & equipment** (answered: search at Upkeep by ending on or next to a wreck; tokens; prototype deck = random crew or
-  equipment; equipment mostly single-use, play any time). Still open:
-  - Confirm the prototype wreck deck is "randomly a **crew** card or an **equipment** card".
-  - How many wreck tokens at setup, and where (scenario setup, or chosen in turn)?
-  - ~~Equipment secret or open?~~ → hidden hand; crew are open (answered). ~~Limit / lost when sunk / command hand hidden~~ → no limit; kept when sunk; command hand hidden (answered).
-  - "Any time" needs precise windows for the online version, e.g. explosive shot: played after a hit is declared, before rolling.
-    Can equipment be played **during another player's attack** (e.g. a defensive item)?
-  - "+2 DD to **any** attack": your own attacks only, or can you boost someone else's attack on a rival?
-  - Equipment and crew cards: are there "something bad" results in the prototype, or only good?
-- ~~Q54. Sea monster~~ → answered (§9.1). Small leftovers: an influence tie at equal distance (roll off?). ~~Entering by drift, current or push~~ → also sinks (answered).
-- **Q55. Teams and Fleets** (answered: teams and Fleets share the same teammate rules; one port per Fleets player; one hand per ship; shared
-  treasure; Race checkpoints once per team; teammates push without DD and can pass treasure; Captain + 2 each). Still open:
-  - ~~Port per team; table talk~~ → one port per team; teammates talk openly and may show cards (answered).
-  - ~~Passing treasure; team target~~ → ram and knock loose without the DD; target 3 (answered).
-- **Q49. Home port refit** (answered: ending a turn at home port → full repair, full heal, recruit up to 3 crew; costs a full turn). Still open:
-  - ~~Which turn~~ → the next turn, and she can't do anything during it (answered). ~~Draws?~~ → yes (answered).
-  - "At home port": in the port hex, or adjacent to it?
-  - Optional: can she refit partly (e.g. just recruit) without losing the turn?
-  - Recruits: from where (random crew deck? choose?) Is 3 the **maximum** crew, or just the refit cap (could you have more by other means)?
-  - Does refitting also clear critical damage cards?
-- **Q48. Crew:**
-  - ~~Starting crew~~ → Captain + 2 (answered). Are the 2 drawn at random?
-  - Crew deck: at least 50 cards, most with a skill (answered); list to be designed.
-  - ~~Captains~~ → 8 identical mammoth Captains; a Retired Captain is in the crew deck (answered). Retired Captain is the strongest crew and won't serve with a Captain (answered). Still open:
-    her card icons and power; on a swap, where does the leaving card go (back into the crew deck? removed from the game?); can a ship decline to take her?
-  - Can the Captain be wounded and killed by Crew damage like anyone else (the damaged player chooses, so they'd protect her)?
-  - **Crew deck**: what's in it (types, card icons, abilities, counts)? Recruits at refit are random from it too? Do mammoth and dinosaur ships get different crew?
-  - Do **wounded** crew still give their card icons? (Assumed no ❓.)
-  - ~~White panel~~ → special powers (answered). The full crew list with powers and card icons is needed. ~~Surgeon~~ → heals 1 wounded crew
-    per turn automatically (answered). When: at Upkeep? Can she heal herself? Does she work while wounded?
-  - Do powers stop working while that crew member is **wounded**?
-  - Gaining crew: refit (up to 3) and wrecks; any other way? ~~Maximum~~ → 6 (answered). ~~At the cap~~ → swap (answered).
-  - Draw timing: at Upkeep, or at the start of Programming?
-- **Q33. Broadside resolution** (answered: hits all enemies in both arcs, no friendly fire, firer may spare any target, ordered by Action-card initiative,
-  no firing through portals or caves). Still open:
-  - ~~DD per hit~~ → 1 DD (answered). No range falloff (assumed ❓).
-  - Line of sight: do islands, reefs, fog or **other ships** block shots?
-- ~~Q32 / Q8. Initiative and conflicts~~ → Answered: Move-slot card for movement, Action-slot card for cannon; higher first; empty slot = 0;
-  ties roll off; movement conflicts in initiative order; cannon damage applied immediately, so sunk ships don't fire (§5.3).
-  Still open: are all initiative numbers on the cards unique?
-- **Q6b. Ramming** (answered: pushes chain; push distance = the pushing movement; pushed into an obstacle = moving into it; ramming = 1 DD). Still open:
-  - ~~Who takes it~~ → the rammed ship (answered). ~~Chains~~ → only the first ship hit takes the DD (answered). Once per ram, or per hex pushed? (Assumed once.)
-- **Q7 / Q30. Cards and deck** (answered: draw = crew icons, hand max 9, unplayed kept, used return to the deck). Still open:
-  - ~~Shared or personal?~~ → One shared deck (answered). Used cards shuffled in, or put on the bottom (or a discard pile reshuffled when the deck runs out)?
-  - Deck size must cover the worst case: 8 ships × up to 9 cards in hand + cards on ship boards. So roughly **100+ cards**?
-  - ~~Makeup~~ → every combination or a good sample, enough cards (answered); exact list later.
-  - If a draw would take you over 9, do you stop at 9 or discard down?
-- ~~Q6a. Steering~~ → Ease 60°, Hard 120°, port and starboard versions (answered). Any other steer values (e.g. 180° about-turn)?
-- ~~Q31. Upkeep order~~ → proposed order in §5.4, to playtest. (Old note: Known steps: search wrecks, spawn treasure, home port refit; probably draw cards and
-  advance weather and tide. *Proposed order to playtest:* 1) refit at home port 2) search wrecks 3) spawn treasure 4) advance weather
-  and tide 5) draw command cards.)
-- **Q44. Treasure Hunt follow-ups** (answered: deck reshuffles; an occupied spawn point is fine; land treasure is dug up at end of turn;
-  sea, land or mixed setups). Still open:
-  - How are spawn points marked on the board (tokens per scenario)?
-  - ~~Treasure already there~~ → only one treasure per point; draw again (answered).
-  - Knocking loose: what if no adjacent hex is empty? Can it be placed on a reef or sandbank?
-  - ~~Port gun range / placement / reaching it~~ → range 2; map edge at setup; must enter (answered). ~~Port guns~~ → 1 DD, every Action phase, all directions, all rival ships within 2 (answered).
-    In what order relative to ship fire (after all ships, assumed)? Can fog hide a ship from port guns? (Assumed yes.)
-  - Can treasure be scored at another player's port? (Assumed no.)
-  - Timed variant: wall-clock time, a turn limit, or both? Which tie-break(s)?
+### A. Needed for the prototype
+1. **Q19 / Q20 Currents** *(awaiting the designer's diagram)*: turning amounts; turn before or after the move; absolute (face the arrow) or
+   relative; how far an eddy spins; dashed eddies; gyres and loop currents round islands; the maelstrom. Do tides change currents (Q40)?
+2. **Q18 Board tiles** *(awaiting the designer's diagram)*: tile size and shape, how they join; this sets the map data format.
+3. **Q24 Board edge**: what happens to a ship that sails, is pushed or drifts off the map?
+4. **Q30 Command deck**: the full card list (band combinations and initiative numbers) and deck size (8 ships may need 100+ cards).
+   Are all initiative numbers unique?
+5. **Q7 Hand limit**: if a draw would take you over 9, stop at 9 or draw and discard down?
+6. **Q33 Line of fire**: do **other ships** block cannon fire (does the nearest ship shield those behind)?
+7. **Q15b Damage timing**: a damage marker on a slot whose Part has already resolved this turn just blocks it from next turn? Can Repair
+   remove a marker from any slot, including one in the current Part?
+8. **Q48 Crew basics**:
+   - Can the Captain be wounded and killed like any crew member?
+   - Wounded crew give no card icons? (Assumed.)
+   - Do crew powers stop while wounded?
+9. **Q49 Refit**: is "in port" being in the port hex? Can a ship refit partly (e.g. only recruit) without losing the turn? Are recruits random from
+   the crew deck?
+10. **Q16 Coming back after sinking**: facing and sail level on return? What if an enemy ship is in the port hex?
+11. **Q44 Treasure Hunt leftovers**:
+    - Knocking loose with no empty adjacent hex: what happens?
+    - Can treasure be placed on a reef or sandbank?
+    - Port guns fire after all ships (assumed)? Does fog hide a ship from them (assumed yes)?
+    - No scoring at another team's port (assumed)?
+12. **Q38 Gale damage**: 1 DD for each Move phase at Full Sail (up to 3 a turn), or once per turn?
+13. **Q37 Weather board**:
+    - How is "now" marked?
+    - Are all 6 spaces filled, or 3 cards refilled from the deck?
+    - What is the starting tide?
+    - Does New Weather Front replace the face-up cards too?
 
 ### B. Needed for a full game
-- ~~Q10. Wind drift~~ → 1 hex downwind, no pushing, Light and Dead Calm never drift (answered).
-- **Q38. Gale damage.** Is "1 DD per Full Sail" per Move phase at Full Sail (up to 3 per turn) or once per turn?
-- ~~Q39. Wind direction~~ → blows the way the arrow points (answered). Card naming may need changing (§3.5).
-- **Q37 / Q39b. Weather board** (answered: one space per turn; next two visible). Still open: How is "now" marked? Are all 6 spaces filled (3 face up) or 3 cards refilled
-  from the deck? Starting tide? Does New Weather Front replace the visible cards too?
-- **Q40. Tides** (answered: which terrain; stranded ships are stuck until the tide returns; "haul her out" under consideration). Still open:
-  - ~~While stuck~~ → actions only, no sail or steer (answered). ~~Moved off by currents, pushing or drift?~~ → No (answered). ~~Pushing a stuck ship~~ → she's on land, so her hex counts as land (answered).
-  - Do tides change currents?
-- ~~Q51. Terrain follow-ups~~ → Answered: stopped ships can still be moved later; damage and death reefs apply however she got there;
-  cannons fire over land (§3.2.0, §7.1). ~~Wall reefs and cannon~~ → don't block (answered).
-- ~~Q53. Rough water~~ → checked at the end of each Part (answered).
-- ~~Q52. Fog~~ → can't fire from, into or through fog (answered).
-- **Q20 / Q21 / Q22. Currents** (answered: 1/2/3 hexes by arrow count; curved arrows move and turn; land and reefs apply). Still open:
-  - ~~Order / multi-hex~~ → three sub-steps, RoboRally express-belt style; conflicts by Sail initiative (answered). ~~Eddies~~ → spin the ship (answered).
-  - **Awaiting the designer's current diagram**: turning amounts and timing, absolute vs relative turns, how far an eddy spins, dashed eddies,
-    gyres and loop currents, the maelstrom.
-  - ~~Carried into an occupied hex~~ → stays put (answered).
-- **Q19. Board features.** Terrain, portals and caves are done. Still to define: eddies (solid and dashed), gyres and loop currents,
-  maelstrom, rough water (purple), fog, storm, port town.
-- **Q45. Whirlpool portals** (basics answered, §3.2.1). Edge cases:
-  - ~~Blocked~~ → she carries on as if it were a normal hex (answered).
-  - ~~Re-triggering~~ → arriving through a portal doesn't trigger it (answered).
-  - ~~Simultaneous entry~~ → resolved by initiative (answered).
-  - ~~Cannon through portals~~ → No (answered, §7.1).
-- **Q46. Sea caves** (blocking answered: emerging pushes). Still open:
-  - Confirm that remaining movement continues after coming out, and that any movement (currents, drift, being pushed) triggers a cave.
-  - Currents and drift don't push (§5.2). If a ship is carried into a cave by a current or drift and the exit is occupied, does she
-    push anyway, or is she stopped (and where: at the entrance)?
-  - If the occupying ship can't be pushed (land or another obstacle behind her), what happens?
-  - Can a ship enter a cave mouth while moving **backwards** or sideways (drift, push)? Does she still come out facing the arrow?
-- **Q24. Board edge.** What happens when a ship sails or drifts off the map?
-- **Q29. Actions.** What do Heal and Repair do exactly (crew vs ship)? Are there other action types?
-- **Q17. Crew** → see Q48 (priority A).
-  Known so far: some crew or equipment may let a player **peek at the treasure map deck** (§8.2.1).
-- **Q14. Other weapons.** You said "mostly broadside": are there forward or aft weapons? Any limit on firing (ammo, reload, crew)?
-- ~~Q35. Starting state~~ → ships start **in their home port** with sail **down (No Sail)**; each player **chooses her starting heading**;
-  starting hand = normal draw (answered).
-
-- **Q41. Race:** How are checkpoints placed (scenario setup)? How is a checkpoint "reached": end a Part on it, or pass through it?
-  What happens to a sunk ship (respawn at the last checkpoint?) and to a ship that has to be removed?
-- **Q43. Deathmatch / Capture the Flag:** Scoring (kills? last ship or team afloat? time limit)? Respawn? Flag pickup and steal
-  rules (probably the same as treasure)?
+14. **Q46 Sea caves**:
+    - Does remaining movement continue after coming out?
+    - Does any movement (current, drift, push) trigger a cave?
+    - Carried in by a current or drift with the exit occupied: push or stop?
+    - Exit ship can't be pushed: what happens?
+    - Can a ship enter backwards or sideways, and does she still exit facing the arrow?
+15. **Q19 Port town**: what does the town on the example board do?
+16. **Q41 Race**: placing checkpoints; "reached" = pass through or end a Part on it; sunk ship returns to port or last checkpoint?
+17. **Q43 Deathmatch / Capture the Flag**: scoring (sinkings?), end condition, flag rules (as treasure?).
+18. **Q44 Timed variant**: clock, turn limit or both; which tie-breaks?
+19. **Q50 Wreck tokens**: how many at setup, and placed by the scenario or by players?
+20. **Stranding**: adopt "haul her out" (a whole turn to move 1 hex)?
+21. **Q14 Other weapons**: any forward or aft weapons ("mostly broadside")? Any limit on firing?
 
 ### C. Detail and polish
-- **Q36.** Is the point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
-- **Q28.** Are all 9 cards revealed at once, or one Part at a time?
-- **Q39a.** Check the derived rows of the full sail-move table (§6.3).
-- ~~Q2. Factions~~ → No factions; crew are prehistoric monsters, captains are mammoths (answered). ~~Ship types~~ → all ships identical (answered).
-- **Q3a / Q3b / Q3c.** Teams (e.g. 4v4)? Minimum player count? Board size for each player count?
-- **Q18.** Board tile size and shape; rules for joining tiles.
+22. **Q36** Point of sail judged from the heading at the start of the Move phase? (Assumed yes.)
+23. **Q28** Reveal all 9 cards at once, or one Part at a time?
+24. **Q39a** Check the derived rows of the sail-move table (§6.3).
+25. **Q3b / Q3c** Minimum player count; board size per player count.
+26. **Critical hits**: replace the placeholder (re-roll + 1 DD) with a critical damage deck? If so: contents, and does refit clear them?
+
+### D. Add-ons
+27. **Q48 Crew deck**: the full list (≥ 50 cards: icons, powers, counts). Retired Captain: card icons, power; on a swap, where does the
+    leaving card go; can a ship decline her? Surgeon: when does she heal, can she heal herself, does she work while wounded?
+28. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+    attack? Contents of the wreck deck beyond crew and equipment, including bad results.
+29. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.88 — open questions rewritten: only unanswered ones, numbered and prioritised.
 - v0.87 — teams pass treasure by ramming (no DD); team target 3.
 - v0.86 — teams share one home port and may talk openly and show cards.
 - v0.85 — Teams (§8.6) generalised: player teams and Fleets share teammate rules; Fleets moved to §8.7.
