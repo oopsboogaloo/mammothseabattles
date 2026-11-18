@@ -741,7 +741,8 @@ _Rewritten in v0.88: only unanswered questions are listed (answers live in the r
 3. **Q24 Board edge**: what happens to a ship that sails, is pushed or drifts off the map?
 4. **Q30 Command deck**: the full card list (band combinations and initiative numbers) and deck size (8 ships may need 100+ cards).
    Are all initiative numbers unique?
-5. **Q7 Hand limit**: if a draw would take you over 9, stop at 9 or draw and discard down?
+5. **Q7 Hand limit and recycling**: if a draw would take you over 9, stop at 9 or draw and discard down? Do used cards get shuffled
+   straight back into the deck, go on the bottom, or go to a discard pile that's reshuffled when the deck runs out?
 6. **Q33 Line of fire**: do **other ships** block cannon fire (does the nearest ship shield those behind)?
 7. **Q15b Damage timing**: a damage marker on a slot whose Part has already resolved this turn just blocks it from next turn? Can Repair
    remove a marker from any slot, including one in the current Part?
