@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.90**
+> Status: **Draft v0.91**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -143,7 +143,7 @@ Caves work like whirlpool portals (§3.2.1) with these differences:
 - A ship can enter a cave **backwards or sideways** (drift, push); she still comes out **facing the arrow**.
 - **Exit hex occupied**: unlike whirlpools, the cave is **not** blocked. Coming out of the cave is **normal movement** into the exit hex,
   so the emerging ship **pushes** the ship that's there (in her new heading), following the normal pushing rules (§6.5). This applies
-  however she entered, even carried in by a current or drift, which normally don't push *(my reading of "as with regular movement" ❓)*.
+  however she entered, even carried in by a current or drift, which normally don't push.
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -193,8 +193,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   renaming the cards (e.g. "Wind to the North" / "Northward", or just the arrow) to avoid arguments at the table.
 - Weather cards are **hex-shaped**. Each shows a **wind strength** and a **wind direction** on a 6-point compass
   (**N, NE, SE, S, SW, NW**). These are the 6 directions of flat-topped hex sides, so the wind always runs along a hex direction.
-- **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next two
-  cards face up**. The circuit also **marks the tides** (§6.4).
+- **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next
+  card face up**. The circuit also **marks the tides** (§6.4).
 
 **Weather board**
 
@@ -207,8 +207,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   - Two right-hand spaces = **Mid** (ebbing).
   - Bottom space = **Low**.
   - Two left-hand spaces = **Mid** (flooding).
-- The weather board **advances one space per turn**, so the tide cycle is **6 turns**. The **next two turns' weather is visible to everyone**.
-- **All 6 spaces hold a weather card**; only the **next 2** are face up *(designer: "only 2 show at a time"; whether that's now + next or the next 2 after now: ❓)*.
+- The weather board **advances one space per turn**, so the tide cycle is **6 turns**. Everyone can see the **current and next turn's weather**.
+- **All 6 spaces hold a weather card**; **2 are face up: the current card and the next one**.
 - **"Now" is marked by a rotating arrow** in the middle of the board *(designer to-do; a pencil for now)*.
 - **Starting tide: random.**
 - **New Weather Front** replaces the face-up cards too.
@@ -255,7 +255,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 1. Build the map from tiles (scenario). Place home ports on the map edge, spawn points and wreck tokens (scenario).
 2. Spawn the starting treasures (§8.2.1).
 3. Each player: ship board, Captain + 2 random crew, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
-4. Weather board filled; current card and the next two face up.
+4. Weather board filled; current card and the next one face up.
 5. Draw command cards (§5.1).
 
 ## 5. Turn structure
@@ -648,7 +648,7 @@ mode is a plug-in objective module on top of a shared rules core.
 - When a ship carrying treasure is **rammed** or **hit by cannon**, the attacker may **give up a damage die (DD)** they would
   deal and **knock the treasure loose** instead.
 - The **attacker** places the treasure in a hex **adjacent to the victim**, sea or land (including reefs and sandbanks), as they choose. The
-  hex **must not already hold treasure** but **may hold a ship** *(my reading ❓)*.
+  hex **must not already hold treasure** but **may hold a ship**.
 - Anyone can then pick it up as normal (§8.2.2). In practice the attacker places it where they can grab it, or where a rival can't.
 
 **8.2.4 Home port & scoring**
@@ -770,11 +770,6 @@ the change log. ❓ in a rule section marks my reading of an answer, to confirm.
 4. **Q44 Spawn points**: how are the 9 spawn points marked: tokens placed by the scenario, or printed on tiles? No scoring at another team's port? (Assumed.)
 5. **Q38 Gale damage count**: taken at Upkeep (answered), but is it 1 DD for **each Part** sailed at Full Sail (up to 3), or 1 DD if she
    ended the turn at Full Sail?
-6. **Confirm my readings** (marked ❓ in the sections):
-   - Knocking treasure loose: the hex must have no treasure but may hold a ship (§8.2.3).
-   - Weather board: which 2 cards show: the current one and the next, or the next 2 after the current one (§3.5)?
-   - Caves: a ship carried in by a current or drift still pushes on the way out (§3.2.2).
-   - Refit: "yes, no, yes" read as partial refit allowed, still costs the turn, recruits are random (§7.7).
 
 ### B. Needed for a full game
 7. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
@@ -793,6 +788,7 @@ the change log. ❓ in a rule section marks my reading of an answer, to confirm.
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.91 — confirmed: knock-loose hex rule, weather board shows current + next, caves push on exit however entered, partial refit.
 - v0.90 — designer answered the v0.89 list: board edge sinks; unique initiative; discard down to 9; ships don't block fire; damage timing; wounded crew; partial refit; return heading and blocked port; spawn and knock-loose hexes; Gale DD at Upkeep; weather board; caves; port town is a home port; Race checkpoints; timer; wreck count; haul her out; other weapons from crew and equipment; reveal one Part at a time; minimum 2 players. Added a designer to-do list.
 - v0.89 — open-questions review fixes: restored spawn marking, Repair/Heal amount, respawn timing and hand; critical-hit text made consistent; new Q56, Q57.
 - v0.88 — open questions rewritten: only unanswered ones, numbered and prioritised.

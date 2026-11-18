@@ -8,7 +8,7 @@
 **Setup.** Build the sea from hex tiles. Each player puts a **home port** on the map edge. Place **wreck tokens** and the
 **9 treasure spawn points**, then spawn **(ships − 1) ÷ 2, rounded up** treasures using the treasure map deck. Each ship starts in
 port *(TBD)* with a **Captain + 2 random crew** (face up) and an empty ship board. Set up the **weather board**: the current card
-and the **next two** are face up. Starting sail level *(TBD)*.
+and the **next one** are face up. Starting sail level *(TBD)*.
 
 **Your hand.** Each turn, draw **1 command card per card icon** on your healthy crew (Captain 3, ordinary crew 1). Keep unplayed
 cards; **hand limit 9**. One shared deck; used cards go back into it.

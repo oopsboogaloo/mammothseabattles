@@ -161,7 +161,7 @@ side by side; to be tested in the mock-up. Each ship has her **own hand** (rules
 | **Board** (most of the screen) | 3D sea, gentle perspective, ships as 3D models, wind arrow, tide state | Pan / zoom / limited rotate; tap a ship to inspect it |
 | **Ship board** (bottom) | Your 3 × 3 programming grid | Always visible while programming; collapses during resolution |
 | **Hand** (bottom, next to the ship board) | Your command cards (up to 9) | Fans out; drag or tap a card, then a slot |
-| **Weather board** (corner) | Current weather and tide + next two | Compact badge, expands on tap |
+| **Weather board** (corner) | Current weather and tide + next one | Compact badge, expands on tap |
 | **Crew** (side) | Your crew, healthy or wounded | Compact strip, expands |
 | **Opponents** (side) | Each rival: crew, damage, treasure, ready status | Collapsed list, expands |
 | **Resolution controls** | Play / pause / step / speed, current Part and phase, caption | Shown during resolution |

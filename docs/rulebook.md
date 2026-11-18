@@ -44,7 +44,7 @@ cannons roar. Plans go wrong. That's the fun.
 4. Shuffle the **treasure map deck**. Turn over cards and place treasure on those spawn points until there are
    **half as many treasures as ships** (rounded down, minimum 1): 1 treasure with 2–3 ships, 2 with 4–5, 3 with 6–7, 4 with 8.
 5. Each player takes a **Captain** and **2 random crew**, face up in front of them.
-6. Shuffle the **weather cards** onto the weather board. The current card and the **next two** are face up.
+6. Shuffle the **weather cards** onto the weather board. The current card and the **next one** are face up.
 7. Ships start **in their home port** with **sail down (No Sail)**, pointing whichever way their player chooses.
 8. Each player draws **command cards**: one for each card icon on their crew (§4).
 
