@@ -24,4 +24,4 @@ navigator,Navigator,Information and treasure,Plesiosaur,1,"When you enter a whir
 diver,Diver,Information and treasure,Nothosaur,1,Search a wreck by passing through it; draw 2 and keep 1.,,,
 quartermaster,Quartermaster,Information and treasure,Dimetrodon,2,Hand limit 10. No other power.,,,
 monster-whisperer,Monster Whisperer,Information and treasure,Dunkleosteus,1,+1 sea monster influence.,,,The rare octopus-icon crew of rules 9.1.
-drunken-sailor,Drunken Sailor,Mildly negative,Cave bear,1,Starts incapacitated as you leave port.,,,"Designer's idea (2026-11-18): a mildly negative crew card. Icons not specified; 1 assumed. To decide: is incapacitated the wounded side, and does it apply at the start of the game only or after every refit too?"
+drunken-sailor,Drunken Sailor,Mildly negative,Cave bear,1,Wounded every time you leave port.,,,"Designer's idea (2026-11-18): a mildly negative crew card. Confirmed by the designer: incapacitated means wounded, and it applies every time the ship leaves port, not only at the start of the game. Icons not specified; 1 assumed."
