@@ -14,6 +14,7 @@ For the next working session (which will have access to all the art). Written at
 | [`v1-gaps.md`](v1-gaps.md) | What v1 still needs: art list, design inputs, engineering | 2026-11-18 |
 | [`online-version.md`](online-version.md) | Product goals of the free online version, BGA research, mid-resolution prompts | Draft |
 | [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md) | 4 wireframe layouts, scores, **layout A chosen** (bottom dock, fanned hand) | Done |
+| [`suggestions.md`](suggestions.md) | Ideas for the designer to consider (not rules): 15 equipment cards so far | Open |
 | [`research/`](research/) | RoboRally and Full Metal Planète reference notes | Done |
 | `packages/` | Engine skeleton: seeded RNG, decisions, hex maths, first rules; 100% coverage gate | M1 started |
 | [`ui/mockup/README.md`](ui/mockup/README.md) | **Clickable mock-up of layout A with the real art** (`packages/client`, `npm run mockup`); checks, screenshots, questions found in the art | Built; **approved by the designer (2026-11-18)**; to test with the family |
