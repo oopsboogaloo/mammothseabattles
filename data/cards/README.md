@@ -14,14 +14,16 @@ Transcribed on 2026-11-18 by reading every card image in `packages/client/public
 | `treasure-map-cards.csv` | 9 | `spawn_point_number`, `status` |
 
 ## Ideas, not cards yet
-`crew-card-ideas.csv` holds 24 **proposed** crew cards for the designer to pick from (proposed 2026-11-18; none is in the rules or has card art).
-Put anything in the `use` column to mark the ones to keep; chosen rows then move to `crew-cards.csv`. Columns: `group`, `creature`,
-`card_icons`, `power_text`. Three design points the ideas raise:
+`crew-card-ideas.csv` holds 24 **proposed** crew cards for the designer to pick from (proposed 2026-11-18). None has card art and none is a finished card in the rules,
+although two powers already appear there: the Surgeon's, and peeking at the treasure map deck (see each row's `notes`).
+Put anything in the `use` column to mark the ones to keep; chosen rows then move to `crew-cards.csv`. Its columns are `id`, `name`, `group`,
+`creature`, `card_icons`, `power_text`, `use` and `notes`; it has no `copies` or `art_file`, and its ids are not art file names. Three design points the ideas raise:
 - **Icons as the price of a power**: a strong power on a 0-icon card makes each recruit a real choice, because it shrinks the hand.
 - **Wounded crew**: the rules leave open whether powers work while wounded (Q48). Suggestion: they don't, which gives the Cook a job.
-- **Overlap with equipment**: some ideas are permanent versions of an equipment card (noted per row), so they should be weaker than the card.
+- **Overlap with equipment**: some ideas are permanent versions of an equipment card (noted per row), so each needs balancing against
+  that card when it is chosen. As written they are not: a permanent power outlasts a one-shot card (Anchor Hand and Wind Chimes, Carpenter and Repair Kit).
 
-Every file also has `id` (unique; matches the art file name), `copies` (how many of that card are in the deck), `art_file` and `notes`.
+Every card file (not the ideas file) also has `id` (unique; matches the art file name), `copies` (how many of that card are in the deck), `art_file` and `notes`.
 Text is in sentence case; the cards print it in capitals.
 
 ## Not in these files
