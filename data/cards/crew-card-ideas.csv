@@ -1,0 +1,25 @@
+﻿id,name,group,creature,card_icons,power_text,use,notes
+helmsman,Helmsman,Sailing and steering,Parasaurolophus,1,"Your Ease turns may be Hard turns, and the reverse.",,
+sailing-master,Sailing Master,Sailing and steering,Pteranodon,1,Close Hauled counts as Broad Reach for your sail moves.,,
+rigger,Rigger,Sailing and steering,Archaeopteryx,1,"Once per turn, change your sail level by one step without a Sail card.",,
+storm-hand,Storm Hand,Sailing and steering,Woolly rhino,1,You take no DD from Full Sail in a Gale.,,
+anchor-hand,Anchor Hand,Sailing and steering,Glyptodon,1,You may ignore wind drift.,,Permanent version of the Wind Chimes equipment card.
+pilot,Pilot,Sailing and steering,Ichthyosaur,1,You may ignore one current each turn.,,Permanent version of the Ocean Charts equipment card.
+leadsman,Leadsman,Sailing and steering,Trilobite,0,Sandbanks and underwater reefs never strand you; you stop beside them instead.,,
+master-gunner,Master Gunner,Guns and boarding,Triceratops,1,Cannon range 5 instead of 4.,,Permanent version of the Cannon Sights equipment card.
+bow-chaser,Bow Chaser,Guns and boarding,Velociraptor,1,Your broadsides also hit the hex directly ahead.,,
+powder-monkey,Powder Monkey,Guns and boarding,Compsognathus,1,Your Fire Cannons card counts +200 initiative.,,
+marksman,Marksman,Guns and boarding,Terror bird,0,"Once per turn, re-roll one damage die you dealt.",,
+ram-master,Ram Master,Guns and boarding,Pachycephalosaurus,1,Your rams deal 2 DD instead of 1.,,
+boarding-chief,Boarding Chief,Guns and boarding,Sabre-tooth cat,1,"When you ram a treasure carrier, knock the treasure loose and still deal the DD.",,
+carpenter,Carpenter,Damage and recovery,Giant beaver,1,Your Repair removes 2 damage markers.,,
+surgeon,Surgeon,Damage and recovery,Therizinosaurus,1,Automatically heals 1 wounded crew member per turn.,,Power is already in rules 3.6; the creature and icons are ideas.
+bosun,Bosun,Damage and recovery,Ankylosaurus,1,"Once per turn, ignore 1 Ship damage.",,
+cook,Cook,Damage and recovery,Giant ground sloth,0,Wounded crew still draw their cards.,,Only useful if wounded crew normally draw nothing (rules Q48).
+bodyguard,Bodyguard,Damage and recovery,Stegosaurus,0,Must take the first Crew damage each turn; your Captain can't be wounded while the Bodyguard is healthy.,,
+lookout,Lookout,Information and treasure,Quetzalcoatlus,1,See one rival's programmed Part I cards before you lock in.,,
+cartographer,Cartographer,Information and treasure,Ammonite,1,Peek at the top treasure map card.,,Rules 3.6 and 8.2.1 already reserve this power for some crew or equipment.
+navigator,Navigator,Information and treasure,Plesiosaur,1,"When you enter a whirlpool, you may choose not to travel.",,
+diver,Diver,Information and treasure,Nothosaur,1,Search a wreck by passing through it; draw 2 and keep 1.,,
+quartermaster,Quartermaster,Information and treasure,Dimetrodon,2,Hand limit 10. No other power.,,
+monster-whisperer,Monster Whisperer,Information and treasure,Dunkleosteus,1,+1 sea monster influence.,,The rare octopus-icon crew of rules 9.1.

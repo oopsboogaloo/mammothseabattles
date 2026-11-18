@@ -13,6 +13,14 @@ Transcribed on 2026-11-18 by reading every card image in `packages/client/public
 | `crew-cards.csv` | 3 finished + 2 from the rules | `name`, `card_icons` (command cards drawn), `power_text`, `status`, `wounded_art_file` |
 | `treasure-map-cards.csv` | 9 | `spawn_point_number`, `status` |
 
+## Ideas, not cards yet
+`crew-card-ideas.csv` holds 24 **proposed** crew cards for the designer to pick from (proposed 2026-11-18; none is in the rules or has card art).
+Put anything in the `use` column to mark the ones to keep; chosen rows then move to `crew-cards.csv`. Columns: `group`, `creature`,
+`card_icons`, `power_text`. Three design points the ideas raise:
+- **Icons as the price of a power**: a strong power on a 0-icon card makes each recruit a real choice, because it shrinks the hand.
+- **Wounded crew**: the rules leave open whether powers work while wounded (Q48). Suggestion: they don't, which gives the Cook a job.
+- **Overlap with equipment**: some ideas are permanent versions of an equipment card (noted per row), so they should be weaker than the card.
+
 Every file also has `id` (unique; matches the art file name), `copies` (how many of that card are in the deck), `art_file` and `notes`.
 Text is in sentence case; the cards print it in capitals.
 
