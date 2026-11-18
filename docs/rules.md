@@ -811,10 +811,15 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
+5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+    does she heal (Upkeep?), and can she heal herself?
+6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+    attack? Wreck deck contents beyond crew and equipment, including bad results.
+7. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
-- v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed).
+- v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed). Restored three add-on questions (crew deck, equipment timing, sea monster tie) accidentally dropped in v0.102.
 - v0.105 — weather flotsam placed by the player in last place, more than 5 hexes from any ship.
 - v0.104 — flotsam-icon weather cards bring one token.
 - v0.103 — flotsam: one token per damage event.
