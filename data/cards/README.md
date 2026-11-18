@@ -28,5 +28,6 @@ Text is in sentence case; the cards print it in capitals.
 - The Gale cards are spelled **GAIL** on the art.
 - The rules' example equipment "Explosive cannon balls: +2 DD" (§7.10) is "Really Big Cannonballs: +1 DD" on the card.
 
-`test/card-data.test.ts` checks these files on every build: unique ids, known values, and the expected columns.
+`test/card-data.test.ts` checks these files whenever the tests run (`npm test`, and in CI on every push): the expected columns, the same
+number of fields in every row, unique ids, known values, and whole-number copies.
 **The game does not read these files yet.** The mock-up still uses its own copy of the data; the engine will load from here (`docs/engineering-design.md` §7.2).
