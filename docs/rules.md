@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.95**
+> Status: **Draft v0.96**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -594,7 +594,9 @@ draws an **equipment card**. Flotsam appears in two ways:
 - **Battle debris:** when a ship is damaged, place a flotsam token in the hex **directly astern** of her (behind her).
   Chasing a damaged ship pays off. *(Exact trigger and blocked-hex rule: Q58.)*
 - **Weather:** some **weather cards** bring flotsam *(which cards, how many tokens, and where they're placed: Q58)*.
-- *Cap, and whether flotsam moves with currents and drift: Q58.*
+- **Cap: a fixed pool of N flotsam tokens.** Flotsam is only placed while there are tokens **left in the pool**; when the pool is empty, none
+  is placed until a token is picked up and returns to it *(my reading ❓; N to be decided)*.
+- *Whether flotsam moves with currents and drift: Q58.*
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -791,7 +793,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
   - If the hex astern holds land, a ship, treasure or flotsam: no token, or the nearest free sea hex?
   - Weather: which weather cards bring flotsam (e.g. Storm, Gale, a new "Flotsam" card), how many tokens, and where (upwind map edge,
     spawn points)?
-  - A cap on flotsam in play (suggestion: one per two ships)?
+  - ~~Cap~~ → a fixed pool of N tokens (answered). What is N (suggestion: 8, one per ship at most)? Picked-up tokens return to the pool? (Assumed.)
   - Does flotsam move with currents and wind drift, like a ship at No Sail?
   - Pickup only by sailing through it, or also by drifting or being pushed through it?
 5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
@@ -802,6 +804,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.96 — flotsam capped by a fixed pool of N tokens.
 - v0.95 — flotsam (§7.11): battle debris astern of damaged ships plus weather cards; gives equipment cards. Details in Q58.
 - v0.94 — confirmed: random starting crew; starting treasures via the treasure map deck; 2-player target first to 3; sandbar wreck is a starting wreck.
 - v0.93 — Repair/Heal fix 1 each; a sunk ship doesn't miss a turn and draws a new hand; no scoring at other ports.
