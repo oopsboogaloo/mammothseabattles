@@ -67,4 +67,4 @@ A drifting prize that the wind and currents control. ✅ **Adopted into `rules.m
 sitting target for a whole turn; and it's a trial run for the ghost ships of the future solo and co-op mode.
 
 **Decided (v0.97–0.98):** announced by **Dead Calm**, arriving with the next weather card that has wind, on its upwind edge; sinks after **4 damage**; its treasure **counts** towards the treasures in play.
-Remaining details are rules question Q59.
+All details are now settled in `rules.md` §7.12.

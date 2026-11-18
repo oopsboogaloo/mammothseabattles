@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.100**
+> Status: **Draft v0.101**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -613,7 +613,8 @@ An abandoned ship drifting with valuable cargo: a moving prize that the wind and
 - **Sinking it:** it can be shot (it's a valid target in the broadside arcs). It sinks after taking **4 DD** in total (count the dice dealt to it; they aren't rolled, since it has no crew or ship board)
   and leaves **flotsam** (§7.11).
 - **Lost:** if it drifts off the map or onto a death reef, it's gone.
-- **Treasure counts:** its treasure **counts towards the treasures in play** (§8.2.1).
+- **Treasure counts:** its treasure **counts towards the treasures in play** (§8.2.1). If the maximum are already in play, the Derelict
+  carries **only the 2 equipment cards**.
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -804,10 +805,6 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-- **Q59 Derelict** (§7.12):
-  - ~~Which edge, and where on it~~ → the next wind's upwind edge; placed by the player in last place (answered).
-  - ~~4 damage~~ → 4 DD (answered).
-  - Since its treasure counts towards the treasures in play: if the maximum are already in play, does the Derelict carry no treasure?
 - **Q58 Flotsam** (§7.11):
   - Battle debris: does any damage drop flotsam, or only Ship damage? From any source (cannon, ram, cliffs, rough water, storm), or only
     attacks by other ships? One token per hit, or per point of damage?
@@ -825,6 +822,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.101 — the Derelict carries only equipment when the maximum treasures are in play; Q59 closed.
 - v0.100 — the Derelict sinks after 4 DD.
 - v0.99 — the Derelict is placed on the upwind edge by the player in last place.
 - v0.98 — the Derelict arrives with the next weather card that has wind, on its upwind edge.
