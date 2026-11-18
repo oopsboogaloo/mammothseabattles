@@ -1,0 +1,13 @@
+﻿id,name,text,copies,art_file,notes
+armour-plating,Armour Plating,"Prevent up to 3 DD of damage, from any source.",1,equipment/armour-plating.webp,
+big-cannonballs,Really Big Cannonballs,Cannon damage is +1 DD this turn,1,equipment/big-cannonballs.webp,
+cannon-sights,Cannon Sights,Cannon range +2 this turn,1,equipment/cannon-sights.webp,
+extra-sail,Extra Sail,Sail move is +1 for this move phase.,1,equipment/extra-sail.webp,
+fireworks,Fireworks,"Cannon range +4, but it only does 1 DD.",1,equipment/fireworks.webp,
+first-aid-kit,First Aid Kit,Use to immediately heal 2 crew.,1,equipment/first-aid-kit.webp,
+grape-shot,Grape Shot,Cannon does 1 injury to crew in addition to any other damage this turn,1,equipment/grape-shot.webp,
+ocean-charts,Ocean Charts,Ignore the effects of ocean currents for the rest of the turn,1,equipment/ocean-charts.webp,
+repair-kit,Repair Kit,Repair 2 damage,1,equipment/repair-kit.webp,
+strong-rudder,Strong Rudder,"Immediately turn the boat around, 180 degrees.",1,equipment/strong-rudder.webp,
+weathervane,Weathervane,"Look at the uncovered weather cards, you may re-arrange them as you wish",1,equipment/weathervane.webp,
+wind-chimes,Wind Chimes,Ignore wind drift for the rest of the turn,1,equipment/wind-chimes.webp,

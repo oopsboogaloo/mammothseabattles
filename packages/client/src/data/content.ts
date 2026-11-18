@@ -22,7 +22,7 @@ export interface CommandCard {
 
 type Row = [init: number, sail: SailOrder, steer: SteerOrder, action: ActionOrder, octopus: number, id?: string];
 const ROWS: Row[] = [
-  [100, 'rowAhead', 'easePort', 'fire', 0], [120, 'rowBack', 'easePort', 'heal', 0], [140, 'anchor', 'easePort', 'repair', 0],
+  [100, 'rowAhead', 'easePort', 'fire', 0], [120, 'rowBack', 'easePort', 'heal', 1], [140, 'anchor', 'easePort', 'repair', 1],
   [160, 'anchor', 'easeStbd', 'fire', 0], [180, 'rowAhead', 'easeStbd', 'heal', 1], [200, 'rowBack', 'easeStbd', 'repair', 0],
   [220, 'rowBack', 'hardPort', 'fire', 0], [240, 'anchor', 'hardPort', 'heal', 1], [260, 'rowAhead', 'hardPort', 'repair', 1],
   [280, 'rowAhead', 'hardStbd', 'fire', 0], [300, 'rowBack', 'hardStbd', 'heal', 3], [320, 'anchor', 'hardStbd', 'repair', 0],
@@ -31,7 +31,7 @@ const ROWS: Row[] = [
   [460, 'half', 'easeStbd', 'fire', 1], [480, 'half', 'easeStbd', 'heal', 0], [500, 'half', 'easeStbd', 'repair', 0],
   [520, 'half', 'hardPort', 'fire', 2], [540, 'half', 'hardPort', 'heal', 1], [560, 'half', 'hardPort', 'repair', 0],
   [580, 'half', 'hardStbd', 'fire', 0], [600, 'half', 'hardStbd', 'heal', 1], [620, 'half', 'hardStbd', 'repair', 0],
-  [640, 'half', 'hardAbout', 'fire', 2], [660, 'half', 'hardAbout', 'heal', 0], [680, 'half', 'hardAbout', 'repair', 0],
+  [640, 'half', 'hardAbout', 'fire', 2], [660, 'half', 'hardAbout', 'heal', 0], [680, 'half', 'hardAbout', 'repair', 1],
   [700, 'full', 'easePort', 'fire', 1], [720, 'full', 'easePort', 'heal', 0], [740, 'full', 'easePort', 'repair', 2],
   [760, 'full', 'easeStbd', 'fire', 0], [780, 'full', 'easeStbd', 'heal', 2], [800, 'full', 'easeStbd', 'repair', 0],
   [820, 'full', 'hardPort', 'fire', 0], [840, 'full', 'hardPort', 'heal', 1], [860, 'full', 'hardPort', 'repair', 0],
