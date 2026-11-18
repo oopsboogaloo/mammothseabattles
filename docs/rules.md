@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.96**
+> Status: **Draft v0.97**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -598,6 +598,20 @@ draws an **equipment card**. Flotsam appears in two ways:
   is placed until a token is picked up and returns to it *(my reading ❓; N to be decided)*.
 - *Whether flotsam moves with currents and drift: Q58.*
 
+### 7.12 The Derelict *(add-on, adopted v0.97)*
+An abandoned ship drifting with valuable cargo: a moving prize that the wind and currents control.
+- **Appears:** when a **Dead Calm** weather card comes into play, place the Derelict on the **upwind map edge** *(with no wind, which
+  edge? Q59)*. At most one Derelict on the board at a time.
+- **Moves:** like a ship at **No Sail**: currents carry it and wind drift pushes it. It never sails or steers.
+- **Obstacle:** sailing into it pushes it, with no DD. Currents and drift don't push it.
+- **Boarding:** a ship that **ends a turn next to it** boards and loots it: **2 equipment cards + 1 treasure** (the treasure only if her
+  ship isn't already carrying one). Several ships boarding on the same turn take the loot one item at a time, in Sail initiative order.
+  The Derelict is then **removed**.
+- **Sinking it:** it can be shot (it's a valid target in the broadside arcs). It sinks after **4 damage** *(4 DD hits, no roll needed ❓)*
+  and leaves **flotsam** (§7.11).
+- **Lost:** if it drifts off the map or onto a death reef, it's gone.
+- **Treasure counts:** its treasure **counts towards the treasures in play** (§8.2.1).
+
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
 (checkpoints, treasure, flags) and **win/end conditions**. That way new modes are cheap to add, and in the engine each
@@ -787,6 +801,10 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
+- **Q59 Derelict** (§7.12):
+  - Dead Calm has no wind, so which edge is "upwind"? (Suggestion: the edge the previous wind blew from, or the edge furthest from all ships.)
+  - "4 damage": 4 DD hits (no roll), or 4 points of damage rolled on the d12?
+  - Since its treasure counts towards the treasures in play: if the maximum are already in play, does the Derelict carry no treasure?
 - **Q58 Flotsam** (§7.11):
   - Battle debris: does any damage drop flotsam, or only Ship damage? From any source (cannon, ram, cliffs, rough water, storm), or only
     attacks by other ships? One token per hit, or per point of damage?
@@ -804,6 +822,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.97 — the Derelict adopted (§7.12): brought by Dead Calm, sinks after 4 damage, its treasure counts.
 - v0.96 — flotsam capped by a fixed pool of N tokens.
 - v0.95 — flotsam (§7.11): battle debris astern of damaged ships plus weather cards; gives equipment cards. Details in Q58.
 - v0.94 — confirmed: random starting crew; starting treasures via the treasure map deck; 2-player target first to 3; sandbar wreck is a starting wreck.

@@ -49,7 +49,7 @@ Suggested additions: a cap (one flotsam per two ships), and pickup only by saili
 
 ## The Derelict (drifting abandoned ship)
 
-A drifting prize that the wind and currents control. **Designer: yes; details below agreed.** Not yet in `rules.md`.
+A drifting prize that the wind and currents control. ✅ **Adopted into `rules.md` §7.12 (v0.97).** Kept here for the design history.
 
 | | Rule | Reuses |
 |---|---|---|
@@ -66,7 +66,5 @@ A drifting prize that the wind and currents control. **Designer: yes; details be
 **Why it works:** its path is predictable but has to be read from the wind and currents; it draws everyone to one spot; a ship boarding it is a
 sitting target for a whole turn; and it's a trial run for the ghost ships of the future solo and co-op mode.
 
-**Still to decide**
-- How much damage sinks it: any Ship damage, a number of DD (e.g. 3), or a whole ship board's worth?
-- Does its treasure count towards the treasures in play (§8.2.1)?
-- Which weather card(s) bring it, and how many copies are in the weather deck?
+**Decided (v0.97):** brought by **Dead Calm**; sinks after **4 damage**; its treasure **counts** towards the treasures in play.
+Remaining details are rules question Q59.
