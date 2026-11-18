@@ -12,12 +12,11 @@ For the next working session (which will have access to all the art). Written at
 | [`web-spec.md`](web-spec.md) | Digital version: roadmap, NFRs, architecture, UI, testing | Draft 0.1 + decisions since |
 | [`engineering-design.md`](engineering-design.md) | **Engineering design** for v1: state, resolution, movement, map format, events, views, client | **Draft 0.1, awaiting the designer's review** (decisions D1–D7) |
 | [`v1-gaps.md`](v1-gaps.md) | What v1 still needs: art list, design inputs, engineering | 2026-11-18 |
-| [`progress-log.md`](progress-log.md) | Weekly record of progress and the designer's feedback | Week 1 |
 | [`online-version.md`](online-version.md) | Product goals of the free online version, BGA research, mid-resolution prompts | Draft |
 | [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md) | 4 wireframe layouts, scores, **layout A chosen** (bottom dock, fanned hand) | Done |
 | [`research/`](research/) | RoboRally and Full Metal Planète reference notes | Done |
 | `packages/` | Engine skeleton: seeded RNG, decisions, hex maths, first rules; 100% coverage gate | M1 started |
-| [`ui/mockup/README.md`](ui/mockup/README.md) | **Clickable mock-up of layout A with the real art** (`packages/client`, `npm run mockup`); checks, screenshots, questions found in the art | Built; to test with the family |
+| [`ui/mockup/README.md`](ui/mockup/README.md) | **Clickable mock-up of layout A with the real art** (`packages/client`, `npm run mockup`); checks, screenshots, questions found in the art | Built; **approved by the designer (2026-11-18)**; to test with the family |
 | [`../tools/ship-pipeline/`](../tools/ship-pipeline/README.md) | Blender ship model → web GLB (9k and 2.6k triangles) | Done |
 
 ## Working conventions (agreed with the designer)

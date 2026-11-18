@@ -17,7 +17,6 @@ A board game in design, with a companion online version.
 - [`docs/web-spec.md`](docs/web-spec.md) — digital version spec: requirements, architecture, UI, testing
 - [`docs/engineering-design.md`](docs/engineering-design.md) — engineering design for v1 (draft for review)
 - [`docs/v1-gaps.md`](docs/v1-gaps.md) — what v1 still needs: art, design inputs, engineering
-- [`docs/progress-log.md`](docs/progress-log.md) — weekly progress log
 - [`docs/ui/wireframe-evaluation.md`](docs/ui/wireframe-evaluation.md) — UI wireframes (4 layouts) and evaluation
 
 - [`docs/online-version.md`](docs/online-version.md) — online version goals and teaching approach

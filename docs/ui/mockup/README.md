@@ -4,6 +4,8 @@ A clickable mock-up of **layout A, bottom dock** ([`web-spec.md` §4.2](../../we
 It is step 3 of the wireframe process in [web-spec §4.4](../../web-spec.md): refine the chosen layout into a clickable mock-up and **test it
 with real players**. It is not the M2 client. The code is in [`packages/client`](../../../packages/client).
 
+**Approved by the designer on 2026-11-18**: the user interface is "looking fantastic"; loves the screenshots. Still to do: the family test below.
+
 ## Run it
 
 ```
