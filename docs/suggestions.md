@@ -46,3 +46,27 @@ astern of a damaged ship, plus weather cards).
 4. ✅ **Weather cards:** some weather cards bring flotsam. Predictable, because the next card is visible.
 
 Suggested additions: a cap (one flotsam per two ships), and pickup only by sailing through it, so collecting it is a choice.
+
+## The Derelict (drifting abandoned ship)
+
+A drifting prize that the wind and currents control. **Designer: yes; details below agreed.** Not yet in `rules.md`.
+
+| | Rule | Reuses |
+|---|---|---|
+| **Appears** | A weather card ("Derelict sighted!") places it on the **upwind map edge**. At most one on the board at a time. | Weather board: visible a turn ahead |
+| **Moves** | Like a ship at **No Sail**: currents carry it and wind drift pushes it. It never sails or steers. | Movement rules |
+| **Obstacle** | It's a ship: sailing into it pushes it, with no DD. Currents and drift don't push it. | Pushing (§6.5) |
+| **Boarding** | **End a turn next to it** to board and loot it. | The land-treasure rule (§8.2.2) |
+| **Loot** ✅ | **2 equipment cards + 1 treasure** (the treasure only if your ship isn't already carrying one). | Equipment, treasure |
+| **Contested** | Several ships boarding on the same turn take loot one item at a time, in Sail initiative order. | Initiative (§5.3) |
+| **Shot and sunk** ✅ | It can be shot and sunk, which denies the prize to a rival. It leaves **flotsam** when it sinks. | Cannon fire, flotsam (§7.11) |
+| **After looting** ✅ | **Removed** from the board. | |
+| **Lost** | Drifts off the map or onto a death reef: gone. | Board edge, death reefs |
+
+**Why it works:** its path is predictable but has to be read from the wind and currents; it draws everyone to one spot; a ship boarding it is a
+sitting target for a whole turn; and it's a trial run for the ghost ships of the future solo and co-op mode.
+
+**Still to decide**
+- How much damage sinks it: any Ship damage, a number of DD (e.g. 3), or a whole ship board's worth?
+- Does its treasure count towards the treasures in play (§8.2.1)?
+- Which weather card(s) bring it, and how many copies are in the weather deck?
