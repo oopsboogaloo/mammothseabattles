@@ -180,7 +180,7 @@ side by side; to be tested in the mock-up. Each ship has her **own hand** (rules
 1. Generate **3–4 alternative layouts** as wireframes, at desktop 16:9 and iPad 4:3.
 2. Evaluate them against **task walkthroughs**: program a turn; understand why your ship ended up where it did; place damage; check the
    weather ahead; see who's carrying treasure. Criteria: number of clicks or taps, nothing hidden that's needed, no scrolling, readability on iPad.
-3. Pick one, refine it into **clickable mock-ups**, and **test with real players** (family!) before building.
+3. Pick one, refine it into **clickable mock-ups**, and **test with real players** (family!) before building. The layout A mock-up is in [`ui/mockup/`](ui/mockup/README.md).
 4. Keep the wireframes in `docs/ui/` with the evaluation notes.
 
 ### 4.5 The 3D tabletop

@@ -1,3 +1,6 @@
 node_modules/
 coverage/
 dist/
+
+# WebKit check screenshots (local only)
+docs/ui/mockup/screenshots/webkit/

@@ -18,5 +18,6 @@
       "@msb/msb-rules": ["./packages/msb-rules/src/index.ts"]
     }
   },
-  "include": ["./packages/*/src", "packages/*/test", "vitest.config.ts"]
+  "include": ["./packages/*/src", "packages/*/test", "vitest.config.ts"],
+  "exclude": ["packages/client"]
 }

@@ -14,6 +14,8 @@ For the next working session (which will have access to all the art). Written at
 | [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md) | 4 wireframe layouts, scores, **layout A chosen** (bottom dock, fanned hand) | Done |
 | [`research/`](research/) | RoboRally and Full Metal Planète reference notes | Done |
 | `packages/` | Engine skeleton: seeded RNG, decisions, hex maths, first rules; 100% coverage gate | M1 started |
+| [`ui/mockup/README.md`](ui/mockup/README.md) | **Clickable mock-up of layout A with the real art** (`packages/client`, `npm run mockup`); checks, screenshots, questions found in the art | Built; to test with the family |
+| [`../tools/ship-pipeline/`](../tools/ship-pipeline/README.md) | Blender ship model → web GLB (9k and 2.6k triangles) | Done |
 
 ## Working conventions (agreed with the designer)
 - **Rules spec first.** Every answer from the designer goes into `rules.md` straight away: rule text in its section, open question struck
@@ -24,11 +26,11 @@ For the next working session (which will have access to all the art). Written at
 - The designer likes **concise answers with references**, and prefers searching to guessing.
 
 ## Next steps
-1. **Clickable mock-up of layout A** (web-spec §4.2) with the **real art**: fanned hand of real command cards, ship board art with damage
-   markers, weather board, crew cards, example board as a flat tabletop in gentle perspective (**flat-topped hexes**), placeholder or real ships.
-   Include the ship switcher for Fleets/teams. Test at 1920×1080 and 1024×768, no scrollbars. Then test with the designer's family.
-2. **Ship model pipeline**: OBJ (high-poly, separate parts, no textures) → simplified GLB (~10k triangles), simple materials, sails take the
-   player colour, sail state shown by the sail parts (web-spec §3.6).
+1. **Test the mock-up with the designer's family** ([`ui/mockup/README.md`](ui/mockup/README.md), "What to watch for"). It was built
+   on 2026-11-18 with all the real cards, weather, maps and the ship model, and passes the no-scroll/target/font checks at 1920×1080
+   and 1024×768. Not yet tried on a real iPad.
+2. **Answer the questions the art raised** (mock-up README, "Questions for the designer"): the two 360 cards; the Anchor, Row and Hard About
+   orders; flat-topped hexes on the printed maps (Q18); the Lightning Storm and Hurricane weather cards. Then put the answers in `rules.md`.
 3. **Engine (M1)**: turn loop (program → Parts I–III → Upkeep), movement with pushing, portals and caves, terrain and tides, then Treasure Hunt,
    then AI and the simulation CLI. **Players/teams/ships separate from day one (NFR-13).**
 4. **Waiting on the designer**: the **current-types diagram** (turning amounts, eddies, gyres, maelstrom) and the **board tile diagram**

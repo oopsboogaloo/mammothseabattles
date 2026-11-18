@@ -14,3 +14,5 @@ jobs:
       - run: npm ci
       # Type-check, then tests with the 100% coverage gate (NFR-4).
       - run: npm run check
+      # The layout A mock-up must type-check and build (docs/ui/mockup/README.md).
+      - run: npm run mockup:build

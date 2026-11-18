@@ -1,0 +1,431 @@
+/**
+ * The 3D tabletop (web-spec §4.5): the printed sea map lying flat on a table, ships as miniatures standing on it,
+ * overlays drawn like translucent markings. Gentle perspective, limited orbit.
+ */
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { hexKey, type Direction, type Hex } from '@msb/hex';
+import type { SailLevel } from '@msb/msb-rules';
+import { hexToOffset } from './game';
+
+export interface MapInfo {
+  width: number;
+  height: number;
+  size: number;
+  originX: number;
+  originY: number;
+  hexes: [number, number][];
+}
+
+const PX = 100; // map pixels per world unit
+const SHIP_SCALE = 2.0;
+
+export interface ShipView {
+  id: string;
+  colour: string;
+  hex: Hex;
+  heading: Direction;
+  sail: SailLevel;
+  selected: boolean;
+}
+
+interface ShipObj {
+  root: THREE.Group;
+  sails: THREE.Object3D[];
+  label: HTMLElement;
+}
+
+export class Table {
+  readonly renderer: THREE.WebGLRenderer;
+  readonly scene = new THREE.Scene();
+  readonly camera: THREE.PerspectiveCamera;
+  readonly controls: OrbitControls;
+  private map!: MapInfo;
+  private board = new THREE.Group();
+  private shipTemplate: THREE.Group | null = null;
+  private ships = new Map<string, ShipObj>();
+  private ghosts = new THREE.Group();
+  private overlay = new THREE.Group();
+  private fx = new THREE.Group();
+  private labels: { el: HTMLElement; pos: THREE.Vector3 }[] = [];
+  private raycaster = new THREE.Raycaster();
+  private hexGeo!: THREE.CircleGeometry;
+  private home = { target: new THREE.Vector3(), pos: new THREE.Vector3() };
+  onShipClick: (id: string | null) => void = () => {};
+
+  constructor(private host: HTMLElement, private labelLayer: HTMLElement) {
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.05;
+    host.appendChild(this.renderer.domElement);
+    this.camera = new THREE.PerspectiveCamera(32, 1, 0.5, 400);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.screenSpacePanning = false;
+    this.controls.minPolarAngle = 0.15; // ~10° from vertical
+    this.controls.maxPolarAngle = 1.0; // ~57°
+    this.controls.minAzimuthAngle = -0.6;
+    this.controls.maxAzimuthAngle = 0.6;
+    this.controls.minDistance = 8;
+    this.controls.maxDistance = 90;
+    this.controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE };
+    this.controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+
+    this.scene.background = new THREE.Color('#2b211b');
+    this.scene.add(new THREE.HemisphereLight('#fff6e8', '#4a3626', 1.6));
+    const sun = new THREE.DirectionalLight('#fff1dc', 2.2);
+    sun.position.set(-14, 30, 12);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    const sc = sun.shadow.camera;
+    sc.left = -24; sc.right = 24; sc.top = 26; sc.bottom = -26; sc.near = 1; sc.far = 80;
+    sun.shadow.bias = -0.0005;
+    this.scene.add(sun);
+    this.scene.add(this.board, this.ghosts, this.overlay, this.fx);
+    this.addTableTop();
+
+    new ResizeObserver(() => this.resize()).observe(host);
+    this.resize();
+    let down: { x: number; y: number } | null = null;
+    const el = this.renderer.domElement;
+    el.addEventListener('pointerdown', (e) => (down = { x: e.clientX, y: e.clientY }));
+    el.addEventListener('pointerup', (e) => {
+      if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) this.pick(e);
+      down = null;
+    });
+    const tick = () => {
+      this.controls.update();
+      this.renderer.render(this.scene, this.camera);
+      this.placeLabels();
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  private addTableTop() {
+    // Procedural wood: warm planks with soft grain (placeholder for a table texture).
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 1024;
+    const g = c.getContext('2d')!;
+    for (let i = 0; i < 8; i++) {
+      const hue = 24 + ((i * 37) % 7);
+      g.fillStyle = `hsl(${hue} 38% ${26 + ((i * 13) % 6)}%)`;
+      g.fillRect(0, i * 128, 1024, 128);
+      for (let k = 0; k < 60; k++) {
+        g.strokeStyle = `hsla(${hue} 40% ${18 + Math.random() * 14}% / 0.35)`;
+        g.lineWidth = 1 + Math.random() * 2;
+        const y = i * 128 + Math.random() * 128;
+        g.beginPath();
+        g.moveTo(0, y);
+        g.bezierCurveTo(300, y + Math.random() * 10 - 5, 700, y + Math.random() * 10 - 5, 1024, y);
+        g.stroke();
+      }
+      g.fillStyle = 'rgba(0,0,0,.35)';
+      g.fillRect(0, i * 128, 1024, 2);
+    }
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(5, 5);
+    tex.anisotropy = 8;
+    const table = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.75 }));
+    table.rotation.x = -Math.PI / 2;
+    table.position.y = -0.02;
+    table.receiveShadow = true;
+    this.scene.add(table);
+  }
+
+  async loadMap(id: string): Promise<MapInfo> {
+    const map: MapInfo = await (await fetch(`art/maps/${id}.json`)).json();
+    this.map = map;
+    this.board.clear();
+    const tex = await new THREE.TextureLoader().loadAsync(`art/maps/${id}.webp`);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+    const w = map.width / PX, h = map.height / PX;
+    const geo = new THREE.PlaneGeometry(w, h);
+    const sheet = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.5, roughness: 0.6 }));
+    sheet.rotation.x = -Math.PI / 2;
+    sheet.position.y = 0.04;
+    sheet.receiveShadow = true;
+    // The printed tiles have a little thickness: a dark copy just below, slightly offset, reads as the board's edge.
+    const edge = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#000000', map: tex, transparent: true, opacity: 0.6, alphaTest: 0.5 }));
+    edge.rotation.x = -Math.PI / 2;
+    edge.position.set(0.05, 0.01, 0.07);
+    this.board.add(edge, sheet);
+    this.hexGeo = new THREE.CircleGeometry((map.size / PX) * 0.94, 6);
+    this.hexGeo.rotateX(-Math.PI / 2);
+    // Default view: whole board, north up, gentle tilt.
+    const dist = ((h * 0.5) / Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2))) * 1.0;
+    const tilt = THREE.MathUtils.degToRad(30);
+    this.home.target.set(0, 0, 0.9);
+    this.home.pos.set(0, Math.cos(tilt) * dist, 0.9 + Math.sin(tilt) * dist);
+    this.resetView();
+    return map;
+  }
+
+  async loadShip(lowDetail: boolean) {
+    const gltf = await new GLTFLoader().loadAsync(lowDetail ? 'models/ship-lod.glb' : 'models/ship.glb');
+    gltf.scene.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh) {
+        o.castShadow = true;
+        o.receiveShadow = true;
+      }
+    });
+    this.shipTemplate = gltf.scene;
+  }
+
+  /** Hex centre in world space. */
+  hexToWorld(h: Hex, y = 0.05): THREE.Vector3 {
+    const [col, row] = hexToOffset(h);
+    const m = this.map, s = m.size, hh = Math.sqrt(3) * s;
+    const px = m.originX + 1.5 * s * col;
+    const py = m.originY + hh * (row + 0.5 * (col & 1));
+    return new THREE.Vector3((px - m.width / 2) / PX, y, (py - m.height / 2) / PX);
+  }
+
+  static headingAngle(d: Direction): number {
+    return (-d * Math.PI) / 3;
+  }
+
+  private makeShip(colour: string): ShipObj {
+    const root = this.shipTemplate!.clone(true);
+    const sails: THREE.Object3D[] = [];
+    const sailMat = new THREE.MeshStandardMaterial({ color: colour, roughness: 0.9 });
+    root.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.isMesh && (mesh.material as THREE.Material).name === 'sail') mesh.material = sailMat;
+      if (o.name.startsWith('sail_')) sails.push(o);
+    });
+    root.scale.setScalar(SHIP_SCALE);
+    const group = new THREE.Group();
+    group.add(root);
+    const label = document.createElement('div');
+    label.className = 'ship-label';
+    this.labelLayer.appendChild(label);
+    return { root: group, sails, label };
+  }
+
+  private static applySail(obj: ShipObj, sail: SailLevel) {
+    for (const s of obj.sails) {
+      s.visible = sail !== 'none';
+      s.scale.y = sail === 'half' ? 0.55 : 1;
+    }
+  }
+
+  setShips(views: (ShipView & { name: string })[]) {
+    if (!this.shipTemplate) return;
+    for (const v of views) {
+      let obj = this.ships.get(v.id);
+      if (!obj) {
+        obj = this.makeShip(v.colour);
+        this.ships.set(v.id, obj);
+        this.scene.add(obj.root);
+        obj.root.userData.shipId = v.id;
+      }
+      obj.root.position.copy(this.hexToWorld(v.hex));
+      obj.root.rotation.y = Table.headingAngle(v.heading);
+      Table.applySail(obj, v.sail);
+      obj.label.textContent = v.name;
+      obj.label.classList.toggle('selected', v.selected);
+      obj.label.style.setProperty('--c', v.colour);
+    }
+    for (const [id, obj] of this.ships)
+      if (!views.some((v) => v.id === id)) {
+        this.scene.remove(obj.root);
+        obj.label.remove();
+        this.ships.delete(id);
+      }
+  }
+
+  /** Ghost preview: translucent ships at the end of each Part, and a dashed path. */
+  setGhost(colour: string, path: Hex[], ends: { hex: Hex; heading: Direction; sail: SailLevel; label: string }[]) {
+    this.clearGroup(this.ghosts);
+    if (!this.shipTemplate || ends.length === 0) return;
+    const pts = path.map((h) => this.hexToWorld(h, 0.12));
+    if (pts.length > 1) {
+      const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.2);
+      const line = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(curve.getPoints(pts.length * 12)),
+        new THREE.LineDashedMaterial({ color: '#fffbe8', dashSize: 0.35, gapSize: 0.2, linewidth: 2 }),
+      );
+      line.computeLineDistances();
+      this.ghosts.add(line);
+    }
+    const strong = new THREE.MeshStandardMaterial({ color: colour, transparent: true, opacity: 0.55, depthWrite: false, emissive: colour, emissiveIntensity: 0.5 });
+    const faint = strong.clone();
+    faint.opacity = 0.28;
+    ends.forEach((e, i) => {
+      // The last Part's ghost is the strongest; earlier ones are fainter.
+      const mat = i === ends.length - 1 ? strong : faint;
+      const g = this.shipTemplate!.clone(true);
+      g.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.isMesh) {
+          m.material = mat;
+          m.castShadow = false;
+        }
+        if (o.name.startsWith('sail_')) {
+          o.visible = e.sail !== 'none';
+          o.scale.y = e.sail === 'half' ? 0.55 : 1;
+        }
+      });
+      g.scale.setScalar(SHIP_SCALE * 0.92);
+      g.position.copy(this.hexToWorld(e.hex, 0.06));
+      g.rotation.y = Table.headingAngle(e.heading);
+      this.ghosts.add(g);
+      const ring = new THREE.Mesh(this.hexGeo, new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.22, depthWrite: false }));
+      ring.position.copy(this.hexToWorld(e.hex, 0.07));
+      this.ghosts.add(ring);
+    });
+    this.setLabels('ghost', ends.map((e) => ({ text: e.label, pos: this.hexToWorld(e.hex, 0.1), cls: 'ghost-label' })));
+  }
+
+  /** Translucent hex markings, e.g. broadside arcs. */
+  setOverlay(hexes: Hex[], colour = '#e0402a', opacity = 0.32) {
+    this.clearGroup(this.overlay);
+    const onBoard = new Set(this.map.hexes.map(([c, r]) => `${c},${r}`));
+    const mat = new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity, depthWrite: false });
+    const seen = new Set<string>();
+    for (const h of hexes) {
+      const k = hexKey(h);
+      if (seen.has(k) || !onBoard.has(hexToOffset(h).join(','))) continue;
+      seen.add(k);
+      const m = new THREE.Mesh(this.hexGeo, mat);
+      m.position.copy(this.hexToWorld(h, 0.08));
+      this.overlay.add(m);
+    }
+  }
+
+  private labelSets = new Map<string, HTMLElement[]>();
+  setLabels(set: string, items: { text: string; pos: THREE.Vector3; cls: string }[]) {
+    for (const el of this.labelSets.get(set) ?? []) {
+      el.remove();
+      this.labels = this.labels.filter((l) => l.el !== el);
+    }
+    const els = items.map((it) => {
+      const el = document.createElement('div');
+      el.className = it.cls;
+      el.textContent = it.text;
+      this.labelLayer.appendChild(el);
+      this.labels.push({ el, pos: it.pos });
+      return el;
+    });
+    this.labelSets.set(set, els);
+  }
+
+  private placeLabels() {
+    const r = this.host.getBoundingClientRect();
+    const v = new THREE.Vector3();
+    const place = (el: HTMLElement, p: THREE.Vector3) => {
+      v.copy(p).project(this.camera);
+      el.style.transform = `translate(${((v.x + 1) / 2) * r.width}px, ${((1 - v.y) / 2) * r.height}px)`;
+      el.style.display = v.z < 1 ? '' : 'none';
+    };
+    for (const [, s] of this.ships) place(s.label, s.root.position.clone().setY(2.6));
+    for (const l of this.labels) place(l.el, l.pos);
+  }
+
+  /** Animate one ship along a path and/or to a new heading. */
+  animateShip(id: string, path: Hex[], heading: Direction, sail: SailLevel, ms: number): Promise<void> {
+    const obj = this.ships.get(id);
+    if (!obj) return Promise.resolve();
+    Table.applySail(obj, sail);
+    const start = obj.root.position.clone();
+    const pts = [start, ...path.map((h) => this.hexToWorld(h))];
+    const a0 = obj.root.rotation.y;
+    let a1 = Table.headingAngle(heading);
+    while (a1 - a0 > Math.PI) a1 -= 2 * Math.PI;
+    while (a0 - a1 > Math.PI) a1 += 2 * Math.PI;
+    if (pts.length === 1 && Math.abs(a1 - a0) < 1e-3) return Promise.resolve();
+    const t0 = performance.now();
+    return new Promise((res) => {
+      const step = () => {
+        const t = Math.min(1, (performance.now() - t0) / ms);
+        const e = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+        if (pts.length > 1) {
+          const f = e * (pts.length - 1);
+          const i = Math.min(Math.floor(f), pts.length - 2);
+          obj.root.position.lerpVectors(pts[i]!, pts[i + 1]!, f - i);
+        }
+        obj.root.rotation.y = a0 + (a1 - a0) * e;
+        if (t < 1) requestAnimationFrame(step);
+        else res();
+      };
+      step();
+    });
+  }
+
+  /** Broadside: a puff of smoke beside the firing ship and a flash on the target. */
+  broadside(fromId: string, toId: string) {
+    const a = this.ships.get(fromId)?.root.position, b = this.ships.get(toId)?.root.position;
+    if (!a || !b) return;
+    const puff = (p: THREE.Vector3, colour: string, size: number) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(size, 12, 8), new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.85, depthWrite: false }));
+      m.position.copy(p).setY(0.8);
+      this.fx.add(m);
+      const t0 = performance.now();
+      const f = () => {
+        const t = (performance.now() - t0) / 900;
+        m.scale.setScalar(1 + t * 2.2);
+        (m.material as THREE.MeshBasicMaterial).opacity = 0.85 * (1 - t);
+        if (t < 1) requestAnimationFrame(f);
+        else this.fx.remove(m);
+      };
+      f();
+    };
+    puff(a.clone().lerp(b, 0.12), '#f4efe6', 0.35);
+    setTimeout(() => puff(b, '#ff8a3c', 0.3), 280);
+  }
+
+  private pick(e: PointerEvent) {
+    const r = this.renderer.domElement.getBoundingClientRect();
+    this.raycaster.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), this.camera);
+    const hits = this.raycaster.intersectObjects([...this.ships.values()].map((s) => s.root), true);
+    let o: THREE.Object3D | null = hits[0]?.object ?? null;
+    while (o && !o.userData.shipId) o = o.parent;
+    this.onShipClick((o?.userData.shipId as string) ?? null);
+  }
+
+  focus(h: Hex) {
+    const p = this.hexToWorld(h, 0);
+    const offset = this.camera.position.clone().sub(this.controls.target).setLength(26);
+    this.tween(p, p.clone().add(offset));
+  }
+  zoom(factor: number) {
+    const offset = this.camera.position.clone().sub(this.controls.target);
+    const len = THREE.MathUtils.clamp(offset.length() * factor, this.controls.minDistance, this.controls.maxDistance);
+    this.tween(this.controls.target.clone(), this.controls.target.clone().add(offset.setLength(len)));
+  }
+  resetView() {
+    this.tween(this.home.target.clone(), this.home.pos.clone(), this.camera.position.lengthSq() === 0 ? 0 : 500);
+  }
+  private tween(target: THREE.Vector3, pos: THREE.Vector3, ms = 500) {
+    const t0 = performance.now(), ft = this.controls.target.clone(), fp = this.camera.position.clone();
+    const f = () => {
+      const t = ms ? Math.min(1, (performance.now() - t0) / ms) : 1;
+      const e = 1 - (1 - t) ** 3;
+      this.controls.target.lerpVectors(ft, target, e);
+      this.camera.position.lerpVectors(fp, pos, e);
+      if (t < 1) requestAnimationFrame(f);
+    };
+    f();
+  }
+
+  private resize() {
+    const { clientWidth: w, clientHeight: h } = this.host;
+    if (!w || !h) return;
+    this.renderer.setSize(w, h, false);
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+  }
+
+  private clearGroup(g: THREE.Group) {
+    g.clear();
+    if (g === this.ghosts) this.setLabels('ghost', []);
+  }
+}
