@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.105**
+> Status: **Draft v0.106**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -596,7 +596,7 @@ Flotsam appears in two ways:
 - **Battle debris:** when a ship takes **Ship damage** (not Crew damage), place a flotsam token in the hex **directly astern** of her
   (behind her). If that hex is **blocked** (land, a ship, treasure or flotsam), **no flotsam** is placed. Chasing a damaged ship pays off.
   **One token per damage event** (a second token couldn't be placed anyway: the hex astern would already be blocked). Ship damage from
-  any source counts, attacks or hazards like cliffs and storms *(assumed ❓)*.
+  any source counts: attacks or hazards like cliffs, wall reefs, rough water and storms.
 - **Weather:** a weather card marked with a **flotsam icon** brings **one** flotsam token when it comes into play *(designer to mark the cards)*. The **player in last place** places it in an
   **empty sea hex more than 5 hexes from every ship**. If there's no such hex, **no flotsam** is placed.
 
@@ -811,13 +811,10 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-- **Q58 Flotsam** (§7.11; answered: Ship damage only, blocked hex = none, flagged weather cards, pool 5 for now, no drift, any movement
-  picks it up). Still open:
-  - ~~Per event or per point~~ → per damage event (answered). Confirm Ship damage from hazards (cliffs, storms) also drops flotsam (assumed).
-  - ~~How many, where~~ → one token, placed by the player in last place more than 5 hexes from every ship (answered).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed).
 - v0.105 — weather flotsam placed by the player in last place, more than 5 hexes from any ship.
 - v0.104 — flotsam-icon weather cards bring one token.
 - v0.103 — flotsam: one token per damage event.
