@@ -9,3 +9,6 @@ export * from './events';
 export * from './take-damage';
 export * from './turn';
 export * from './game';
+export * from './cards';
+export * from './programming';
+export * from './random-player';

@@ -8,6 +8,7 @@
 
 import type { Direction, Hex } from '@msb/hex';
 import type { PendingDecision, ResolutionRecord } from '@msb/engine';
+import type { CommandCard } from './cards';
 import type { SailLevel } from './sailing';
 import type { CrewMember } from './shipboard';
 
@@ -51,6 +52,8 @@ export interface GameSetup {
   readonly map: GameMap;
   /** One ship per seat for now; Fleets (2 ships per player) come later. */
   readonly seats: readonly SeatSetup[];
+  /** The command deck (rules §5.1: one shared deck). Content from `msb-data`. */
+  readonly commandCards: readonly CommandCard[];
 }
 
 export interface ShipCrew extends CrewMember {
@@ -69,6 +72,10 @@ export interface Ship {
   /** Damage markers, as slot keys (`sail1` … `action3`), rules §7.3. */
   blocked: string[];
   crew: ShipCrew[];
+  /** Command card ids in hand (hidden from rivals). */
+  hand: string[];
+  /** Card id per slot key; cleared at the end of each turn. */
+  program: Record<string, string>;
 }
 
 export interface Team {
@@ -94,6 +101,12 @@ export interface GameState {
   teams: Record<TeamId, Team>;
   players: Record<PlayerId, Player>;
   ships: Record<ShipId, Ship>;
+  /** Command deck, top first (rules §5.1). */
+  deck: string[];
+  /** Cards discarded down to the hand limit this turn; they join the used cards at the end of the turn. */
+  discards: string[];
+  /** 0 while programming; 1–3 = the Part being resolved. Cards in Parts up to this one are revealed (D6). */
+  part: number;
   /** Players who have finished programming this turn. */
   ready: PlayerId[];
   /** Present only while a turn is being resolved (engineering design §5). */

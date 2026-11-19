@@ -24,7 +24,7 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | # | Step | What it delivers | Rules |
 |---|---|---|---|
 | **P1** ✅ | **Kernel and the re-run design (D1)** | `GameDef` interface, action log and `replay`; game state with teams, players and ships kept separate; setup on a test map; resolution with `ask()` and re-run from the turn snapshot, proved on **damage placement** (a Ship or Crew damage choice mid-turn) | §5, §7.2–7.4 |
-| **P2** | **Programming** | Deal from crew icons, place and take back cards, ready, reveal Part by Part (D6), discard down to 9, used cards to the deck bottom. A **random player** (legal random programs) for fuzz tests | §5.1 |
+| **P2** ✅ | **Programming** | Deal from crew icons, place and take back cards, ready, reveal Part by Part (D6), discard down to 9, used cards to the deck bottom. A **random player** (legal random programs) for fuzz tests | §5.1 |
 | **P3** | **Movement** | `stepShip` (engineering design §6); Move with pushing and ramming; Steer; wind drift; terrain at each tide; board edge; whirlpools; caves; stranding | §3.2, §5.2, §6 |
 | **P4** | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
 | **P5** | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
@@ -37,6 +37,12 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 the ready → resolve → next turn loop, and end-of-Part rough water and storm damage with Ship and Crew damage placement asked of the
 damaged ship's player (defaults: never complete a row if avoidable; wound before kill, Captain last). A sunk ship stays sunk until
 P5 adds the return at Upkeep.
+
+**Done in P2:** the command deck (one shared deck, shuffled at setup; card lists come with the setup until P7), dealing one card per
+icon on healthy crew, placing and taking back cards (not into damaged slots), discarding down to 9 before ready, rivals' programs hidden
+and revealed Part by Part (D6) with teammates seeing each other's hands, used and discarded cards shuffled onto the deck bottom, drawing
+at Upkeep, and a random player. Fuzz tests play random games and check that every card is accounted for and that each game replays
+exactly. While a turn is paused for a decision, the state shows the turn part-way through.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).

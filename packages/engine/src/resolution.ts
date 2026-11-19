@@ -27,7 +27,10 @@ export interface ResolutionContext<Event> {
   emit(event: Event): void;
 }
 
-/** A resolution script: takes a private copy of the snapshot and returns the resolved state. */
+/**
+ * A resolution script: takes a private copy of the snapshot and returns the resolved state.
+ * Scripts should change that copy in place, so a paused run can report how far the turn got (`partial`).
+ */
 export type ResolutionScript<State, Event> = (state: State, ctx: ResolutionContext<Event>) => State;
 
 export type ResolutionOutcome<State, Event> =
@@ -37,6 +40,8 @@ export type ResolutionOutcome<State, Event> =
       readonly decision: PendingDecision<unknown>;
       readonly record: ResolutionRecord<State>;
       readonly events: Event[];
+      /** The script's working copy at the moment it stopped: the state part-way through resolution. */
+      readonly partial: State;
     };
 
 class Pause {
@@ -74,8 +79,9 @@ export function runResolution<State, Event>(
       events.push(event);
     },
   };
+  const draft = cloneJson(record.snapshot);
   try {
-    const state = script(cloneJson(record.snapshot), ctx);
+    const state = script(draft, ctx);
     return { kind: 'done', state, events: events.slice(record.emitted) };
   } catch (e) {
     if (!(e instanceof Pause)) throw e;
@@ -84,6 +90,7 @@ export function runResolution<State, Event>(
       decision: e.decision,
       record: { ...record, emitted: events.length },
       events: events.slice(record.emitted),
+      partial: draft,
     };
   }
 }

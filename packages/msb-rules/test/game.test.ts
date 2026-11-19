@@ -19,6 +19,7 @@ import {
   type ShipCrew,
   type Terrain,
 } from '@msb/msb-rules';
+import { TEST_CARDS } from './fixtures';
 
 // A tiny test map: A's port is in rough water, B's in a storm, plus open sea.
 function map(a: Terrain, b: Terrain): GameMap {
@@ -36,6 +37,7 @@ function setup(a: Terrain = 'roughWater', b: Terrain = 'sea', seed = 7): GameSet
       { player: 'A', team: 'red', name: 'Ann', homePort: hex(0, 0), heading: Direction.N },
       { player: 'B', team: 'blue', name: 'Bob', homePort: hex(3, 0), heading: Direction.S },
     ],
+    commandCards: TEST_CARDS,
   };
 }
 
@@ -83,7 +85,7 @@ describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
 describe('programming phase (rules §5.1; cards come in step P2)', () => {
   it('waits until every player is ready', () => {
     const s0 = newGame(setup('sea'));
-    expect(game.legalActions(s0, 'A')).toEqual([{ type: 'ready' }]);
+    expect(game.legalActions(s0, 'A')).toContainEqual({ type: 'ready' });
     expect(game.legalActions(s0, 'nobody')).toEqual([]);
     const { state: s1, events } = game.apply(s0, 'A', { type: 'ready' });
     expect(events).toEqual([{ type: 'PlayerReady', rule: '5.1', player: 'A' }]);
@@ -104,6 +106,9 @@ describe('programming phase (rules §5.1; cards come in step P2)', () => {
       'PartStarted',
       'PartStarted',
       'UpkeepStarted',
+      'CardsReturned',
+      'CardsDrawn',
+      'CardsDrawn',
       'TurnStarted',
     ]);
     expect(game.result(state)).toBeUndefined();

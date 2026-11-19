@@ -11,7 +11,15 @@ export type DamageSource = 'roughWater' | 'storm';
 export type GameEvent =
   | { readonly type: 'PlayerReady'; readonly rule: '5.1'; readonly player: PlayerId }
   | { readonly type: 'TurnStarted'; readonly rule: '5'; readonly turn: number }
-  | { readonly type: 'PartStarted'; readonly rule: '5.2'; readonly part: Part }
+  | {
+      readonly type: 'PartStarted';
+      readonly rule: '5.2';
+      readonly part: Part;
+      /** Each ship's cards for this Part, now revealed (D6): slot row → card id. */
+      readonly revealed: Readonly<Record<ShipId, Readonly<Record<string, string>>>>;
+    }
+  | { readonly type: 'CardsDrawn'; readonly rule: '5.1'; readonly ship: ShipId; readonly count: number }
+  | { readonly type: 'CardsReturned'; readonly rule: '5.1'; readonly count: number }
   | {
       readonly type: 'DamageRolled';
       readonly rule: '7.2';
