@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.129**
+> Status: **Draft v0.130**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -101,6 +101,8 @@ interact with each other and with the sea.
 - The example shows 2 main boards and 2 ports: a 2-player layout.
 
 - **Board edge**: a ship that would leave the map (sailing, pushed, current or drift) **sinks in the hex she was about to leave** (§7.8).
+  - **Optional rule: Safe edge** *(designer, v0.130; for an easier game)*: the map edge acts as a **beach**. A ship that would leave the map
+    **stops** in the hex she was about to leave, with no damage, instead of sinking.
 - **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
 
 ### 3.2 Board features seen in the example board
@@ -891,6 +893,7 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 | Crew special powers (Surgeon, Retired Captain, peeking, 🐙 crew...) | §3.6 | Add-on |
 | Wreck deck variety (Chance-style) | §7.9 | Add-on. **Core game: searching a wreck gives a crew card** |
 | Points of Sail | §6.2 | Optional rule, **intended as standard** |
+| Safe edge (map edge acts as a beach) | §3.1 | Optional rule, for an easier game |
 
 
 ### 9.1 Sea monster *(optional module)*
@@ -974,6 +977,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.130 — optional rule **Safe edge**: the map edge acts as a beach (ships stop instead of sinking).
 - v0.129 — **sail level is no longer persistent**: every Part starts at No Sail; a Sail card sets the level for its Part only. **Anchor** = No Sail and no movement of any kind (sailing, pushing, drift, currents) but turning allowed (Q67 for details). No No Sail card exists.
 - v0.128 — §6.5 tidied (ramming DD and pushed-into-obstacle effects were already answered); Q66 weather board refill.
 - v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.

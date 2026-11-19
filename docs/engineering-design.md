@@ -138,7 +138,8 @@ Rules §5.2 says ships move at the same time and initiative settles conflicts. *
 ```
 stepShip(state, ship, direction, cause: 'sail' | 'push' | 'current' | 'drift' | 'cave')
   1. Edge crossed: wall reef → stop + 2 DD.  Cave mouth → come out of the partner cave facing out (§3.2.2).
-  2. Target hex off the map → she sinks in the hex she was about to leave (rules §3.1, §7.8).
+  2. Target hex off the map → she sinks in the hex she was about to leave (rules §3.1, §7.8); with the optional **Safe edge** rule
+     (`RulesConfig.safeEdge`) she stops instead, like a beach.
   3. Terrain at the current tide: cliff → stop + 2 DD; beach, dry sandbank, dry reef, stuck ship → stop; death reef → sink.
   4. Occupied by a ship: 'sail' and 'cave' push her with the same function (chains; first ship rammed takes 1 DD; no DD for a teammate).
      'current' and 'drift' stay put.
