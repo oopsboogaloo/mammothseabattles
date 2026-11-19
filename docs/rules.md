@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.133**
+> Status: **Draft v0.134**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -395,7 +395,7 @@ whatever the wind** (Dead Calm included, and no weather modifiers). She has no s
 no **pushing**, no **wind drift** and no **currents**. She **can still turn** with her Steer card, and still act in the Action phase.
 - A ship that sails or rows into an anchored ship is **stopped**, and the anchored ship takes the **1 DD** for being rammed; a push chain
   stops at her. ✅ *Designer (Q67a, v0.133).*
-- ❓ *Assumed (Q67):* an **eddy** (a current that only turns) doesn't turn an anchored ship either, because "no currents" covers all of them.
+- **Eddies don't turn an anchored ship** (nor do curved currents or rotors): **only her Steer card turns her**. ✅ *Designer (Q67b, v0.134).*
 - ❓ *Assumed:* Anchor lasts only for the Part it's played in.
 
 ### 6.2 Points of Sail *(optional rule, intended as the standard)*
@@ -964,8 +964,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
   card for the empty space come from? *Engine assumption: the old card is discarded, the space gets the top card of the weather deck,
   and the discards are reshuffled when the deck runs out.*
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
-- **Q67 Anchor details** (§6.1): ~~(a) ramming an anchored ship~~ → the mover stops, the anchored ship takes the 1 DD (v0.133).
-  (b) Does an eddy still turn an anchored ship? (c) Anchor lasts only for its own Part?
+- **Q67 Anchor details** (§6.1): ~~(a) ramming~~ → the mover stops, the anchored ship takes the 1 DD (v0.133); ~~(b) eddies~~ → no, only
+  Steer turns her (v0.134). (c) Does Anchor last only for its own Part?
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
 - ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -983,6 +983,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.134 — Q67b: currents (eddies included) don't turn an anchored ship; only her Steer card does.
 - v0.133 — Q67a: anchored ships stop movers and take the ram damage.
 - v0.132 — Q68: rowing pushes and rams.
 - v0.131 — Row Ahead 1 / Row Back 1 = 1 hex ahead or astern whatever the wind (Q68: pushing?); Hard About = 180°; the second 360 card is 380 (designer to fix the art).
