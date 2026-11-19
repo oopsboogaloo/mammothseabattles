@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.113**
+> Status: **Draft v0.114**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -465,6 +465,12 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-1-straight.jpg" width="320">
 
+2. **Curved current:** a curved arrow moves the ship **1 hex** along the arrow **and turns her one hex side (60°) in the direction the arrow
+   curves**. The turn is **relative** to her own heading. In the example a ship facing south, on a curved arrow bending clockwise, is moved
+   1 hex and turned clockwise to face south-west. A ring of curved arrows round an island (a gyre) is a chain of these.
+
+   <img src="images/currents/example-2-curved.jpg" width="320">
+
 - **Eddies** (circular arrows within a hex) **spin** the ship in place.
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
   1. **Triple** currents move 1 hex.
@@ -862,6 +868,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.114 — current example 2: curved arrows move 1 hex and turn the ship 60° in the curve's direction.
 - v0.113 — confirmed: straight currents don't turn the ship.
 - v0.112 — current example 1: a straight single arrow moves the ship 1 hex, heading unchanged.
 - v0.111 — leaving port: weather doesn't apply until the ship is outside the port hex.
