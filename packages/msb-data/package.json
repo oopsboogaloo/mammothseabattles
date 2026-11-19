@@ -1,0 +1,10 @@
+{
+  "name": "@msb/msb-data",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "generate": "node scripts/generate.mjs"
+  }
+}

@@ -9,6 +9,7 @@ export default defineConfig({
       '@msb/engine': pkg('engine'),
       '@msb/hex': pkg('hex'),
       '@msb/msb-rules': pkg('msb-rules'),
+      '@msb/msb-data': pkg('msb-data'),
     },
   },
   test: {

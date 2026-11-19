@@ -29,7 +29,7 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | **P4** ✅ | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
 | **P5** ✅ | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
 | **P6** ✅ | **Upkeep and Treasure Hunt** | Refit (optional and partial, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
-| **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
+| **P7** ✅ | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
 | **P8** | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
 | **P9** | **Play-test** | Family game on PC and iPad; findings back into `rules.md` and this plan | |
 
@@ -68,6 +68,12 @@ spawning with the treasure map deck, picking up by passing through, digging up o
 dropping on sinking, scoring in her own port, and the win at the target (the game ends at once).
 *Not in the prototype:* hauling a stranded ship out (§6.7). *Engine assumptions:* the "leaving port" working (Q60); a refitting ship can
 still be pushed; a ship already carrying sails through treasure (§8.2.2 ❓).
+
+**Done in P7:** `packages/msb-data` reads the card CSVs (copied into a generated module by `npm run data`, checked by a test) into the
+real command deck (45 cards; 360b read as 380), weather deck (26 cards; the two storm cards left out), crew cards and treasure map
+cards; a **test map** (radius 5, 91 hexes) with every supported feature and 4 rim ports; and `prototypeSetup(players, seed)` for 2–4
+players. Whole random games on the real data run to 60 turns, keep all 45 cards and replay exactly. (Random players mostly sail off the
+map edge, so they never score: a job for the AI, and a hint that the Safe edge option suits beginners.)
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
