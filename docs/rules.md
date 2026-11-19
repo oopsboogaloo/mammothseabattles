@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.107**
+> Status: **Draft v0.108**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -63,8 +63,24 @@ interact with each other and with the sea.
 ![Example board](images/example-board.jpg)
 
 - **Modular**: you build the sea by putting several hex **board tiles** together, so scenarios and
-  board size can vary (this also helps it scale to 8 players, see Q3c).
+  board size can vary (§3.1.1).
 - The play area is a **hex grid** of **flat-topped** hexes (§3.5 compass; cannon diagram).
+### 3.1.1 Building the map *(designer, v0.108)*
+<img src="images/board-layout-example.jpg" width="420">
+
+- **Main boards** are large **hexagonal boards** (each appears to be 37 hexes, a hexagon 3 hexes from centre to edge ❓). **Port tiles** are
+  small **4-hex** pieces, one per player (or team).
+- **The players choose the layout together**: the host decides, or players take turns placing boards. The rulebook will offer some
+  **suggested layouts** to get people started, but choosing your own is more fun.
+- **How many main boards**: usually **at least 2**; **2–4** is a normal game. **More ships → more boards.**
+  - **Fewer boards** → a tighter, more intense, more interactive game (more combat).
+  - **More boards** → more racing and navigation, less combat.
+- **Ports** are attached to the **outer edge** of the map:
+  - A port tile can face any way round (upside down is fine).
+  - Its **sea part must join a sea hex** on a main board.
+  - **No two ports on the same side** of a main board, so ports are spread out.
+- The example shows 2 main boards and 2 ports: a 2-player layout.
+
 - **Board edge**: a ship that would leave the map (sailing, pushed, current or drift) **sinks in the hex she was about to leave** (§7.8).
 - **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
 
@@ -252,7 +268,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
-1. Build the map from tiles (scenario). Place home ports on the map edge, spawn points and wreck tokens (scenario).
+1. Build the map together (§3.1.1): main boards, then one **port tile** per player or team on the outer edge. Place spawn points and wreck tokens (scenario).
 2. Spawn the starting treasures (§8.2.1).
 3. Each player: ship board, Captain + 2 random crew, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
 4. Weather board filled; current card and the next one face up.
@@ -688,7 +704,7 @@ mode is a plug-in objective module on top of a shared rules core.
 - Anyone can then pick it up as normal (§8.2.2). In practice the attacker places it where they can grab it, or where a rival can't.
 
 **8.2.4 Home port & scoring**
-- Each player has a **home port**, **placed on the edge of the map at setup**. It is **indestructible** and **has guns**
+- Each player (or team) has a **home port**: a **4-hex port tile** attached to the edge of the map at setup (§3.1.1). It is **indestructible** and **has guns**
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
   at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
@@ -788,8 +804,8 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 ## Designer to-do
 _Things the designer has said they'll do or supply._
 - **Current-types diagram** (turning amounts, eddies, gyres, maelstrom) for players and for this spec (Q19/Q20).
-- **Board tile diagram**: tile size and shape, how tiles join (Q18).
-- **Gale card**: add "1 DD per Full Sail, taken at Upkeep" to the card text (§3.5).
+- **Gale card**: add "1 DD for each Part sailed at Full Sail, taken at Upkeep" to the card text (§3.5).
+- **Suggested layouts** for the rulebook (§3.1.1).
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
@@ -805,7 +821,13 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 ### B. Needed for a full game
 1. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
 2. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
-3. **Q3c Board size** for each player count.
+3. **Q18 / Q3c Board construction** (answered: §3.1.1). Still open:
+   - Is a main board 37 hexes (3 hexes from centre to edge)?
+   - How do two main boards join: anywhere along an edge, with any offset (as in the example), or must whole sides line up?
+   - Port tiles: which hex is "the port" for scoring, refits and coming back (the green ✗ on the example's port)? Can ships sail through
+     the port tile's other hexes?
+   - What is the town printed in the middle of one main board, now that ports are separate tiles: just scenery (land)?
+   - Spawn points and wrecks on a home-made layout: who places them, and where?
 
 ### C. Detail
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
@@ -821,6 +843,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.108 — building the map (§3.1.1): main boards and 4-hex port tiles; players choose the layout; 2–4 boards normal; port placement rules.
 - v0.107 — Upkeep order: sunk ships return (step 2) and Gale damage (step 6) placed, as proposals. Rulebook updated to playtest draft 0.2.
 - v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed). Restored three add-on questions (crew deck, equipment timing, sea monster tie) accidentally dropped in v0.102.
 - v0.105 — weather flotsam placed by the player in last place, more than 5 hexes from any ship.

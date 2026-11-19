@@ -1,6 +1,6 @@
 # Mammoth Sea Battles: Rulebook
 
-> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.107).
+> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.108).
 > Covers the **core game**, **Treasure Hunt**, **Race** and **teams**. Add-ons are in the appendix.
 > 🛠 marks rules still being decided.
 
@@ -20,10 +20,10 @@ cannons roar. Plans go wrong. That's the fun.
 
 | Component | Use |
 |---|---|
-| Hex sea tiles | Build the map |
 | 8 ships | One per player (or two per player in Fleets, §12) |
 | 8 ship boards | Where you program your orders |
-| 8 home port tokens | Your safe harbour |
+| Main boards (large hexagonal boards) | Build the sea |
+| 8 port tiles (4 hexes each) | Your home port |
 | Command cards (one shared deck) | Your orders: Sail / Steer / Action |
 | Crew cards | Captains (mammoths) and crew (prehistoric monsters) |
 | Weather board + weather cards | Wind, weather and tides |
@@ -37,8 +37,12 @@ cannons roar. Plans go wrong. That's the fun.
 
 ## 2. Setting up
 
-1. **Build the sea** from the tiles, as the scenario shows.
-2. Each player takes a **ship**, **ship board** and **home port**, and places the port on the **edge of the map**.
+1. **Build the sea together.** Join **main boards** (big hexagonal boards) into a layout everyone likes: the host decides, or take turns.
+   Try one of the suggested layouts for your first game 🛠 *(to come)*. Usually **2–4 boards**: fewer boards make a tight, combat-heavy
+   game; more boards make more of a race. More ships need more boards.
+2. Each player (or team) takes a **port tile** (4 hexes) and attaches it to the **outer edge** of the map. It can face any way round, but
+   its **sea part must join a sea hex**, and **no two ports may share the same side** of a main board. Each player takes a **ship** and
+   **ship board**.
 3. Place the **9 spawn point tokens** and **one shipwreck token per ship**, as the scenario shows. Spawn points can all be at sea (a quick
    game), all on land (a longer game), or a mix.
 4. Shuffle the **treasure map deck**. Turn over cards and place treasure on those spawn points until there are

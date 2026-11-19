@@ -1,11 +1,12 @@
 # Mammoth Sea Battles: Core Rules on One Page
 
-> Draft summary of the **core game** (no sea monster, equipment or crew powers), written from [`rules.md`](rules.md) v0.107.
+> Draft summary of the **core game** (no sea monster, equipment or crew powers), written from [`rules.md`](rules.md) v0.108.
 > Teams, Fleets and the add-ons are in the [rulebook](rulebook.md). **TBD** marks rules not decided yet. Section numbers point to the full spec.
 
 **Goal (Treasure Hunt).** Be the first to bring **3 treasures** home to your port (2 with 7–8 players).
 
-**Setup.** Build the sea from hex tiles. Each player puts a **home port** on the map edge. Place **one wreck token per ship** and the
+**Setup.** Together, join **2–4 main boards** (fewer = more combat, more = more racing). Each player attaches a 4-hex **port tile** to the
+outer edge (its sea part joining a sea hex; no two ports on the same board side). Place **one wreck token per ship** and the
 **9 treasure spawn points** (scenario), then spawn **(ships − 1) ÷ 2, rounded up** treasures using the treasure map deck. Each ship starts
 **in port, sail down**, heading of her player's choice, with a **Captain + 2 random crew** (face up). Fill the **weather board**: the current
 card and the **next one** are face up; the starting tide is random. Players: **2–8**.
