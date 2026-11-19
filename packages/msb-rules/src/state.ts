@@ -32,6 +32,8 @@ export interface MapHex {
   readonly terrain: Terrain;
   /** Whirlpool portal number; paired with the other hex of the same number (rules §3.2.1). */
   readonly whirlpool?: number;
+  /** Fog bank (rules §7.1): no firing from, into or through it. */
+  readonly fog?: boolean;
   /** A current starting in this hex (rules §6.6). Rotors are listed on the map instead. */
   readonly current?: Current;
 }
@@ -79,6 +81,10 @@ export interface GameMap {
   readonly wallReefs?: readonly MapEdge[];
   readonly caves?: readonly MapCave[];
   readonly rotors?: readonly Rotor[];
+  /** Shipwrecks placed when the map was built (rules §7.9: one per ship). */
+  readonly startWrecks?: readonly string[];
+  /** Treasure spawn points (rules §8.2.1): spawn number → hex key. */
+  readonly spawnPoints?: Readonly<Record<string, string>>;
 }
 
 export interface SeatSetup {
@@ -123,6 +129,12 @@ export interface Ship {
   program: Record<string, string>;
   /** Anchored this Part (rules §6.1): can't be moved by anything. */
   anchored: boolean;
+  /** Stranded by the tide (rules §6.7): can't sail, steer or be moved; can still act; her hex stops other ships like beach. */
+  stuck: boolean;
+  /** Spending this turn refitting in port (rules §7.7): can't do anything. */
+  refitting: boolean;
+  /** Carrying a treasure (rules §8.2.2: at most 1). */
+  carrying: boolean;
   /** Parts sailed at Full Sail in a Gale this turn: 1 DD each at Upkeep (rules §3.5). */
   galeParts: number;
 }
@@ -131,6 +143,8 @@ export interface Team {
   id: TeamId;
   players: PlayerId[];
   homePort: Hex;
+  /** Treasures scored (rules §8.2.4). */
+  score: number;
 }
 
 export interface Player {
@@ -140,7 +154,7 @@ export interface Player {
   ships: ShipId[];
 }
 
-export type Phase = 'programming' | 'resolving';
+export type Phase = 'programming' | 'resolving' | 'over';
 
 export interface GameState {
   setup: GameSetup;
@@ -153,6 +167,16 @@ export interface GameState {
   weather: WeatherBoard;
   /** Command deck, top first (rules §5.1). */
   deck: string[];
+  /** Shipwreck tokens on the map, as hex keys (rules §7.9). */
+  wrecks: string[];
+  /** Treasure lying loose on the map, as hex keys (rules §8.2). Carried treasure is on the ship (`carrying`). */
+  treasures: string[];
+  /** The treasure map deck: spawn point numbers, top first (rules §8.2.1). */
+  treasureDeck: string[];
+  /** Treasures scored this turn; one new treasure spawns for each at Upkeep (rules §8.2.1). */
+  pendingSpawns: number;
+  /** The winning team, once a team reaches the target (rules §8.2.5). */
+  winner?: TeamId;
   /** Cards discarded down to the hand limit this turn; they join the used cards at the end of the turn. */
   discards: string[];
   /** 0 while programming; 1–3 = the Part being resolved. Cards in Parts up to this one are revealed (D6). */

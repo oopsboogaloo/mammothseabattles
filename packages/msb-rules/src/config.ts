@@ -44,6 +44,9 @@ export interface RulesConfig {
   readonly tieBreakDieSides: number;
   /** §3.1 optional rule Safe edge: the map edge acts as a beach instead of sinking ships. */
   readonly safeEdge: boolean;
+  /** §8.2.5 treasures to win, and with 7–8 ships. */
+  readonly treasureTarget: number;
+  readonly treasureTargetLarge: number;
 }
 
 export const DEFAULT_DAMAGE_DIE: readonly DamageFace[] = [
@@ -88,6 +91,8 @@ export const DEFAULT_CONFIG: RulesConfig = {
   refitCrew: 3,
   tieBreakDieSides: 6,
   safeEdge: false,
+  treasureTarget: 3,
+  treasureTargetLarge: 2,
 };
 
 /** Make a config from the defaults with some values overridden (shallow per section). */

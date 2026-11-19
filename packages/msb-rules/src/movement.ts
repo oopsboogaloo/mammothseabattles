@@ -10,29 +10,17 @@ import type { CommandCard, SteerOrder } from './cards';
 import type { RulesConfig } from './config';
 import type { GameEvent, MoveCause, StopReason } from './events';
 import { sailDirection, sailMove, type Part, type SailLevel } from './sailing';
-import type { GameState, MapCave, Ship, Terrain } from './state';
+import type { GameState, MapCave, Ship } from './state';
 import { takeDamage } from './take-damage';
-import { currentWeather, tide, type Tide } from './weather';
+import { isLand } from './map';
+import { sinkShip } from './sinking';
+import { arrive, offerKnockLoose } from './treasure';
+import { currentWeather, tide } from './weather';
 
 export type StepResult = 'moved' | 'stopped' | 'sunk';
 
 /** Ship movement pushes; currents and drift don't (§6.5). */
 const PUSHES: ReadonlySet<MoveCause> = new Set<MoveCause>(['sail', 'row', 'push']);
-
-/** §3.2.0 tide table: is this terrain land (it stops ships) at this tide? */
-export function isLand(terrain: Terrain, at: Tide): boolean {
-  switch (terrain) {
-    case 'cliff':
-    case 'beach':
-      return true;
-    case 'sandbank':
-      return at !== 'high';
-    case 'underwaterReef':
-      return at === 'low';
-    default:
-      return false;
-  }
-}
 
 export function shipAt(state: GameState, at: Hex): Ship | undefined {
   return Object.values(state.ships).find((s) => s.status === 'afloat' && hexEquals(s.pos, at));
@@ -88,8 +76,7 @@ function stop(m: MoveContext, ship: Ship, by: StopReason): StepResult {
 }
 
 function sink(m: MoveContext, ship: Ship, reason: 'edge' | 'deathReef'): StepResult {
-  ship.status = 'sunk';
-  m.ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason });
+  sinkShip(m.state, ship, reason, m.ctx);
   return 'sunk';
 }
 
@@ -104,6 +91,7 @@ function damage(m: MoveContext, ship: Ship, dd: number, source: 'cliff' | 'wallR
 export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: MoveCause): StepResult {
   const { state, config } = m;
   if (ship.anchored) return stop(m, ship, 'anchored');
+  if (ship.stuck) return stop(m, ship, 'stuck');
   const from = ship.pos;
 
   // 1. Edges: wall reef, then cave mouth.
@@ -138,16 +126,20 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
 
   // 4. Another ship: ship movement pushes her (chains); currents and drift stay put (§6.5).
   const other = shipAt(state, to);
+  // A stranded ship's hex is dry land (§6.7): it stops ships like a beach, and she can't be pushed or rammed.
+  if (other?.stuck) return stop(m, ship, 'beach');
   if (other) {
     if (!PUSHES.has(cause)) return stop(m, ship, 'ship');
     const firstHit = cause !== 'push';
+    const anchored = other.anchored;
     const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir as Direction, 'push');
     if (firstHit && other.status === 'afloat' && !sameTeam(state, ship, other)) {
       m.ctx.emit({ type: 'ShipRammed', rule: '6.5', ship: other.id, by: ship.id });
-      damage(m, other, config.dd.ram, 'ram');
+      // §8.2.3: instead of the DD, she may knock a carrier's treasure loose.
+      if (!offerKnockLoose(state, ship, other, m.ctx)) damage(m, other, config.dd.ram, 'ram');
     }
     // An anchored ship stops the mover even if the ram sinks her (§6.1).
-    if (other.anchored) return stop(m, ship, 'anchored');
+    if (anchored) return stop(m, ship, 'anchored');
     if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, 'ship');
   }
 
@@ -155,10 +147,12 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
   ship.pos = to;
   m.ctx.emit({ type: 'ShipMoved', rule: '6', ship: ship.id, from, to, cause });
   if (hex.terrain === 'deathReef') return sink(m, ship, 'deathReef');
+  arrive(state, ship, config, m.ctx);
   const partner = partnerWhirlpool(state, to);
   if (partner && !shipAt(state, partner)) {
     ship.pos = partner;
     m.ctx.emit({ type: 'Teleported', rule: '3.2.1', ship: ship.id, from: to, to: partner });
+    arrive(state, ship, config, m.ctx);
   }
   return 'moved';
 }
@@ -193,9 +187,20 @@ export function cardInSlot(state: GameState, ship: Ship, slot: string): CommandC
   return state.setup.commandCards.find((c) => c.id === id);
 }
 
-/** §5.2 step 1: set sail (or row, or anchor) from the Sail card, then move. */
+/** §8.2.4: is she in her own team's home port hex? There, no weather of any kind affects her. */
+export function inOwnPort(state: GameState, ship: Ship): boolean {
+  const team = state.players[ship.player]?.team as string;
+  return hexEquals(ship.pos, state.teams[team]?.homePort as Hex);
+}
+
+/**
+ * §5.2 step 1: set sail (or row, or anchor) from the Sail card, then move.
+ * Leaving port (§8.2.4 ❓): under sail she always gets 1 hex out, whatever the weather; the rest of her sail move is then worked
+ * out normally, less the hex already used.
+ */
 export function moveShip(m: MoveContext, ship: Ship): void {
   const { state, config, part } = m;
+  if (ship.stuck || ship.refitting) return;
   const card = cardInSlot(state, ship, `sail${part}`);
   const order = card?.sail;
   const sail: SailLevel = order === 'half' || order === 'full' ? order : 'none';
@@ -206,10 +211,16 @@ export function moveShip(m: MoveContext, ship: Ship): void {
     stepShip(m, ship, order === 'rowAhead' ? ship.heading : opposite(ship.heading), 'row');
     return;
   }
+  if (sail === 'none') return;
+  let used = 0;
+  if (inOwnPort(state, ship)) {
+    if (stepShip(m, ship, ship.heading, 'sail') !== 'moved') return;
+    used = 1;
+  }
   const weather = currentWeatherOf(state);
   const n = sailMove(sail, ship.heading, weather, config);
   if (sail === 'full' && weather.strength === 'gale') ship.galeParts += 1;
-  for (let i = 0; i < Math.abs(n); i++) {
+  for (let i = used; i < Math.abs(n); i++) {
     if (stepShip(m, ship, sailDirection(ship.heading, n), 'sail') !== 'moved') return;
   }
 }
@@ -225,6 +236,7 @@ export const STEER_TURNS: Readonly<Record<SteerOrder, number>> = {
 
 /** §5.2 step 2: turn by the Steer card. Anchored ships still turn (§6.1). */
 export function steerShip(m: MoveContext, ship: Ship): void {
+  if (ship.stuck || ship.refitting) return;
   const card = cardInSlot(m.state, ship, `steer${m.part}`);
   if (!card) return;
   const from = ship.heading;
@@ -234,7 +246,7 @@ export function steerShip(m: MoveContext, ship: Ship): void {
 
 /** §5.2 step 5: drift 1 hex downwind, heading unchanged; no pushing. Anchored ships don't drift (§6.1). */
 export function driftShip(m: MoveContext, ship: Ship): void {
-  if (ship.anchored) return;
+  if (ship.anchored || ship.stuck || inOwnPort(m.state, ship)) return; // §8.2.4: no weather in her own port
   stepShip(m, ship, currentWeatherOf(m.state).direction, 'drift');
 }
 

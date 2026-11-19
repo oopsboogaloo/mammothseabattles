@@ -19,6 +19,7 @@ import {
   type CrewDamageChoice,
   type Slot,
 } from './shipboard';
+import { sinkShip } from './sinking';
 import type { GameState, Ship, ShipCrew } from './state';
 
 export const PLACE_SHIP_DAMAGE = 'placeShipDamage';
@@ -54,10 +55,6 @@ export function defaultCrewIndex(options: readonly CrewDamageChoice[], crew: rea
   return best;
 }
 
-function sink(ship: Ship, reason: 'row' | 'crew', ctx: ResolutionContext<GameEvent>): void {
-  ship.status = 'sunk';
-  ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason });
-}
 
 /** Deal `dd` damage dice to a ship. Mutates the resolution's private copy of the state. */
 export function takeDamage(
@@ -89,10 +86,18 @@ export function takeDamage(
     const slot = ctx.ask(
       createDecision(PLACE_SHIP_DAMAGE, ship.player, options, defaultSlotIndex(options, ship.blocked, part)),
     );
-    ship.blocked.push(slotKey(slot));
+    const key = slotKey(slot);
+    ship.blocked.push(key);
+    // §7.3: any card in that slot is removed (it goes with the used cards).
+    const lost = ship.program[key];
+    if (lost !== undefined) {
+      delete ship.program[key];
+      state.discards.push(lost);
+      ctx.emit({ type: 'CardLost', rule: '7.3', ship: ship.id, slot: key, card: lost });
+    }
     ctx.emit({ type: 'SlotBlocked', rule: '7.3', ship: ship.id, slot: slotKey(slot) });
     if (rowBlocked(new Set(ship.blocked))) {
-      sink(ship, 'row', ctx);
+      sinkShip(state, ship, 'row', ctx);
       return;
     }
   }
@@ -110,7 +115,7 @@ export function takeDamage(
         : { type: 'CrewKilled', rule: '7.4', ship: ship.id, crew: choice.kill },
     );
     if (noHealthyCrew(ship.crew)) {
-      sink(ship, 'crew', ctx);
+      sinkShip(state, ship, 'crew', ctx);
       return;
     }
   }

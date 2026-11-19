@@ -2,7 +2,24 @@
  * Map validation (engineering design §7.1): catch map data the rules can't use when a game is set up, not mid-turn.
  */
 
-import type { GameMap } from './state';
+import type { GameMap, Terrain } from './state';
+import type { Tide } from './weather';
+
+/** §3.2.0 tide table: is this terrain land (it stops ships) at this tide? */
+export function isLand(terrain: Terrain, at: Tide): boolean {
+  switch (terrain) {
+    case 'cliff':
+    case 'beach':
+      return true;
+    case 'sandbank':
+      return at !== 'high';
+    case 'underwaterReef':
+      return at === 'low';
+    default:
+      return false;
+  }
+}
+
 
 function countBy<T>(items: readonly T[], key: (t: T) => string): Map<string, number> {
   const counts = new Map<string, number>();
@@ -23,6 +40,9 @@ export function validateMap(map: GameMap): void {
   for (const [key, hex] of Object.entries(map.hexes)) {
     // A current may point off the map: that sinks a ship (rules §3.1). Its start hex is this hex, which is on the map.
     if (hex.current?.kind === 'flow' && !/^-?\d+,-?\d+$/.test(hex.current.to)) throw new Error(`Current in ${key} has a bad destination`);
+  }
+  for (const [n, key] of Object.entries(map.spawnPoints ?? {})) {
+    if (!onMap(key)) throw new Error(`Spawn point ${n} (${key}) isn't on the map`);
   }
   for (const rotor of map.rotors ?? []) {
     for (const [from, to] of Object.entries(rotor.moves)) {

@@ -23,14 +23,31 @@ const game = createGame();
 function setup(seed = 3, portTerrain: Terrain = 'sea', sameTeam = false): GameSetup {
   return {
     seed,
-    map: { id: 't', hexes: { [hexKey(hex(0, 0))]: { terrain: portTerrain }, [hexKey(hex(4, 0))]: { terrain: 'sea' } } },
+    // A's station (0,0) has the given terrain; ships start at their stations, out of port (§8.2.4 shelters ships in port).
+    map: {
+      id: 't',
+      hexes: {
+        [hexKey(hex(0, 0))]: { terrain: portTerrain },
+        [hexKey(hex(4, 0))]: { terrain: 'sea' },
+        [hexKey(hex(0, 2))]: { terrain: 'sea' },
+        [hexKey(hex(4, 2))]: { terrain: 'sea' },
+      },
+    },
     seats: [
-      { player: 'A', team: 'red', name: 'Ann', homePort: hex(0, 0), heading: Direction.N },
-      { player: 'B', team: sameTeam ? 'red' : 'blue', name: 'Bob', homePort: hex(4, 0), heading: Direction.S },
+      { player: 'A', team: 'red', name: 'Ann', homePort: hex(0, 2), heading: Direction.N },
+      { player: 'B', team: sameTeam ? 'red' : 'blue', name: 'Bob', homePort: hex(4, 2), heading: Direction.S },
     ],
     commandCards: TEST_CARDS,
     weatherCards: CALM_WEATHER,
   };
+}
+
+/** A new game with the ships moved out of port to their stations. */
+function start(setup: GameSetup): GameState {
+  const s = newGame(setup);
+  s.ships['A-ship']!.pos = hex(0, 0);
+  s.ships['B-ship']!.pos = hex(4, 0);
+  return s;
 }
 
 /** Every card is in exactly one place: deck, a hand, a program or the discards. */
@@ -43,12 +60,12 @@ const ALL_IDS = TEST_CARDS.map((c) => c.id).sort();
 
 describe('dealing (rules §5.1)', () => {
   it('shuffles the deck and deals each ship one card per icon on her healthy crew', () => {
-    const s = newGame(setup());
+    const s = start(setup());
     expect(s.ships['A-ship']?.hand).toHaveLength(5); // Captain 3 + 2 Pirates
     expect(s.ships['B-ship']?.hand).toHaveLength(5);
     expect(s.deck).toHaveLength(35);
     expect(allCards(s)).toEqual(ALL_IDS);
-    expect(newGame(setup(4)).deck).not.toEqual(s.deck);
+    expect(start(setup(4)).deck).not.toEqual(s.deck);
   });
 
   it('rejects a card list with duplicate ids or initiatives', () => {
@@ -61,7 +78,7 @@ describe('dealing (rules §5.1)', () => {
 
 describe('placing cards (rules §3.4, §5.1)', () => {
   it('places a card from the hand into an empty slot and takes it back', () => {
-    const s0 = newGame(setup());
+    const s0 = start(setup());
     const card = s0.ships['A-ship']!.hand[0]!;
     const s1 = game.apply(s0, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card }).state;
     expect(s1.ships['A-ship']!.program).toEqual({ sail1: card });
@@ -74,7 +91,7 @@ describe('placing cards (rules §3.4, §5.1)', () => {
   });
 
   it('only into the player’s own ships, free slots, and cards in her hand', () => {
-    const s0 = newGame(setup());
+    const s0 = start(setup());
     const bCard = s0.ships['B-ship']!.hand[0]!;
     expect(() => game.apply(s0, 'A', { type: 'place', ship: 'B-ship', slot: 'sail1', card: bCard })).toThrow('Illegal');
     expect(() => game.apply(s0, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card: bCard })).toThrow('Illegal');
@@ -82,7 +99,7 @@ describe('placing cards (rules §3.4, §5.1)', () => {
   });
 
   it('a slot with a damage marker takes no card (rules §7.3)', () => {
-    const s = newGame(setup());
+    const s = start(setup());
     s.ships['A-ship']!.blocked = ['steer2'];
     expect(freeSlots(s.ships['A-ship']!)).not.toContain('steer2');
     expect(freeSlots(s.ships['A-ship']!)).toHaveLength(8);
@@ -90,13 +107,13 @@ describe('placing cards (rules §3.4, §5.1)', () => {
   });
 
   it('a sunk ship can’t be programmed', () => {
-    const s = newGame(setup());
+    const s = start(setup());
     s.ships['A-ship']!.status = 'sunk';
     expect(game.legalActions(s, 'A')).toEqual([{ type: 'ready' }]);
   });
 
   it('a hand over 9 must be discarded down before the player can be ready', () => {
-    const s0 = newGame(setup());
+    const s0 = start(setup());
     const extra = s0.deck.splice(0, 6);
     s0.ships['A-ship']!.hand.push(...extra); // 11 cards
     const legal = game.legalActions(s0, 'A');
@@ -112,7 +129,7 @@ describe('placing cards (rules §3.4, §5.1)', () => {
 
 describe('hidden programs, revealed Part by Part (D6, rules §5.1)', () => {
   function programmed(portTerrain: Terrain, seed = 3) {
-    let s = newGame(setup(seed, portTerrain));
+    let s = start(setup(seed, portTerrain));
     const [a1, a2, a3] = s.ships['A-ship']!.hand as [string, string, string];
     const [b1, b3] = s.ships['B-ship']!.hand as [string, string];
     for (const [player, ship, slot, card] of [
@@ -138,7 +155,7 @@ describe('hidden programs, revealed Part by Part (D6, rules §5.1)', () => {
   });
 
   it('teammates see each other’s hands and programs (rules §8.6)', () => {
-    let s = newGame(setup(3, 'sea', true));
+    let s = start(setup(3, 'sea', true));
     const card = s.ships['A-ship']!.hand[0]!;
     s = game.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card }).state;
     expect(game.view(s, 'B').ships['A-ship']!.program).toEqual({ sail1: card });
@@ -160,7 +177,11 @@ describe('hidden programs, revealed Part by Part (D6, rules §5.1)', () => {
       let state = out.state;
       const events: GameEvent[] = [];
       while (state.pending) {
-        const r = game.apply(state, state.pending.player, { type: 'answer', choice: state.pending.defaultIndex });
+        // Keep the damage off A's programmed slots, so her cards stay for the reveal.
+        const d = state.pending;
+        const free = d.options.findIndex((o) => !['sail1', 'steer2', 'action3'].includes(`${(o as { row?: string }).row}${(o as { part?: number }).part}`));
+        const choice = d.kind === 'placeShipDamage' && free >= 0 ? free : d.defaultIndex;
+        const r = game.apply(state, d.player, { type: 'answer', choice });
         state = r.state;
         events.push(...r.events);
       }
@@ -173,7 +194,7 @@ describe('hidden programs, revealed Part by Part (D6, rules §5.1)', () => {
 
 describe('end of turn (rules §5.1 step 4, §5.4)', () => {
   it('used and discarded cards go to the bottom of the deck, programs are cleared, and ships draw again', () => {
-    let s = newGame(setup());
+    let s = start(setup());
     const card = s.ships['A-ship']!.hand[0]!;
     s = game.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'action3', card }).state;
     const top = s.deck.slice(0, 10);
@@ -189,22 +210,30 @@ describe('end of turn (rules §5.1 step 4, §5.4)', () => {
     expect(allCards(next)).toEqual(ALL_IDS);
   });
 
-  it('a sunk ship draws nothing, and draws stop when the deck is empty', () => {
-    let s = newGame(setup());
+  it('a sunk ship comes back at Upkeep and draws a new hand; draws stop when the deck is empty', () => {
+    let s = start(setup());
     s.ships['B-ship']!.status = 'sunk';
-    s.deck = s.deck.slice(0, 3);
+    s.deck = s.deck.slice(0, 2);
     s = game.apply(s, 'A', { type: 'ready' }).state;
-    const out = game.apply(s, 'B', { type: 'ready' });
-    expect(out.state.ships['A-ship']!.hand).toHaveLength(8);
-    expect(out.state.ships['B-ship']!.hand).toHaveLength(5);
-    expect(out.events.filter((e) => e.type === 'CardsDrawn')).toEqual([{ type: 'CardsDrawn', rule: '5.1', ship: 'A-ship', count: 3 }]);
+    let out = game.apply(s, 'B', { type: 'ready' });
+    const events = [...out.events];
+    expect(out.state.pending).toMatchObject({ kind: 'returnHeading', player: 'B' });
+    while (out.state.pending) {
+      out = game.apply(out.state, out.state.pending.player, { type: 'answer', choice: out.state.pending.defaultIndex });
+      events.push(...out.events);
+    }
+    // B's old hand of 5 goes under the deck: 7 cards for A (5) and B (2 of her 3).
+    expect(out.state.ships['A-ship']!.hand).toHaveLength(10);
+    expect(out.state.ships['B-ship']!.hand).toHaveLength(2);
+    expect(events.filter((e) => e.type === 'CardsDrawn').map((e) => (e as { count: number }).count)).toEqual([5, 2]);
+    expect(out.state.ships['B-ship']!.crew.map((c) => [c.captain, c.cardIcons])).toEqual([[false, 1], [false, 1], [false, 1]]);
   });
 });
 
 describe('random players and fuzz tests (engineering design §10, §12)', () => {
   function play(seed: number, turns: number, terrain: Terrain) {
     const rng = new Rng(seed * 7919);
-    let state = newGame(setup(seed, terrain));
+    let state = start(setup(seed, terrain));
     const log: LogEntry<Action>[] = [];
     while (state.turn <= turns) {
       for (const player of ['A', 'B']) {
@@ -225,12 +254,12 @@ describe('random players and fuzz tests (engineering design §10, §12)', () => 
   it('random games keep every card accounted for and replay exactly from their logs', () => {
     for (let seed = 1; seed <= 25; seed++) {
       const { state, log } = play(seed, 4, seed % 2 ? 'storm' : 'roughWater');
-      expect(replay(game, setup(seed, seed % 2 ? 'storm' : 'roughWater'), log).state).toEqual(state);
+      expect(replay({ ...game, init: start }, setup(seed, seed % 2 ? 'storm' : 'roughWater'), log).state).toEqual(state);
     }
   });
 
   it('returns nothing when the player has no legal action', () => {
-    const s = newGame(setup());
+    const s = start(setup());
     expect(randomAction(game, s, 'nobody', new Rng(1))).toBeUndefined();
   });
 });

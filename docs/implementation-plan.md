@@ -27,8 +27,8 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | **P2** ✅ | **Programming** | Deal from crew icons, place and take back cards, ready, reveal Part by Part (D6), discard down to 9, used cards to the deck bottom. A **random player** (legal random programs) for fuzz tests | §5.1 |
 | **P3** ✅ | **Movement** | `stepShip` (engineering design §6); Move with pushing and ramming; Steer; wind drift; terrain at each tide; board edge; whirlpools; caves; stranding | §3.2, §5.2, §6 |
 | **P4** ✅ | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
-| **P5** | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
-| **P6** | **Upkeep and Treasure Hunt** | Refit (optional and partial, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
+| **P5** ✅ | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
+| **P6** ✅ | **Upkeep and Treasure Hunt** | Refit (optional and partial, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
 | **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
 | **P8** | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
 | **P9** | **Play-test** | Family game on PC and iPad; findings back into `rules.md` and this plan | |
@@ -53,6 +53,21 @@ Gale damage at Upkeep. Damaged slots' cards are ignored. Caves join two hexes an
 once per sub-step: straight and curved flows, eddies (60°, 120°, 180°), rotors of any size moving all their ships together (so ships
 swap), jumps to non-adjacent hexes that ignore the hexes between, and blocked currents leaving the ship where she is (not turned: Q70, agreed).
 Map data stores each current's destination and turn (engineering design §7.1).
+
+**Done in P5:** the Action phase in Action-slot initiative order: Fire Cannons (both broadsides, every enemy in the arcs takes 1 DD,
+no friendly fire, the firer may hold fire on each target, fog and whirlpools block), Repair (one marker of the player's choice) and Heal
+(one wounded crew member); then every home port's guns (1 DD to rivals within 2 hexes, fog hides). A card in a slot that takes Ship
+damage is lost. Sinking leaves a shipwreck; at Upkeep a sunk ship comes back at her port (or a free hex next to it, her player's choice),
+heading of her player's choice, repaired, with 3 Pirates and no Captain, and draws a new hand (Q71: if there's nowhere free, she waits).
+
+**Done in P6:** the full Upkeep order (§5.4): dig up treasure on land, sunk ships come back, refit (any part; default full if damaged;
+costs the next turn), search wrecks (gain a Pirate; swap with a full crew), spawn treasure for each one scored, Gale damage, advance the
+weather board (refill, reshuffle, New Weather Front) with tide changes and stranding, then draw. Stuck ships can't move or be moved and
+stop others like a beach. In her own port a ship has no drift, storm or Gale; leaving port under sail she always gets 1 hex out. Treasure:
+spawning with the treasure map deck, picking up by passing through, digging up on land, knocking loose by ram or cannon instead of the DD,
+dropping on sinking, scoring in her own port, and the win at the target (the game ends at once).
+*Not in the prototype:* hauling a stranded ship out (§6.7). *Engine assumptions:* the "leaving port" working (Q60); a refitting ship can
+still be pushed; a ship already carrying sails through treasure (§8.2.2 ❓).
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).

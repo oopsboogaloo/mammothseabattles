@@ -16,3 +16,7 @@ export * from './weather';
 export * from './movement';
 export * from './currents';
 export * from './map';
+export * from './actions';
+export * from './sinking';
+export * from './upkeep';
+export * from './treasure';

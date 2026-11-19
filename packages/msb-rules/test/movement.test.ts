@@ -315,7 +315,9 @@ describe('obstacles (rules §3.2.0, §3.1)', () => {
     place(s, 'A-ship', O);
     const events = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'drift'));
     expect(s.ships['A-ship']!.status).toBe('sunk');
-    expect(events.at(-1)).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'deathReef' });
+    expect(events.at(-2)).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'deathReef' });
+    expect(events.at(-1)).toEqual({ type: 'WreckPlaced', rule: '7.9', at: hex(0, -1) });
+    expect(s.wrecks).toContain(hexKey(hex(0, -1)));
   });
 
   it('leaving the map sinks her in the hex she left; with Safe edge she stops instead', () => {
@@ -324,7 +326,7 @@ describe('obstacles (rules §3.2.0, §3.1)', () => {
     const safe = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), makeConfig({ safeEdge: true }));
     expect(safe).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: hex(0, -4), by: 'edge' }]);
     const events = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'));
-    expect(events).toEqual([{ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'edge' }]);
+    expect(events[0]).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'edge' });
     expect(pos(s, 'A-ship')).toEqual(hex(0, -4));
   });
 });
@@ -342,9 +344,9 @@ describe('anchored and sunk-on-impact ships', () => {
     const deadly = makeConfig({ damageDie: Array(12).fill({ ship: 0, crew: 2 }) });
     const s = game3(map({ [hexKey(hex(0, -1))]: { terrain: 'cliff' } }, { wallReefs: [{ hex: hexKey(O), side: S }] }));
     place(s, 'A-ship', O);
-    expect(run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), deadly).at(-1)).toMatchObject({ type: 'ShipSank', reason: 'crew' });
+    expect(run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), deadly).at(-2)).toMatchObject({ type: 'ShipSank', reason: 'crew' });
     place(s, 'B-ship', O);
-    expect(run(s, (m) => stepShip(m, s.ships['B-ship']!, S, 'sail'), deadly).at(-1)).toMatchObject({ type: 'ShipSank', reason: 'crew' });
+    expect(run(s, (m) => stepShip(m, s.ships['B-ship']!, S, 'sail'), deadly).at(-2)).toMatchObject({ type: 'ShipSank', reason: 'crew' });
   });
 
   it('Dead Calm cards have no direction', () => {
@@ -461,7 +463,7 @@ describe('setup checks (engineering design §7.1)', () => {
   it('rejects weather decks with duplicate ids, unsupported cards or winds without a direction', () => {
     const base = CALM_WEATHER.slice(1);
     expect(() => game3(map(), [...base, base[0]!])).toThrow('Duplicate weather card');
-    expect(() => game3(map(), [...base, { id: 'front', strength: 'newFront' as WindStrength }])).toThrow('unsupported strength');
+    expect(() => game3(map(), [...base, { id: 'storm', strength: 'hurricane' as WindStrength }])).toThrow('unsupported strength');
     expect(() => game3(map(), [...base, { id: 'gust', strength: 'firm' }])).toThrow('no wind direction');
   });
 
@@ -526,6 +528,7 @@ describe('a whole turn (rules §5.2)', () => {
   });
 
   it('sails, steers and drifts through Parts I–III, and Gale damage arrives at Upkeep', () => {
+    const g = createGame(NO_DAMAGE);
     let s = game3(map(), CALM_WEATHER, false);
     setWeather(s, 'gale', SE);
     place(s, 'A-ship', hex(-4, 2), NE);
@@ -571,7 +574,8 @@ describe('a whole turn (rules §5.2)', () => {
     }
     const sank = events.findIndex((e) => e.type === 'ShipSank' && e.ship === 'A-ship');
     expect(sank).toBeGreaterThan(-1);
-    expect(events.slice(sank).some((e) => 'ship' in e && e.ship === 'A-ship' && e.type !== 'ShipSank')).toBe(false);
+    const upkeep = events.findIndex((e) => e.type === 'UpkeepStarted');
+    expect(events.slice(sank + 1, upkeep).some((e) => 'ship' in e && e.ship === 'A-ship')).toBe(false);
   });
 
   it('parses hex keys', () => {
