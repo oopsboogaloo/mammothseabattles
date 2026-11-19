@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.118**
+> Status: **Draft v0.119**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -99,7 +99,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Current | Single arrow | **Confirmed** (§6.6): moves the ship 1 hex |
 | Fast current | Double / triple arrows | **Confirmed** (§6.6): moves the ship 2 / 3 hexes |
 | Turning current | Curved arrow | **Confirmed** (§6.6): moves the ship and turns her |
-| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place (60° per activation?) ❓ |
+| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place **one hex side (60°)** in the arrows' direction; she doesn't move (§6.6 example 6) |
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
@@ -498,7 +498,14 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-3-rotor-a.jpg" width="300"> <img src="images/currents/example-3-rotor-b.jpg" width="300">
 
-- **Eddies** (circular arrows within a hex) **spin** the ship in place.
+6. **Eddy (turn only):** a ring of arrows inside one hex. The ship **stays in her hex** and is turned **one hex side (60°)** in the
+   direction the arrows go. In the example the arrows run clockwise: a ship facing south turns to face south-west.
+   - It's a **single-arrow** current, so it acts in the **single-arrow sub-step** ❓.
+   - Nothing moves, so an eddy is never blocked.
+
+   <img src="images/currents/example-6-eddy-a.jpg" width="300"> <img src="images/currents/example-6-eddy-b.jpg" width="300">
+
+- **Eddies** (circular arrows within a hex) **spin** the ship in place, 60° per Currents phase (example 6).
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
   1. **Triple** currents move 1 hex.
   2. **Double and triple** currents move 1 hex.
@@ -506,7 +513,7 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
   So triple currents move 3, double 2 and single 1, all finishing together, and a ship can be carried from one current onto another
   between sub-steps. Conflicts within a sub-step are resolved in **Sail (Move-slot) initiative order**.
-- *Turning amounts, eddy spin amount, gyres and the maelstrom: designer's diagram (Q20).*
+- *Dashed eddies, gyres and the maelstrom: designer's diagram (Q20).*
 
 ### 6.7 Stranded by the tide
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
@@ -890,7 +897,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
   4-hex rotor turns 180°)? 120° keeps all ships in the ring facing the same way relative to it, as a turntable would.
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
-  - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
+  - Dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram); eddies act in the single-arrow sub-step (§6.6 example 6).
 2. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
@@ -902,6 +909,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.119 — current example: eddy turns the ship 60° in place, no movement (resolves the eddy ❓ in §3.2).
 - v0.118 — current example: small ring around a hex corner (Q62: 60° or 120°?).
 - v0.117 — current example: anticlockwise curved current (60°).
 - v0.116 — currents act on ships whose hex has an arrow starting in it; rotor details confirmed.
