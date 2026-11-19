@@ -212,6 +212,7 @@ certainly for v1. Instead **the game generates the map automatically** from a fe
 | Setting | Meaning |
 |---|---|
 | **Number of main boards** | e.g. 2–4; default from the number of ships |
+| **Board category** | 1–3 (rules §3.1.1). Category 1 (forgiving, open, simple currents) is the default for new players, and the tutorial uses it |
 | **Density** | how tightly the boards are packed: compact (more combat) to spread out (more racing and navigation) |
 | **Seed** | optional; the same seed and settings always give the same map (NFR-3), so a good map can be shared and replayed |
 

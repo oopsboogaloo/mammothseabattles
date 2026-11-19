@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.120**
+> Status: **Draft v0.121**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -77,6 +77,13 @@ interact with each other and with the sea.
 - **How many main boards**: usually **at least 2**; **2–4** is a normal game. **More ships → more boards.**
   - **Fewer boards** → a tighter, more intense, more interactive game (more combat).
   - **More boards** → more racing and navigation, less combat.
+- **Board categories** *(designer, v0.121)*: main boards are graded like hurricanes, **Category 1, 2 and 3**. The rulebook advises
+  new players to **start with Category 1**.
+  - **Category 1**: forgiving. The simplest board features and currents, plenty of open sea, and islands edged mostly with **sand
+    (beaches)** rather than cliffs.
+  - **Category 3**: as dense as the example boards: complex currents, rotors, eddies, reefs and cliffs. Mentally demanding, which
+    experienced players enjoy.
+  - Category 2 sits in between. ❓ Whether boards of different categories can be mixed in one map is not decided (Q64).
 - **Joining boards**: no fixed rule. Players agree how the boards fit together, as long as it makes an interesting map.
 - **Computer version:** the map is **generated automatically** from a few settings (number of boards, density); players don't design it
   (web-spec §5.1). Rules here that say "players agree" apply to the physical game only.
@@ -883,6 +890,7 @@ _Things the designer has said they'll do or supply._
 - **Current-types diagram** (turning amounts, eddies, gyres, maelstrom) for players and for this spec (Q19/Q20).
 - **Gale card**: add "1 DD for each Part sailed at Full Sail, taken at Upkeep" to the card text (§3.5).
 - **Suggested layouts** for the rulebook (§3.1.1).
+- **Grade each main board** Category 1, 2 or 3, and design Category 1 boards (open sea, simple currents, mostly beaches) (§3.1.1).
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
@@ -910,6 +918,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q63 Eddy turning amount** (§6.6 examples 6 and 7): the eddy drawn with 6 short arrows turns a ship 60°; in the pictures of the
   eddy drawn with 3 longer arrows the ship turns from south to north-west, which is 120°. Is that right: does the 3-arrow eddy turn
   **120°**, or is it also 60° (south → south-west)?
+- **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
+  is the category printed on the board? How many boards of each category are planned for the first box?
 - ~~Q62 Ring round a hex corner~~ → one hex side (60°); bobbles on the art where unclear (answered v0.120).
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
@@ -925,6 +935,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.121 — board categories 1–3 (like hurricanes): Category 1 forgiving and open for beginners, Category 3 dense (Q64).
 - v0.120 — current examples: river and sideways straight currents; Q62 answered (corner ring turns 60°); 3-arrow eddy example (Q63: 120°?); turning amounts need only be consistent.
 - v0.119 — current example: eddy turns the ship 60° in place, no movement (resolves the eddy ❓ in §3.2).
 - v0.118 — current example: small ring around a hex corner (Q62: 60° or 120°?).
