@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.117**
+> Status: **Draft v0.118**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -478,7 +478,13 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-4-curved-anticlockwise.jpg" width="300">
 
-4. **Rotor current (a "turntable"):** a ring of arrows rotating around a **point between hexes**, not around one hex's centre. Each
+4. **Small ring around a hex corner** *(designer: "just the same")*: a ring of arrows around the corner where 3 hexes meet. In the example
+   a ship is carried from one of the 3 hexes to the next one clockwise (1 hex) and turned **one hex side clockwise** (south-west →
+   north-west), the same as a curved current. *(But see Q62: as a true rotor about that corner it would turn 120°.)*
+
+   <img src="images/currents/example-5-three-hex-ring.jpg" width="300">
+
+5. **Rotor current (a "turntable"):** a ring of arrows rotating around a **point between hexes**, not around one hex's centre. Each
    activation turns everything in the rotor around that point, like a secret library door turning in place: **ships move to the hex the
    rotation carries them to, and turn by the same angle**. The example rotor turns **180°**: a ship on one side is carried across to the
    opposite hex and **ends facing the opposite way** (east → west in the first picture, south-east → north-west in the second). A ship on
@@ -879,6 +885,9 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
+- **Q62 Ring round a hex corner** (§6.6 example 4): carried 1 hex to the next of the 3 hexes. Is the turn **60°** (like a curved arrow, as
+  the picture shows), or **120°** (like a rotor turning around the corner: a 3-hex turntable turns everything 120° each time, just as the
+  4-hex rotor turns 180°)? 120° keeps all ships in the ring facing the same way relative to it, as a turntable would.
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
   - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
@@ -893,6 +902,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.118 — current example: small ring around a hex corner (Q62: 60° or 120°?).
 - v0.117 — current example: anticlockwise curved current (60°).
 - v0.116 — currents act on ships whose hex has an arrow starting in it; rotor details confirmed.
 - v0.115 — current example 3: rotors turn ships around a point between hexes (example: 180°, ships swap and reverse). Designer to-do: show rotation amounts on the art.
