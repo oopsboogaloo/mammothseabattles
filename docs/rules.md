@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.127**
+> Status: **Draft v0.137**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -101,6 +101,8 @@ interact with each other and with the sea.
 - The example shows 2 main boards and 2 ports: a 2-player layout.
 
 - **Board edge**: a ship that would leave the map (sailing, pushed, current or drift) **sinks in the hex she was about to leave** (§7.8).
+  - **Optional rule: Safe edge** *(designer, v0.130; for an easier game)*: the map edge acts as a **beach**. A ship that would leave the map
+    **stops** in the hex she was about to leave, with no damage, instead of sinking.
 - **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
 
 ### 3.2 Board features seen in the example board
@@ -187,8 +189,8 @@ Each command card is split into **three coloured bands**, one for each kind of o
 
 | Band | Colour | Order type | Values seen so far |
 |---|---|---|---|
-| Top | Blue | **Sail** | No Sail, Half Sail, Full Sail |
-| Middle | Yellow | **Steer** | Ease Port / Ease Starboard (60°), Hard to Port / Hard to Starboard (120°) |
+| Top | Blue | **Sail** | Half Sail, Full Sail, **Anchor**, Row Ahead 1, Row Back 1 (there is **no No Sail card**: No Sail is the default, §3.4) |
+| Middle | Yellow | **Steer** | Ease Port / Ease Starboard (60°), Hard to Port / Hard to Starboard (120°), **Hard About (180°)** |
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
 Each card also has an **initiative number** in the top-right corner (e.g. 400, 420, 840, 860), used like
@@ -216,7 +218,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 
 - **Up to 9 cards** per turn (3 Parts × 3 slots).
 - **Empty slots**:
-  - Empty **Move** slot → the **sail stays at its current level**. Sail level is a **persistent setting** carried from Part to Part and turn to turn.
+  - Empty **Move** slot → **No Sail** for that Part. *(Designer, v0.129: sail level is **not** carried over. Every Part starts at No Sail,
+    and a Sail card in that Part's Move slot sets Half or Full Sail for that Part only.)*
   - Empty **Steer** slot → no turn.
   - Empty **Action** slot → no action.
 
@@ -247,6 +250,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 - **"Now" is marked by a rotating arrow** in the middle of the board *(designer to-do; a pencil for now)*.
 - **Starting tide: random.**
 - **New Weather Front** replaces the face-up cards too.
+- **Refilling** *(v0.137)*: when the board advances, the card leaving "now" goes to a **weather discard pile**, and the empty space gets
+  the **top card of the weather deck**. When the deck runs out, shuffle the discards to make a new deck.
 
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
 |---|---|---|---|
@@ -256,6 +261,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
+
+**Lightning Storm** and **Hurricane** cards exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*; their intended text and more weather ideas are in [`suggestions.md`](suggestions.md).
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 
@@ -309,10 +316,11 @@ of Sail × Steer × Action bands, or a good sample**, and will be large enough f
 ### 5.2 Resolving each Part (I, II, III)
 All ships act **at the same time** in each phase (pillar P1). When they interfere, **initiative** decides the order (§5.3).
 
-1. **Move phase**: apply any Sail card (change sail level). Then every ship sails according to her sail level, the **points of sail**
+1. **Move phase**: each ship's sail level for this Part is set by her Sail card (**No Sail if the slot is empty**; **Anchor**: see §6.1).
+   Then every ship sails according to her sail level, the **points of sail**
    and the **weather** (§6.1–6.3). **Ships push** ships they move into (§6.5). Terrain (§3.2.0), portals and caves (§3.2.1–3.2.2) apply.
    Conflicts: Sail-slot initiative.
-2. **Steer phase**: ships turn according to their Steer card (Ease 60°, Hard 120°).
+2. **Steer phase**: ships turn according to their Steer card (Ease 60°, Hard 120°, Hard About 180°).
 3. **Currents**: in three 1-hex sub-steps (triple → double + triple → all), moving and/or turning ships. Eddies spin ships.
    **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
 4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
@@ -379,9 +387,20 @@ Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
 
 | Sail level | Move phase |
 |---|---|
-| No Sail | 0 (the ship is still moved by currents and wind drift) |
+| No Sail (empty Move slot) | 0 (the ship is still moved by currents and wind drift) |
 | Half Sail | 1 hex forward |
 | Full Sail | 2 hexes forward |
+
+**Row Ahead 1 / Row Back 1** *(designer, v0.131)*: Sail-band orders. The ship moves **1 hex straight ahead or straight astern,
+whatever the wind** (Dead Calm included, and no weather modifiers). She has no sail set, so she's at **No Sail** for that Part.
+- Rowing is ship movement like sailing: it **pushes** ships in the way and **rams** (1 DD to the first ship hit). ✅ *Designer (Q68): "ask the Vikings".*
+
+**Anchor** *(designer, v0.129)*: a Sail-band order. For that Part the ship is at **No Sail** and **can't be moved at all**: no sailing,
+no **pushing**, no **wind drift** and no **currents**. She **can still turn** with her Steer card, and still act in the Action phase.
+- A ship that sails or rows into an anchored ship is **stopped**, and the anchored ship takes the **1 DD** for being rammed; a push chain
+  stops at her. ✅ *Designer (Q67a, v0.133).*
+- **Eddies don't turn an anchored ship** (nor do curved currents or rotors): **only her Steer card turns her**. ✅ *Designer (Q67b, v0.134).*
+- Anchor lasts **only for the Part it's played in**. ✅ *Designer (Q67c, v0.135).*
 
 ### 6.2 Points of Sail *(optional rule, intended as the standard)*
 <img src="images/points-of-sail.jpg" width="420">
@@ -451,9 +470,8 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 - Ship movement (sailing, and coming out of a cave) **pushes** any ship in the way. Currents and wind drift do **not** push (§5.2).
 - **Pushes chain**: a pushed ship pushes the next ship in line, and so on.
 - **Distance**: a pushed ship moves **as far as the pushing movement continues**, hex for hex.
-- **Pushed into an obstacle** (land, reef, board edge, other features) has **the same effect as moving into it**. Hex effects are
-  still to be defined (Q19).
-- *Ramming damage: who takes the 1 DD (Q6b).*
+- **Pushed into an obstacle** (land, reef, board edge, other features) has **the same effect as moving into it** (terrain effects: §3.2.0).
+- **Ramming**: the **first ship hit** takes **1 DD**; ships further along a push chain take none (§7.2).
 
 ### 6.6 Currents
 - Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2). *A players' diagram showing every
@@ -883,6 +901,7 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 | Crew special powers (Surgeon, Retired Captain, peeking, 🐙 crew...) | §3.6 | Add-on |
 | Wreck deck variety (Chance-style) | §7.9 | Add-on. **Core game: searching a wreck gives a crew card** |
 | Points of Sail | §6.2 | Optional rule, **intended as standard** |
+| Safe edge (map edge acts as a beach) | §3.1 | Optional rule, for an easier game |
 
 
 ### 9.1 Sea monster *(optional module)*
@@ -927,6 +946,7 @@ _Things the designer has said they'll do or supply._
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
   *Designer's plan: little bobbles on the arrow, one per hex side turned.*
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
+- **Fix the duplicate 360 card**: *Row Ahead 1 / Hard About / Repair* should be **380** (the other, *Row Back 1 / Hard About / Heal*, stays 360). Correct the card art and `data/cards/command-cards.csv`.
 
 ## Open questions
 _Rewritten in v0.90, updated v0.93. Only unanswered questions are listed; answers are in the rule sections and
@@ -944,6 +964,10 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
+- ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
+  discards are reshuffled when the deck runs out (designer approved, v0.137).
+- ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
+- ~~Q67 Anchor details~~ → ramming her stops the mover and she takes the 1 DD; only Steer turns her; lasts for its own Part (v0.133–v0.135).
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
 - ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -961,6 +985,16 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.137 — Q66 answered: weather board refill (discard the old card, refill from the deck, reshuffle discards when empty).
+- v0.136 — Lightning Storm and Hurricane weather cards left out for now.
+- v0.135 — Q67c: Anchor lasts only for its own Part. Q67 closed.
+- v0.134 — Q67b: currents (eddies included) don't turn an anchored ship; only her Steer card does.
+- v0.133 — Q67a: anchored ships stop movers and take the ram damage.
+- v0.132 — Q68: rowing pushes and rams.
+- v0.131 — Row Ahead 1 / Row Back 1 = 1 hex ahead or astern whatever the wind (Q68: pushing?); Hard About = 180°; the second 360 card is 380 (designer to fix the art).
+- v0.130 — optional rule **Safe edge**: the map edge acts as a beach (ships stop instead of sinking).
+- v0.129 — **sail level is no longer persistent**: every Part starts at No Sail; a Sail card sets the level for its Part only. **Anchor** = No Sail and no movement of any kind (sailing, pushing, drift, currents) but turning allowed (Q67 for details). No No Sail card exists.
+- v0.128 — §6.5 tidied (ramming DD and pushed-into-obstacle effects were already answered); Q66 weather board refill.
 - v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.
 - v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
 - v0.125 — current example: 2-hex rotor round an edge, 180° swap.

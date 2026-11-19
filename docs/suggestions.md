@@ -14,7 +14,7 @@ them workable online (web-spec §4, `online-version.md`).
 
 | Name | Effect | When to play | Hooks into | Notes |
 |---|---|---|---|---|
-| **Sea Anchor** | Your ship doesn't move at all this Part: no sailing, currents, drift or pushing. | Start of a Part | Currents, pushing, drift | ⚠ Overlaps the **Anchor** order on the command cards. Keep one, or check what the Anchor order does and make this card differ (e.g. lasting the whole turn). |
+| **Sea Anchor** | Your ship doesn't move at all this Part: no sailing, currents, drift or pushing (like the Anchor order, rules §6.1). | **Any time**, e.g. after the Part's cards are revealed | Currents, pushing, drift | ✅ *Designer: keep it.* Same effect as the Anchor order, but the order must be programmed in advance, while this card is played **when you need it**: a last-moment way to stop a current, drift or push carrying her onto rocks or off the map. |
 | **Sweeps (oars)** | Move 1 hex in any direction this Move phase, whatever the wind. | Move phase | Dead Calm, heading into the wind | ⚠ Overlaps the **Row** order on the command cards. |
 | **Tide Tables** | This turn, your ship treats **sandbanks and underwater reefs as water**: a stranded ship floats free, and you can cross them. | Start of a Part, or at Upkeep when the tide changes | Stranding, tides (§6.4, §6.7) | |
 | **Smoke Pots** | Your hex counts as fog until the end of the turn. | Before an Action phase | Fog (§7.1) | |
@@ -77,3 +77,24 @@ Ideas from the designer (v0.109) for later; the current rule is "agree, or take 
 - **Wrecks:** don't place a wreck too near another player's port (distance to decide).
 - **Independent ports:** the town printed on a main board could become a neutral port where anyone can repair.
 - **One-piece boards:** e.g. a large rectangular board with ports printed on it, used on its own instead of modular 37-hex boards.
+
+## Weather ideas *(designer, 2026-11-19; future ideas, not rules)*
+
+**The two storm cards in the art** (left out of the deck for now, rules §3.5), with their intended text:
+- **Hurricane**: *(storm surge)* the tide is as if **High tide** for this turn; *(turbulence)* draw a **fresh weather card for each Part**
+  to set that Part's wind direction and strength; **all ships take 1 DD at Upkeep**.
+- **Lightning Storm**: *(turbulence)* draw a **fresh weather card for each Part** to set that Part's wind direction and strength;
+  **all ships take 2 DD at Upkeep**.
+
+**More weather ideas:**
+- **Blessed wind**: each player chooses the wind strength and direction for themselves.
+- **Cursed wind**: each player chooses the wind strength and direction (at most Strong) for the player on their left.
+- **Healing calm**: no wind (as Dead Calm); heal all wounded crew.
+- **Rainbow**: place an extra treasure.
+- **Hail**: all ships take 2 Ship damage at Upkeep.
+- **Blistering heat**: all ships take 2 Crew damage at Upkeep.
+- **Mist**: cannon range reduced by 1.
+- **Fog**: cannon range reduced to 1.
+
+**Concept:** a smaller **extreme weather deck**, with a pair of **extreme weather cards** in the main weather deck that call a card from it.
+Needs thought.

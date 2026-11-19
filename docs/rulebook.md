@@ -60,8 +60,9 @@ cannons roar. Plans go wrong. That's the fun.
 Your ship always points at one of the **six sides** of her hex. She moves forward through that side.
 
 ### Sail
-Your ship's sail is set to **No Sail**, **Half Sail** or **Full Sail**. It **stays set** until you change it. You don't need to play a
-sail card every time.
+Each Part, your Sail card sets **Half Sail** or **Full Sail** for that Part only. With no Sail card, she's at **No Sail** that Part
+(currents and wind drift still move her). **Anchor** holds her still that Part: she can't sail, be pushed, drift or be carried by
+currents, but she can still turn.
 
 ### Cannons
 Your cannons are on your ship's **sides (broadsides)**. Each side fires into a **60° wedge** out to **4 hexes**. You can't fire straight

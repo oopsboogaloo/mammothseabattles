@@ -6,11 +6,12 @@ For the next working session (which will have access to all the art). Written at
 
 | Document | What it is | State |
 |---|---|---|
-| [`rules.md`](rules.md) | **Design spec: the source of truth for the rules.** Every rule, decision log, prioritised open questions, change log. | v0.87, core game fully specified |
-| [`rulebook.md`](rulebook.md) | Player-facing rulebook written from the spec | Playtest draft 0.2, up to date with spec v0.107 |
+| [`rules.md`](rules.md) | **Design spec: the source of truth for the rules.** Every rule, decision log, prioritised open questions, change log. | v0.127, core game fully specified; currents illustrated |
+| [`rulebook.md`](rulebook.md) | Player-facing rulebook written from the spec | Playtest draft 0.2, matches spec v0.111 (not yet the current examples or board categories) |
 | [`core-rules-summary.md`](core-rules-summary.md) | Core rules on one page | From spec v0.107 |
 | [`web-spec.md`](web-spec.md) | Digital version: roadmap, NFRs, architecture, UI, testing | Draft 0.1 + decisions since |
-| [`engineering-design.md`](engineering-design.md) | **Engineering design** for v1: state, resolution, movement, map format, events, views, client | **Draft 0.1, awaiting the designer's review** (decisions D1–D7) |
+| [`engineering-design.md`](engineering-design.md) | **Engineering design** for v1: state, resolution, movement, map format, events, views, client | **v1.0, approved 2026-11-19** (D1–D7 as recommended) |
+| [`implementation-plan.md`](implementation-plan.md) | **Plan to a two-player hot-seat prototype**: steps P1–P9 | **Current work** |
 | [`v1-gaps.md`](v1-gaps.md) | What v1 still needs: art list, design inputs, engineering | 2026-11-18 |
 | [`online-version.md`](online-version.md) | Product goals of the free online version, BGA research, mid-resolution prompts | Draft |
 | [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md) | 4 wireframe layouts, scores, **layout A chosen** (bottom dock, fanned hand) | Done |
@@ -29,20 +30,18 @@ For the next working session (which will have access to all the art). Written at
 - The designer likes **concise answers with references**, and prefers searching to guessing.
 
 ## Next steps
-0. **Designer reviews [`engineering-design.md`](engineering-design.md)** and answers D1–D7. **Then write the implementation plan**
-   (the designer asked for the design to come first). No plan exists yet beyond the roadmap in `web-spec.md` §1.
+0. **Build the hot-seat prototype** following [`implementation-plan.md`](implementation-plan.md) (P1 kernel → P8 client → P9 play-test).
+   The engineering design was approved on 2026-11-19.
 1. **Test the mock-up with the designer's family** ([`ui/mockup/README.md`](ui/mockup/README.md), "What to watch for"). It was built
    on 2026-11-18 with all the real cards, weather, maps and the ship model, and passes the no-scroll/target/font checks at 1920×1080
    and 1024×768. Not yet tried on a real iPad.
-2. **Answer the questions the art raised** (mock-up README, "Questions for the designer"): the two 360 cards; the Anchor, Row and Hard About
-   orders; flat-topped hexes on the printed maps (Q18); the Lightning Storm and Hurricane weather cards. Then put the answers in `rules.md`.
-3. **Engine (M1)**: turn loop (program → Parts I–III → Upkeep), movement with pushing, portals and caves, terrain and tides, then Treasure Hunt,
-   then AI and the simulation CLI. **Players/teams/ships separate from day one (NFR-13).**
-4. **Waiting on the designer**: the **current-types diagram** (turning amounts, eddies, gyres, maelstrom) and the **board tile diagram**
-   (sets the map data format).
-5. Keep `rulebook.md` and `core-rules-summary.md` in step with `rules.md` (both match v0.107).
+2. **Answer the card questions** listed in [`implementation-plan.md`](implementation-plan.md) ("Questions the prototype needs answered"):
+   Anchor, Row, Hard About, the two 360 cards, the Lightning Storm and Hurricane weather cards, and how the weather board refills.
+3. **After the prototype**: AI and the simulator, then the v1 client (React, saving, offline, tutorial), then real boards (implementation plan).
+4. **Waiting on the designer**: the **real boards**, and diagrams for dashed eddies, gyres and the maelstrom.
+5. Keep `rulebook.md` and `core-rules-summary.md` in step with `rules.md` (rulebook matches v0.111: not yet the current examples or board categories).
 
 ## Biggest open rules questions (see `rules.md` "Open questions")
-- Current diagram details (Q20/Q19); board tiles (Q18); critical hits are a placeholder; the full command card list and the crew deck (≥ 50 cards).
+- Dashed eddies, gyres and the maelstrom (Q20); critical hits are a placeholder; the full command card list and the crew deck (≥ 50 cards).
 - Smaller: knocking treasure loose with no empty adjacent hex; "haul her out" for stranded ships; Race/Deathmatch/Capture the Flag details;
   timed-game tie-break.
