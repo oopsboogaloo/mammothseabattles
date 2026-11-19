@@ -15,7 +15,7 @@ export type SinkReason = 'row' | 'crew' | 'edge' | 'deathReef';
 export type MoveCause = 'sail' | 'row' | 'push' | 'current' | 'drift';
 
 /** What stopped a ship (rules §3.2.0, §6.1, §6.5). */
-export type StopReason = 'cliff' | 'beach' | 'wallReef' | 'ship' | 'anchored' | 'edge';
+export type StopReason = 'cliff' | 'beach' | 'wallReef' | 'ship' | 'anchored' | 'edge' | 'stuck';
 
 export type GameEvent =
   | { readonly type: 'PlayerReady'; readonly rule: '5.1'; readonly player: PlayerId }
@@ -44,6 +44,10 @@ export type GameEvent =
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
   | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
+  | { readonly type: 'WeatherAdvanced'; readonly rule: '3.5'; readonly now: string; readonly next: string; readonly space: number; readonly newFronts: number }
+  | { readonly type: 'TideChanged'; readonly rule: '6.4'; readonly tide: 'high' | 'mid' | 'low' }
+  | { readonly type: 'ShipStranded'; readonly rule: '6.7'; readonly ship: ShipId }
+  | { readonly type: 'ShipFreed'; readonly rule: '6.7'; readonly ship: ShipId }
   | { readonly type: 'ShipReturned'; readonly rule: '7.8'; readonly ship: ShipId; readonly at: Hex; readonly heading: Direction }
   | { readonly type: 'CannonFired'; readonly rule: '7.1'; readonly ship: ShipId; readonly targets: readonly ShipId[]; readonly spared: readonly ShipId[] }
   | { readonly type: 'PortGunsFired'; readonly rule: '8.2.4'; readonly team: string; readonly targets: readonly ShipId[] }

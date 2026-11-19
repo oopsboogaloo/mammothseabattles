@@ -90,6 +90,7 @@ function damage(m: MoveContext, ship: Ship, dd: number, source: 'cliff' | 'wallR
 export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: MoveCause): StepResult {
   const { state, config } = m;
   if (ship.anchored) return stop(m, ship, 'anchored');
+  if (ship.stuck) return stop(m, ship, 'stuck');
   const from = ship.pos;
 
   // 1. Edges: wall reef, then cave mouth.
@@ -124,6 +125,8 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
 
   // 4. Another ship: ship movement pushes her (chains); currents and drift stay put (§6.5).
   const other = shipAt(state, to);
+  // A stranded ship's hex is dry land (§6.7): it stops ships like a beach, and she can't be pushed or rammed.
+  if (other?.stuck) return stop(m, ship, 'beach');
   if (other) {
     if (!PUSHES.has(cause)) return stop(m, ship, 'ship');
     const firstHit = cause !== 'push';
@@ -180,9 +183,20 @@ export function cardInSlot(state: GameState, ship: Ship, slot: string): CommandC
   return state.setup.commandCards.find((c) => c.id === id);
 }
 
-/** §5.2 step 1: set sail (or row, or anchor) from the Sail card, then move. */
+/** §8.2.4: is she in her own team's home port hex? There, no weather of any kind affects her. */
+export function inOwnPort(state: GameState, ship: Ship): boolean {
+  const team = state.players[ship.player]?.team as string;
+  return hexEquals(ship.pos, state.teams[team]?.homePort as Hex);
+}
+
+/**
+ * §5.2 step 1: set sail (or row, or anchor) from the Sail card, then move.
+ * Leaving port (§8.2.4 ❓): under sail she always gets 1 hex out, whatever the weather; the rest of her sail move is then worked
+ * out normally, less the hex already used.
+ */
 export function moveShip(m: MoveContext, ship: Ship): void {
   const { state, config, part } = m;
+  if (ship.stuck || ship.refitting) return;
   const card = cardInSlot(state, ship, `sail${part}`);
   const order = card?.sail;
   const sail: SailLevel = order === 'half' || order === 'full' ? order : 'none';
@@ -193,10 +207,16 @@ export function moveShip(m: MoveContext, ship: Ship): void {
     stepShip(m, ship, order === 'rowAhead' ? ship.heading : opposite(ship.heading), 'row');
     return;
   }
+  if (sail === 'none') return;
+  let used = 0;
+  if (inOwnPort(state, ship)) {
+    if (stepShip(m, ship, ship.heading, 'sail') !== 'moved') return;
+    used = 1;
+  }
   const weather = currentWeatherOf(state);
   const n = sailMove(sail, ship.heading, weather, config);
   if (sail === 'full' && weather.strength === 'gale') ship.galeParts += 1;
-  for (let i = 0; i < Math.abs(n); i++) {
+  for (let i = used; i < Math.abs(n); i++) {
     if (stepShip(m, ship, sailDirection(ship.heading, n), 'sail') !== 'moved') return;
   }
 }
@@ -212,6 +232,7 @@ export const STEER_TURNS: Readonly<Record<SteerOrder, number>> = {
 
 /** §5.2 step 2: turn by the Steer card. Anchored ships still turn (§6.1). */
 export function steerShip(m: MoveContext, ship: Ship): void {
+  if (ship.stuck || ship.refitting) return;
   const card = cardInSlot(m.state, ship, `steer${m.part}`);
   if (!card) return;
   const from = ship.heading;
@@ -221,7 +242,7 @@ export function steerShip(m: MoveContext, ship: Ship): void {
 
 /** §5.2 step 5: drift 1 hex downwind, heading unchanged; no pushing. Anchored ships don't drift (§6.1). */
 export function driftShip(m: MoveContext, ship: Ship): void {
-  if (ship.anchored) return;
+  if (ship.anchored || ship.stuck || inOwnPort(m.state, ship)) return; // §8.2.4: no weather in her own port
   stepShip(m, ship, currentWeatherOf(m.state).direction, 'drift');
 }
 

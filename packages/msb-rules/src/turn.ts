@@ -18,11 +18,13 @@ import { runActions } from './actions';
 import { runCurrents } from './currents';
 import { returnSunkShips } from './sinking';
 import { initiativeOrder } from './initiative';
-import { cardInSlot, currentWeatherOf, driftShip, moveShip, steerShip, type MoveContext } from './movement';
+import { cardInSlot, currentWeatherOf, driftShip, inOwnPort, moveShip, steerShip, type MoveContext } from './movement';
+import { isLand } from './map';
+import { advanceWeather, tide } from './weather';
 import { driftsInPart, type Part } from './sailing';
 import { drawCards, returnUsedCards } from './programming';
 import { PARTS, SLOT_ROWS } from './shipboard';
-import type { GameState, Player, Ship } from './state';
+import type { GameState, Player, Ship, Terrain } from './state';
 import { takeDamage } from './take-damage';
 
 /** Ships in seat order (setup order). Used where the rules give no initiative order. */
@@ -72,7 +74,7 @@ function moveSteerDrift(state: GameState, part: Part, config: RulesConfig, ctx: 
 
 function endOfPart(state: GameState, part: Part, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   for (const ship of shipsInSeatOrder(state)) {
-    if (ship.status !== 'afloat') continue;
+    if (ship.status !== 'afloat' || inOwnPort(state, ship)) continue; // §8.2.4: sheltered in her own port
     const hazard = endOfPartHazard(state, ship, config);
     if (hazard) takeDamage(state, ship.id, hazard.dd, hazard.source, part, config, ctx);
   }
@@ -92,6 +94,26 @@ export function revealPart(state: GameState, part: Part): Record<string, Record<
   return out;
 }
 
+/** §5.4 step 7 and §6.7: the board moves on one space; ships on hexes that are now land are stuck, and stuck ships on water are freed. */
+export function advanceWeatherAndTide(state: GameState, ctx: ResolutionContext<GameEvent>): void {
+  const before = tide(state.weather);
+  const rng = new Rng(state.rng);
+  const { fronts } = advanceWeather(state.weather, state.setup.weatherCards, rng);
+  state.rng = rng.state;
+  const { spaces, now } = state.weather;
+  ctx.emit({ type: 'WeatherAdvanced', rule: '3.5', now: spaces[now] as string, next: spaces[(now + 1) % 6] as string, space: now, newFronts: fronts });
+  const after = tide(state.weather);
+  if (after !== before) ctx.emit({ type: 'TideChanged', rule: '6.4', tide: after });
+  for (const ship of shipsInSeatOrder(state)) {
+    if (ship.status !== 'afloat') continue;
+    // An afloat ship is always on a map hex (leaving the map sinks her).
+    const land = isLand((state.setup.map.hexes[hexKey(ship.pos)] as { terrain: Terrain }).terrain, after);
+    if (land && !ship.stuck) ctx.emit({ type: 'ShipStranded', rule: '6.7', ship: ship.id });
+    if (!land && ship.stuck) ctx.emit({ type: 'ShipFreed', rule: '6.7', ship: ship.id });
+    ship.stuck = land;
+  }
+}
+
 /** §5.4 Upkeep (so far): used cards to the deck bottom, then each afloat ship draws. */
 function upkeep(state: GameState, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   // §5.4 step 1: sunk ships come back.
@@ -103,6 +125,8 @@ function upkeep(state: GameState, config: RulesConfig, ctx: ResolutionContext<Ga
     ship.anchored = false;
     if (dd > 0 && ship.status === 'afloat') takeDamage(state, ship.id, dd, 'gale', 3, config, ctx);
   }
+  // §5.4 step 7: advance the weather board (new wind, new tide), then check stranding (§6.7).
+  advanceWeatherAndTide(state, ctx);
   const before = state.deck.length;
   returnUsedCards(state);
   ctx.emit({ type: 'CardsReturned', rule: '5.1', count: state.deck.length - before });

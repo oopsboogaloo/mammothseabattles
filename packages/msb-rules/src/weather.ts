@@ -1,7 +1,7 @@
 /**
  * Weather cards and the weather board (rules §3.5, §6.4): six spaces in a ring, one of them "now";
  * each space is also a tide level (High, Mid, Mid, Low, Mid, Mid).
- * Advancing the board at Upkeep comes in step P6; New Weather Front with it.
+ * At Upkeep the board advances one space (§5.4 step 7); the card leaving "now" is discarded and its space refilled (v0.137).
  */
 
 import { Rng, type RngState } from '@msb/engine';
@@ -10,7 +10,8 @@ import type { Weather, WindStrength } from './sailing';
 
 export interface WeatherCard {
   readonly id: string;
-  readonly strength: WindStrength;
+  /** 'newFront' = New Weather Front: reshuffle the weather deck and deal new cards, including this one (§3.5). */
+  readonly strength: WindStrength | 'newFront';
   /** The wind blows towards this direction. Dead Calm has none. */
   readonly direction?: Direction;
 }
@@ -29,11 +30,11 @@ export interface WeatherBoard {
   discards: string[];
 }
 
-const STRENGTHS: readonly WindStrength[] = ['deadCalm', 'light', 'firm', 'strong', 'gale'];
+const STRENGTHS: readonly WeatherCard['strength'][] = ['deadCalm', 'light', 'firm', 'strong', 'gale', 'newFront'];
 
 /**
- * Throws if a weather deck can't be used: duplicate ids, an unknown strength (New Weather Front and the storm cards aren't
- * supported yet: step P6 and later), or a wind other than Dead Calm without a direction.
+ * Throws if a weather deck can't be used: duplicate ids, an unknown strength (the storm cards aren't supported yet), a wind other
+ * than Dead Calm or New Weather Front without a direction, or New Weather Front cards only.
  */
 export function validateWeatherCards(cards: readonly WeatherCard[]): void {
   const ids = new Set<string>();
@@ -41,7 +42,7 @@ export function validateWeatherCards(cards: readonly WeatherCard[]): void {
     if (ids.has(card.id)) throw new Error(`Duplicate weather card id ${card.id}`);
     ids.add(card.id);
     if (!STRENGTHS.includes(card.strength)) throw new Error(`Weather card ${card.id}: unsupported strength ${String(card.strength)}`);
-    if (card.strength !== 'deadCalm' && card.direction === undefined) throw new Error(`Weather card ${card.id} has no wind direction`);
+    if (card.strength !== 'deadCalm' && card.strength !== 'newFront' && card.direction === undefined) throw new Error(`Weather card ${card.id} has no wind direction`);
   }
 }
 
@@ -52,8 +53,43 @@ export function setUpWeather(cards: readonly WeatherCard[], rngState: RngState):
   const rng = new Rng(rngState);
   const deck = rng.shuffle(cards.map((c) => c.id));
   const spaces = deck.splice(0, 6);
-  const now = rng.int(0, 5);
-  return { board: { spaces, now, deck, discards: [] }, rng: rng.state };
+  const board: WeatherBoard = { spaces, now: rng.int(0, 5), deck, discards: [] };
+  resolveNewFront(board, cards, rng);
+  return { board, rng: rng.state };
+}
+
+function isNewFront(id: string | undefined, cards: readonly WeatherCard[]): boolean {
+  return cards.find((c) => c.id === id)?.strength === 'newFront';
+}
+
+/**
+ * §3.5 New Weather Front: when it becomes "now", reshuffle all the weather cards (this one included) and deal 6 new ones.
+ * Repeats if the new "now" is a New Weather Front again. Returns how many times it happened.
+ */
+export function resolveNewFront(board: WeatherBoard, cards: readonly WeatherCard[], rng: Rng): number {
+  let fronts = 0;
+  while (isNewFront(board.spaces[board.now], cards)) {
+    if (cards.every((c) => c.strength === 'newFront')) throw new Error('The weather deck needs some wind cards');
+    fronts++;
+    const all = rng.shuffle([...board.spaces, ...board.deck, ...board.discards]);
+    board.spaces = all.splice(0, 6);
+    board.deck = all;
+    board.discards = [];
+  }
+  return fronts;
+}
+
+/** §5.4 step 7: advance one space. The card leaving "now" is discarded and its space refilled from the deck (§3.5, v0.137). */
+export function advanceWeather(board: WeatherBoard, cards: readonly WeatherCard[], rng: Rng): { fronts: number } {
+  const old = board.now;
+  board.discards.push(board.spaces[old] as string);
+  if (board.deck.length === 0) {
+    board.deck = rng.shuffle(board.discards);
+    board.discards = [];
+  }
+  board.spaces[old] = board.deck.shift() as string;
+  board.now = (old + 1) % 6;
+  return { fronts: resolveNewFront(board, cards, rng) };
 }
 
 export function tide(board: WeatherBoard): Tide {
@@ -64,5 +100,6 @@ export function tide(board: WeatherBoard): Tide {
 export function currentWeather(board: WeatherBoard, cards: readonly WeatherCard[]): Weather {
   const id = board.spaces[board.now];
   const card = cards.find((c) => c.id === id) as WeatherCard;
-  return { strength: card.strength, direction: card.direction ?? 0 };
+  // New Weather Front never stays "now" (resolveNewFront), so this card is a wind.
+  return { strength: card.strength as WindStrength, direction: card.direction ?? 0 };
 }

@@ -127,6 +127,10 @@ export interface Ship {
   program: Record<string, string>;
   /** Anchored this Part (rules §6.1): can't be moved by anything. */
   anchored: boolean;
+  /** Stranded by the tide (rules §6.7): can't sail, steer or be moved; can still act; her hex stops other ships like beach. */
+  stuck: boolean;
+  /** Spending this turn refitting in port (rules §7.7): can't do anything. */
+  refitting: boolean;
   /** Parts sailed at Full Sail in a Gale this turn: 1 DD each at Upkeep (rules §3.5). */
   galeParts: number;
 }

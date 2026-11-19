@@ -463,7 +463,7 @@ describe('setup checks (engineering design §7.1)', () => {
   it('rejects weather decks with duplicate ids, unsupported cards or winds without a direction', () => {
     const base = CALM_WEATHER.slice(1);
     expect(() => game3(map(), [...base, base[0]!])).toThrow('Duplicate weather card');
-    expect(() => game3(map(), [...base, { id: 'front', strength: 'newFront' as WindStrength }])).toThrow('unsupported strength');
+    expect(() => game3(map(), [...base, { id: 'storm', strength: 'hurricane' as WindStrength }])).toThrow('unsupported strength');
     expect(() => game3(map(), [...base, { id: 'gust', strength: 'firm' }])).toThrow('no wind direction');
   });
 

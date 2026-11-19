@@ -21,12 +21,29 @@ import {
 } from '@msb/msb-rules';
 import { CALM_WEATHER, TEST_CARDS } from './fixtures';
 
-// A tiny test map: A's port is in rough water, B's in a storm, plus open sea.
+// A tiny test map: A's station is in rough water, B's in a storm (by default), plus open sea and the two ports.
+// Ships start at their stations, not in port, because a ship in her own port is sheltered from all weather (§8.2.4).
+const PORT_A = hex(0, 2);
+const PORT_B = hex(3, 2);
 function map(a: Terrain, b: Terrain): GameMap {
   return {
     id: 'test',
-    hexes: { [hexKey(hex(0, 0))]: { terrain: a }, [hexKey(hex(3, 0))]: { terrain: b }, [hexKey(hex(1, 0))]: { terrain: 'sea' } },
+    hexes: {
+      [hexKey(hex(0, 0))]: { terrain: a },
+      [hexKey(hex(3, 0))]: { terrain: b },
+      [hexKey(hex(1, 0))]: { terrain: 'sea' },
+      [hexKey(PORT_A)]: { terrain: 'sea' },
+      [hexKey(PORT_B)]: { terrain: 'sea' },
+    },
   };
+}
+
+/** A new game with the ships moved from port to their stations. */
+function start(setup: GameSetup): GameState {
+  const s = newGame(setup);
+  s.ships['A-ship']!.pos = hex(0, 0);
+  s.ships['B-ship']!.pos = hex(3, 0);
+  return s;
 }
 
 function setup(a: Terrain = 'roughWater', b: Terrain = 'sea', seed = 7): GameSetup {
@@ -34,8 +51,8 @@ function setup(a: Terrain = 'roughWater', b: Terrain = 'sea', seed = 7): GameSet
     seed,
     map: map(a, b),
     seats: [
-      { player: 'A', team: 'red', name: 'Ann', homePort: hex(0, 0), heading: Direction.N },
-      { player: 'B', team: 'blue', name: 'Bob', homePort: hex(3, 0), heading: Direction.S },
+      { player: 'A', team: 'red', name: 'Ann', homePort: PORT_A, heading: Direction.N },
+      { player: 'B', team: 'blue', name: 'Bob', homePort: PORT_B, heading: Direction.S },
     ],
     commandCards: TEST_CARDS,
     weatherCards: CALM_WEATHER,
@@ -64,10 +81,10 @@ describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
   it('puts each ship in her home port, sail down, with a Captain and 2 crew', () => {
     const s = newGame(setup());
     expect(Object.keys(s.ships)).toEqual(['A-ship', 'B-ship']);
-    expect(s.ships['A-ship']).toMatchObject({ pos: hex(0, 0), heading: Direction.N, sail: 'none', status: 'afloat', blocked: [] });
+    expect(s.ships['A-ship']).toMatchObject({ pos: PORT_A, heading: Direction.N, sail: 'none', status: 'afloat', blocked: [] });
     expect(s.ships['A-ship']?.crew.map((c) => [c.cardIcons, c.captain])).toEqual([[3, true], [1, false], [1, false]]);
     expect(s.players['A']).toEqual({ id: 'A', team: 'red', name: 'Ann', ships: ['A-ship'] });
-    expect(s.teams['red']).toEqual({ id: 'red', players: ['A'], homePort: hex(0, 0) });
+    expect(s.teams['red']).toEqual({ id: 'red', players: ['A'], homePort: PORT_A });
   });
 
   it('lets two players share a team', () => {
@@ -85,7 +102,7 @@ describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
 
 describe('programming phase (rules §5.1; cards come in step P2)', () => {
   it('waits until every player is ready', () => {
-    const s0 = newGame(setup('sea'));
+    const s0 = start(setup('sea'));
     expect(game.legalActions(s0, 'A')).toContainEqual({ type: 'ready' });
     expect(game.legalActions(s0, 'nobody')).toEqual([]);
     const { state: s1, events } = game.apply(s0, 'A', { type: 'ready' });
@@ -95,7 +112,7 @@ describe('programming phase (rules §5.1; cards come in step P2)', () => {
   });
 
   it('resolves a quiet turn straight through to the next turn', () => {
-    const { state, events } = playTurnWithDefaults(newGame(setup('sea')));
+    const { state, events } = playTurnWithDefaults(start(setup('sea')));
     expect(state.turn).toBe(2);
     expect(state.phase).toBe('programming');
     expect(state.ready).toEqual([]);
@@ -119,7 +136,7 @@ describe('programming phase (rules §5.1; cards come in step P2)', () => {
 
 describe('end of Part hazards (rules §5.2 step 6, §3.2.0)', () => {
   it('rough water deals 2 DD and a storm 3 DD; other terrain none', () => {
-    const s = newGame(setup('roughWater', 'storm'));
+    const s = start(setup('roughWater', 'storm'));
     expect(endOfPartHazard(s, s.ships['A-ship']!, DEFAULT_CONFIG)).toEqual({ dd: 2, source: 'roughWater' });
     expect(endOfPartHazard(s, s.ships['B-ship']!, DEFAULT_CONFIG)).toEqual({ dd: 3, source: 'storm' });
     const off = { ...s.ships['A-ship']!, pos: hex(9, 9) };
@@ -131,7 +148,7 @@ describe('decisions in the middle of resolution (engineering design §5, D1)', (
   // Find a seed where the first roll in rough water gives Ship damage, so the game must ask.
   function firstPause(): { seed: number; state: GameState; events: GameEvent[] } {
     for (let seed = 1; seed < 500; seed++) {
-      let state = newGame(setup('roughWater', 'sea', seed));
+      let state = start(setup('roughWater', 'sea', seed));
       state = game.apply(state, 'A', { type: 'ready' }).state;
       const out = game.apply(state, 'B', { type: 'ready' });
       if (pendingDecision(out.state)?.kind === PLACE_SHIP_DAMAGE) return { seed, state: out.state, events: out.events };
@@ -149,7 +166,7 @@ describe('decisions in the middle of resolution (engineering design §5, D1)', (
     expect(game.legalActions(state, 'A')).toHaveLength(9);
     expect(game.view(state, 'A').decision?.options).toHaveLength(9);
     expect(game.view(state, 'B').decision).toEqual({ player: 'A', kind: PLACE_SHIP_DAMAGE });
-    expect(game.view(newGame(setup()), 'A').decision).toBeUndefined();
+    expect(game.view(start(setup()), 'A').decision).toBeUndefined();
   });
 
   it('places the damage where the player chose and carries on', () => {
@@ -163,15 +180,15 @@ describe('decisions in the middle of resolution (engineering design §5, D1)', (
 
   it('is deterministic: replaying the log gives the same state and events', () => {
     const { seed } = firstPause();
-    const played = playTurnWithDefaults(newGame(setup('roughWater', 'storm', seed)));
-    const again = replay(game, setup('roughWater', 'storm', seed), played.log);
+    const played = playTurnWithDefaults(start(setup('roughWater', 'storm', seed)));
+    const again = replay({ ...game, init: start }, setup('roughWater', 'storm', seed), played.log);
     expect(again.state).toEqual(played.state);
     expect(again.events).toEqual(played.events);
   });
 
   it('applies each point of damage once, in order, across many seeds', () => {
     for (let seed = 1; seed <= 60; seed++) {
-      const { state, events } = playTurnWithDefaults(newGame(setup('storm', 'roughWater', seed)));
+      const { state, events } = playTurnWithDefaults(start(setup('storm', 'roughWater', seed)));
       for (const ship of Object.values(state.ships)) {
         if (events.some((e) => e.type === 'ShipReturned' && e.ship === ship.id)) continue; // repaired on her return
         const blocked = events.filter((e) => e.type === 'SlotBlocked' && e.ship === ship.id).map((e) => (e as { slot: string }).slot);
@@ -187,7 +204,7 @@ describe('sinking (rules §7.3, §7.4, §7.8)', () => {
     const reasons = new Set<string>();
     for (let seed = 1; seed <= 200 && reasons.size < 2; seed++) {
       // Storms on both ports: 3 DD a Part, 9 DD a turn, over 3 turns.
-      let state = newGame(setup('storm', 'storm', seed));
+      let state = start(setup('storm', 'storm', seed));
       const events: GameEvent[] = [];
       for (let turn = 0; turn < 3; turn++) {
         const out = playTurnWithDefaults(state);
@@ -212,7 +229,7 @@ describe('sinking (rules §7.3, §7.4, §7.8)', () => {
 describe('Crew damage (rules §7.4)', () => {
   it('a player may kill a wounded crew member instead of wounding a healthy one', () => {
     for (let seed = 1; seed < 300; seed++) {
-      let state = newGame(setup('storm', 'sea', seed));
+      let state = start(setup('storm', 'sea', seed));
       state.ships['A-ship']!.crew[1] = { ...state.ships['A-ship']!.crew[1]!, state: 'wounded' };
       state = game.apply(state, 'A', { type: 'ready' }).state;
       let out = game.apply(state, 'B', { type: 'ready' });

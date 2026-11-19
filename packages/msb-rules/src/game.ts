@@ -102,6 +102,8 @@ export function newGame(setup: GameSetup): GameState {
       hand: [],
       program: {},
       anchored: false,
+      stuck: false,
+      refitting: false,
       galeParts: 0,
     };
   }

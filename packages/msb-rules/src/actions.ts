@@ -101,7 +101,7 @@ function portGuns(state: GameState, part: Part, config: RulesConfig, ctx: Resolu
 /** §5.2 step 4. `ships` are all ships in seat order. */
 export function runActions(state: GameState, ships: readonly Ship[], part: Part, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   for (const ship of actionOrder(state, ships, part, config)) {
-    if (ship.status !== 'afloat') continue; // sunk earlier this phase: she doesn't act
+    if (ship.status !== 'afloat' || ship.refitting) continue; // sunk earlier this phase, or refitting (§7.7): she doesn't act
     const card = cardInSlot(state, ship, `action${part}`);
     if (!card) continue;
     if (card.action === 'fire') fire(state, ship, part, config, ctx);

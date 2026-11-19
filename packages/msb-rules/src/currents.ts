@@ -39,7 +39,7 @@ function rotorOf(m: MoveContext, at: Hex): Rotor | undefined {
  * blocked) stays put; the others move and turn.
  */
 function turnRotor(m: MoveContext, rotor: Rotor, ships: readonly Ship[], moved: Set<string>): void {
-  let movers = ships.filter((s) => !s.anchored);
+  let movers = ships.filter((s) => !s.anchored && !s.stuck);
   for (let changed = true; changed; ) {
     changed = false;
     for (const ship of movers) {
@@ -69,7 +69,7 @@ export function runCurrents(m: MoveContext, order: readonly Ship[]): void {
     const moved = new Set<string>();
     const rotorsDone = new Set<Rotor>();
     for (const ship of order) {
-      if (ship.status !== 'afloat' || ship.anchored || moved.has(ship.id)) continue;
+      if (ship.status !== 'afloat' || ship.anchored || ship.stuck || moved.has(ship.id)) continue;
       const rotor = rotorOf(m, ship.pos);
       if (rotor) {
         if (!activeIn(rotor.strength, subStep) || rotorsDone.has(rotor)) continue;
