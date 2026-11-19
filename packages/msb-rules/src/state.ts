@@ -10,6 +10,7 @@ import type { Direction, Hex } from '@msb/hex';
 import type { PendingDecision, ResolutionRecord } from '@msb/engine';
 import type { CommandCard } from './cards';
 import type { SailLevel } from './sailing';
+import type { WeatherBoard, WeatherCard } from './weather';
 import type { CrewMember } from './shipboard';
 
 export type TeamId = string;
@@ -29,6 +30,19 @@ export type Terrain =
 
 export interface MapHex {
   readonly terrain: Terrain;
+  /** Whirlpool portal number; paired with the other hex of the same number (rules §3.2.1). */
+  readonly whirlpool?: number;
+}
+
+/** A hex edge: the edge of `hex` (a hex key) on its `side`. */
+export interface MapEdge {
+  readonly hex: string;
+  readonly side: Direction;
+}
+
+/** A sea cave mouth (rules §3.2.2): on the edge of an island hex, facing the sea hex on that side. Paired by letter. */
+export interface MapCave extends MapEdge {
+  readonly letter: string;
 }
 
 /** A map's rules content (engineering design §7.1). Grows with each rules step. */
@@ -36,6 +50,9 @@ export interface GameMap {
   readonly id: string;
   /** Keyed by `hexKey`. A hex not listed is off the map. */
   readonly hexes: Readonly<Record<string, MapHex>>;
+  /** Wall reefs along hex edges (rules §3.2.0). */
+  readonly wallReefs?: readonly MapEdge[];
+  readonly caves?: readonly MapCave[];
 }
 
 export interface SeatSetup {
@@ -54,6 +71,8 @@ export interface GameSetup {
   readonly seats: readonly SeatSetup[];
   /** The command deck (rules §5.1: one shared deck). Content from `msb-data`. */
   readonly commandCards: readonly CommandCard[];
+  /** The weather deck (rules §3.5). Content from `msb-data`. */
+  readonly weatherCards: readonly WeatherCard[];
 }
 
 export interface ShipCrew extends CrewMember {
@@ -76,6 +95,10 @@ export interface Ship {
   hand: string[];
   /** Card id per slot key; cleared at the end of each turn. */
   program: Record<string, string>;
+  /** Anchored this Part (rules §6.1): can't be moved by anything. */
+  anchored: boolean;
+  /** Parts sailed at Full Sail in a Gale this turn: 1 DD each at Upkeep (rules §3.5). */
+  galeParts: number;
 }
 
 export interface Team {
@@ -101,6 +124,7 @@ export interface GameState {
   teams: Record<TeamId, Team>;
   players: Record<PlayerId, Player>;
   ships: Record<ShipId, Ship>;
+  weather: WeatherBoard;
   /** Command deck, top first (rules §5.1). */
   deck: string[];
   /** Cards discarded down to the hand limit this turn; they join the used cards at the end of the turn. */

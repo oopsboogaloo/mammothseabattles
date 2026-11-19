@@ -42,6 +42,8 @@ export interface RulesConfig {
   readonly refitCrew: number;
   /** §5.3 initiative tie-break die. */
   readonly tieBreakDieSides: number;
+  /** §3.1 optional rule Safe edge: the map edge acts as a beach instead of sinking ships. */
+  readonly safeEdge: boolean;
 }
 
 export const DEFAULT_DAMAGE_DIE: readonly DamageFace[] = [
@@ -85,6 +87,7 @@ export const DEFAULT_CONFIG: RulesConfig = {
   handLimit: 9,
   refitCrew: 3,
   tieBreakDieSides: 6,
+  safeEdge: false,
 };
 
 /** Make a config from the defaults with some values overridden (shallow per section). */

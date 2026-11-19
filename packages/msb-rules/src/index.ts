@@ -12,3 +12,5 @@ export * from './game';
 export * from './cards';
 export * from './programming';
 export * from './random-player';
+export * from './weather';
+export * from './movement';

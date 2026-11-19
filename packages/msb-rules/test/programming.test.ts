@@ -16,7 +16,7 @@ import {
   type GameState,
   type Terrain,
 } from '@msb/msb-rules';
-import { TEST_CARDS } from './fixtures';
+import { CALM_WEATHER, TEST_CARDS } from './fixtures';
 
 const game = createGame();
 
@@ -29,6 +29,7 @@ function setup(seed = 3, portTerrain: Terrain = 'sea', sameTeam = false): GameSe
       { player: 'B', team: sameTeam ? 'red' : 'blue', name: 'Bob', homePort: hex(4, 0), heading: Direction.S },
     ],
     commandCards: TEST_CARDS,
+    weatherCards: CALM_WEATHER,
   };
 }
 
@@ -174,7 +175,7 @@ describe('end of turn (rules §5.1 step 4, §5.4)', () => {
   it('used and discarded cards go to the bottom of the deck, programs are cleared, and ships draw again', () => {
     let s = newGame(setup());
     const card = s.ships['A-ship']!.hand[0]!;
-    s = game.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card }).state;
+    s = game.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'action3', card }).state;
     const top = s.deck.slice(0, 10);
     s = game.apply(s, 'A', { type: 'ready' }).state;
     const out = game.apply(s, 'B', { type: 'ready' });

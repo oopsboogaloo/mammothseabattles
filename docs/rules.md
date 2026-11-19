@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.137**
+> Status: **Draft v0.138**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -966,6 +966,9 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
+- **Q69 Caves, edge cases** (§3.2.2): (a) if a ship **can't come out** of the partner cave (an anchored ship or land in the exit hex),
+  does she stay where she was before entering? *Engine assumption: yes.* (b) Does a ship coming out of a cave **ram** the ship she
+  pushes (1 DD), like sailing? *Engine assumption: yes.*
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
 - ~~Q67 Anchor details~~ → ramming her stops the mover and she takes the 1 DD; only Steer turns her; lasts for its own Part (v0.133–v0.135).
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
@@ -985,6 +988,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.138 — Q69 cave edge cases (engine assumptions from step P3).
 - v0.137 — Q66 answered: weather board refill (discard the old card, refill from the deck, reshuffle discards when empty).
 - v0.136 — Lightning Storm and Hurricane weather cards left out for now.
 - v0.135 — Q67c: Anchor lasts only for its own Part. Q67 closed.

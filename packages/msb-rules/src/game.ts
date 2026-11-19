@@ -20,6 +20,7 @@ import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
 import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
+import { setUpWeather } from './weather';
 import { resolveTurn, shipsInSeatOrder } from './turn';
 
 export type Action = ProgramAction | { readonly type: 'answer'; readonly choice: number };
@@ -59,7 +60,10 @@ export function newGame(setup: GameSetup): GameState {
   if (setup.seats.length < 2) throw new Error('A game needs at least 2 seats (rules §2)');
   validateCards(setup.commandCards);
   const rng = new Rng(seedRng(setup.seed));
+  const weather = setUpWeather(setup.weatherCards, rng.state);
+  rng.state = weather.rng;
   const state: GameState = {
+    weather: weather.board,
     setup,
     rng: 0,
     turn: 1,
@@ -91,6 +95,8 @@ export function newGame(setup: GameSetup): GameState {
       crew: startingCrew(shipId),
       hand: [],
       program: {},
+      anchored: false,
+      galeParts: 0,
     };
   }
   for (const ship of shipsInSeatOrder(state)) drawCards(state, ship);
