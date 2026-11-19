@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.124**
+> Status: **Draft v0.125**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -535,6 +535,16 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    - It counts as **one current step** (a single arrow acts in the single-arrow sub-step); if the end hex is occupied she **stays put**,
      as with any blocked current ❓.
 
+9. **2-hex rotor** *(designer, v0.125)*: an oval ring of arrows around the **middle of the edge between two hexes**. It turns everything
+   **180°** around that point: a ship is carried into the other hex and **ends facing the opposite way** (north-east ↔ south-west in the
+   picture). Ships on both hexes **swap places**, as with the 4-hex rotor (example 5).
+
+   <img src="images/currents/example-9-two-hex-rotor.jpg" width="300">
+
+**Rotors in general** (examples 4, 5 and 9): a ring of arrows round a point turns every ship on it around that point; she moves to the
+hex the rotation takes her to and turns by the same angle. The 2-hex rotor (round an edge) turns 180°, the 3-hex ring (round a corner)
+120°, and the 4-hex rotor 180°. The art will mark the angle with notches or bobbles.
+
 **Designer's principle:** the turning amounts only need to be **consistent and predictable**; players learn them quickly. The art will mark
 the number of hex sides wherever it isn't obvious. The **digital version** stores the exact move and turn for every arrow in the map data,
 so it never has to read the art.
@@ -949,6 +959,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.125 — current example: 2-hex rotor round an edge, 180° swap.
 - v0.124 — currents may carry a ship to a non-adjacent hex (e.g. across a hex corner); in-between hexes ignored ❓ (Q65).
 - v0.123 — Q63: eddies turn 60°, 120° or 180° (longer arrows = stronger spin; 180° eddy not drawn yet).
 - v0.122 — Q62 corrected: the ring round a hex corner turns ships 120° (a 3-hex rotor); example picture replaced.
