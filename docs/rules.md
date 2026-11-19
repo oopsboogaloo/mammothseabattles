@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.131**
+> Status: **Draft v0.132**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -389,7 +389,7 @@ Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
 
 **Row Ahead 1 / Row Back 1** *(designer, v0.131)*: Sail-band orders. The ship moves **1 hex straight ahead or straight astern,
 whatever the wind** (Dead Calm included, and no weather modifiers). She has no sail set, so she's at **No Sail** for that Part.
-- ❓ *Assumed (Q68):* rowing is ship movement like sailing, so it **pushes** ships in the way and **rams** (1 DD to the first ship hit).
+- Rowing is ship movement like sailing: it **pushes** ships in the way and **rams** (1 DD to the first ship hit). ✅ *Designer (Q68): "ask the Vikings".*
 
 **Anchor** *(designer, v0.129)*: a Sail-band order. For that Part the ship is at **No Sail** and **can't be moved at all**: no sailing,
 no **pushing**, no **wind drift** and no **currents**. She **can still turn** with her Steer card, and still act in the Action phase.
@@ -963,7 +963,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q66 Refilling the weather board** (§3.5): when the board advances, what happens to the card leaving "now", and where does the new
   card for the empty space come from? *Engine assumption: the old card is discarded, the space gets the top card of the weather deck,
   and the discards are reshuffled when the deck runs out.*
-- **Q68 Rowing** (§6.1): does Row Ahead / Row Back push and ram ships in the way, like sailing?
+- ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
 - **Q67 Anchor details** (§6.1): (a) a ship that sails into an anchored ship: is she stopped, and does the anchored ship take the 1 DD
   for being rammed? (b) Does an eddy still turn an anchored ship? (c) Anchor lasts only for its own Part?
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
@@ -983,6 +983,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.132 — Q68: rowing pushes and rams.
 - v0.131 — Row Ahead 1 / Row Back 1 = 1 hex ahead or astern whatever the wind (Q68: pushing?); Hard About = 180°; the second 360 card is 380 (designer to fix the art).
 - v0.130 — optional rule **Safe edge**: the map edge acts as a beach (ships stop instead of sinking).
 - v0.129 — **sail level is no longer persistent**: every Part starts at No Sail; a Sail card sets the level for its Part only. **Anchor** = No Sail and no movement of any kind (sailing, pushing, drift, currents) but turning allowed (Q67 for details). No No Sail card exists.
