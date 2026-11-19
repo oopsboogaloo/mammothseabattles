@@ -262,7 +262,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
-**Lightning Storm** and **Hurricane** cards exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*.
+**Lightning Storm** and **Hurricane** cards exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*; their intended text and more weather ideas are in [`suggestions.md`](suggestions.md).
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 

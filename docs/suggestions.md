@@ -77,3 +77,24 @@ Ideas from the designer (v0.109) for later; the current rule is "agree, or take 
 - **Wrecks:** don't place a wreck too near another player's port (distance to decide).
 - **Independent ports:** the town printed on a main board could become a neutral port where anyone can repair.
 - **One-piece boards:** e.g. a large rectangular board with ports printed on it, used on its own instead of modular 37-hex boards.
+
+## Weather ideas *(designer, 2026-11-19; future ideas, not rules)*
+
+**The two storm cards in the art** (left out of the deck for now, rules §3.5), with their intended text:
+- **Hurricane**: *(storm surge)* the tide is as if **High tide** for this turn; *(turbulence)* draw a **fresh weather card for each Part**
+  to set that Part's wind direction and strength; **all ships take 1 DD at Upkeep**.
+- **Lightning Storm**: *(turbulence)* draw a **fresh weather card for each Part** to set that Part's wind direction and strength;
+  **all ships take 2 DD at Upkeep**.
+
+**More weather ideas:**
+- **Blessed wind**: each player chooses the wind strength and direction for themselves.
+- **Cursed wind**: each player chooses the wind strength and direction (at most Strong) for the player on their left.
+- **Healing calm**: no wind (as Dead Calm); heal all wounded crew.
+- **Rainbow**: place an extra treasure.
+- **Hail**: all ships take 2 Ship damage at Upkeep.
+- **Blistering heat**: all ships take 2 Crew damage at Upkeep.
+- **Mist**: cannon range reduced by 1.
+- **Fog**: cannon range reduced to 1.
+
+**Concept:** a smaller **extreme weather deck**, with a pair of **extreme weather cards** in the main weather deck that call a card from it.
+Needs thought.
