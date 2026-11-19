@@ -782,6 +782,7 @@ function renderMenu() {
       <button class="btn" id="m-weather">Weather board</button>
     </div>
     <h4>Game</h4>
+    <p><a class="btn primary" href="play.html">Play the hot-seat prototype (real rules, 2–4 players) →</a></p>
     <label class="opt"><input type="checkbox" id="o-fleets" ${settings.fleets ? 'checked' : ''}> Fleets: two ships for you (expert, rules §8.7)</label>
     <label class="opt"><input type="checkbox" id="o-pos" ${settings.pointsOfSail ? 'checked' : ''}> Points of Sail rule (§6.2)</label>
     <label class="opt"><input type="checkbox" id="o-lod" ${settings.lowDetail ? 'checked' : ''}> Lighter ship models (iPad)</label>
