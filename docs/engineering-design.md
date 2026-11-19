@@ -60,7 +60,7 @@ interface GameState {
 interface Ship {
   readonly id: ShipId; readonly player: PlayerId;
   readonly pos: Hex; readonly heading: Direction; readonly sail: SailLevel;
-  readonly status: 'afloat' | 'stuck' | 'refitting';   // sunk ships respawn at once, so there is no 'sunk' state
+  readonly status: 'afloat' | 'stuck' | 'refitting' | 'sunk';   // sunk until she returns at Upkeep (rules §7.8)
   readonly hand: CardId[];
   readonly program: Partial<Record<SlotKey, CardId>>;  // 9 slots
   readonly blocked: SlotKey[];                          // damage markers

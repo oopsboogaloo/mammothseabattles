@@ -4,3 +4,8 @@ export * from './damage';
 export * from './initiative';
 export * from './shipboard';
 export * from './cannon';
+export * from './state';
+export * from './events';
+export * from './take-damage';
+export * from './turn';
+export * from './game';

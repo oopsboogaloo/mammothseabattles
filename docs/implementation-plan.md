@@ -23,7 +23,7 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 
 | # | Step | What it delivers | Rules |
 |---|---|---|---|
-| **P1** | **Kernel and the re-run design (D1)** | `GameDef` interface, action log and `replay`; game state with teams, players and ships kept separate; setup on a test map; resolution with `ask()` and re-run from the turn snapshot, proved on **damage placement** (a Ship or Crew damage choice mid-turn) | §5, §7.2–7.4 |
+| **P1** ✅ | **Kernel and the re-run design (D1)** | `GameDef` interface, action log and `replay`; game state with teams, players and ships kept separate; setup on a test map; resolution with `ask()` and re-run from the turn snapshot, proved on **damage placement** (a Ship or Crew damage choice mid-turn) | §5, §7.2–7.4 |
 | **P2** | **Programming** | Deal from crew icons, place and take back cards, ready, reveal Part by Part (D6), discard down to 9, used cards to the deck bottom. A **random player** (legal random programs) for fuzz tests | §5.1 |
 | **P3** | **Movement** | `stepShip` (engineering design §6); Move with pushing and ramming; Steer; wind drift; terrain at each tide; board edge; whirlpools; caves; stranding | §3.2, §5.2, §6 |
 | **P4** | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
@@ -32,6 +32,11 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; the test map as JSON with a validator | engineering §7 |
 | **P8** | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
 | **P9** | **Play-test** | Family game on PC and iPad; findings back into `rules.md` and this plan | |
+
+**Done in P1:** `engine` has `GameDef`, `replay` and the re-run resolution (`resolution.ts`); `msb-rules` has the game state, setup,
+the ready → resolve → next turn loop, and end-of-Part rough water and storm damage with Ship and Crew damage placement asked of the
+damaged ship's player (defaults: never complete a row if avoidable; wound before kill, Captain last). A sunk ship stays sunk until
+P5 adds the return at Upkeep.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
