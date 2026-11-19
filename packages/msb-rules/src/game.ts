@@ -20,7 +20,7 @@ import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
 import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
-import { setUpWeather } from './weather';
+import { setUpWeather, tide, type Tide } from './weather';
 import { resolveTurn, shipsInSeatOrder } from './turn';
 
 export type Action = ProgramAction | { readonly type: 'answer'; readonly choice: number };
@@ -41,6 +41,8 @@ export interface GameView {
   readonly deckSize: number;
   readonly ships: Readonly<Record<string, ShipView>>;
   readonly ready: readonly PlayerId[];
+  /** The face-up weather (rules §3.5: the current card and the next one) and the tide. Other spaces stay hidden. */
+  readonly weather: { readonly now: string; readonly next: string; readonly space: number; readonly tide: Tide };
   /** The question being asked, if any; options are shown only to the player who must answer. */
   readonly decision?: { readonly player: PlayerId; readonly kind: string; readonly options?: readonly unknown[]; readonly defaultIndex?: number };
 }
@@ -173,7 +175,9 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
     view(state, player) {
       const ships: Record<string, ShipView> = {};
       for (const ship of Object.values(state.ships)) ships[ship.id] = viewShip(state, player, ship);
-      const base = { turn: state.turn, phase: state.phase, part: state.part, deckSize: state.deck.length, ships, ready: state.ready };
+      const { spaces, now } = state.weather;
+      const weather = { now: spaces[now] as string, next: spaces[(now + 1) % 6] as string, space: now, tide: tide(state.weather) };
+      const base = { turn: state.turn, phase: state.phase, part: state.part, deckSize: state.deck.length, ships, ready: state.ready, weather };
       const decision = state.pending;
       if (!decision) return base;
       return {

@@ -178,6 +178,43 @@ describe('rowing and Anchor (rules §6.1)', () => {
   });
 });
 
+describe('Anchor holds for the whole Part (rules §6.1)', () => {
+  it('a faster ship can’t push a ship that anchors later in initiative order', () => {
+    const g = createGame();
+    let s = game3(map(), CALM_WEATHER, false);
+    setWeather(s, 'deadCalm');
+    place(s, 'A-ship', O, N);
+    place(s, 'B-ship', neighbor(O, N), N);
+    const give = (ship: string, id: string, slot: string) => {
+      s.deck = s.deck.filter((x) => x !== id);
+      for (const x of Object.values(s.ships)) x.hand = x.hand.filter((c) => c !== id);
+      s.ships[ship]!.hand.push(id);
+      s = g.apply(s, ship[0]!, { type: 'place', ship, slot, card: id }).state;
+    };
+    const row = TEST_CARDS.filter((c) => c.sail === 'rowAhead').sort((a, b) => b.initiative - a.initiative)[0]!;
+    const anchor = TEST_CARDS.filter((c) => c.sail === 'anchor' && c.initiative < row.initiative)[0]!;
+    give('A-ship', row.id, 'sail1');
+    give('B-ship', anchor.id, 'sail1');
+    s = g.apply(s, 'A', { type: 'ready' }).state;
+    let out = g.apply(s, 'B', { type: 'ready' });
+    while (out.state.pending) out = g.apply(out.state, out.state.pending.player, { type: 'answer', choice: out.state.pending.defaultIndex });
+    expect(out.state.ships['B-ship']!.pos).toEqual(neighbor(O, N));
+    expect(out.state.ships['A-ship']!.pos).toEqual(O);
+  });
+
+  it('players see the current and next weather and the tide, not the rest of the board', () => {
+    const s = game3(map());
+    const v = createGame().view(s, 'A');
+    expect(v.weather).toEqual({
+      now: s.weather.spaces[s.weather.now],
+      next: s.weather.spaces[(s.weather.now + 1) % 6],
+      space: s.weather.now,
+      tide: tide(s.weather),
+    });
+    expect(JSON.stringify(v)).not.toContain('"deck"');
+  });
+});
+
 describe('pushing and ramming (rules §6.5)', () => {
   it('a sailing ship pushes a chain; only the first ship hit takes 1 DD', () => {
     const s = game3(map());

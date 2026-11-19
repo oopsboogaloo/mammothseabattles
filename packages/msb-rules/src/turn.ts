@@ -53,7 +53,10 @@ function afloat(ships: readonly Ship[]): Ship[] {
 /** §5.2 steps 1, 2, 3 and 5. Actions (step 4) come in P5. */
 function moveSteerDrift(state: GameState, part: Part, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   const m: MoveContext = { state, config, part, ctx };
-  for (const ship of Object.values(state.ships)) ship.anchored = false;
+  // Anchor holds for the whole Part (§6.1), so it is set before any ship moves, not at the anchored ship's own initiative.
+  for (const ship of Object.values(state.ships)) {
+    ship.anchored = ship.status === 'afloat' && cardInSlot(state, ship, `sail${part}`)?.sail === 'anchor';
+  }
   const order = sailOrder(state, part, config);
   for (const ship of afloat(order)) if (ship.status === 'afloat') moveShip(m, ship);
   for (const ship of afloat(order)) steerShip(m, ship);
