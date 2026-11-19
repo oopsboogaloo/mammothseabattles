@@ -136,7 +136,7 @@ Rules §5.2 says ships move at the same time and initiative settles conflicts. *
 **One function moves a ship one hex**, whatever the cause, because the rules say terrain applies "however a ship gets there" (§3.2.0):
 
 ```
-stepShip(m, ship, direction, cause: 'sail' | 'row' | 'push' | 'current' | 'drift' | 'cave')   // edges, then enterHex(...)
+stepShip(m, ship, direction, cause: 'sail' | 'row' | 'push' | 'current' | 'drift')   // edges, then enterHex(...)
 enterHex(m, ship, to, direction | undefined, cause)  // also used by currents that jump to a non-adjacent hex
   1. Edge crossed: wall reef → stop + 2 DD.  Cave mouth → come out of the partner cave facing out (§3.2.2).
   2. Target hex off the map → she sinks in the hex she was about to leave (rules §3.1, §7.8); with the optional **Safe edge** rule
@@ -217,7 +217,7 @@ Events are the only thing the client animates and the only source of teaching ca
 | Group | Events |
 |---|---|
 | Turn | `TurnStarted`, `ProgramsRevealed`, `PartStarted`, `PhaseStarted`, `UpkeepStarted`, `GameWon` |
-| Movement (as built in P3–P4) | `SailSet` (sail level and order), `ShipMoved` (from, to, cause: sail, row, push, current, drift, cave), `ShipStopped` (by: cliff, beach, wall reef, ship, anchored, edge), `ShipRammed`, `ShipTurned` (cause: steer, cave, current), `Teleported`, `WentThroughCave`. To come: `ShipStranded`, `ShipFreed` |
+| Movement (as built in P3–P4) | `SailSet` (sail level and order), `ShipMoved` (from, to, cause: sail, row, push, current, drift), `ShipStopped` (by: cliff, beach, wall reef, ship, anchored, edge), `ShipRammed`, `ShipTurned` (cause: steer, cave, current), `Teleported`, `WentThroughCave`. To come: `ShipStranded`, `ShipFreed` |
 | Combat | `CannonFired` (targets, spared), `PortGunsFired`, `DamageRolled` (source, faces), `SlotBlocked`, `CrewWounded`, `CrewKilled`, `SlotRepaired`, `CrewHealed`, `ShipSank`, `ShipReturned` |
 | Objects | `TreasureSpawned`, `TreasurePickedUp`, `TreasureKnockedLoose`, `TreasureScored`, `WreckPlaced`, `WreckSearched`, `CrewGained`, `ShipRefitted` |
 | Cards and weather | `CardsDrawn` (count; ids only in the owner's view), `WeatherAdvanced`, `TideChanged` |

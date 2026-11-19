@@ -403,14 +403,28 @@ describe('sea caves (rules §3.2.2)', () => {
     expect(events).toContainEqual({ type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: N, to: NE, cause: 'cave' });
   });
 
-  it('coming out pushes a ship at the exit, even when drift carried her in', () => {
+  it('caves are ordinary movement (Q69): sailing through pushes and rams; drift is blocked by a ship at the exit', () => {
     const s = game3(caveMap());
     place(s, 'B-ship', neighbor(I2, NE));
     place(s, 'A-ship', neighbor(I1, S), NE);
-    run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'drift'));
-    expect(pos(s, 'A-ship')).toEqual(neighbor(I2, NE));
+    const drift = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'drift'));
+    expect(pos(s, 'A-ship')).toEqual(neighbor(I1, S));
     expect(s.ships['A-ship']!.heading).toBe(NE);
+    expect(types(drift)).toEqual(['ShipStopped']);
+    const sail = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), NO_DAMAGE);
+    expect(pos(s, 'A-ship')).toEqual(neighbor(I2, NE));
     expect(pos(s, 'B-ship')).toEqual(neighbor(neighbor(I2, NE), NE));
+    expect(sail).toContainEqual({ type: 'ShipRammed', rule: '6.5', ship: 'B-ship', by: 'A-ship' });
+  });
+
+  it('a ship can be pushed into a cave', () => {
+    const s = game3(caveMap());
+    place(s, 'B-ship', neighbor(I1, S));
+    place(s, 'A-ship', neighbor(neighbor(I1, S), S), N);
+    run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'row'), NO_DAMAGE);
+    expect(pos(s, 'B-ship')).toEqual(neighbor(I2, NE));
+    expect(s.ships['B-ship']!.heading).toBe(NE);
+    expect(pos(s, 'A-ship')).toEqual(neighbor(I1, S));
   });
 
   it('if she can’t come out, she stays where she was', () => {

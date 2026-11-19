@@ -47,11 +47,11 @@ exactly. While a turn is paused for a decision, the state shows the turn part-wa
 **Done in P3:** the weather board (6 spaces, random starting space, tide from the space); the Move phase in Sail initiative order with
 sailing (points of sail and weather), rowing and Anchor; pushing chains and ramming (1 DD to the first ship hit, none to teammates);
 steering; wind drift; terrain at each tide; wall reefs; death reefs; the map edge and the optional Safe edge; whirlpools; sea caves;
-Gale damage at Upkeep. Damaged slots' cards are ignored. Cave edge cases are engine assumptions (rules Q69).
+Gale damage at Upkeep. Damaged slots' cards are ignored. Caves join two hexes and follow the normal pushing and blocking rules (rules Q69).
 
 **Done in P4:** currents in three sub-steps (triple, then double and triple, then all), in Sail initiative order, each ship moved at most
 once per sub-step: straight and curved flows, eddies (60°, 120°, 180°), rotors of any size moving all their ships together (so ships
-swap), jumps to non-adjacent hexes that ignore the hexes between, and blocked currents leaving the ship where she is (not turned: Q70).
+swap), jumps to non-adjacent hexes that ignore the hexes between, and blocked currents leaving the ship where she is (not turned: Q70, agreed).
 Map data stores each current's destination and turn (engineering design §7.1).
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and

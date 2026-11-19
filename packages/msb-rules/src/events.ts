@@ -10,7 +10,7 @@ import type { PlayerId, ShipId } from './state';
 export type DamageSource = 'roughWater' | 'storm' | 'cliff' | 'wallReef' | 'ram' | 'gale';
 
 /** What moved a ship one hex (engineering design §6). */
-export type MoveCause = 'sail' | 'row' | 'push' | 'current' | 'drift' | 'cave';
+export type MoveCause = 'sail' | 'row' | 'push' | 'current' | 'drift';
 
 /** What stopped a ship (rules §3.2.0, §6.1, §6.5). */
 export type StopReason = 'cliff' | 'beach' | 'wallReef' | 'ship' | 'anchored' | 'edge';

@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.139**
+> Status: **Draft v0.140**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -178,9 +178,12 @@ Caves work like whirlpool portals (§3.2.1) with these differences:
 - She **changes orientation**: she leaves **facing out of the partner cave mouth** (as the printed arrow shows), not keeping her old heading.
 - Like whirlpools, she **continues any remaining movement** after coming out, and **any movement** (sailing, current, drift, push) triggers it.
 - A ship can enter a cave **backwards or sideways** (drift, push); she still comes out **facing the arrow**.
-- **Exit hex occupied**: unlike whirlpools, the cave is **not** blocked. Coming out of the cave is **normal movement** into the exit hex,
-  so the emerging ship **pushes** the ship that's there (in her new heading), following the normal pushing rules (§6.5). This applies
-  however she entered, even carried in by a current or drift, which normally don't push.
+- **Caves are not a special case** *(designer, v0.140, Q69)*: a cave **joins two sea hexes** that would not otherwise be joined (the hex
+  at the cave mouth and the hex in front of the partner's mouth). They're joined **for movement only, not for cannon fire**, and **all the
+  normal movement rules apply**:
+  - ships can be **pushed into** a cave, and a ship moving through a cave **pushes** (and rams) like any ship movement (§6.5);
+  - **currents and drift don't push** through a cave either: if the exit hex is occupied, she **stays where she was**;
+  - a ship that can't come out (blocked) **stays where she was** before entering, as with any blocked move.
 
 ### 3.3 Command cards
 <img src="images/cards/400-half-sail_ease-port_fire-cannons.png" width="160"> <img src="images/cards/420-half-sail_ease-port_heal.png" width="160"> <img src="images/cards/860-full-sail_hard-to-port_repair.png" width="160"> <img src="images/cards/840-full-sail_hard-to-port_heal.png" width="160">
@@ -966,11 +969,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
-- **Q70 Blocked curved current** (§6.6): when a curved arrow (or a rotor) can't carry a ship because the hex is occupied, she stays put.
-  Is she **still turned**? *Engine assumption: no, a blocked current neither moves nor turns her.*
-- **Q69 Caves, edge cases** (§3.2.2): (a) if a ship **can't come out** of the partner cave (an anchored ship or land in the exit hex),
-  does she stay where she was before entering? *Engine assumption: yes.* (b) Does a ship coming out of a cave **ram** the ship she
-  pushes (1 DD), like sailing? *Engine assumption: yes.*
+- ~~Q70 Blocked curved current~~ → a blocked current neither moves nor turns her (designer agreed, v0.140).
+- ~~Q69 Caves, edge cases~~ → caves just join two hexes for movement; normal pushing and blocking rules apply (v0.140).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
 - ~~Q67 Anchor details~~ → ramming her stops the mover and she takes the 1 DD; only Steer turns her; lasts for its own Part (v0.133–v0.135).
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
@@ -990,6 +990,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.140 — Q69: caves join two hexes for movement (not cannon fire); normal pushing and blocking apply. Q70 agreed: a blocked current doesn't turn the ship.
 - v0.139 — Q70 blocked curved currents (engine assumption from step P4).
 - v0.138 — Q69 cave edge cases (engine assumptions from step P3).
 - v0.137 — Q66 answered: weather board refill (discard the old card, refill from the deck, reshuffle discards when empty).

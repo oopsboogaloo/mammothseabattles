@@ -17,7 +17,7 @@ import { currentWeather, tide, type Tide } from './weather';
 export type StepResult = 'moved' | 'stopped' | 'sunk';
 
 /** Ship movement pushes; currents and drift don't (§6.5). */
-const PUSHES: ReadonlySet<MoveCause> = new Set<MoveCause>(['sail', 'row', 'push', 'cave']);
+const PUSHES: ReadonlySet<MoveCause> = new Set<MoveCause>(['sail', 'row', 'push']);
 
 /** §3.2.0 tide table: is this terrain land (it stops ships) at this tide? */
 export function isLand(terrain: Terrain, at: Tide): boolean {
@@ -112,7 +112,7 @@ export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: Move
     return ship.status === 'afloat' ? stop(m, ship, 'wallReef') : 'sunk';
   }
   const cave = caveEntered(state, from, dir);
-  if (cave) return throughCave(m, ship, cave);
+  if (cave) return throughCave(m, ship, cave, cause);
 
   return enterHex(m, ship, neighbor(from, dir), dir, cause);
 }
@@ -164,16 +164,17 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
 }
 
 /**
- * §3.2.2: come out of the partner cave into the sea hex in front of it, facing out of the mouth.
- * Coming out is ship movement, so she pushes a ship that's there. ❓ If she can't come out, she stays where she was.
+ * §3.2.2 (Q69, v0.140): a cave joins the sea hex at its mouth to the sea hex in front of the partner cave. Moving through it is
+ * ordinary movement into that hex, by whatever moved her: sailing and rowing push and ram, currents and drift are blocked by a ship
+ * there, and a blocked ship stays where she was. She comes out facing out of the partner cave's mouth.
  */
-function throughCave(m: MoveContext, ship: Ship, cave: MapCave): StepResult {
+function throughCave(m: MoveContext, ship: Ship, cave: MapCave, cause: MoveCause): StepResult {
   const exit = partnerCave(m.state, cave);
   const before = { pos: ship.pos, heading: ship.heading };
   const mouth = parseHexKey(exit.hex);
   ship.pos = mouth;
   ship.heading = exit.side;
-  const result = stepShip(m, ship, exit.side, 'cave');
+  const result = enterHex(m, ship, neighbor(mouth, exit.side), exit.side, cause);
   if (result !== 'moved' || hexEquals(ship.pos, mouth)) {
     if (ship.status === 'afloat') Object.assign(ship, before);
     return result === 'sunk' ? 'sunk' : 'stopped';
