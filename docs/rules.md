@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.121**
+> Status: **Draft v0.122**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -489,10 +489,11 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-4-curved-anticlockwise.jpg" width="300">
 
-4. **Small ring around a hex corner** *(designer: "just the same")*: a ring of arrows around the corner where 3 hexes meet. In the example
-   a ship is carried from one of the 3 hexes to the next one clockwise (1 hex) and turned **one hex side clockwise** (south-west →
-   north-west), the same as a curved current. ✅ **Designer (Q62): one hex side (60°), not 120°.** The art will get small markers
-   ("bobbles") on the arrow showing how many hex sides to turn wherever it isn't obvious.
+4. **Small ring around a hex corner (a 3-hex rotor)**: a ring of arrows around the corner where 3 hexes meet. Like the 4-hex rotor
+   (example 5), it turns everything around that corner: a ship is carried to the next of the 3 hexes in the arrows' direction (1 hex) and
+   turned **two hex sides (120°)** the same way. In the example the ring is clockwise: a ship facing **north** is carried to the next hex
+   and ends facing **south-east**. ✅ **Designer (Q62, v0.122): 120°.** (The earlier picture showing 60° was a mistake in the art, which
+   shows how easy these are to misread.) The art will get small markers ("bobbles") on the arrows showing how many hex sides to turn.
 
    <img src="images/currents/example-5-three-hex-ring.jpg" width="300">
 
@@ -920,7 +921,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
   **120°**, or is it also 60° (south → south-west)?
 - **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
   is the category printed on the board? How many boards of each category are planned for the first box?
-- ~~Q62 Ring round a hex corner~~ → one hex side (60°); bobbles on the art where unclear (answered v0.120).
+- ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
   - Dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram); eddies act in the single-arrow sub-step (§6.6 example 6).
@@ -935,6 +936,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.122 — Q62 corrected: the ring round a hex corner turns ships 120° (a 3-hex rotor); example picture replaced.
 - v0.121 — board categories 1–3 (like hurricanes): Category 1 forgiving and open for beginners, Category 3 dense (Q64).
 - v0.120 — current examples: river and sideways straight currents; Q62 answered (corner ring turns 60°); 3-arrow eddy example (Q63: 120°?); turning amounts need only be consistent.
 - v0.119 — current example: eddy turns the ship 60° in place, no movement (resolves the eddy ❓ in §3.2).

@@ -185,7 +185,7 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 - Hexes are keyed by axial coordinates (`hex` package). Edges are named by hex + direction.
 - A validator checks: portals and caves come in pairs, currents don't point off the map, 9 spawn points, home ports on the edge, every hex in the art has an entry.
 - **Currents store the exact effect, never inferred from the art** (rules §6.6): each arrow's step direction and `turn` in hex sides
-  (signed, + clockwise), e.g. curved arrow and corner ring `turn: ±1`; eddy `{ "eddy": "cw", "turn": 1 }` (or 2, Q63) with no step;
+  (signed, + clockwise), e.g. curved arrow `turn: ±1`; corner ring (3-hex rotor) `turn: ±2`; eddy `{ "eddy": "cw", "turn": 1 }` (or 2, Q63) with no step;
   rotors as a group of hexes with a centre and an angle, moved together. Dashed eddies, gyres and the maelstrom may still add fields (Q20).
 - Whether a board is one printed map or several tiles joined (Q18) does not change this format: tiles would be assembled into one map file by a build step.
 
