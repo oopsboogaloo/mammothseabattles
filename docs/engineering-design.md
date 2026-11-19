@@ -303,7 +303,7 @@ These are rules questions, not engineering ones. Where no answer exists the engi
 | ~~Board edge~~ | | Answered: leaving the map sinks her (rules §3.1) |
 | Anchor, Row Ahead/Back, Hard About, the two 360s | Card data | The mock-up's assumptions (mock-up README) |
 | ~~Lightning Storm, Hurricane~~ | | Designer: left out for now (rules §3.5, v0.136) |
-| How the weather board refills (Q66) | Weather | When the board advances, the card leaving "now" goes to a weather discard pile and the empty space gets the top card of the weather deck; the discards are shuffled into a new deck when it runs out. **New Weather Front** follows its card text: reshuffle the whole weather deck (with this card) and deal 6 new cards |
+| ~~How the weather board refills~~ | | Answered (rules §3.5, v0.137): when the board advances, the card leaving "now" goes to a weather discard pile and the empty space gets the top card of the weather deck; the discards are shuffled into a new deck when it runs out. **New Weather Front** follows its card text: reshuffle the whole weather deck (with this card) and deal 6 new cards |
 | Core crew deck list (Q48); recruits at refit | Setup, refit, wrecks | Captain + Pirates only |
 | ~~Used cards~~ | | Answered: shuffled onto the bottom of the deck; discard down to 9 after programming (rules §5.1) |
 | ~~Gale DD~~ | | Answered: 1 DD per Part sailed at Full Sail, taken at Upkeep (rules §3.5) |

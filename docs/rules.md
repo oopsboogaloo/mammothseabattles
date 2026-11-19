@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.136**
+> Status: **Draft v0.137**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -250,6 +250,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 - **"Now" is marked by a rotating arrow** in the middle of the board *(designer to-do; a pencil for now)*.
 - **Starting tide: random.**
 - **New Weather Front** replaces the face-up cards too.
+- **Refilling** *(v0.137)*: when the board advances, the card leaving "now" goes to a **weather discard pile**, and the empty space gets
+  the **top card of the weather deck**. When the deck runs out, shuffle the discards to make a new deck.
 
 | Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
 |---|---|---|---|
@@ -962,9 +964,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
-- **Q66 Refilling the weather board** (§3.5): when the board advances, what happens to the card leaving "now", and where does the new
-  card for the empty space come from? *Engine assumption: the old card is discarded, the space gets the top card of the weather deck,
-  and the discards are reshuffled when the deck runs out.*
+- ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
+  discards are reshuffled when the deck runs out (designer approved, v0.137).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
 - ~~Q67 Anchor details~~ → ramming her stops the mover and she takes the 1 DD; only Steer turns her; lasts for its own Part (v0.133–v0.135).
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
@@ -984,6 +985,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.137 — Q66 answered: weather board refill (discard the old card, refill from the deck, reshuffle discards when empty).
 - v0.136 — Lightning Storm and Hurricane weather cards left out for now.
 - v0.135 — Q67c: Anchor lasts only for its own Part. Q67 closed.
 - v0.134 — Q67b: currents (eddies included) don't turn an anchored ship; only her Steer card does.

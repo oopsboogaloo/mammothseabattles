@@ -53,7 +53,7 @@ mock-up's assumptions until they're answered, each kept in one place so it is ch
 | ~~**Hard About**~~ | **Answered (v0.131):** turn 180° |
 | ~~**Two cards numbered 360**~~ | **Answered (v0.131):** `360b` (Row Ahead 1 / Hard About / Repair) is **380**. P7 sets it in `msb-data` until the designer corrects the CSV and card art |
 | ~~**Lightning Storm** and **Hurricane**~~ | **Designer (v0.136): left out of the deck for now** |
-| **How the weather board refills** (rules Q66) | The card leaving "now" is discarded and the space gets the top card of the weather deck; New Weather Front reshuffles and deals 6 new cards (engineering design §14) |
+| ~~**How the weather board refills**~~ | **Answered (v0.137):** discard the old card, refill from the top of the weather deck, reshuffle the discards when it runs out |
 
 ## After the prototype
 
