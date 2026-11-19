@@ -224,7 +224,7 @@ describe('sinking and coming back (rules §7.8, §7.9)', () => {
 
   it('if her port is occupied she comes back next to it, in a free sea hex of her choice; if none is free, she waits', () => {
     const P = hex(5, -5);
-    const m = () => map({ [k(neighbor(P, SW))]: { terrain: 'beach' } }); // round P on the map: S (sea), SW (beach), NW (sea)
+    const m = () => map({ [k(neighbor(P, SW))]: { terrain: 'beach' }, [k(neighbor(P, 2))]: { terrain: 'deathReef' } }); // round P: S sea, SW beach, NW sea, SE a death reef (never offered)
     const s = game(m());
     ship(s, 'B').status = 'sunk';
     place(s, 'D', P);

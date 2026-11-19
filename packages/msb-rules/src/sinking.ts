@@ -58,7 +58,8 @@ export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: R
         .map((d) => neighbor(port, d))
         .filter((h) => {
           const hex = state.setup.map.hexes[hexKey(h)];
-          return hex !== undefined && !isLand(hex.terrain, tide(state.weather)) && !occupied(state, h);
+          // Never onto land, and never onto a death reef, which would sink her at once (§3.2.0).
+          return hex !== undefined && hex.terrain !== 'deathReef' && !isLand(hex.terrain, tide(state.weather)) && !occupied(state, h);
         });
       // ❓ If every hex round the port is full too, she waits for the next Upkeep.
       if (free.length === 0) continue;
