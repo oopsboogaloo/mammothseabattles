@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.123**
+> Status: **Draft v0.124**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -526,6 +526,15 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-7-eddy-a.jpg" width="300"> <img src="images/currents/example-7-eddy-b.jpg" width="300">
 
+8. **Current to a non-adjacent hex** *(designer, v0.124; no picture yet, the draft art had the ship colours swapped)*: an arrow can
+   carry a ship to a hex that **isn't next to hers**, e.g. straight across the **corner between two hexes** to the hex beyond. Nothing
+   forbids it, and it's useful: it can take a ship somewhere she couldn't otherwise reach. In the designer's example a ship facing
+   south-west is carried across the corner between whirlpools 5 and 6, past a line of reefs, into the hex beyond, still facing south-west.
+   - She goes **straight to the arrow's end hex**: she **doesn't enter the hexes in between** (here she doesn't fall into either
+     whirlpool) ❓.
+   - It counts as **one current step** (a single arrow acts in the single-arrow sub-step); if the end hex is occupied she **stays put**,
+     as with any blocked current ❓.
+
 **Designer's principle:** the turning amounts only need to be **consistent and predictable**; players learn them quickly. The art will mark
 the number of hex sides wherever it isn't obvious. The **digital version** stores the exact move and turn for every arrow in the map data,
 so it never has to read the art.
@@ -920,6 +929,9 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
+- **Q65 Currents to a non-adjacent hex** (§6.6 example 8): confirm that the ship jumps straight to the end hex without entering the
+  hexes in between (so she can't fall into a whirlpool, hit a reef or be pushed into a ship on the way), that it counts as one step,
+  and that an occupied end hex leaves her where she is.
 - **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
   is the category printed on the board? How many boards of each category are planned for the first box?
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -937,6 +949,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.124 — currents may carry a ship to a non-adjacent hex (e.g. across a hex corner); in-between hexes ignored ❓ (Q65).
 - v0.123 — Q63: eddies turn 60°, 120° or 180° (longer arrows = stronger spin; 180° eddy not drawn yet).
 - v0.122 — Q62 corrected: the ring round a hex corner turns ships 120° (a 3-hex rotor); example picture replaced.
 - v0.121 — board categories 1–3 (like hurricanes): Category 1 forgiving and open for beginners, Category 3 dense (Q64).

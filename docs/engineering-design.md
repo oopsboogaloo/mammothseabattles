@@ -184,7 +184,7 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 - `terrain`: `sea | cliff | beach | sandbank | underwaterReef | deathReef | roughWater | storm` (rules §3.2.0). Land and sea are one field so a hex can never be both.
 - Hexes are keyed by axial coordinates (`hex` package). Edges are named by hex + direction.
 - A validator checks: portals and caves come in pairs, currents don't point off the map, 9 spawn points, home ports on the edge, every hex in the art has an entry.
-- **Currents store the exact effect, never inferred from the art** (rules §6.6): each arrow's step direction and `turn` in hex sides
+- **Currents store the exact effect, never inferred from the art** (rules §6.6): each arrow's **destination hex** (usually adjacent, but it may be further away, e.g. across a hex corner: rules §6.6 example 8) and `turn` in hex sides
   (signed, + clockwise), e.g. curved arrow `turn: ±1`; corner ring (3-hex rotor) `turn: ±2`; eddy `{ "eddy": "cw", "turn": 1 | 2 | 3 }` with no step;
   rotors as a group of hexes with a centre and an angle, moved together. Dashed eddies, gyres and the maelstrom may still add fields (Q20).
 - Whether a board is one printed map or several tiles joined (Q18) does not change this format: tiles would be assembled into one map file by a build step.
