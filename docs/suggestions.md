@@ -14,7 +14,7 @@ them workable online (web-spec §4, `online-version.md`).
 
 | Name | Effect | When to play | Hooks into | Notes |
 |---|---|---|---|---|
-| **Sea Anchor** | Your ship doesn't move at all this Part: no sailing, currents, drift or pushing. | Start of a Part | Currents, pushing, drift | ⚠ Now **identical to the Anchor order** (rules §6.1, v0.129). Drop it, or make it differ, e.g. lasting the whole turn, or played in reaction after programs are revealed. |
+| **Sea Anchor** | Your ship doesn't move at all this Part: no sailing, currents, drift or pushing (like the Anchor order, rules §6.1). | **Any time**, e.g. after the Part's cards are revealed | Currents, pushing, drift | ✅ *Designer: keep it.* Same effect as the Anchor order, but the order must be programmed in advance, while this card is played **when you need it**: a last-moment way to stop a current, drift or push carrying her onto rocks or off the map. |
 | **Sweeps (oars)** | Move 1 hex in any direction this Move phase, whatever the wind. | Move phase | Dead Calm, heading into the wind | ⚠ Overlaps the **Row** order on the command cards. |
 | **Tide Tables** | This turn, your ship treats **sandbanks and underwater reefs as water**: a stranded ship floats free, and you can cross them. | Start of a Part, or at Upkeep when the tide changes | Stranding, tides (§6.4, §6.7) | |
 | **Smoke Pots** | Your hex counts as fog until the end of the turn. | Before an Action phase | Fog (§7.1) | |
