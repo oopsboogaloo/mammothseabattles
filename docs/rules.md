@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.110**
+> Status: **Draft v0.111**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -717,7 +717,11 @@ mode is a plug-in objective module on top of a shared rules core.
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking). The **port hex** is the tile's
   **only sea hex** (marked ✗ in the example); it's the only hex of the tile a ship can enter.
 - **Shelter from the weather:** **no weather effects or consequences of any kind occur while a ship is in her port**, from the moment she
-  enters the port hex: no wind drift, no storm damage, no Gale damage. "Any port in a storm." *(Sailing out of port: Q60.)*
+  enters the port hex: no wind drift, no storm damage, no Gale damage. "Any port in a storm."
+- **Leaving port** follows the same rule, even when it seems odd: while she's still in port the weather doesn't affect her, so she always
+  gets out; the moment she's on the hex outside the port, the weather applies as normal (in a Dead Calm she goes no further).
+  *My working of this for the engine ❓:* she always moves **1 hex out of port**, ignoring wind and weather; the **rest of her sail move**
+  is then worked out normally from that hex (points of sail and the weather card), less the hex already used.
 - Treasure is **scored, and safe, once it reaches the carrier's (team's) home port**; it **can't be scored at anyone else's port**. It can't be stolen after that.
 
 **8.2.5 Winning**
@@ -833,8 +837,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q50 wreck placement; Q18 / Q3c board construction~~ → answered (§3.1.1, §8.2.4): 37-hex main boards, joined however players agree; the port
   hex is the port tile's only sea hex and shelters ships from the weather; the printed town is scenery; spawn points and wrecks placed by
   agreement or in turns.
-- **Q60 Leaving port:** a ship sailing out starts her Move phase in port. Is her sail move worked out normally (points of sail and the
-  weather card, so she can't sail out in a Dead Calm), or does the shelter mean weather doesn't affect that move either?
+- **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
@@ -850,6 +853,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.111 — leaving port: weather doesn't apply until the ship is outside the port hex.
 - v0.110 — port shelter: no weather effects or consequences of any kind in port (Gale damage included).
 - v0.109 — 37-hex boards standard; boards joined by agreement; port hex = the tile's only sea hex, sheltered from weather; printed town is scenery; spawn points and wrecks placed by agreement or in turns.
 - v0.108 — building the map (§3.1.1): main boards and 4-hex port tiles; players choose the layout; 2–4 boards normal; port placement rules.
