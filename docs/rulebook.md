@@ -1,6 +1,6 @@
 # Mammoth Sea Battles: Rulebook
 
-> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.109).
+> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.110).
 > Covers the **core game**, **Treasure Hunt**, **Race** and **teams**. Add-ons are in the appendix.
 > 🛠 marks rules still being decided.
 
@@ -278,7 +278,7 @@ There's a **Retired Captain** somewhere in the crew deck: the best crew member o
 - **Start:** you begin the game here.
 - **Your port hex** is the port tile's only sea hex. It's the only part of the tile a ship can enter.
 - **Safe harbour:** your port can't be harmed, and its guns fire at rivals within 2 hexes.
-- **Any port in a storm:** while your ship is on her port hex, the weather can't touch her: no drift, no storm damage, no Gale damage.
+- **Any port in a storm:** while your ship is in port, **no weather effects of any kind** happen to her: no drift, no storm damage, no Gale damage.
 - **Refit:** end a turn in your port to fully repair, fully heal, and recruit back up to 3 crew (drawn at random). You can do just part of a
   refit, but either way you **miss the next turn** (you still draw cards).
 - **Score:** sail into your port carrying treasure to score it. It's safe forever. You can only score at your own port.

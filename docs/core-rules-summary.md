@@ -1,6 +1,6 @@
 # Mammoth Sea Battles: Core Rules on One Page
 
-> Draft summary of the **core game** (no sea monster, equipment or crew powers), written from [`rules.md`](rules.md) v0.109.
+> Draft summary of the **core game** (no sea monster, equipment or crew powers), written from [`rules.md`](rules.md) v0.110.
 > Teams, Fleets and the add-ons are in the [rulebook](rulebook.md). **TBD** marks rules not decided yet. Section numbers point to the full spec.
 
 **Goal (Treasure Hunt).** Be the first to bring **3 treasures** home to your port (2 with 7–8 players).
