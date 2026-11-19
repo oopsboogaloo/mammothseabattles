@@ -15,7 +15,9 @@ import {
   type PendingDecision,
   type ResolutionOutcome,
 } from '@msb/engine';
+import { hexKey } from '@msb/hex';
 import { validateCards } from './cards';
+import { validateMap } from './map';
 import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
@@ -61,6 +63,7 @@ export function startingCrew(shipId: string): ShipCrew[] {
 export function newGame(setup: GameSetup): GameState {
   if (setup.seats.length < 2) throw new Error('A game needs at least 2 seats (rules §2)');
   validateCards(setup.commandCards);
+  validateMap(setup.map);
   const rng = new Rng(seedRng(setup.seed));
   const weather = setUpWeather(setup.weatherCards, rng.state);
   rng.state = weather.rng;
@@ -101,6 +104,8 @@ export function newGame(setup: GameSetup): GameState {
       galeParts: 0,
     };
   }
+  const ports = new Set(setup.seats.map((s) => hexKey(s.homePort)));
+  if (ports.size !== setup.seats.length) throw new Error('Two seats share a home port; ships must start on different hexes');
   for (const ship of shipsInSeatOrder(state)) drawCards(state, ship);
   return state;
 }

@@ -65,9 +65,9 @@ function partnerCave(state: GameState, cave: MapCave): MapCave {
 function partnerWhirlpool(state: GameState, at: Hex): Hex | undefined {
   const number = state.setup.map.hexes[hexKey(at)]?.whirlpool;
   if (number === undefined) return undefined;
+  // Whirlpools are validated in pairs at setup (map.ts), so the partner always exists.
   const key = Object.keys(state.setup.map.hexes).find((k) => k !== hexKey(at) && state.setup.map.hexes[k]?.whirlpool === number);
-  if (key === undefined) return undefined;
-  return parseHexKey(key);
+  return parseHexKey(key as string);
 }
 
 export function parseHexKey(key: string): Hex {
@@ -146,7 +146,9 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
       m.ctx.emit({ type: 'ShipRammed', rule: '6.5', ship: other.id, by: ship.id });
       damage(m, other, config.dd.ram, 'ram');
     }
-    if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, other.anchored ? 'anchored' : 'ship');
+    // An anchored ship stops the mover even if the ram sinks her (§6.1).
+    if (other.anchored) return stop(m, ship, 'anchored');
+    if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, 'ship');
   }
 
   // 5. Move in, then hex effects.

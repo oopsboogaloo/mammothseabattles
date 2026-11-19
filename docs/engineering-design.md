@@ -136,7 +136,8 @@ Rules §5.2 says ships move at the same time and initiative settles conflicts. *
 **One function moves a ship one hex**, whatever the cause, because the rules say terrain applies "however a ship gets there" (§3.2.0):
 
 ```
-stepShip(state, ship, direction, cause: 'sail' | 'push' | 'current' | 'drift' | 'cave')
+stepShip(m, ship, direction, cause: 'sail' | 'row' | 'push' | 'current' | 'drift' | 'cave')   // edges, then enterHex(...)
+enterHex(m, ship, to, direction | undefined, cause)  // also used by currents that jump to a non-adjacent hex
   1. Edge crossed: wall reef → stop + 2 DD.  Cave mouth → come out of the partner cave facing out (§3.2.2).
   2. Target hex off the map → she sinks in the hex she was about to leave (rules §3.1, §7.8); with the optional **Safe edge** rule
      (`RulesConfig.safeEdge`) she stops instead, like a beach.
@@ -170,19 +171,22 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
   "hexes": {
     "4,7": { "terrain": "sea" },
     "5,7": { "terrain": "sandbank" },
-    "6,7": { "terrain": "sea", "current": { "strength": 2, "dir": "NE", "turn": 0 } },
-    "7,7": { "terrain": "sea", "eddy": "cw" },
-    "8,7": { "terrain": "sea", "portal": 1 },
-    "9,7": { "terrain": "cliff", "caves": [{ "edge": "SW", "letter": "A" }] },
+    "6,7": { "terrain": "sea", "current": { "kind": "flow", "to": "7,6", "turn": 0, "strength": 2 } },
+    "7,7": { "terrain": "sea", "current": { "kind": "eddy", "turn": 1, "strength": 1 } },
+    "8,7": { "terrain": "sea", "whirlpool": 1 },
+    "9,7": { "terrain": "cliff" },
     "3,2": { "terrain": "sea", "fog": true }
   },
-  "wallReefs": [["4,6", "NE"]],
+  "wallReefs": [{ "hex": "4,6", "side": 1 }],
+  "caves": [{ "hex": "9,7", "side": 4, "letter": "A" }, { "hex": "2,9", "side": 0, "letter": "A" }],
+  "rotors": [{ "moves": { "5,5": "5,6", "5,6": "5,5" }, "turn": 3, "strength": 1 }],
   "spawnPoints": { "1": "6,3", "2": "10,11" },
   "homePorts": ["0,4", "12,10", "4,13", "8,2"],
   "startWrecks": ["2,3"]
 }
 ```
 
+- **This is the format the engine reads** (`GameMap` in `packages/msb-rules/src/state.ts`, checked by `validateMap`). Directions are numbers, 0 = N clockwise to 5 = NW.
 - `terrain`: `sea | cliff | beach | sandbank | underwaterReef | deathReef | roughWater | storm` (rules §3.2.0). Land and sea are one field so a hex can never be both.
 - Hexes are keyed by axial coordinates (`hex` package). Edges are named by hex + direction.
 - A validator checks: portals and caves come in pairs, currents that point off the map are allowed (they sink a ship, rules §3.1), 9 spawn points, home ports on the edge, every hex in the art has an entry.
@@ -213,7 +217,7 @@ Events are the only thing the client animates and the only source of teaching ca
 | Group | Events |
 |---|---|
 | Turn | `TurnStarted`, `ProgramsRevealed`, `PartStarted`, `PhaseStarted`, `UpkeepStarted`, `GameWon` |
-| Movement | `SailSet`, `ShipSailed` (from, to, point of sail, wind, hexes), `ShipTurned`, `ShipPushed`, `ShipStopped` (by what), `ShipCarriedByCurrent`, `ShipSpun`, `ShipDrifted`, `Teleported`, `WentThroughCave`, `ShipStranded`, `ShipFreed` |
+| Movement (as built in P3–P4) | `SailSet` (sail level and order), `ShipMoved` (from, to, cause: sail, row, push, current, drift, cave), `ShipStopped` (by: cliff, beach, wall reef, ship, anchored, edge), `ShipRammed`, `ShipTurned` (cause: steer, cave, current), `Teleported`, `WentThroughCave`. To come: `ShipStranded`, `ShipFreed` |
 | Combat | `CannonFired` (targets, spared), `PortGunsFired`, `DamageRolled` (source, faces), `SlotBlocked`, `CrewWounded`, `CrewKilled`, `SlotRepaired`, `CrewHealed`, `ShipSank`, `ShipReturned` |
 | Objects | `TreasureSpawned`, `TreasurePickedUp`, `TreasureKnockedLoose`, `TreasureScored`, `WreckPlaced`, `WreckSearched`, `CrewGained`, `ShipRefitted` |
 | Cards and weather | `CardsDrawn` (count; ids only in the owner's view), `WeatherAdvanced`, `TideChanged` |

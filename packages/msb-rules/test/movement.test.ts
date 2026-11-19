@@ -357,7 +357,7 @@ describe('anchored and sunk-on-impact ships', () => {
 describe('whirlpools (rules §3.2.1)', () => {
   const W1 = hex(0, -1);
   const W2 = hex(2, 1);
-  const pools = () => map({ [hexKey(W1)]: { terrain: 'sea', whirlpool: 1 }, [hexKey(W2)]: { terrain: 'sea', whirlpool: 1 }, [hexKey(hex(3, 3))]: { terrain: 'sea', whirlpool: 2 } });
+  const pools = () => map({ [hexKey(W1)]: { terrain: 'sea', whirlpool: 1 }, [hexKey(W2)]: { terrain: 'sea', whirlpool: 1 } });
 
   it('entering one takes her to its partner, same heading, and she carries on; arriving doesn’t trigger it again', () => {
     const s = game3(pools());
@@ -370,16 +370,13 @@ describe('whirlpools (rules §3.2.1)', () => {
     expect(s.ships['A-ship']!.heading).toBe(S);
   });
 
-  it('if the partner is occupied she treats it as a normal hex; an unpaired number does nothing', () => {
+  it('if the partner is occupied she treats it as a normal hex', () => {
     const s = game3(pools());
     place(s, 'B-ship', W2);
     place(s, 'A-ship', hex(0, -2));
     const events = run(s, (m) => stepShip(m, s.ships['A-ship']!, S, 'drift'));
     expect(types(events)).not.toContain('Teleported');
     expect(pos(s, 'A-ship')).toEqual(W1);
-    place(s, 'A-ship', hex(3, 2));
-    run(s, (m) => stepShip(m, s.ships['A-ship']!, S, 'drift'));
-    expect(pos(s, 'A-ship')).toEqual(hex(3, 3));
   });
 });
 
@@ -434,6 +431,44 @@ describe('sea caves (rules §3.2.2)', () => {
     place(s, 'A-ship', neighbor(I1, S));
     run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'));
     expect(s.ships['A-ship']!.status).toBe('sunk');
+  });
+});
+
+describe('setup checks (engineering design §7.1)', () => {
+  it('rejects unpaired whirlpools and caves, rotors leaving the map, and bad current destinations', () => {
+    expect(() => game3(map({ [hexKey(O)]: { terrain: 'sea', whirlpool: 7 } }))).toThrow('Whirlpool 7 appears 1 times');
+    expect(() => game3(map({}, { caves: [{ hex: hexKey(O), side: N, letter: 'Z' }] }))).toThrow('Cave Z appears 1 times');
+    expect(() => game3(map({}, { rotors: [{ moves: { [hexKey(O)]: '9,9' }, turn: 3, strength: 1 }] }))).toThrow('leaves the map');
+    expect(() => game3(map({}, { rotors: [{ moves: { '9,9': hexKey(O) }, turn: 3, strength: 1 }] }))).toThrow('leaves the map');
+    expect(() => game3(map({ [hexKey(O)]: { terrain: 'sea', current: { kind: 'flow', to: 'north', turn: 0, strength: 1 } } }))).toThrow('bad destination');
+    expect(() => game3(map({ [hexKey(O)]: { terrain: 'sea', current: { kind: 'eddy', turn: 1, strength: 1 } } }))).not.toThrow();
+  });
+
+  it('rejects weather decks with duplicate ids, unsupported cards or winds without a direction', () => {
+    const base = CALM_WEATHER.slice(1);
+    expect(() => game3(map(), [...base, base[0]!])).toThrow('Duplicate weather card');
+    expect(() => game3(map(), [...base, { id: 'front', strength: 'newFront' as WindStrength }])).toThrow('unsupported strength');
+    expect(() => game3(map(), [...base, { id: 'gust', strength: 'firm' }])).toThrow('no wind direction');
+  });
+
+  it('rejects two ships starting on the same hex', () => {
+    const seats = [
+      { player: 'A', team: 'a', name: 'A', homePort: O, heading: N },
+      { player: 'B', team: 'b', name: 'B', homePort: O, heading: N },
+    ];
+    expect(() => newGame({ seed: 1, map: map(), seats, commandCards: TEST_CARDS, weatherCards: CALM_WEATHER })).toThrow('share a home port');
+  });
+
+  it('a ram that sinks an anchored ship still stops the rammer', () => {
+    const deadly = makeConfig({ damageDie: Array(12).fill({ ship: 0, crew: 2 }) });
+    const s = game3(map());
+    place(s, 'A-ship', O, N);
+    place(s, 'B-ship', neighbor(O, N));
+    s.ships['B-ship']!.anchored = true;
+    s.ships['B-ship']!.crew = s.ships['B-ship']!.crew.slice(0, 1);
+    run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'row'), deadly);
+    expect(s.ships['B-ship']!.status).toBe('sunk');
+    expect(pos(s, 'A-ship')).toEqual(O);
   });
 });
 

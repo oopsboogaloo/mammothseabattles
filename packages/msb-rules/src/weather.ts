@@ -29,9 +29,26 @@ export interface WeatherBoard {
   discards: string[];
 }
 
+const STRENGTHS: readonly WindStrength[] = ['deadCalm', 'light', 'firm', 'strong', 'gale'];
+
+/**
+ * Throws if a weather deck can't be used: duplicate ids, an unknown strength (New Weather Front and the storm cards aren't
+ * supported yet: step P6 and later), or a wind other than Dead Calm without a direction.
+ */
+export function validateWeatherCards(cards: readonly WeatherCard[]): void {
+  const ids = new Set<string>();
+  for (const card of cards) {
+    if (ids.has(card.id)) throw new Error(`Duplicate weather card id ${card.id}`);
+    ids.add(card.id);
+    if (!STRENGTHS.includes(card.strength)) throw new Error(`Weather card ${card.id}: unsupported strength ${String(card.strength)}`);
+    if (card.strength !== 'deadCalm' && card.direction === undefined) throw new Error(`Weather card ${card.id} has no wind direction`);
+  }
+}
+
 /** §3.5: shuffle the weather deck, fill the 6 spaces, and pick a random space as "now" (starting tide: random). */
 export function setUpWeather(cards: readonly WeatherCard[], rngState: RngState): { board: WeatherBoard; rng: RngState } {
   if (cards.length < 6) throw new Error('The weather deck needs at least 6 cards (rules §3.5)');
+  validateWeatherCards(cards);
   const rng = new Rng(rngState);
   const deck = rng.shuffle(cards.map((c) => c.id));
   const spaces = deck.splice(0, 6);
