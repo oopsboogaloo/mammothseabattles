@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.119**
+> Status: **Draft v0.120**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -464,8 +464,12 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    points to. Her **heading doesn't change**: arrows with no turn in them don't turn the ship (the ship in the example faces south, bow
    pointing down, before and after). A line of arrows is a "river" of current, but
    a single-arrow hex still moves her only 1 hex per Currents phase.
+   - **River:** in a line of single arrows she moves only from her own hex to the next one, keeping her heading (second picture).
+   - **Whatever her heading:** the current carries her the way the arrow points, even sideways. In the third picture a ship facing
+     south-west is carried 1 hex south-east and still faces south-west.
 
-   <img src="images/currents/example-1-straight.jpg" width="320">
+   <img src="images/currents/example-1-straight.jpg" width="320"> <img src="images/currents/example-1-river.jpg" width="300">
+   <img src="images/currents/example-1-sideways.jpg" width="300">
 
 2. **Curved current:** a curved arrow moves the ship **1 hex** along the arrow **and turns her one hex side (60°) in the direction the arrow
    curves**. The turn is **relative** to her own heading. In the example a ship facing south, on a curved arrow bending clockwise, is moved
@@ -480,7 +484,8 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
 4. **Small ring around a hex corner** *(designer: "just the same")*: a ring of arrows around the corner where 3 hexes meet. In the example
    a ship is carried from one of the 3 hexes to the next one clockwise (1 hex) and turned **one hex side clockwise** (south-west →
-   north-west), the same as a curved current. *(But see Q62: as a true rotor about that corner it would turn 120°.)*
+   north-west), the same as a curved current. ✅ **Designer (Q62): one hex side (60°), not 120°.** The art will get small markers
+   ("bobbles") on the arrow showing how many hex sides to turn wherever it isn't obvious.
 
    <img src="images/currents/example-5-three-hex-ring.jpg" width="300">
 
@@ -504,6 +509,15 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    - Nothing moves, so an eddy is never blocked.
 
    <img src="images/currents/example-6-eddy-a.jpg" width="300"> <img src="images/currents/example-6-eddy-b.jpg" width="300">
+
+7. **Eddy drawn with 3 arrows** (next to whirlpools 2 and 7): clockwise. In the pictures a ship facing **south** ends facing
+   **north-west**, which is **two hex sides (120°)** clockwise ❓ (see Q63). She stays in her hex.
+
+   <img src="images/currents/example-7-eddy-a.jpg" width="300"> <img src="images/currents/example-7-eddy-b.jpg" width="300">
+
+**Designer's principle:** the turning amounts only need to be **consistent and predictable**; players learn them quickly. The art will mark
+the number of hex sides wherever it isn't obvious. The **digital version** stores the exact move and turn for every arrow in the map data,
+so it never has to read the art.
 
 - **Eddies** (circular arrows within a hex) **spin** the ship in place, 60° per Currents phase (example 6).
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
@@ -875,6 +889,7 @@ _Things the designer has said they'll do or supply._
 - **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors,
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
+  *Designer's plan: little bobbles on the arrow, one per hex side turned.*
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 
 ## Open questions
@@ -892,9 +907,10 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
-- **Q62 Ring round a hex corner** (§6.6 example 4): carried 1 hex to the next of the 3 hexes. Is the turn **60°** (like a curved arrow, as
-  the picture shows), or **120°** (like a rotor turning around the corner: a 3-hex turntable turns everything 120° each time, just as the
-  4-hex rotor turns 180°)? 120° keeps all ships in the ring facing the same way relative to it, as a turntable would.
+- **Q63 Eddy turning amount** (§6.6 examples 6 and 7): the eddy drawn with 6 short arrows turns a ship 60°; in the pictures of the
+  eddy drawn with 3 longer arrows the ship turns from south to north-west, which is 120°. Is that right: does the 3-arrow eddy turn
+  **120°**, or is it also 60° (south → south-west)?
+- ~~Q62 Ring round a hex corner~~ → one hex side (60°); bobbles on the art where unclear (answered v0.120).
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
   - Dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram); eddies act in the single-arrow sub-step (§6.6 example 6).
@@ -909,6 +925,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.120 — current examples: river and sideways straight currents; Q62 answered (corner ring turns 60°); 3-arrow eddy example (Q63: 120°?); turning amounts need only be consistent.
 - v0.119 — current example: eddy turns the ship 60° in place, no movement (resolves the eddy ❓ in §3.2).
 - v0.118 — current example: small ring around a hex corner (Q62: 60° or 120°?).
 - v0.117 — current example: anticlockwise curved current (60°).
