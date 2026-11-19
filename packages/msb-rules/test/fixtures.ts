@@ -20,3 +20,13 @@ export const TEST_CARDS: readonly CommandCard[] = Array.from({ length: 45 }, (_,
     octopus: 0,
   };
 });
+
+import type { WeatherCard, WindStrength } from '@msb/msb-rules';
+import type { Direction } from '@msb/hex';
+
+/** Six Light winds: no drift, so ships stay put unless they sail. */
+export const CALM_WEATHER: readonly WeatherCard[] = Array.from({ length: 6 }, (_, i) => ({
+  id: `light-${i}`,
+  strength: 'light' as WindStrength,
+  direction: i as Direction,
+}));

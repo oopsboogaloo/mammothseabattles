@@ -19,7 +19,7 @@ import {
   type ShipCrew,
   type Terrain,
 } from '@msb/msb-rules';
-import { TEST_CARDS } from './fixtures';
+import { CALM_WEATHER, TEST_CARDS } from './fixtures';
 
 // A tiny test map: A's port is in rough water, B's in a storm, plus open sea.
 function map(a: Terrain, b: Terrain): GameMap {
@@ -38,6 +38,7 @@ function setup(a: Terrain = 'roughWater', b: Terrain = 'sea', seed = 7): GameSet
       { player: 'B', team: 'blue', name: 'Bob', homePort: hex(3, 0), heading: Direction.S },
     ],
     commandCards: TEST_CARDS,
+    weatherCards: CALM_WEATHER,
   };
 }
 
@@ -99,7 +100,8 @@ describe('programming phase (rules §5.1; cards come in step P2)', () => {
     expect(state.phase).toBe('programming');
     expect(state.ready).toEqual([]);
     expect(state.resolution).toBeUndefined();
-    expect(events.map((e) => e.type)).toEqual([
+    const P1_TYPES = ['PlayerReady', 'PartStarted', 'UpkeepStarted', 'CardsReturned', 'CardsDrawn', 'TurnStarted'];
+    expect(events.map((e) => e.type).filter((t) => P1_TYPES.includes(t))).toEqual([
       'PlayerReady',
       'PlayerReady',
       'PartStarted',

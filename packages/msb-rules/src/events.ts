@@ -3,10 +3,17 @@
  * Each carries the rules section it comes from and enough data to show it without reading the state.
  */
 
-import type { Part } from './sailing';
+import type { Direction, Hex } from '@msb/hex';
+import type { Part, SailLevel } from './sailing';
 import type { PlayerId, ShipId } from './state';
 
-export type DamageSource = 'roughWater' | 'storm';
+export type DamageSource = 'roughWater' | 'storm' | 'cliff' | 'wallReef' | 'ram' | 'gale';
+
+/** What moved a ship one hex (engineering design §6). */
+export type MoveCause = 'sail' | 'row' | 'push' | 'current' | 'drift';
+
+/** What stopped a ship (rules §3.2.0, §6.1, §6.5). */
+export type StopReason = 'cliff' | 'beach' | 'wallReef' | 'ship' | 'anchored' | 'edge';
 
 export type GameEvent =
   | { readonly type: 'PlayerReady'; readonly rule: '5.1'; readonly player: PlayerId }
@@ -33,7 +40,14 @@ export type GameEvent =
   | { readonly type: 'SlotBlocked'; readonly rule: '7.3'; readonly ship: ShipId; readonly slot: string }
   | { readonly type: 'CrewWounded'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
-  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: 'row' | 'crew' }
+  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: 'row' | 'crew' | 'edge' | 'deathReef' }
+  | { readonly type: 'SailSet'; readonly rule: '6.1'; readonly ship: ShipId; readonly sail: SailLevel; readonly order: string }
+  | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause }
+  | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason }
+  | { readonly type: 'ShipRammed'; readonly rule: '6.5'; readonly ship: ShipId; readonly by: ShipId }
+  | { readonly type: 'ShipTurned'; readonly rule: '5.2'; readonly ship: ShipId; readonly from: Direction; readonly to: Direction; readonly cause: 'steer' | 'cave' | 'current' }
+  | { readonly type: 'Teleported'; readonly rule: '3.2.1'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex }
+  | { readonly type: 'WentThroughCave'; readonly rule: '3.2.2'; readonly ship: ShipId; readonly letter: string; readonly to: Hex }
   | {
       readonly type: 'DecisionRequested';
       readonly rule: '5';

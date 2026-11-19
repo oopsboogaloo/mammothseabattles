@@ -15,11 +15,14 @@ import {
   type PendingDecision,
   type ResolutionOutcome,
 } from '@msb/engine';
+import { hexKey } from '@msb/hex';
 import { validateCards } from './cards';
+import { validateMap } from './map';
 import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
 import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
+import { setUpWeather, tide, type Tide } from './weather';
 import { resolveTurn, shipsInSeatOrder } from './turn';
 
 export type Action = ProgramAction | { readonly type: 'answer'; readonly choice: number };
@@ -40,6 +43,8 @@ export interface GameView {
   readonly deckSize: number;
   readonly ships: Readonly<Record<string, ShipView>>;
   readonly ready: readonly PlayerId[];
+  /** The face-up weather (rules §3.5: the current card and the next one) and the tide. Other spaces stay hidden. */
+  readonly weather: { readonly now: string; readonly next: string; readonly space: number; readonly tide: Tide };
   /** The question being asked, if any; options are shown only to the player who must answer. */
   readonly decision?: { readonly player: PlayerId; readonly kind: string; readonly options?: readonly unknown[]; readonly defaultIndex?: number };
 }
@@ -58,8 +63,12 @@ export function startingCrew(shipId: string): ShipCrew[] {
 export function newGame(setup: GameSetup): GameState {
   if (setup.seats.length < 2) throw new Error('A game needs at least 2 seats (rules §2)');
   validateCards(setup.commandCards);
+  validateMap(setup.map);
   const rng = new Rng(seedRng(setup.seed));
+  const weather = setUpWeather(setup.weatherCards, rng.state);
+  rng.state = weather.rng;
   const state: GameState = {
+    weather: weather.board,
     setup,
     rng: 0,
     turn: 1,
@@ -91,8 +100,12 @@ export function newGame(setup: GameSetup): GameState {
       crew: startingCrew(shipId),
       hand: [],
       program: {},
+      anchored: false,
+      galeParts: 0,
     };
   }
+  const ports = new Set(setup.seats.map((s) => hexKey(s.homePort)));
+  if (ports.size !== setup.seats.length) throw new Error('Two seats share a home port; ships must start on different hexes');
   for (const ship of shipsInSeatOrder(state)) drawCards(state, ship);
   return state;
 }
@@ -167,7 +180,9 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
     view(state, player) {
       const ships: Record<string, ShipView> = {};
       for (const ship of Object.values(state.ships)) ships[ship.id] = viewShip(state, player, ship);
-      const base = { turn: state.turn, phase: state.phase, part: state.part, deckSize: state.deck.length, ships, ready: state.ready };
+      const { spaces, now } = state.weather;
+      const weather = { now: spaces[now] as string, next: spaces[(now + 1) % 6] as string, space: now, tide: tide(state.weather) };
+      const base = { turn: state.turn, phase: state.phase, part: state.part, deckSize: state.deck.length, ships, ready: state.ready, weather };
       const decision = state.pending;
       if (!decision) return base;
       return {
