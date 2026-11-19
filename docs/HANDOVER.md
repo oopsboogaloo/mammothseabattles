@@ -7,13 +7,14 @@ For the next working session (which will have access to all the art). Written at
 | Document | What it is | State |
 |---|---|---|
 | [`rules.md`](rules.md) | **Design spec: the source of truth for the rules.** Every rule, decision log, prioritised open questions, change log. | v0.87, core game fully specified |
-| [`rulebook.md`](rulebook.md) | Player-facing rulebook written from the spec | Playtest draft 0.1 (behind the spec: no teams/Fleets yet) |
-| [`core-rules-summary.md`](core-rules-summary.md) | Core rules on one page | From spec v0.81 |
+| [`rulebook.md`](rulebook.md) | Player-facing rulebook written from the spec | Playtest draft 0.2, up to date with spec v0.107 |
+| [`core-rules-summary.md`](core-rules-summary.md) | Core rules on one page | From spec v0.107 |
 | [`web-spec.md`](web-spec.md) | Digital version: roadmap, NFRs, architecture, UI, testing | Draft 0.1 + decisions since |
 | [`engineering-design.md`](engineering-design.md) | **Engineering design** for v1: state, resolution, movement, map format, events, views, client | **Draft 0.1, awaiting the designer's review** (decisions D1–D7) |
 | [`v1-gaps.md`](v1-gaps.md) | What v1 still needs: art list, design inputs, engineering | 2026-11-18 |
 | [`online-version.md`](online-version.md) | Product goals of the free online version, BGA research, mid-resolution prompts | Draft |
 | [`ui/wireframe-evaluation.md`](ui/wireframe-evaluation.md) | 4 wireframe layouts, scores, **layout A chosen** (bottom dock, fanned hand) | Done |
+| [`suggestions.md`](suggestions.md) | Ideas for the designer to consider (not rules): 15 equipment cards so far | Open |
 | [`research/`](research/) | RoboRally and Full Metal Planète reference notes | Done |
 | `packages/` | Engine skeleton: seeded RNG, decisions, hex maths, first rules; 100% coverage gate | M1 started |
 | [`ui/mockup/README.md`](ui/mockup/README.md) | **Clickable mock-up of layout A with the real art** (`packages/client`, `npm run mockup`); checks, screenshots, questions found in the art | Built; **approved by the designer (2026-11-18)**; to test with the family |
@@ -39,7 +40,7 @@ For the next working session (which will have access to all the art). Written at
    then AI and the simulation CLI. **Players/teams/ships separate from day one (NFR-13).**
 4. **Waiting on the designer**: the **current-types diagram** (turning amounts, eddies, gyres, maelstrom) and the **board tile diagram**
    (sets the map data format).
-5. Bring `rulebook.md` up to date with spec v0.87 (Teams §8.6, Fleets §8.7, rough water and storm, setup).
+5. Keep `rulebook.md` and `core-rules-summary.md` in step with `rules.md` (both match v0.107).
 
 ## Biggest open rules questions (see `rules.md` "Open questions")
 - Current diagram details (Q20/Q19); board tiles (Q18); critical hits are a placeholder; the full command card list and the crew deck (≥ 50 cards).

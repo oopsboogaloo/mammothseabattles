@@ -184,7 +184,9 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 - `terrain`: `sea | cliff | beach | sandbank | underwaterReef | deathReef | roughWater | storm` (rules §3.2.0). Land and sea are one field so a hex can never be both.
 - Hexes are keyed by axial coordinates (`hex` package). Edges are named by hex + direction.
 - A validator checks: portals and caves come in pairs, currents don't point off the map, 9 spawn points, home ports on the edge, every hex in the art has an entry.
-- **The current fields are provisional** until the designer's current diagram arrives (Q20): turning amounts, eddies, gyres and the maelstrom may add fields.
+- **Currents store the exact effect, never inferred from the art** (rules §6.6): each arrow's **destination hex** (usually adjacent, but it may be further away, e.g. across a hex corner: rules §6.6 example 8) and `turn` in hex sides
+  (signed, + clockwise), e.g. curved arrow `turn: ±1`; corner ring (3-hex rotor) `turn: ±2`; eddy `{ "eddy": "cw", "turn": 1 | 2 | 3 }` with no step;
+  rotors as a group of hexes with a centre and an angle, moved together. Dashed eddies, gyres and the maelstrom may still add fields (Q20).
 - Whether a board is one printed map or several tiles joined (Q18) does not change this format: tiles would be assembled into one map file by a build step.
 
 **Authoring (D2).** Three maps of roughly 120 hexes each must be transcribed from the printed art. I propose a small **map painter**, a developer-only page in the client that shows the map art with the grid, lets you click hexes and edges to set terrain and features, and saves the JSON. It then doubles as the tool for checking the transcription with the designer. The alternative is typing the JSON by hand, which is slower and error-prone.

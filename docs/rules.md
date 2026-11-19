@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.94**
+> Status: **Draft v0.127**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -63,8 +63,43 @@ interact with each other and with the sea.
 ![Example board](images/example-board.jpg)
 
 - **Modular**: you build the sea by putting several hex **board tiles** together, so scenarios and
-  board size can vary (this also helps it scale to 8 players, see Q3c).
+  board size can vary (§3.1.1).
 - The play area is a **hex grid** of **flat-topped** hexes (§3.5 compass; cannon diagram).
+### 3.1.1 Building the map *(designer, v0.108)*
+<img src="images/board-layout-example.jpg" width="420">
+
+> **All board art so far is prototype examples** (for showing the rules), not final, balanced boards. Real board design is still to do.
+
+- **Main boards** are large **hexagonal boards** of **37 hexes** (3 hexes from centre to edge). **Port tiles** are small **4-hex** pieces,
+  one per player (or team).
+- 37-hex boards are the standard, not a rule: other formats may come later (e.g. one large rectangular board with the ports printed on it,
+  used on its own).
+- **The players choose the layout together**: the host decides, or players take turns placing boards. The rulebook will offer some
+  **suggested layouts** to get people started, but choosing your own is more fun.
+- **How many main boards**: usually **at least 2**; **2–4** is a normal game. **More ships → more boards.**
+  - **Fewer boards** → a tighter, more intense, more interactive game (more combat).
+  - **More boards** → more racing and navigation, less combat.
+- **Board categories** *(designer, v0.121)*: main boards are graded like hurricanes, **Category 1, 2 and 3**. The rulebook advises
+  new players to **start with Category 1**.
+  - **Category 1**: forgiving. The simplest board features and currents, plenty of open sea, and islands edged mostly with **sand
+    (beaches)** rather than cliffs.
+  - **Category 3**: as dense as the example boards: complex currents, rotors, eddies, reefs and cliffs. Mentally demanding, which
+    experienced players enjoy.
+  - Category 2 sits in between.
+  - It's a **broad guide, not a strict rule**: it helps players choose boards that suit their experience and the kind of game they want
+    (fewer currents make for a more open battle). There's no rule on what a category may contain, and nothing stops players mixing
+    categories. Details wait until the real boards are designed.
+- **Joining boards**: no fixed rule. Players agree how the boards fit together, as long as it makes an interesting map.
+- **Computer version:** the map is **generated automatically** from a few settings (number of boards, density); players don't design it
+  (web-spec §5.1). Rules here that say "players agree" apply to the physical game only.
+- **Spawn points and wrecks**: placed as part of designing the map, by **mutual agreement** or **taking turns** (see `suggestions.md` for
+  fairer methods under consideration).
+- **Ports** are attached to the **outer edge** of the map:
+  - A port tile can face any way round (upside down is fine).
+  - Its **sea hex** (the only sea hex on the tile) **must join a sea hex** on a main board. The rest of the tile is land.
+  - **No two ports on the same side** of a main board, so ports are spread out.
+- The example shows 2 main boards and 2 ports: a 2-player layout.
+
 - **Board edge**: a ship that would leave the map (sailing, pushed, current or drift) **sinks in the hex she was about to leave** (§7.8).
 - **Sea currents** are printed as arrows. A current acts on a ship sitting on it, **moving her and/or turning her** (like RoboRally conveyors and gears).
 
@@ -76,7 +111,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Current | Single arrow | **Confirmed** (§6.6): moves the ship 1 hex |
 | Fast current | Double / triple arrows | **Confirmed** (§6.6): moves the ship 2 / 3 hexes |
 | Turning current | Curved arrow | **Confirmed** (§6.6): moves the ship and turns her |
-| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place (60° per activation?) ❓ |
+| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place, in the arrows' direction, by **1, 2 or 3 hex sides (60°, 120° or 180°)** depending on the eddy; she doesn't move (§6.6 examples 6–7) |
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
@@ -90,7 +125,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
-| Port town | Harbour town (bottom) | **Confirmed**: just one of the **home ports** (§8.2.4) |
+| Port town | Harbour town printed on a main board | **Scenery** (land) for now; home ports are separate port tiles (§3.1.1) |
 | Small wreck on sandbar | Upper left | **Confirmed**: a **starting shipwreck** (§7.9) |
 
 ### 3.2.0 Terrain *(confirmed)*
@@ -252,7 +287,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
 
 ## 4. Setup
-1. Build the map from tiles (scenario). Place home ports on the map edge, spawn points and wreck tokens (scenario).
+1. Build the map together (§3.1.1): main boards, then one **port tile** per player or team on the outer edge. Place spawn points and wreck tokens (scenario).
 2. Spawn the starting treasures (§8.2.1).
 3. Each player: ship board, Captain + 2 random crew, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
 4. Weather board filled; current card and the next one face up.
@@ -328,12 +363,14 @@ so replays and tests can be reproduced.)*
 After Part III: **Upkeep**, then a new turn begins. Order *(proposed by Claude, to playtest)*:
 
 1. **Sea monster moves** *(add-on, §9.1)*: first, because its influence comes from the cards programmed in the turn just played.
-2. **Refit** ships that ended the turn in their home port (§7.7).
-3. **Search wrecks** (§7.9). After refit, so crew gained from a wreck isn't wiped out by the refit's "recruit up to 3".
-4. **Spawn treasure** for each one scored this turn (§8.2.1).
-5. **Advance the weather board** one space: new wind and **new tide**. **Check stranding now**: ships on hexes that have become land are
+2. **Sunk ships come back** at their home port (§7.8) *(placement in the order proposed in v0.107)*.
+3. **Refit** ships that ended the turn in their home port (§7.7).
+4. **Search wrecks** (§7.9). After refit, so crew gained from a wreck isn't wiped out by the refit's "recruit up to 3".
+5. **Spawn treasure** for each one scored this turn (§8.2.1).
+6. **Gale damage**: 1 DD for each Part a ship sailed at Full Sail in a Gale (§3.5) *(placement proposed in v0.107)*.
+7. **Advance the weather board** one space: new wind and **new tide**. **Check stranding now**: ships on hexes that have become land are
    **stuck**, and stuck ships on hexes that are water again are **freed** (§6.7).
-6. **Draw command cards** (§5.1). Last, so players draw knowing the new weather and can plan the next turn with it.
+8. **Draw command cards** (§5.1). Last, so players draw knowing the new weather and can plan the next turn with it.
 
 ## 6. Movement & actions
 
@@ -431,7 +468,93 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
 - Currents **don't push** other ships (§5.2), but a ship carried into a **cliff** or **wall reef** takes the damage (§3.2.0), and into a
   **death reef** sinks.
-- **Eddies** (circular arrows within a hex) **spin** the ship in place.
+**Which ships a current moves:** a ship is affected by a current when **an arrow starts in her hex** and goes somewhere.
+
+**Current examples** *(from the designer; more to come)*
+
+1. **Straight current, single arrow:** a ship that ends her movement on a hex with an arrow is moved **1 hex** across the hex side the arrow
+   points to. Her **heading doesn't change**: arrows with no turn in them don't turn the ship (the ship in the example faces south, bow
+   pointing down, before and after). A line of arrows is a "river" of current, but
+   a single-arrow hex still moves her only 1 hex per Currents phase.
+   - **River:** in a line of single arrows she moves only from her own hex to the next one, keeping her heading (second picture).
+   - **Whatever her heading:** the current carries her the way the arrow points, even sideways. In the third picture a ship facing
+     south-west is carried 1 hex south-east and still faces south-west.
+
+   <img src="images/currents/example-1-straight.jpg" width="320"> <img src="images/currents/example-1-river.jpg" width="300">
+   <img src="images/currents/example-1-sideways.jpg" width="300">
+
+2. **Curved current:** a curved arrow moves the ship **1 hex** along the arrow **and turns her one hex side (60°) in the direction the arrow
+   curves**. The turn is **relative** to her own heading. In the example a ship facing south, on a curved arrow bending clockwise, is moved
+   1 hex and turned clockwise to face south-west. A ring of curved arrows round an island (a gyre) is a chain of these.
+
+   <img src="images/currents/example-2-curved.jpg" width="320">
+
+3. **Curved current, anticlockwise** *(designer's 4th example, listed here with the other curves)*: the arrow starting in the ship's hex bends
+   anticlockwise, so she is carried 1 hex along it and turned **one hex side anticlockwise** (facing north-west → south-west in the example).
+
+   <img src="images/currents/example-4-curved-anticlockwise.jpg" width="300">
+
+4. **Small ring around a hex corner (a 3-hex rotor)**: a ring of arrows around the corner where 3 hexes meet. Like the 4-hex rotor
+   (example 5), it turns everything around that corner: a ship is carried to the next of the 3 hexes in the arrows' direction (1 hex) and
+   turned **two hex sides (120°)** the same way. In the example the ring is clockwise: a ship facing **north** is carried to the next hex
+   and ends facing **south-east**. ✅ **Designer (Q62, v0.122): 120°.** (The earlier picture showing 60° was a mistake in the art, which
+   shows how easy these are to misread.) The art will get small markers ("bobbles") on the arrows showing how many hex sides to turn.
+
+   <img src="images/currents/example-5-three-hex-ring.jpg" width="300">
+
+5. **Rotor current (a "turntable"):** a ring of arrows rotating around a **point between hexes**, not around one hex's centre. Each
+   activation turns everything in the rotor around that point, like a secret library door turning in place: **ships move to the hex the
+   rotation carries them to, and turn by the same angle**. The example rotor turns **180°**: a ship on one side is carried across to the
+   opposite hex and **ends facing the opposite way** (east → west in the first picture, south-east → north-west in the second). A ship on
+   the opposite hex is carried the other way at the same moment, so **ships swap places**.
+   - The example rotor covers the **4 hexes around its centre point**: each has an arrow starting in it, so a ship on any of them is carried.
+   - It's a **single-arrow** current, so it acts in the **single-arrow sub-step**.
+   - **Blocked:** as with every current, if the hex she'd be carried to is still occupied (rare, because the ship there is usually being
+     carried too), she **stays put**.
+   - Inspired by RoboRally's rotating board elements: confusing at first, but exceptional play.
+   - **More sizes are planned**, covering different numbers of hexes (and so different rotation angles).
+
+   <img src="images/currents/example-3-rotor-a.jpg" width="300"> <img src="images/currents/example-3-rotor-b.jpg" width="300">
+
+6. **Eddy (turn only):** a ring of arrows inside one hex. The ship **stays in her hex** and is turned **one hex side (60°)** in the
+   direction the arrows go. In the example the arrows run clockwise: a ship facing south turns to face south-west.
+   - It's a **single-arrow** current, so it acts in the **single-arrow sub-step** ❓.
+   - Nothing moves, so an eddy is never blocked.
+
+   <img src="images/currents/example-6-eddy-a.jpg" width="300"> <img src="images/currents/example-6-eddy-b.jpg" width="300">
+
+7. **Eddy drawn with 3 arrows** (next to whirlpools 2 and 7): clockwise. In the pictures a ship facing **south** ends facing
+   **north-west**, which is **two hex sides (120°)** clockwise. She stays in her hex. ✅ *Designer (Q63, v0.123).* The **longer arrows**
+   show a **stronger spin**.
+   - **Eddy strengths:** eddies turn a ship **60°, 120° or 180°** (a 180° eddy exists but isn't drawn yet). The art will mark the
+     amount with notches or bobbles on the arrows.
+
+   <img src="images/currents/example-7-eddy-a.jpg" width="300"> <img src="images/currents/example-7-eddy-b.jpg" width="300">
+
+8. **Current to a non-adjacent hex** *(designer, v0.124; no picture yet, the draft art had the ship colours swapped)*: an arrow can
+   carry a ship to a hex that **isn't next to hers**, e.g. straight across the **corner between two hexes** to the hex beyond. Nothing
+   forbids it, and it's useful: it can take a ship somewhere she couldn't otherwise reach. In the designer's example a ship facing
+   south-west is carried across the corner between whirlpools 5 and 6, past a line of reefs, into the hex beyond, still facing south-west.
+   - She goes **straight to the arrow's end hex**: she **doesn't enter the hexes in between** (here she doesn't fall into either
+     whirlpool), so nothing on the way affects her: whirlpools, reefs or ships.
+   - It counts as **one current step** (a single arrow acts in the single-arrow sub-step); if the end hex is occupied she **stays put**,
+     as with any blocked current. ✅ *Designer (Q65, v0.126).*
+
+9. **2-hex rotor** *(designer, v0.125)*: an oval ring of arrows around the **middle of the edge between two hexes**. It turns everything
+   **180°** around that point: a ship is carried into the other hex and **ends facing the opposite way** (north-east ↔ south-west in the
+   picture). Ships on both hexes **swap places**, as with the 4-hex rotor (example 5).
+
+   <img src="images/currents/example-9-two-hex-rotor.jpg" width="300">
+
+**Rotors in general** (examples 4, 5 and 9): a ring of arrows round a point turns every ship on it around that point; she moves to the
+hex the rotation takes her to and turns by the same angle. The 2-hex rotor (round an edge) turns 180°, the 3-hex ring (round a corner)
+120°, and the 4-hex rotor 180°. The art will mark the angle with notches or bobbles.
+
+**Designer's principle:** the turning amounts only need to be **consistent and predictable**; players learn them quickly. The art will mark
+the number of hex sides wherever it isn't obvious. The **digital version** stores the exact move and turn for every arrow in the map data,
+so it never has to read the art.
+
+- **Eddies** (circular arrows within a hex) **spin** the ship in place by 60°, 120° or 180° per Currents phase, depending on the eddy (examples 6–7).
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
   1. **Triple** currents move 1 hex.
   2. **Double and triple** currents move 1 hex.
@@ -439,7 +562,7 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
   So triple currents move 3, double 2 and single 1, all finishing together, and a ship can be carried from one current onto another
   between sub-steps. Conflicts within a sub-step are resolved in **Sail (Move-slot) initiative order**.
-- *Turning amounts, eddy spin amount, gyres and the maelstrom: designer's diagram (Q20).*
+- *Dashed eddies, gyres and the maelstrom: designer's diagram (Q20).*
 
 ### 6.7 Stranded by the tide
 - A ship on a sandbank or underwater reef when the tide turns it into land is **stuck** (stranded) until the tide makes it water again.
@@ -568,7 +691,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - She leaves a **shipwreck** where she sank (§7.9).
 
 ### 7.9 Shipwrecks
-- **Number at setup = number of ships** *(placement: scenario or players? Q50)*.
+- **Number at setup = number of ships**, placed by mutual agreement or in turns, as part of designing the map (§3.1.1).
 - **Shipwreck tokens** are placed on the map at setup, and **every ship that sinks leaves a new shipwreck token** where she sank.
 - **Searching** happens during **Upkeep**: a ship that **ends the turn on** a wreck (sea), or **next to** it if the wreck is on land,
   searches it and draws a **wreck card**.
@@ -587,6 +710,39 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - Equipment is **kept when a ship sinks** (it isn't lost or dropped).
 
 *Critical hits (d12 = 12): for now, roll that DD again plus 1 extra DD (§7.2). A critical damage card deck may replace this (Q56).*
+
+### 7.11 Flotsam *(equipment add-on, designer's choice in v0.95)*
+Equipment is single-use, so it needs to be more plentiful. **Flotsam tokens** float on the sea; a ship that **moves over** one (any
+movement) removes it and draws an **equipment card**. Flotsam **doesn't drift**: currents and wind leave it where it is.
+
+Flotsam appears in two ways:
+- **Battle debris:** when a ship takes **Ship damage** (not Crew damage), place a flotsam token in the hex **directly astern** of her
+  (behind her). If that hex is **blocked** (land, a ship, treasure or flotsam), **no flotsam** is placed. Chasing a damaged ship pays off.
+  **One token per damage event** (a second token couldn't be placed anyway: the hex astern would already be blocked). Ship damage from
+  any source counts: attacks or hazards like cliffs, wall reefs, rough water and storms.
+- **Weather:** a weather card marked with a **flotsam icon** brings **one** flotsam token when it comes into play *(designer to mark the cards)*. The **player in last place** places it in an
+  **empty sea hex more than 5 hexes from every ship**. If there's no such hex, **no flotsam** is placed.
+
+**Pool:** a fixed pool of flotsam tokens; flotsam is only placed while tokens are left in the pool, and picked-up tokens return to it.
+The pool size will vary with **map size and player count** (set by the scenario); **5 for now**, to playtest.
+
+### 7.12 The Derelict *(add-on, adopted v0.97)*
+An abandoned ship drifting with valuable cargo: a moving prize that the wind and currents control.
+- **Appears:** a **Dead Calm** weather card announces it; the Derelict arrives when the **next weather card with wind** comes into play,
+  on that wind's **upwind map edge**. (If the next card is another Dead Calm, it waits for the first card with wind.) Because the weather
+  board shows the current and next card, players can see it coming. At most one Derelict on the board at a time.
+- **Placement:** the **player in last place** (lowest score: fewest treasures scored in Treasure Hunt) places it in any **empty sea hex on
+  that upwind edge**. Ties are rolled off. A gentle catch-up rule: the player who most needs the prize aims it.
+- **Moves:** like a ship at **No Sail**: currents carry it and wind drift pushes it. It never sails or steers.
+- **Obstacle:** sailing into it pushes it, with no DD. Currents and drift don't push it.
+- **Boarding:** a ship that **ends a turn next to it** boards and loots it: **2 equipment cards + 1 treasure** (the treasure only if her
+  ship isn't already carrying one). Several ships boarding on the same turn take the loot one item at a time, in Sail initiative order.
+  The Derelict is then **removed**.
+- **Sinking it:** it can be shot (it's a valid target in the broadside arcs). It sinks after taking **4 DD** in total (count the dice dealt to it; they aren't rolled, since it has no crew or ship board)
+  and leaves **flotsam** (§7.11).
+- **Lost:** if it drifts off the map or onto a death reef, it's gone.
+- **Treasure counts:** its treasure **counts towards the treasures in play** (§8.2.1). If the maximum are already in play, the Derelict
+  carries **only the 2 equipment cards**.
 
 ## 8. Game modes & winning
 The **core rules (§3–7) are the same in every mode**. A mode only adds an **objective**, any **mode components**
@@ -617,7 +773,7 @@ mode is a plug-in objective module on top of a shared rules core.
 
   <img src="images/treasure-map-1.png" width="120"> <img src="images/treasure-map-3.png" width="120">
 
-  - **N = 9 spawn points** (for now), **placed as tokens by the scenario**.
+  - **N = 9 spawn points** (for now), placed as tokens by mutual agreement or in turns, as part of designing the map (§3.1.1).
   - A small deck of hex-shaped **treasure map cards**, numbered 1…9 (one per spawn point).
   - *Naming:* spawn points may get **non-numeric symbols** to avoid confusion with the numbered whirlpool portals.
     The spec uses numbers for now.
@@ -653,10 +809,17 @@ mode is a plug-in objective module on top of a shared rules core.
 - Anyone can then pick it up as normal (§8.2.2). In practice the attacker places it where they can grab it, or where a rival can't.
 
 **8.2.4 Home port & scoring**
-- Each player has a **home port**, **placed on the edge of the map at setup**. It is **indestructible** and **has guns**
+- Each player (or team) has a **home port**: a **4-hex port tile** attached to the edge of the map at setup (§3.1.1). It is **indestructible** and **has guns**
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
   at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
-- A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
+- A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking). The **port hex** is the tile's
+  **only sea hex** (marked ✗ in the example); it's the only hex of the tile a ship can enter.
+- **Shelter from the weather:** **no weather effects or consequences of any kind occur while a ship is in her port**, from the moment she
+  enters the port hex: no wind drift, no storm damage, no Gale damage. "Any port in a storm."
+- **Leaving port** follows the same rule, even when it seems odd: while she's still in port the weather doesn't affect her, so she always
+  gets out; the moment she's on the hex outside the port, the weather applies as normal (in a Dead Calm she goes no further).
+  *My working of this for the engine ❓:* she always moves **1 hex out of port**, ignoring wind and weather; the **rest of her sail move**
+  is then worked out normally from that hex (points of sail and the weather card), less the hex already used.
 - Treasure is **scored, and safe, once it reaches the carrier's (team's) home port**; it **can't be scored at anyone else's port**. It can't be stolen after that.
 
 **8.2.5 Winning**
@@ -693,7 +856,7 @@ The same rules apply either way. **Teammates**:
 - **share goals**: treasure scored by any teammate counts for the team; in **Race**, a checkpoint only needs to be reached **once per team**;
 - **never hit each other** (no friendly fire, §7.1);
 - **can push each other**, but ramming a teammate deals **no DD**;
-- **can pass treasure**: **ram your teammate** and knock her treasure loose **without the DD**, placing it in an empty hex next to her
+- **can pass treasure**: **ram your teammate** and knock her treasure loose **without the DD**, placing it in a hex next to her that holds no treasure
   (the normal knock-loose rule, §8.2.3); then pick it up as usual.
 - Treasure Hunt **target is 3 per team**, as for a single player (§8.2.5).
 
@@ -753,10 +916,16 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 ## Designer to-do
 _Things the designer has said they'll do or supply._
 - **Current-types diagram** (turning amounts, eddies, gyres, maelstrom) for players and for this spec (Q19/Q20).
-- **Board tile diagram**: tile size and shape, how tiles join (Q18).
-- **Gale card**: add "1 DD per Full Sail, taken at Upkeep" to the card text (§3.5).
+- **Gale card**: add "1 DD for each Part sailed at Full Sail, taken at Upkeep" to the card text (§3.5).
+- **Suggested layouts** for the rulebook (§3.1.1).
+- **Real board design**: the current boards are prototype examples. Design the real boards, and grade each one Category 1, 2 or 3 (§3.1.1).
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
+- **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
+- **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
+- **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors and eddies (eddies come in 60°, 120° and 180°; draw the 180° eddy),
+  where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
+  *Designer's plan: little bobbles on the arrow, one per hex side turned.*
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 
 ## Open questions
@@ -768,23 +937,63 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### B. Needed for a full game
 1. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
-2. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
-3. **Q3c Board size** for each player count.
+- ~~Q50 wreck placement; Q18 / Q3c board construction~~ → answered (§3.1.1, §8.2.4): 37-hex main boards, joined however players agree; the port
+  hex is the port tile's only sea hex and shelters ships from the weather; the printed town is scenery; spawn points and wrecks placed by
+  agreement or in turns.
+- **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
+- ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
+- ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
+- ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
+- ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
+- ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
-  - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
-4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
+  - Dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram); eddies act in the single-arrow sub-step (§6.6 example 6).
+2. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+3. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
     does she heal (Upkeep?), and can she heal herself?
-6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+4. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
     attack? Wreck deck contents beyond crew and equipment, including bad results.
-7. **Sea monster**: equal-distance influence tie (roll off?).
+5. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.
+- v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
+- v0.125 — current example: 2-hex rotor round an edge, 180° swap.
+- v0.124 — currents may carry a ship to a non-adjacent hex (e.g. across a hex corner); in-between hexes ignored ❓ (Q65).
+- v0.123 — Q63: eddies turn 60°, 120° or 180° (longer arrows = stronger spin; 180° eddy not drawn yet).
+- v0.122 — Q62 corrected: the ring round a hex corner turns ships 120° (a 3-hex rotor); example picture replaced.
+- v0.121 — board categories 1–3 (like hurricanes): Category 1 forgiving and open for beginners, Category 3 dense (Q64).
+- v0.120 — current examples: river and sideways straight currents; Q62 answered (corner ring turns 60°); 3-arrow eddy example (Q63: 120°?); turning amounts need only be consistent.
+- v0.119 — current example: eddy turns the ship 60° in place, no movement (resolves the eddy ❓ in §3.2).
+- v0.118 — current example: small ring around a hex corner (Q62: 60° or 120°?).
+- v0.117 — current example: anticlockwise curved current (60°).
+- v0.116 — currents act on ships whose hex has an arrow starting in it; rotor details confirmed.
+- v0.115 — current example 3: rotors turn ships around a point between hexes (example: 180°, ships swap and reverse). Designer to-do: show rotation amounts on the art.
+- v0.114 — current example 2: curved arrows move 1 hex and turn the ship 60° in the curve's direction.
+- v0.113 — confirmed: straight currents don't turn the ship.
+- v0.112 — current example 1: a straight single arrow moves the ship 1 hex, heading unchanged.
+- v0.111 — leaving port: weather doesn't apply until the ship is outside the port hex.
+- v0.110 — port shelter: no weather effects or consequences of any kind in port (Gale damage included).
+- v0.109 — 37-hex boards standard; boards joined by agreement; port hex = the tile's only sea hex, sheltered from weather; printed town is scenery; spawn points and wrecks placed by agreement or in turns.
+- v0.108 — building the map (§3.1.1): main boards and 4-hex port tiles; players choose the layout; 2–4 boards normal; port placement rules.
+- v0.107 — Upkeep order: sunk ships return (step 2) and Gale damage (step 6) placed, as proposals. Rulebook updated to playtest draft 0.2.
+- v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed). Restored three add-on questions (crew deck, equipment timing, sea monster tie) accidentally dropped in v0.102.
+- v0.105 — weather flotsam placed by the player in last place, more than 5 hexes from any ship.
+- v0.104 — flotsam-icon weather cards bring one token.
+- v0.103 — flotsam: one token per damage event.
+- v0.102 — flotsam details: Ship damage only, blocked hex = none, weather icon, pool 5, no drift, picked up by any movement.
+- v0.101 — the Derelict carries only equipment when the maximum treasures are in play; Q59 closed.
+- v0.100 — the Derelict sinks after 4 DD.
+- v0.99 — the Derelict is placed on the upwind edge by the player in last place.
+- v0.98 — the Derelict arrives with the next weather card that has wind, on its upwind edge.
+- v0.97 — the Derelict adopted (§7.12): brought by Dead Calm, sinks after 4 damage, its treasure counts.
+- v0.96 — flotsam capped by a fixed pool of N tokens.
+- v0.95 — flotsam (§7.11): battle debris astern of damaged ships plus weather cards; gives equipment cards. Details in Q58.
 - v0.94 — confirmed: random starting crew; starting treasures via the treasure map deck; 2-player target first to 3; sandbar wreck is a starting wreck.
 - v0.93 — Repair/Heal fix 1 each; a sunk ship doesn't miss a turn and draws a new hand; no scoring at other ports.
 - v0.92 — used cards roughly shuffled onto the bottom of the deck; sunk ships come back at Upkeep; spawn points are scenario tokens; Gale 1 DD per Part at Full Sail.

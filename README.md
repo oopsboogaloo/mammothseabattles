@@ -22,6 +22,7 @@ A board game in design, with a companion online version.
 
 - [`docs/online-version.md`](docs/online-version.md) — online version goals and teaching approach
 
+- [`docs/suggestions.md`](docs/suggestions.md) — ideas for the designer to consider (equipment cards so far)
 - [`docs/rules.md`](docs/rules.md) — working rules specification (source of truth)
 - [`docs/core-rules-summary.md`](docs/core-rules-summary.md) — core rules on one page
 - [`docs/research/roborally.md`](docs/research/roborally.md) — notes on RoboRally, the reference game
