@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.112**
+> Status: **Draft v0.113**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -459,7 +459,8 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 **Current examples** *(from the designer; more to come)*
 
 1. **Straight current, single arrow:** a ship that ends her movement on a hex with an arrow is moved **1 hex** across the hex side the arrow
-   points to. Her **heading doesn't change** (the ship in the example still faces north) ❓. A line of arrows is a "river" of current, but
+   points to. Her **heading doesn't change**: arrows with no turn in them don't turn the ship (the ship in the example faces south, bow
+   pointing down, before and after). A line of arrows is a "river" of current, but
    a single-arrow hex still moves her only 1 hex per Currents phase.
 
    <img src="images/currents/example-1-straight.jpg" width="320">
@@ -861,6 +862,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.113 — confirmed: straight currents don't turn the ship.
 - v0.112 — current example 1: a straight single arrow moves the ship 1 hex, heading unchanged.
 - v0.111 — leaving port: weather doesn't apply until the ship is outside the port hex.
 - v0.110 — port shelter: no weather effects or consequences of any kind in port (Gale damage included).
