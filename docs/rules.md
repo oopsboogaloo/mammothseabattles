@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.122**
+> Status: **Draft v0.123**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -106,7 +106,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Current | Single arrow | **Confirmed** (§6.6): moves the ship 1 hex |
 | Fast current | Double / triple arrows | **Confirmed** (§6.6): moves the ship 2 / 3 hexes |
 | Turning current | Curved arrow | **Confirmed** (§6.6): moves the ship and turns her |
-| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place **one hex side (60°)** in the arrows' direction; she doesn't move (§6.6 example 6) |
+| Eddy | Circular arrows inside one hex, clockwise or anticlockwise | Turns the ship in place, in the arrows' direction, by **1, 2 or 3 hex sides (60°, 120° or 180°)** depending on the eddy; she doesn't move (§6.6 examples 6–7) |
 | Dashed eddy | Same, with a dashed outline | Weaker, or only active at certain tides? ❓ |
 | Gyre / loop current | Ring of arrows circling an island, or an oval loop over 2 hexes | Carries ships round the loop ❓ |
 | Maelstrom | Large multi-ring spiral (lower right) | Pulls ships inward and turns them; damage or loss at the centre? ❓ |
@@ -519,7 +519,10 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    <img src="images/currents/example-6-eddy-a.jpg" width="300"> <img src="images/currents/example-6-eddy-b.jpg" width="300">
 
 7. **Eddy drawn with 3 arrows** (next to whirlpools 2 and 7): clockwise. In the pictures a ship facing **south** ends facing
-   **north-west**, which is **two hex sides (120°)** clockwise ❓ (see Q63). She stays in her hex.
+   **north-west**, which is **two hex sides (120°)** clockwise. She stays in her hex. ✅ *Designer (Q63, v0.123).* The **longer arrows**
+   show a **stronger spin**.
+   - **Eddy strengths:** eddies turn a ship **60°, 120° or 180°** (a 180° eddy exists but isn't drawn yet). The art will mark the
+     amount with notches or bobbles on the arrows.
 
    <img src="images/currents/example-7-eddy-a.jpg" width="300"> <img src="images/currents/example-7-eddy-b.jpg" width="300">
 
@@ -527,7 +530,7 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 the number of hex sides wherever it isn't obvious. The **digital version** stores the exact move and turn for every arrow in the map data,
 so it never has to read the art.
 
-- **Eddies** (circular arrows within a hex) **spin** the ship in place, 60° per Currents phase (example 6).
+- **Eddies** (circular arrows within a hex) **spin** the ship in place by 60°, 120° or 180° per Currents phase, depending on the eddy (examples 6–7).
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
   1. **Triple** currents move 1 hex.
   2. **Double and triple** currents move 1 hex.
@@ -896,7 +899,7 @@ _Things the designer has said they'll do or supply._
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
 - **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
-- **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors,
+- **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors and eddies (eddies come in 60°, 120° and 180°; draw the 180° eddy),
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
   *Designer's plan: little bobbles on the arrow, one per hex side turned.*
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
@@ -916,9 +919,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
-- **Q63 Eddy turning amount** (§6.6 examples 6 and 7): the eddy drawn with 6 short arrows turns a ship 60°; in the pictures of the
-  eddy drawn with 3 longer arrows the ship turns from south to north-west, which is 120°. Is that right: does the 3-arrow eddy turn
-  **120°**, or is it also 60° (south → south-west)?
+- ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
   is the category printed on the board? How many boards of each category are planned for the first box?
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -936,6 +937,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.123 — Q63: eddies turn 60°, 120° or 180° (longer arrows = stronger spin; 180° eddy not drawn yet).
 - v0.122 — Q62 corrected: the ring round a hex corner turns ships 120° (a 3-hex rotor); example picture replaced.
 - v0.121 — board categories 1–3 (like hurricanes): Category 1 forgiving and open for beginners, Category 3 dense (Q64).
 - v0.120 — current examples: river and sideways straight currents; Q62 answered (corner ring turns 60°); 3-arrow eddy example (Q63: 120°?); turning amounts need only be consistent.
