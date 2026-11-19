@@ -44,6 +44,9 @@ export type GameEvent =
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
   | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
+  | { readonly type: 'WreckSearched'; readonly rule: '7.9'; readonly ship: ShipId; readonly at: string }
+  | { readonly type: 'CrewGained'; readonly rule: '7.9'; readonly ship: ShipId; readonly crew: string; readonly replaced?: string }
+  | { readonly type: 'ShipRefitted'; readonly rule: '7.7'; readonly ship: ShipId; readonly repair: boolean; readonly heal: boolean; readonly recruit: number }
   | { readonly type: 'WeatherAdvanced'; readonly rule: '3.5'; readonly now: string; readonly next: string; readonly space: number; readonly newFronts: number }
   | { readonly type: 'TideChanged'; readonly rule: '6.4'; readonly tide: 'high' | 'mid' | 'low' }
   | { readonly type: 'ShipStranded'; readonly rule: '6.7'; readonly ship: ShipId }

@@ -19,7 +19,7 @@ export type ProgramAction =
 
 /** Ships a player programs: her own, afloat (sunk ships wait for Upkeep, §7.8). */
 export function programmableShips(state: GameState, player: PlayerId): Ship[] {
-  return (state.players[player] as { ships: string[] }).ships.map((id) => state.ships[id] as Ship).filter((s) => s.status === 'afloat');
+  return (state.players[player] as { ships: string[] }).ships.map((id) => state.ships[id] as Ship).filter((s) => s.status === 'afloat' && !s.refitting); // refitting ships can't do anything (§7.7)
 }
 
 /** Slots that can take a card: empty and without a damage marker (§7.3). */

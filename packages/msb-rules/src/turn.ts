@@ -17,6 +17,7 @@ import type { DamageSource, GameEvent } from './events';
 import { runActions } from './actions';
 import { runCurrents } from './currents';
 import { returnSunkShips } from './sinking';
+import { refit, searchWrecks } from './upkeep';
 import { initiativeOrder } from './initiative';
 import { cardInSlot, currentWeatherOf, driftShip, inOwnPort, moveShip, steerShip, type MoveContext } from './movement';
 import { isLand } from './map';
@@ -117,7 +118,10 @@ export function advanceWeatherAndTide(state: GameState, ctx: ResolutionContext<G
 /** §5.4 Upkeep (so far): used cards to the deck bottom, then each afloat ship draws. */
 function upkeep(state: GameState, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   // §5.4 step 1: sunk ships come back.
-  returnSunkShips(state, shipsInSeatOrder(state), ctx);
+  const returned = returnSunkShips(state, shipsInSeatOrder(state), ctx);
+  // Steps 3 and 4: refit in port (§7.7), then search wrecks (§7.9).
+  refit(state, shipsInSeatOrder(state), config, ctx, returned);
+  searchWrecks(state, shipsInSeatOrder(state), config, ctx);
   // §3.5: Gale damage, 1 DD for each Part sailed at Full Sail. (Its place in the full Upkeep order comes with P6.)
   for (const ship of shipsInSeatOrder(state)) {
     const dd = ship.galeParts * config.dd.galePerFullSail;

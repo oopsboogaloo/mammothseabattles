@@ -44,7 +44,8 @@ export function recruitCrew(ship: Ship, count: number, tag: string): ShipCrew[] 
  * heading of her player's choice, sail down, fully repaired, with 3 random crew and no Captain. Her old hand is discarded;
  * she draws a new hand with everyone else at the end of Upkeep.
  */
-export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: ResolutionContext<GameEvent>): void {
+export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: ResolutionContext<GameEvent>): Set<string> {
+  const returned = new Set<string>();
   for (const ship of ships) {
     if (ship.status !== 'sunk') continue;
     const team = state.players[ship.player]?.team as string;
@@ -76,5 +77,7 @@ export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: R
       galeParts: 0,
     });
     ctx.emit({ type: 'ShipReturned', rule: '7.8', ship: ship.id, at, heading });
+    returned.add(ship.id);
   }
+  return returned;
 }

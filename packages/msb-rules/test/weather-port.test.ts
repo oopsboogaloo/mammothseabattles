@@ -187,9 +187,22 @@ describe('home port shelter and leaving port (rules §8.2.4)', () => {
   it('no end-of-Part storm damage in her own port', () => {
     const g = createGame();
     let s = game(map({ [k(PORT_A)]: { terrain: 'storm' } }));
-    for (const p of ['A', 'B']) s = g.apply(s, p, { type: 'ready' }).state;
-    expect(s.pending).toBeUndefined();
-    expect(s.turn).toBe(2);
+    const events: GameEvent[] = [];
+    for (const p of ['A', 'B']) {
+      const out = g.apply(s, p, { type: 'ready' });
+      s = out.state;
+      events.push(...out.events);
+    }
+    // The only question is whether to refit (she's in port, with room for crew); undamaged, the default is no refit.
+    expect(s.pending).toMatchObject({ kind: 'refit', player: 'A' });
+    let out = g.apply(s, 'A', { type: 'answer', choice: s.pending!.defaultIndex });
+    events.push(...out.events);
+    expect(out.state.pending).toMatchObject({ kind: 'refit', player: 'B' }); // B is in her port too
+    out = g.apply(out.state, 'B', { type: 'answer', choice: out.state.pending!.defaultIndex });
+    events.push(...out.events);
+    expect(events.some((e) => e.type === 'DamageRolled')).toBe(false);
+    expect(out.state.turn).toBe(2);
+    expect(out.state.ships['A-ship']!.refitting).toBe(false);
   });
 });
 
