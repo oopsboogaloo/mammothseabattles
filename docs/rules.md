@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.111**
+> Status: **Draft v0.112**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -456,6 +456,14 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
 - Currents **don't push** other ships (§5.2), but a ship carried into a **cliff** or **wall reef** takes the damage (§3.2.0), and into a
   **death reef** sinks.
+**Current examples** *(from the designer; more to come)*
+
+1. **Straight current, single arrow:** a ship that ends her movement on a hex with an arrow is moved **1 hex** across the hex side the arrow
+   points to. Her **heading doesn't change** (the ship in the example still faces north) ❓. A line of arrows is a "river" of current, but
+   a single-arrow hex still moves her only 1 hex per Currents phase.
+
+   <img src="images/currents/example-1-straight.jpg" width="320">
+
 - **Eddies** (circular arrows within a hex) **spin** the ship in place.
 - **Order of activation** (like RoboRally's express conveyor belts): currents move in **three sub-steps**, 1 hex each:
   1. **Triple** currents move 1 hex.
@@ -853,6 +861,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.112 — current example 1: a straight single arrow moves the ship 1 hex, heading unchanged.
 - v0.111 — leaving port: weather doesn't apply until the ship is outside the port hex.
 - v0.110 — port shelter: no weather effects or consequences of any kind in port (Gale damage included).
 - v0.109 — 37-hex boards standard; boards joined by agreement; port hex = the tile's only sea hex, sheltered from weather; printed town is scenery; spawn points and wrecks placed by agreement or in turns.
