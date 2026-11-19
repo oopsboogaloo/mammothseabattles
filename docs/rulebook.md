@@ -1,6 +1,6 @@
 # Mammoth Sea Battles: Rulebook
 
-> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.108).
+> **Playtest draft 0.2**, written for players from the design spec ([`rules.md`](rules.md) v0.109).
 > Covers the **core game**, **Treasure Hunt**, **Race** and **teams**. Add-ons are in the appendix.
 > 🛠 marks rules still being decided.
 
@@ -41,9 +41,9 @@ cannons roar. Plans go wrong. That's the fun.
    Try one of the suggested layouts for your first game 🛠 *(to come)*. Usually **2–4 boards**: fewer boards make a tight, combat-heavy
    game; more boards make more of a race. More ships need more boards.
 2. Each player (or team) takes a **port tile** (4 hexes) and attaches it to the **outer edge** of the map. It can face any way round, but
-   its **sea part must join a sea hex**, and **no two ports may share the same side** of a main board. Each player takes a **ship** and
+   **sea hex must join a sea hex**, and **no two ports may share the same side** of a main board. Each player takes a **ship** and
    **ship board**.
-3. Place the **9 spawn point tokens** and **one shipwreck token per ship**, as the scenario shows. Spawn points can all be at sea (a quick
+3. Place the **9 spawn point tokens** and **one shipwreck token per ship**: agree where they go, or take turns placing them. Spawn points can all be at sea (a quick
    game), all on land (a longer game), or a mix.
 4. Shuffle the **treasure map deck**. Turn over cards and place treasure on those spawn points until there are
    **half as many treasures as ships** (rounded down, minimum 1): 1 treasure with 2–3 ships, 2 with 4–5, 3 with 6–7, 4 with 8.
@@ -276,7 +276,9 @@ There's a **Retired Captain** somewhere in the crew deck: the best crew member o
 ## 10. Home port
 
 - **Start:** you begin the game here.
+- **Your port hex** is the port tile's only sea hex. It's the only part of the tile a ship can enter.
 - **Safe harbour:** your port can't be harmed, and its guns fire at rivals within 2 hexes.
+- **Any port in a storm:** while your ship is on her port hex, the weather can't touch her: no drift, no storm damage, no Gale damage.
 - **Refit:** end a turn in your port to fully repair, fully heal, and recruit back up to 3 crew (drawn at random). You can do just part of a
   refit, but either way you **miss the next turn** (you still draw cards).
 - **Score:** sail into your port carrying treasure to score it. It's safe forever. You can only score at your own port.

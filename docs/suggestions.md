@@ -68,3 +68,12 @@ sitting target for a whole turn; and it's a trial run for the ghost ships of the
 
 **Decided (v0.97–0.98):** announced by **Dead Calm**, arriving with the next weather card that has wind, on its upwind edge; sinks after **4 damage**; its treasure **counts** towards the treasures in play.
 All details are now settled in `rules.md` §7.12.
+
+## Map building: fairer placement and other ideas
+
+Ideas from the designer (v0.109) for later; the current rule is "agree, or take turns".
+- **Spawn points:** make the number of spawn points a multiple of the number of players, and have each player place their share.
+  (Note: the treasure map deck currently has 9 cards, so the deck would need to match.)
+- **Wrecks:** don't place a wreck too near another player's port (distance to decide).
+- **Independent ports:** the town printed on a main board could become a neutral port where anyone can repair.
+- **One-piece boards:** e.g. a large rectangular board with ports printed on it, used on its own instead of modular 37-hex boards.

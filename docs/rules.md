@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.108**
+> Status: **Draft v0.109**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -68,16 +68,21 @@ interact with each other and with the sea.
 ### 3.1.1 Building the map *(designer, v0.108)*
 <img src="images/board-layout-example.jpg" width="420">
 
-- **Main boards** are large **hexagonal boards** (each appears to be 37 hexes, a hexagon 3 hexes from centre to edge ❓). **Port tiles** are
-  small **4-hex** pieces, one per player (or team).
+- **Main boards** are large **hexagonal boards** of **37 hexes** (3 hexes from centre to edge). **Port tiles** are small **4-hex** pieces,
+  one per player (or team).
+- 37-hex boards are the standard, not a rule: other formats may come later (e.g. one large rectangular board with the ports printed on it,
+  used on its own).
 - **The players choose the layout together**: the host decides, or players take turns placing boards. The rulebook will offer some
   **suggested layouts** to get people started, but choosing your own is more fun.
 - **How many main boards**: usually **at least 2**; **2–4** is a normal game. **More ships → more boards.**
   - **Fewer boards** → a tighter, more intense, more interactive game (more combat).
   - **More boards** → more racing and navigation, less combat.
+- **Joining boards**: no fixed rule. Players agree how the boards fit together, as long as it makes an interesting map.
+- **Spawn points and wrecks**: placed as part of designing the map, by **mutual agreement** or **taking turns** (see `suggestions.md` for
+  fairer methods under consideration).
 - **Ports** are attached to the **outer edge** of the map:
   - A port tile can face any way round (upside down is fine).
-  - Its **sea part must join a sea hex** on a main board.
+  - Its **sea hex** (the only sea hex on the tile) **must join a sea hex** on a main board. The rest of the tile is land.
   - **No two ports on the same side** of a main board, so ports are spread out.
 - The example shows 2 main boards and 2 ports: a 2-player layout.
 
@@ -106,7 +111,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
-| Port town | Harbour town (bottom) | **Confirmed**: just one of the **home ports** (§8.2.4) |
+| Port town | Harbour town printed on a main board | **Scenery** (land) for now; home ports are separate port tiles (§3.1.1) |
 | Small wreck on sandbar | Upper left | **Confirmed**: a **starting shipwreck** (§7.9) |
 
 ### 3.2.0 Terrain *(confirmed)*
@@ -586,7 +591,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - She leaves a **shipwreck** where she sank (§7.9).
 
 ### 7.9 Shipwrecks
-- **Number at setup = number of ships** *(placement: scenario or players? Q50)*.
+- **Number at setup = number of ships**, placed by mutual agreement or in turns, as part of designing the map (§3.1.1).
 - **Shipwreck tokens** are placed on the map at setup, and **every ship that sinks leaves a new shipwreck token** where she sank.
 - **Searching** happens during **Upkeep**: a ship that **ends the turn on** a wreck (sea), or **next to** it if the wreck is on land,
   searches it and draws a **wreck card**.
@@ -668,7 +673,7 @@ mode is a plug-in objective module on top of a shared rules core.
 
   <img src="images/treasure-map-1.png" width="120"> <img src="images/treasure-map-3.png" width="120">
 
-  - **N = 9 spawn points** (for now), **placed as tokens by the scenario**.
+  - **N = 9 spawn points** (for now), placed as tokens by mutual agreement or in turns, as part of designing the map (§3.1.1).
   - A small deck of hex-shaped **treasure map cards**, numbered 1…9 (one per spawn point).
   - *Naming:* spawn points may get **non-numeric symbols** to avoid confusion with the numbered whirlpool portals.
     The spec uses numbers for now.
@@ -707,7 +712,10 @@ mode is a plug-in objective module on top of a shared rules core.
 - Each player (or team) has a **home port**: a **4-hex port tile** attached to the edge of the map at setup (§3.1.1). It is **indestructible** and **has guns**
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
   at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
-- A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking).
+- A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking). The **port hex** is the tile's
+  **only sea hex** (marked ✗ in the example); it's the only hex of the tile a ship can enter.
+- **Shelter from the weather:** from the moment a ship is on her port hex she is **free from all weather effects**: no wind drift, no storm
+  damage, and no Gale damage *(Gale included: assumed ❓)*. "Any port in a storm." 
 - Treasure is **scored, and safe, once it reaches the carrier's (team's) home port**; it **can't be scored at anyone else's port**. It can't be stolen after that.
 
 **8.2.5 Winning**
@@ -820,29 +828,26 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### B. Needed for a full game
 1. **Q43 Deathmatch / Capture the Flag**: scoring, end condition, flag rules. *(Designer: TBD.)*
-2. **Q50 Wreck tokens at setup**: one per ship (answered); placed by the scenario, or by players in turn?
-3. **Q18 / Q3c Board construction** (answered: §3.1.1). Still open:
-   - Is a main board 37 hexes (3 hexes from centre to edge)?
-   - How do two main boards join: anywhere along an edge, with any offset (as in the example), or must whole sides line up?
-   - Port tiles: which hex is "the port" for scoring, refits and coming back (the green ✗ on the example's port)? Can ships sail through
-     the port tile's other hexes?
-   - What is the town printed in the middle of one main board, now that ports are separate tiles: just scenery (land)?
-   - Spawn points and wrecks on a home-made layout: who places them, and where?
+- ~~Q50 wreck placement; Q18 / Q3c board construction~~ → answered (§3.1.1, §8.2.4): 37-hex main boards, joined however players agree; the port
+  hex is the port tile's only sea hex and shelters ships from the weather; the printed town is scenery; spawn points and wrecks placed by
+  agreement or in turns.
+- **Confirm:** does port shelter also cover Gale damage (assumed yes)?
 
 ### C. Detail
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
   - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
-4. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
+2. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
 
 ### D. Add-ons
-5. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
+3. **Q48 Crew deck**: Retired Captain's card icons and power; on a swap, where does the leaving card go; can a ship decline her? Surgeon: when
     does she heal (Upkeep?), and can she heal herself?
-6. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
+4. **Q50 Equipment**: exact play windows ("any time"), especially during other players' attacks; can "+2 DD to any attack" boost a rival's
     attack? Wreck deck contents beyond crew and equipment, including bad results.
-7. **Sea monster**: equal-distance influence tie (roll off?).
+5. **Sea monster**: equal-distance influence tie (roll off?).
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.109 — 37-hex boards standard; boards joined by agreement; port hex = the tile's only sea hex, sheltered from weather; printed town is scenery; spawn points and wrecks placed by agreement or in turns.
 - v0.108 — building the map (§3.1.1): main boards and 4-hex port tiles; players choose the layout; 2–4 boards normal; port placement rules.
 - v0.107 — Upkeep order: sunk ships return (step 2) and Gale damage (step 6) placed, as proposals. Rulebook updated to playtest draft 0.2.
 - v0.106 — any Ship damage drops flotsam; flotsam fully specified (Q58 closed). Restored three add-on questions (crew deck, equipment timing, sea monster tie) accidentally dropped in v0.102.
