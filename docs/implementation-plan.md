@@ -11,7 +11,7 @@
 |---|---|
 | 2 ships, 2 human players, hot-seat with a hand-over screen | AI opponents (the random AI is built only as a test tool), online play |
 | Core rules (rules §5–§7) and Treasure Hunt (§8.2) | Equipment, flotsam, the Derelict, crew powers, the sea monster |
-| One hand-made **test map** that uses every board feature | Real boards (still being designed, rules §3.1.1); the map painter (D2); the map generator (web-spec §5.1) |
+| One hand-made **test map** that uses every board feature the prototype supports (not dashed eddies, gyres as a whole or the maelstrom, which aren't defined yet) | Real boards (still being designed, rules §3.1.1); the map painter (D2); the map generator (web-spec §5.1) |
 | The mock-up's UI, rewired to the engine | React (D3), saving, offline, tutorial: these come with the v1 client |
 
 **Why keep the mock-up's UI for now:** moving to React (D3) before anyone has played the real rules would delay the play-test by weeks.
@@ -27,9 +27,9 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | **P2** | **Programming** | Deal from crew icons, place and take back cards, ready, reveal Part by Part (D6), discard down to 9, used cards to the deck bottom. A **random player** (legal random programs) for fuzz tests | §5.1 |
 | **P3** | **Movement** | `stepShip` (engineering design §6); Move with pushing and ramming; Steer; wind drift; terrain at each tide; board edge; whirlpools; caves; stranding | §3.2, §5.2, §6 |
 | **P4** | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
-| **P5** | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, rough water and storm at end of Part, sinking and return at Upkeep | §7 |
-| **P6** | **Upkeep and Treasure Hunt** | Refit (optional, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
-| **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; the test map as JSON with a validator | engineering §7 |
+| **P5** | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
+| **P6** | **Upkeep and Treasure Hunt** | Refit (optional and partial, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
+| **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
 | **P8** | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
 | **P9** | **Play-test** | Family game on PC and iPad; findings back into `rules.md` and this plan | |
 
@@ -51,8 +51,9 @@ mock-up's assumptions until they're answered, each kept in one place so it is ch
 | **Anchor** (blue band): what does it do? Is it how you drop sail? | Sails down; no sail move and no wind drift that Part |
 | **Row Ahead 1 / Row Back 1** (blue band) | Move 1 hex ahead or astern whatever the wind; sail level unchanged |
 | **Hard About** (yellow band) | Turn 180° |
-| **Two cards numbered 360** | One is treated as 380 |
+| **Two cards numbered 360** | Card `360b` (Row Ahead 1 / Hard About / Repair) is treated as **380**, by an override in `msb-data`, so initiatives stay unique |
 | **Lightning Storm** and **Hurricane** weather cards | Left out of the deck |
+| **How the weather board refills** (rules Q66) | The card leaving "now" is discarded and the space gets the top card of the weather deck; New Weather Front reshuffles and deals 6 new cards (engineering design §14) |
 
 ## After the prototype
 

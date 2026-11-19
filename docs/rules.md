@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.127**
+> Status: **Draft v0.128**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -451,9 +451,8 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 - Ship movement (sailing, and coming out of a cave) **pushes** any ship in the way. Currents and wind drift do **not** push (§5.2).
 - **Pushes chain**: a pushed ship pushes the next ship in line, and so on.
 - **Distance**: a pushed ship moves **as far as the pushing movement continues**, hex for hex.
-- **Pushed into an obstacle** (land, reef, board edge, other features) has **the same effect as moving into it**. Hex effects are
-  still to be defined (Q19).
-- *Ramming damage: who takes the 1 DD (Q6b).*
+- **Pushed into an obstacle** (land, reef, board edge, other features) has **the same effect as moving into it** (terrain effects: §3.2.0).
+- **Ramming**: the **first ship hit** takes **1 DD**; ships further along a push chain take none (§7.2).
 
 ### 6.6 Currents
 - Arrows show current movement. A ship on a current is moved in the Currents phase (§5.2). *A players' diagram showing every
@@ -944,6 +943,9 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
+- **Q66 Refilling the weather board** (§3.5): when the board advances, what happens to the card leaving "now", and where does the new
+  card for the empty space come from? *Engine assumption: the old card is discarded, the space gets the top card of the weather deck,
+  and the discards are reshuffled when the deck runs out.*
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
 - ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -961,6 +963,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.128 — §6.5 tidied (ramming DD and pushed-into-obstacle effects were already answered); Q66 weather board refill.
 - v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.
 - v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
 - v0.125 — current example: 2-hex rotor round an edge, 180° swap.

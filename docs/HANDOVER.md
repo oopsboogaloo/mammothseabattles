@@ -35,15 +35,13 @@ For the next working session (which will have access to all the art). Written at
 1. **Test the mock-up with the designer's family** ([`ui/mockup/README.md`](ui/mockup/README.md), "What to watch for"). It was built
    on 2026-11-18 with all the real cards, weather, maps and the ship model, and passes the no-scroll/target/font checks at 1920×1080
    and 1024×768. Not yet tried on a real iPad.
-2. **Answer the questions the art raised** (mock-up README, "Questions for the designer"): the two 360 cards; the Anchor, Row and Hard About
-   orders; flat-topped hexes on the printed maps (Q18); the Lightning Storm and Hurricane weather cards. Then put the answers in `rules.md`.
-3. **Engine (M1)**: turn loop (program → Parts I–III → Upkeep), movement with pushing, portals and caves, terrain and tides, then Treasure Hunt,
-   then AI and the simulation CLI. **Players/teams/ships separate from day one (NFR-13).**
-4. **Waiting on the designer**: the **current-types diagram** (turning amounts, eddies, gyres, maelstrom) and the **board tile diagram**
-   (sets the map data format).
-5. Keep `rulebook.md` and `core-rules-summary.md` in step with `rules.md` (both match v0.107).
+2. **Answer the card questions** listed in [`implementation-plan.md`](implementation-plan.md) ("Questions the prototype needs answered"):
+   Anchor, Row, Hard About, the two 360 cards, the Lightning Storm and Hurricane weather cards, and how the weather board refills.
+3. **After the prototype**: AI and the simulator, then the v1 client (React, saving, offline, tutorial), then real boards (implementation plan).
+4. **Waiting on the designer**: the **real boards**, and diagrams for dashed eddies, gyres and the maelstrom.
+5. Keep `rulebook.md` and `core-rules-summary.md` in step with `rules.md` (rulebook matches v0.111: not yet the current examples or board categories).
 
 ## Biggest open rules questions (see `rules.md` "Open questions")
-- Current diagram details (Q20/Q19); board tiles (Q18); critical hits are a placeholder; the full command card list and the crew deck (≥ 50 cards).
+- Dashed eddies, gyres and the maelstrom (Q20); critical hits are a placeholder; the full command card list and the crew deck (≥ 50 cards).
 - Smaller: knocking treasure loose with no empty adjacent hex; "haul her out" for stranded ships; Race/Deathmatch/Capture the Flag details;
   timed-game tie-break.

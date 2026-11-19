@@ -123,7 +123,8 @@ I recommend re-running. It keeps the rules readable and testable, which matters 
 | Knock treasure loose instead of 1 DD, and where it lands | Attacker, only when the victim carries treasure | Take the DD | §8.2.3 |
 | Place Ship damage | Damaged player | Least useful slot (already-resolved Parts first, never completing a row if avoidable) | §7.3 |
 | Place Crew damage | Damaged player | Wound before kill; Captain last | §7.4 |
-| Refit this turn or not | Ship's player, at Upkeep | Refit if damaged | §7.7 (D5) |
+| Refit: which parts, if any | Ship's player, at Upkeep | Full refit if damaged | §7.7 (D5). Options: any combination of repair all, heal all, and recruit 0–3 crew (partial refit) |
+| Heading on return after sinking | Ship's player, at Upkeep | The ship's starting heading | §7.8 |
 | Crew swap at the cap of 6 | Ship's player | Keep current crew | §3.6 |
 
 Decisions with one legal option are answered automatically and never shown.
@@ -137,7 +138,7 @@ Rules §5.2 says ships move at the same time and initiative settles conflicts. *
 ```
 stepShip(state, ship, direction, cause: 'sail' | 'push' | 'current' | 'drift' | 'cave')
   1. Edge crossed: wall reef → stop + 2 DD.  Cave mouth → come out of the partner cave facing out (§3.2.2).
-  2. Target hex off the map → board-edge rule (Q24, open).
+  2. Target hex off the map → she sinks in the hex she was about to leave (rules §3.1, §7.8).
   3. Terrain at the current tide: cliff → stop + 2 DD; beach, dry sandbank, dry reef, stuck ship → stop; death reef → sink.
   4. Occupied by a ship: 'sail' and 'cave' push her with the same function (chains; first ship rammed takes 1 DD; no DD for a teammate).
      'current' and 'drift' stay put.
@@ -147,9 +148,9 @@ stepShip(state, ship, direction, cause: 'sail' | 'push' | 'current' | 'drift' | 
 
 | Phase | How it uses `stepShip` |
 |---|---|
-| Move | Ships in Sail-slot initiative order. Each takes her whole sail move hex by hex and stops early if stopped. Gale DD per Full Sail. |
+| Move | Ships in Sail-slot initiative order. Each takes her whole sail move hex by hex and stops early if stopped. In a Gale, count each Part sailed at Full Sail; she takes 1 DD per count **at Upkeep** (rules §3.5). |
 | Steer | All ships turn. No conflicts possible. |
-| Currents | Three sub-steps (triple; double + triple; all). In each, ships on an active current step once, in Sail-slot initiative order. |
+| Currents | Three sub-steps (triple; double + triple; all). In each, ships on an active current step once, in Sail-slot initiative order. **A rotor moves as one group**: all ships on it move and turn together, and a destination counts as free if its ship is leaving it in the same rotor turn (so ships swap places); only then does "blocked = stay put" apply (rules §6.6). |
 | Action | Ships in Action-slot initiative order: fire (with decisions), repair, heal. Then port guns. Sinking is applied at once, so a sunk ship does not fire. |
 | Drift | If the wind drifts in this Part, each ship steps once downwind, in Sail-slot initiative order. |
 | End of Part | Rough water 2 DD, storm 3 DD. |
@@ -183,7 +184,7 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 
 - `terrain`: `sea | cliff | beach | sandbank | underwaterReef | deathReef | roughWater | storm` (rules §3.2.0). Land and sea are one field so a hex can never be both.
 - Hexes are keyed by axial coordinates (`hex` package). Edges are named by hex + direction.
-- A validator checks: portals and caves come in pairs, currents don't point off the map, 9 spawn points, home ports on the edge, every hex in the art has an entry.
+- A validator checks: portals and caves come in pairs, currents that point off the map are allowed (they sink a ship, rules §3.1), 9 spawn points, home ports on the edge, every hex in the art has an entry.
 - **Currents store the exact effect, never inferred from the art** (rules §6.6): each arrow's **destination hex** (usually adjacent, but it may be further away, e.g. across a hex corner: rules §6.6 example 8) and `turn` in hex sides
   (signed, + clockwise), e.g. curved arrow `turn: ±1`; corner ring (3-hex rotor) `turn: ±2`; eddy `{ "eddy": "cw", "turn": 1 | 2 | 3 }` with no step;
   rotors as a group of hexes with a centre and an angle, moved together. Dashed eddies, gyres and the maelstrom may still add fields (Q20).
@@ -228,7 +229,7 @@ Events that reveal hidden information (which cards were drawn) are filtered per 
 | Own ships' hands and programs | Everything |
 | Teammates' hands and programs | Everything, read-only (rules §8.6) |
 | Rivals' hands | Card count only |
-| Rivals' programs | Which slots are filled; cards are shown when revealed (Q28 decides all at once or per Part) |
+| Rivals' programs | Which slots are filled; each Part's cards are shown **only when that Part starts** (D6, rules §5.1). Later Parts stay hidden |
 | Decks | Counts only; never the order; the top treasure map card is hidden |
 | RNG state | Removed |
 | Crew, damage, sail, treasure, weather and the next two cards | Open to everyone |
@@ -300,13 +301,14 @@ These are rules questions, not engineering ones. Where no answer exists the engi
 | **Real boards** (rules §3.1.1: all art so far is prototype) | Play on real maps | A hand-made test map that uses every feature |
 | ~~Board edge~~ | | Answered: leaving the map sinks her (rules §3.1) |
 | Anchor, Row Ahead/Back, Hard About, the two 360s | Card data | The mock-up's assumptions (mock-up README) |
-| Lightning Storm, Hurricane, New Weather Front, how the circuit refills (Q37) | Weather | Leave the two storm cards out of the v1 deck |
+| Lightning Storm, Hurricane (Q37) | Weather | Left out of the v1 deck |
+| How the weather board refills (Q66) | Weather | When the board advances, the card leaving "now" goes to a weather discard pile and the empty space gets the top card of the weather deck; the discards are shuffled into a new deck when it runs out. **New Weather Front** follows its card text: reshuffle the whole weather deck (with this card) and deal 6 new cards |
 | Core crew deck list (Q48); recruits at refit | Setup, refit, wrecks | Captain + Pirates only |
 | ~~Used cards~~ | | Answered: shuffled onto the bottom of the deck; discard down to 9 after programming (rules §5.1) |
 | ~~Gale DD~~ | | Answered: 1 DD per Part sailed at Full Sail, taken at Upkeep (rules §3.5) |
 | ~~Return after sinking~~ | | Answered: new hand, 3 random crew, no Captain, sail down, at Upkeep (rules §7.8) |
 | ~~Starting wrecks~~ | | Answered: one per ship, placed when building the map (rules §3.1.1) |
-| ~~Knock loose~~ | | Answered: any adjacent hex without treasure, sea or land, ships allowed (rules §8.2.3) |
+| ~~Knock loose~~ | | Answered: the attacker chooses any adjacent hex that has no treasure in it. It may be sea or land and may hold a ship (rules §8.2.3) |
 
 ## 15. Risks
 
