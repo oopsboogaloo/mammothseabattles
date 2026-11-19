@@ -48,7 +48,7 @@ mock-up's assumptions until they're answered, each kept in one place so it is ch
 
 | Question | Assumption used |
 |---|---|
-| **Anchor** (blue band): what does it do? Is it how you drop sail? | Sails down; no sail move and no wind drift that Part |
+| ~~**Anchor**~~ | **Answered (rules v0.129):** No Sail plus no movement of any kind (sailing, pushing, drift, currents); turning allowed. Details still open: Q67. Also: **sail level is no longer persistent**, an empty Move slot means No Sail for that Part |
 | **Row Ahead 1 / Row Back 1** (blue band) | Move 1 hex ahead or astern whatever the wind; sail level unchanged |
 | **Hard About** (yellow band) | Turn 180° |
 | **Two cards numbered 360** | Card `360b` (Row Ahead 1 / Hard About / Repair) is treated as **380**, by an override in `msb-data`, so initiatives stay unique |

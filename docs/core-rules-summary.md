@@ -16,14 +16,14 @@ card and the **next one** are face up; the starting tide is random. Players: **2
 Keep unplayed cards; **hand limit 9** (discard down after programming). One shared deck; used cards are roughly shuffled onto its bottom.
 
 **1. Program (everyone at once, in secret).** Your ship board has **3 Parts × 3 slots: Sail, Steer, Action**. Each command card has
-three bands; **only the band of the slot it's placed in counts**. Fill up to 9 slots. **Empty slot**: sail stays as set / no turn / no action.
+three bands; **only the band of the slot it's placed in counts**. Fill up to 9 slots. **Empty slot**: No Sail for that Part / no turn / no action.
 
 **2. Resolve Parts I, II and III.** Reveal each Part's cards as it starts. All ships act together; when they clash, **initiative** decides (higher first; empty slot = 0;
 ties roll off). Movement uses the **Sail card's** number, firing uses the **Action card's** number.
 
 | Phase | What happens |
 |---|---|
-| **a. Sail** | Set sail (**No / Half / Full**; it stays set), then sail forward (table below). Moving into a ship **pushes** it (chains allowed); the **first ship rammed takes 1 DD**. |
+| **a. Sail** | Your Sail card sets **Half** or **Full Sail** for this Part only (empty slot = **No Sail**; **Anchor** = no movement of any kind this Part, but you can still turn), then sail forward (table below). Moving into a ship **pushes** it (chains allowed); the **first ship rammed takes 1 DD**. |
 | **b. Steer** | Turn **60°** (Ease) or **120°** (Hard), port or starboard. |
 | **c. Currents** | Arrows move ships 1/2/3 hexes (single/double/triple arrows, in 3 sub-steps), turning on curves; eddies spin ships. **No pushing.** |
 | **d. Action** | In initiative order, damage applied at once: **Fire Cannons** = both broadsides, 60° arcs, **range 4**, **1 DD to every enemy** in arc (ships don't shield each other; you may spare any). **Repair** = remove 1 damage marker (any slot). **Heal** = flip 1 wounded crew. Then **home ports** fire 1 DD at every rival within 2 hexes. |

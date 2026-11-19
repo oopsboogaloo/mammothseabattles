@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.128**
+> Status: **Draft v0.129**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -187,7 +187,7 @@ Each command card is split into **three coloured bands**, one for each kind of o
 
 | Band | Colour | Order type | Values seen so far |
 |---|---|---|---|
-| Top | Blue | **Sail** | No Sail, Half Sail, Full Sail |
+| Top | Blue | **Sail** | Half Sail, Full Sail, **Anchor**, Row Ahead 1, Row Back 1 (there is **no No Sail card**: No Sail is the default, §3.4) |
 | Middle | Yellow | **Steer** | Ease Port / Ease Starboard (60°), Hard to Port / Hard to Starboard (120°) |
 | Bottom | Red | **Action** (cannon background) | Fire Cannons, Heal, Repair |
 
@@ -216,7 +216,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 
 - **Up to 9 cards** per turn (3 Parts × 3 slots).
 - **Empty slots**:
-  - Empty **Move** slot → the **sail stays at its current level**. Sail level is a **persistent setting** carried from Part to Part and turn to turn.
+  - Empty **Move** slot → **No Sail** for that Part. *(Designer, v0.129: sail level is **not** carried over. Every Part starts at No Sail,
+    and a Sail card in that Part's Move slot sets Half or Full Sail for that Part only.)*
   - Empty **Steer** slot → no turn.
   - Empty **Action** slot → no action.
 
@@ -309,7 +310,8 @@ of Sail × Steer × Action bands, or a good sample**, and will be large enough f
 ### 5.2 Resolving each Part (I, II, III)
 All ships act **at the same time** in each phase (pillar P1). When they interfere, **initiative** decides the order (§5.3).
 
-1. **Move phase**: apply any Sail card (change sail level). Then every ship sails according to her sail level, the **points of sail**
+1. **Move phase**: each ship's sail level for this Part is set by her Sail card (**No Sail if the slot is empty**; **Anchor**: see §6.1).
+   Then every ship sails according to her sail level, the **points of sail**
    and the **weather** (§6.1–6.3). **Ships push** ships they move into (§6.5). Terrain (§3.2.0), portals and caves (§3.2.1–3.2.2) apply.
    Conflicts: Sail-slot initiative.
 2. **Steer phase**: ships turn according to their Steer card (Ease 60°, Hard 120°).
@@ -379,9 +381,16 @@ Without the Points of Sail rule (§6.2), wind direction doesn't affect sailing:
 
 | Sail level | Move phase |
 |---|---|
-| No Sail | 0 (the ship is still moved by currents and wind drift) |
+| No Sail (empty Move slot) | 0 (the ship is still moved by currents and wind drift) |
 | Half Sail | 1 hex forward |
 | Full Sail | 2 hexes forward |
+
+**Anchor** *(designer, v0.129)*: a Sail-band order. For that Part the ship is at **No Sail** and **can't be moved at all**: no sailing,
+no **pushing**, no **wind drift** and no **currents**. She **can still turn** with her Steer card, and still act in the Action phase.
+- ❓ *Assumed (Q67):* a ship that sails into an anchored ship is **stopped**, as by a stuck ship (§6.7); the anchored ship still takes the
+  **1 DD** for being rammed; a push chain stops at her.
+- ❓ *Assumed (Q67):* an **eddy** (a current that only turns) doesn't turn an anchored ship either, because "no currents" covers all of them.
+- ❓ *Assumed:* Anchor lasts only for the Part it's played in.
 
 ### 6.2 Points of Sail *(optional rule, intended as the standard)*
 <img src="images/points-of-sail.jpg" width="420">
@@ -946,6 +955,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q66 Refilling the weather board** (§3.5): when the board advances, what happens to the card leaving "now", and where does the new
   card for the empty space come from? *Engine assumption: the old card is discarded, the space gets the top card of the weather deck,
   and the discards are reshuffled when the deck runs out.*
+- **Q67 Anchor details** (§6.1): (a) a ship that sails into an anchored ship: is she stopped, and does the anchored ship take the 1 DD
+  for being rammed? (b) Does an eddy still turn an anchored ship? (c) Anchor lasts only for its own Part?
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
 - ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -963,6 +974,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.129 — **sail level is no longer persistent**: every Part starts at No Sail; a Sail card sets the level for its Part only. **Anchor** = No Sail and no movement of any kind (sailing, pushing, drift, currents) but turning allowed (Q67 for details). No No Sail card exists.
 - v0.128 — §6.5 tidied (ramming DD and pushed-into-obstacle effects were already answered); Q66 weather board refill.
 - v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.
 - v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
