@@ -30,8 +30,8 @@ For the next working session (which will have access to all the art). Written at
 - The designer likes **concise answers with references**, and prefers searching to guessing.
 
 ## Next steps
-0. **Build the hot-seat prototype** following [`implementation-plan.md`](implementation-plan.md) (P1 kernel → P8 client → P9 play-test).
-   The engineering design was approved on 2026-11-19.
+0. **Play-test the hot-seat prototype** (P9): `npm run mockup`, open `/play.html`. P1–P8 of
+   [`implementation-plan.md`](implementation-plan.md) are done; findings go back into `rules.md` and the plan.
 1. **Test the mock-up with the designer's family** ([`ui/mockup/README.md`](ui/mockup/README.md), "What to watch for"). It was built
    on 2026-11-18 with all the real cards, weather, maps and the ship model, and passes the no-scroll/target/font checks at 1920×1080
    and 1024×768. Not yet tried on a real iPad.

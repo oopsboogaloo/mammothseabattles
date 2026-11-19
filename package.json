@@ -13,7 +13,8 @@
     "mockup": "npm run dev -w @msb/client",
     "mockup:build": "npm run build -w @msb/client",
     "mockup:assets": "npm run assets -w @msb/client",
-    "mockup:shoot": "npm run build -w @msb/client && node packages/client/scripts/shoot.mjs"
+    "mockup:shoot": "npm run build -w @msb/client && node packages/client/scripts/shoot.mjs",
+    "data": "npm run generate -w @msb/msb-data"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

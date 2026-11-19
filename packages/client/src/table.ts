@@ -141,9 +141,20 @@ export class Table {
 
   async loadMap(id: string): Promise<MapInfo> {
     const map: MapInfo = await (await fetch(`art/maps/${id}.json`)).json();
+    const tex = await new THREE.TextureLoader().loadAsync(`art/maps/${id}.webp`);
+    this.showBoard(map, tex);
+    return map;
+  }
+
+  /** A board drawn on a canvas (board-art.ts), for maps with no printed art. */
+  loadBoard(map: MapInfo, canvas: HTMLCanvasElement): MapInfo {
+    this.showBoard(map, new THREE.CanvasTexture(canvas));
+    return map;
+  }
+
+  private showBoard(map: MapInfo, tex: THREE.Texture) {
     this.map = map;
     this.board.clear();
-    const tex = await new THREE.TextureLoader().loadAsync(`art/maps/${id}.webp`);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
     const w = map.width / PX, h = map.height / PX;
@@ -165,7 +176,6 @@ export class Table {
     this.home.target.set(0, 0, 0.9);
     this.home.pos.set(0, Math.cos(tilt) * dist, 0.9 + Math.sin(tilt) * dist);
     this.resetView();
-    return map;
   }
 
   async loadShip(lowDetail: boolean) {

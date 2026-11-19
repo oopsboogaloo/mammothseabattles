@@ -30,4 +30,7 @@ Text is in sentence case; the cards print it in capitals.
 
 `test/card-data.test.ts` checks these files whenever the tests run (`npm test`, and in CI on every push): the expected columns, the same
 number of fields in every row, unique ids, known values, and whole-number copies.
-**The game does not read these files yet.** The mock-up still uses its own copy of the data; the engine will load from here (`docs/engineering-design.md` §7.2).
+**The rules engine reads these files** through `packages/msb-data`: after editing a CSV, run **`npm run data`** to regenerate
+`packages/msb-data/src/generated/csv.ts` (a test fails if you forget). Corrections the rules make to the printed cards are applied there:
+the second 360 card is read as **380**, and **Lightning Storm** and **Hurricane** are left out of the weather deck for now.
+The mock-up still uses its own copy of the data until step P8.

@@ -29,8 +29,8 @@ Each step is one pull request, fully tested (100% coverage, rules-section tags) 
 | **P4** ✅ | **Currents** | The three sub-steps; straight, curved, rotors (2-, 3- and 4-hex), eddies (60/120/180°), jumps to non-adjacent hexes; blocked = stay put | §6.6 |
 | **P5** ✅ | **Action and damage** | Cannon fire with "hold fire", repair, heal, port guns, sinking, and return at Upkeep (the player chooses the heading) | §7 |
 | **P6** ✅ | **Upkeep and Treasure Hunt** | Refit (optional and partial, D5), wrecks, treasure spawn, pickup, knocking loose, scoring, the win; weather and tide advance; Gale damage; draw | §5.4, §8.2 |
-| **P7** | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
-| **P8** | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
+| **P7** ✅ | **Content data** (`msb-data`) | Command and weather cards generated from the CSVs in `data/cards/`; crew cards (Captain, Pirate) and treasure map cards 1–9; the test map as JSON with a validator | engineering §7 |
+| **P8** ✅ | **Hot-seat client** | Session and presenter (engineering §11) replace the mock-up's `game.ts`; start screen (2–4 players, names), **hand-over screen**, decisions shown to the right player, end screen | web-spec §4 |
 | **P9** | **Play-test** | Family game on PC and iPad; findings back into `rules.md` and this plan | |
 
 **Done in P1:** `engine` has `GameDef`, `replay` and the re-run resolution (`resolution.ts`); `msb-rules` has the game state, setup,
@@ -68,6 +68,22 @@ spawning with the treasure map deck, picking up by passing through, digging up o
 dropping on sinking, scoring in her own port, and the win at the target (the game ends at once).
 *Not in the prototype:* hauling a stranded ship out (§6.7). *Engine assumptions:* the "leaving port" working (Q60); a refitting ship can
 still be pushed; a ship already carrying sails through treasure (§8.2.2 ❓).
+
+**Done in P7:** `packages/msb-data` reads the card CSVs (copied into a generated module by `npm run data`, checked by a test) into the
+real command deck (45 cards; 360b read as 380), weather deck (26 cards; the two storm cards left out), crew cards and treasure map
+cards; a **test map** (radius 5, 91 hexes) with every supported feature and 4 rim ports; and `prototypeSetup(players, seed)` for 2–4
+players. Whole random games on the real data run to 60 turns, keep all 45 cards and replay exactly. (Random players mostly sail off the
+map edge, so they never score: a job for the AI, and a hint that the Safe edge option suits beginners.)
+
+**Done in P8:** a separate page, `play.html` (`npm run mockup` → `/play.html`), plays the real engine; the layout A mock-up stays as it
+was. Start screen (2–4 names, Safe edge option, Resume); the test map is drawn from its data (`board-art.ts`: terrain, fog,
+whirlpools, currents by strength, eddies, rotors, caves, wall reef, spawn points, ports). Each turn a **hand-over screen** ("pass the
+device to …") guards each player's hand; programming with the real cards (tap a card, then a slot; tap a placed card to take it
+back; discard down to 9). After the last Ready the turn's events play back on the table with a running caption (moves, turns,
+whirlpools, caves, sinking, returns, broadsides, damage rolls, treasure, Upkeep). Every decision is shown by name to the player who
+must make it, with the default marked; hex choices are numbered on the map. End screen with the scores. `Session` saves the action
+log to the browser after every action, so a reload resumes the game. Checked by driving 4 full turns in headless Chromium (5 decisions,
+resume restores all actions). *Not yet:* ghost preview of the program, broadside arcs, a weather-board view, card zoom.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).

@@ -11,8 +11,13 @@ export default defineConfig({
       '@msb/engine': pkg('engine'),
       '@msb/hex': pkg('hex'),
       '@msb/msb-rules': pkg('msb-rules'),
+      '@msb/msb-data': pkg('msb-data'),
     },
   },
   server: { host: true },
-  build: { chunkSizeWarningLimit: 1200 },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    // Two pages: the layout A mock-up (index.html) and the hot-seat prototype on the real rules engine (play.html).
+    rollupOptions: { input: { mockup: fileURLToPath(new URL('index.html', import.meta.url)), play: fileURLToPath(new URL('play.html', import.meta.url)) } },
+  },
 });
