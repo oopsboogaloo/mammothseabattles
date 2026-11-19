@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.125**
+> Status: **Draft v0.126**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -531,9 +531,9 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    forbids it, and it's useful: it can take a ship somewhere she couldn't otherwise reach. In the designer's example a ship facing
    south-west is carried across the corner between whirlpools 5 and 6, past a line of reefs, into the hex beyond, still facing south-west.
    - She goes **straight to the arrow's end hex**: she **doesn't enter the hexes in between** (here she doesn't fall into either
-     whirlpool) ❓.
+     whirlpool), so nothing on the way affects her: whirlpools, reefs or ships.
    - It counts as **one current step** (a single arrow acts in the single-arrow sub-step); if the end hex is occupied she **stays put**,
-     as with any blocked current ❓.
+     as with any blocked current. ✅ *Designer (Q65, v0.126).*
 
 9. **2-hex rotor** *(designer, v0.125)*: an oval ring of arrows around the **middle of the edge between two hexes**. It turns everything
    **180°** around that point: a ship is carried into the other hex and **ends facing the opposite way** (north-east ↔ south-west in the
@@ -939,9 +939,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
-- **Q65 Currents to a non-adjacent hex** (§6.6 example 8): confirm that the ship jumps straight to the end hex without entering the
-  hexes in between (so she can't fall into a whirlpool, hit a reef or be pushed into a ship on the way), that it counts as one step,
-  and that an occupied end hex leaves her where she is.
+- ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
 - **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
   is the category printed on the board? How many boards of each category are planned for the first box?
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
@@ -959,6 +957,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
 - v0.125 — current example: 2-hex rotor round an edge, 180° swap.
 - v0.124 — currents may carry a ship to a non-adjacent hex (e.g. across a hex corner); in-between hexes ignored ❓ (Q65).
 - v0.123 — Q63: eddies turn 60°, 120° or 180° (longer arrows = stronger spin; 180° eddy not drawn yet).
