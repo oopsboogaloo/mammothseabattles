@@ -2,7 +2,24 @@
  * Map validation (engineering design §7.1): catch map data the rules can't use when a game is set up, not mid-turn.
  */
 
-import type { GameMap } from './state';
+import type { GameMap, Terrain } from './state';
+import type { Tide } from './weather';
+
+/** §3.2.0 tide table: is this terrain land (it stops ships) at this tide? */
+export function isLand(terrain: Terrain, at: Tide): boolean {
+  switch (terrain) {
+    case 'cliff':
+    case 'beach':
+      return true;
+    case 'sandbank':
+      return at !== 'high';
+    case 'underwaterReef':
+      return at === 'low';
+    default:
+      return false;
+  }
+}
+
 
 function countBy<T>(items: readonly T[], key: (t: T) => string): Map<string, number> {
   const counts = new Map<string, number>();

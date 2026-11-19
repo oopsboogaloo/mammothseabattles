@@ -173,6 +173,7 @@ describe('decisions in the middle of resolution (engineering design §5, D1)', (
     for (let seed = 1; seed <= 60; seed++) {
       const { state, events } = playTurnWithDefaults(newGame(setup('storm', 'roughWater', seed)));
       for (const ship of Object.values(state.ships)) {
+        if (events.some((e) => e.type === 'ShipReturned' && e.ship === ship.id)) continue; // repaired on her return
         const blocked = events.filter((e) => e.type === 'SlotBlocked' && e.ship === ship.id).map((e) => (e as { slot: string }).slot);
         expect(blocked).toEqual(ship.blocked);
         expect(new Set(blocked).size).toBe(blocked.length);
@@ -197,8 +198,11 @@ describe('sinking (rules §7.3, §7.4, §7.8)', () => {
         if (e.type !== 'ShipSank') continue;
         reasons.add(e.reason);
         const after = events.slice(events.indexOf(e) + 1);
-        expect(after.some((x) => 'ship' in x && x.ship === e.ship && x.type !== 'ShipSank')).toBe(false);
-        expect(state.ships[e.ship]?.status).toBe('sunk');
+        const back = after.findIndex((x) => x.type === 'ShipReturned' && x.ship === e.ship);
+        expect(back).toBeGreaterThan(-1); // she comes back at Upkeep (§7.8)…
+        const DAMAGE = ['DamageRolled', 'SlotBlocked', 'CrewWounded', 'CrewKilled'];
+        expect(after.slice(0, back).some((x) => 'ship' in x && x.ship === e.ship && DAMAGE.includes(x.type))).toBe(false); // …and takes no damage until then
+        expect(state.ships[e.ship]?.status).toBe('afloat');
       }
     }
     expect(reasons).toEqual(new Set(['row', 'crew']));

@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.140**
+> Status: **Draft v0.141**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -662,7 +662,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - For each point of **Ship damage**, the player places a **damage marker** on one of the **9 slots** of their ship board
   (Sail, Steer or Action in Parts I–III). **The damaged player chooses which.**
   - Any card in that slot is **removed**.
-  - That slot **can't be used** until repaired. So a blocked Sail slot means the sail stays at its current level that Part; a blocked Steer slot means no turn; a blocked Action slot means no action.
+  - That slot **can't be used** until repaired. So a blocked Sail slot means **No Sail** that Part (§3.4); a blocked Steer slot means no turn; a blocked Action slot means no action.
 - **Sinking**: if a ship has **no usable Sail slots, no usable Steer slots, or no usable Action slots** (any whole row blocked),
   she **sinks**.
 - So a ship can survive at most **6 Ship damage** (2 per row), and the next one sinks her. But even **2–3 damage is crippling**:
@@ -969,6 +969,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
+- **Q71 Nowhere to come back** (§7.8): a sunk ship comes back at Upkeep in her port hex, or next to it if that's occupied. If the port
+  **and every hex next to it** are occupied (or land), what happens? *Engine assumption: she waits and comes back at the next Upkeep.*
 - ~~Q70 Blocked curved current~~ → a blocked current neither moves nor turns her (designer agreed, v0.140).
 - ~~Q69 Caves, edge cases~~ → caves just join two hexes for movement; normal pushing and blocking rules apply (v0.140).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
@@ -990,6 +992,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.141 — §7.3 corrected (a blocked Sail slot means No Sail); Q71 a sunk ship with nowhere to come back (engine assumption from step P5).
 - v0.140 — Q69: caves join two hexes for movement (not cannon fire); normal pushing and blocking apply. Q70 agreed: a blocked current doesn't turn the ship.
 - v0.139 — Q70 blocked curved currents (engine assumption from step P4).
 - v0.138 — Q69 cave edge cases (engine assumptions from step P3).

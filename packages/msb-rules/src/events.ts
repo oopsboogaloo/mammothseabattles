@@ -7,7 +7,9 @@ import type { Direction, Hex } from '@msb/hex';
 import type { Part, SailLevel } from './sailing';
 import type { PlayerId, ShipId } from './state';
 
-export type DamageSource = 'roughWater' | 'storm' | 'cliff' | 'wallReef' | 'ram' | 'gale';
+export type DamageSource = 'roughWater' | 'storm' | 'cliff' | 'wallReef' | 'ram' | 'gale' | 'cannon' | 'portGuns';
+
+export type SinkReason = 'row' | 'crew' | 'edge' | 'deathReef';
 
 /** What moved a ship one hex (engineering design §6). */
 export type MoveCause = 'sail' | 'row' | 'push' | 'current' | 'drift';
@@ -40,7 +42,14 @@ export type GameEvent =
   | { readonly type: 'SlotBlocked'; readonly rule: '7.3'; readonly ship: ShipId; readonly slot: string }
   | { readonly type: 'CrewWounded'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
-  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: 'row' | 'crew' | 'edge' | 'deathReef' }
+  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
+  | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
+  | { readonly type: 'ShipReturned'; readonly rule: '7.8'; readonly ship: ShipId; readonly at: Hex; readonly heading: Direction }
+  | { readonly type: 'CannonFired'; readonly rule: '7.1'; readonly ship: ShipId; readonly targets: readonly ShipId[]; readonly spared: readonly ShipId[] }
+  | { readonly type: 'PortGunsFired'; readonly rule: '8.2.4'; readonly team: string; readonly targets: readonly ShipId[] }
+  | { readonly type: 'SlotRepaired'; readonly rule: '7.6'; readonly ship: ShipId; readonly slot: string }
+  | { readonly type: 'CrewHealed'; readonly rule: '7.6'; readonly ship: ShipId; readonly crew: string }
+  | { readonly type: 'CardLost'; readonly rule: '7.3'; readonly ship: ShipId; readonly slot: string; readonly card: string }
   | { readonly type: 'SailSet'; readonly rule: '6.1'; readonly ship: ShipId; readonly sail: SailLevel; readonly order: string }
   | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause }
   | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason }

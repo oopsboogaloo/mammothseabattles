@@ -78,6 +78,7 @@ export function newGame(setup: GameSetup): GameState {
     ships: {},
     deck: rng.shuffle(setup.commandCards.map((c) => c.id)),
     discards: [],
+    wrecks: [...(setup.map.startWrecks ?? [])],
     part: 0,
     ready: [],
   };

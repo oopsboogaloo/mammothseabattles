@@ -160,7 +160,11 @@ describe('hidden programs, revealed Part by Part (D6, rules §5.1)', () => {
       let state = out.state;
       const events: GameEvent[] = [];
       while (state.pending) {
-        const r = game.apply(state, state.pending.player, { type: 'answer', choice: state.pending.defaultIndex });
+        // Keep the damage off A's programmed slots, so her cards stay for the reveal.
+        const d = state.pending;
+        const free = d.options.findIndex((o) => !['sail1', 'steer2', 'action3'].includes(`${(o as { row?: string }).row}${(o as { part?: number }).part}`));
+        const choice = d.kind === 'placeShipDamage' && free >= 0 ? free : d.defaultIndex;
+        const r = game.apply(state, d.player, { type: 'answer', choice });
         state = r.state;
         events.push(...r.events);
       }
@@ -189,15 +193,23 @@ describe('end of turn (rules §5.1 step 4, §5.4)', () => {
     expect(allCards(next)).toEqual(ALL_IDS);
   });
 
-  it('a sunk ship draws nothing, and draws stop when the deck is empty', () => {
+  it('a sunk ship comes back at Upkeep and draws a new hand; draws stop when the deck is empty', () => {
     let s = newGame(setup());
     s.ships['B-ship']!.status = 'sunk';
-    s.deck = s.deck.slice(0, 3);
+    s.deck = s.deck.slice(0, 2);
     s = game.apply(s, 'A', { type: 'ready' }).state;
-    const out = game.apply(s, 'B', { type: 'ready' });
-    expect(out.state.ships['A-ship']!.hand).toHaveLength(8);
-    expect(out.state.ships['B-ship']!.hand).toHaveLength(5);
-    expect(out.events.filter((e) => e.type === 'CardsDrawn')).toEqual([{ type: 'CardsDrawn', rule: '5.1', ship: 'A-ship', count: 3 }]);
+    let out = game.apply(s, 'B', { type: 'ready' });
+    const events = [...out.events];
+    expect(out.state.pending).toMatchObject({ kind: 'returnHeading', player: 'B' });
+    while (out.state.pending) {
+      out = game.apply(out.state, out.state.pending.player, { type: 'answer', choice: out.state.pending.defaultIndex });
+      events.push(...out.events);
+    }
+    // B's old hand of 5 goes under the deck: 7 cards for A (5) and B (2 of her 3).
+    expect(out.state.ships['A-ship']!.hand).toHaveLength(10);
+    expect(out.state.ships['B-ship']!.hand).toHaveLength(2);
+    expect(events.filter((e) => e.type === 'CardsDrawn').map((e) => (e as { count: number }).count)).toEqual([5, 2]);
+    expect(out.state.ships['B-ship']!.crew.map((c) => [c.captain, c.cardIcons])).toEqual([[false, 1], [false, 1], [false, 1]]);
   });
 });
 

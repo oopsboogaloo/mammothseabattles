@@ -32,6 +32,8 @@ export interface MapHex {
   readonly terrain: Terrain;
   /** Whirlpool portal number; paired with the other hex of the same number (rules §3.2.1). */
   readonly whirlpool?: number;
+  /** Fog bank (rules §7.1): no firing from, into or through it. */
+  readonly fog?: boolean;
   /** A current starting in this hex (rules §6.6). Rotors are listed on the map instead. */
   readonly current?: Current;
 }
@@ -79,6 +81,8 @@ export interface GameMap {
   readonly wallReefs?: readonly MapEdge[];
   readonly caves?: readonly MapCave[];
   readonly rotors?: readonly Rotor[];
+  /** Shipwrecks placed when the map was built (rules §7.9: one per ship). */
+  readonly startWrecks?: readonly string[];
 }
 
 export interface SeatSetup {
@@ -153,6 +157,8 @@ export interface GameState {
   weather: WeatherBoard;
   /** Command deck, top first (rules §5.1). */
   deck: string[];
+  /** Shipwreck tokens on the map, as hex keys (rules §7.9). */
+  wrecks: string[];
   /** Cards discarded down to the hand limit this turn; they join the used cards at the end of the turn. */
   discards: string[];
   /** 0 while programming; 1–3 = the Part being resolved. Cards in Parts up to this one are revealed (D6). */

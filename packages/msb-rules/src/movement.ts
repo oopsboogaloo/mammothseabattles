@@ -10,29 +10,16 @@ import type { CommandCard, SteerOrder } from './cards';
 import type { RulesConfig } from './config';
 import type { GameEvent, MoveCause, StopReason } from './events';
 import { sailDirection, sailMove, type Part, type SailLevel } from './sailing';
-import type { GameState, MapCave, Ship, Terrain } from './state';
+import type { GameState, MapCave, Ship } from './state';
 import { takeDamage } from './take-damage';
-import { currentWeather, tide, type Tide } from './weather';
+import { isLand } from './map';
+import { sinkShip } from './sinking';
+import { currentWeather, tide } from './weather';
 
 export type StepResult = 'moved' | 'stopped' | 'sunk';
 
 /** Ship movement pushes; currents and drift don't (§6.5). */
 const PUSHES: ReadonlySet<MoveCause> = new Set<MoveCause>(['sail', 'row', 'push']);
-
-/** §3.2.0 tide table: is this terrain land (it stops ships) at this tide? */
-export function isLand(terrain: Terrain, at: Tide): boolean {
-  switch (terrain) {
-    case 'cliff':
-    case 'beach':
-      return true;
-    case 'sandbank':
-      return at !== 'high';
-    case 'underwaterReef':
-      return at === 'low';
-    default:
-      return false;
-  }
-}
 
 export function shipAt(state: GameState, at: Hex): Ship | undefined {
   return Object.values(state.ships).find((s) => s.status === 'afloat' && hexEquals(s.pos, at));
@@ -88,8 +75,7 @@ function stop(m: MoveContext, ship: Ship, by: StopReason): StepResult {
 }
 
 function sink(m: MoveContext, ship: Ship, reason: 'edge' | 'deathReef'): StepResult {
-  ship.status = 'sunk';
-  m.ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason });
+  sinkShip(m.state, ship, reason, m.ctx);
   return 'sunk';
 }
 
@@ -141,13 +127,14 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
   if (other) {
     if (!PUSHES.has(cause)) return stop(m, ship, 'ship');
     const firstHit = cause !== 'push';
+    const anchored = other.anchored;
     const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir as Direction, 'push');
     if (firstHit && other.status === 'afloat' && !sameTeam(state, ship, other)) {
       m.ctx.emit({ type: 'ShipRammed', rule: '6.5', ship: other.id, by: ship.id });
       damage(m, other, config.dd.ram, 'ram');
     }
     // An anchored ship stops the mover even if the ram sinks her (§6.1).
-    if (other.anchored) return stop(m, ship, 'anchored');
+    if (anchored) return stop(m, ship, 'anchored');
     if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, 'ship');
   }
 
