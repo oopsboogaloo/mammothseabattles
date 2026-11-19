@@ -48,7 +48,7 @@ mock-up's assumptions until they're answered, each kept in one place so it is ch
 
 | Question | Assumption used |
 |---|---|
-| ~~**Anchor**~~ | **Answered (rules v0.129):** No Sail plus no movement of any kind (sailing, pushing, drift, currents); turning allowed. Details still open: Q67. Also: **sail level is no longer persistent**, an empty Move slot means No Sail for that Part |
+| ~~**Anchor**~~ | **Answered (rules v0.129):** No Sail plus no movement of any kind (sailing, pushing, drift, currents); turning allowed (only Steer turns her); ramming her stops the mover and she takes the 1 DD; lasts for its Part (Q67). Also: **sail level is no longer persistent**, an empty Move slot means No Sail for that Part |
 | ~~**Row Ahead 1 / Row Back 1**~~ | **Answered (v0.131):** 1 hex ahead or astern whatever the wind, at No Sail; pushes and rams (Q68) |
 | ~~**Hard About**~~ | **Answered (v0.131):** turn 180° |
 | ~~**Two cards numbered 360**~~ | **Answered (v0.131):** `360b` (Row Ahead 1 / Hard About / Repair) is **380**. P7 sets it in `msb-data` until the designer corrects the CSV and card art |
