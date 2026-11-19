@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="data:," />
+    <title>Mammoth Sea Battles · hot-seat prototype</title>
+  </head>
+  <body>
+    <div id="app" class="programming">
+      <main id="table">
+        <div id="labels"></div>
+        <div class="topbar">
+          <button class="btn" id="menu-btn" aria-label="Menu"><span class="i">☰</span> Menu</button>
+          <div id="status" class="pill"></div>
+        </div>
+        <section id="rivals" class="panel"></section>
+        <section id="weather" class="panel"></section>
+        <section id="crew" class="panel"></section>
+        <nav id="viewctl">
+          <button class="btn sq" data-v="in" aria-label="Zoom in">+</button>
+          <button class="btn sq" data-v="out" aria-label="Zoom out">−</button>
+          <button class="btn sq" data-v="home" aria-label="Whole board">⤢</button>
+          <button class="btn sq" data-v="me" aria-label="Centre on my ship">◎</button>
+        </nav>
+        <div id="toast" hidden></div>
+      </main>
+      <footer id="dock">
+        <div id="board-col">
+          <div id="shipboard"></div>
+        </div>
+        <div id="hand"></div>
+        <div id="actions">
+          <button class="btn primary" id="ready"><span class="i">✓</span> Ready</button>
+          <button class="btn" id="clear">Clear</button>
+        </div>
+      </footer>
+      <footer id="playback" hidden></footer>
+      <aside id="menu" hidden></aside>
+      <div id="modal" hidden></div>
+      <div id="screen" hidden></div>
+    </div>
+    <script type="module" src="/src/play.ts"></script>
+  </body>
+</html>

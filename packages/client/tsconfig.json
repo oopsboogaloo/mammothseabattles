@@ -7,7 +7,8 @@
     "paths": {
       "@msb/engine": ["../engine/src/index.ts"],
       "@msb/hex": ["../hex/src/index.ts"],
-      "@msb/msb-rules": ["../msb-rules/src/index.ts"]
+      "@msb/msb-rules": ["../msb-rules/src/index.ts"],
+      "@msb/msb-data": ["../msb-data/src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts"],
