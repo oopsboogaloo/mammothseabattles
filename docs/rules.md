@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.116**
+> Status: **Draft v0.117**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -473,7 +473,12 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
    <img src="images/currents/example-2-curved.jpg" width="320">
 
-3. **Rotor current (a "turntable"):** a ring of arrows rotating around a **point between hexes**, not around one hex's centre. Each
+3. **Curved current, anticlockwise** *(designer's 4th example, listed here with the other curves)*: the arrow starting in the ship's hex bends
+   anticlockwise, so she is carried 1 hex along it and turned **one hex side anticlockwise** (facing north-west → south-west in the example).
+
+   <img src="images/currents/example-4-curved-anticlockwise.jpg" width="300">
+
+4. **Rotor current (a "turntable"):** a ring of arrows rotating around a **point between hexes**, not around one hex's centre. Each
    activation turns everything in the rotor around that point, like a secret library door turning in place: **ships move to the hex the
    rotation carries them to, and turn by the same angle**. The example rotor turns **180°**: a ship on one side is carried across to the
    opposite hex and **ends facing the opposite way** (east → west in the first picture, south-east → north-west in the second). A ship on
@@ -856,7 +861,7 @@ _Things the designer has said they'll do or supply._
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
 - **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors,
-  where the 180° turn isn't yet clear from the arrows (§6.6, example 3).
+  where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 
 ## Open questions
@@ -888,6 +893,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.117 — current example: anticlockwise curved current (60°).
 - v0.116 — currents act on ships whose hex has an arrow starting in it; rotor details confirmed.
 - v0.115 — current example 3: rotors turn ships around a point between hexes (example: 180°, ships swap and reverse). Designer to-do: show rotation amounts on the art.
 - v0.114 — current example 2: curved arrows move 1 hex and turn the ship 60° in the curve's direction.
