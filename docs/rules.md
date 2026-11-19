@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.115**
+> Status: **Draft v0.116**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -456,6 +456,8 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
 
 - Currents **don't push** other ships (§5.2), but a ship carried into a **cliff** or **wall reef** takes the damage (§3.2.0), and into a
   **death reef** sinks.
+**Which ships a current moves:** a ship is affected by a current when **an arrow starts in her hex** and goes somewhere.
+
 **Current examples** *(from the designer; more to come)*
 
 1. **Straight current, single arrow:** a ship that ends her movement on a hex with an arrow is moved **1 hex** across the hex side the arrow
@@ -476,6 +478,10 @@ Remember: Gale also gives **1 DD for each Part sailed at Full Sail**, taken at U
    rotation carries them to, and turn by the same angle**. The example rotor turns **180°**: a ship on one side is carried across to the
    opposite hex and **ends facing the opposite way** (east → west in the first picture, south-east → north-west in the second). A ship on
    the opposite hex is carried the other way at the same moment, so **ships swap places**.
+   - The example rotor covers the **4 hexes around its centre point**: each has an arrow starting in it, so a ship on any of them is carried.
+   - It's a **single-arrow** current, so it acts in the **single-arrow sub-step**.
+   - **Blocked:** as with every current, if the hex she'd be carried to is still occupied (rare, because the ship there is usually being
+     carried too), she **stays put**.
    - Inspired by RoboRally's rotating board elements: confusing at first, but exceptional play.
    - **More sizes are planned**, covering different numbers of hexes (and so different rotation angles).
 
@@ -848,6 +854,7 @@ _Things the designer has said they'll do or supply._
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
+- **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors,
   where the 180° turn isn't yet clear from the arrows (§6.6, example 3).
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
@@ -867,11 +874,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - **Q60 Leaving port** (answered: weather doesn't apply in port, applies from the first hex outside). Confirm the engine working in §8.2.4 (1 hex out free, then the rest of the move normally).
 
 ### C. Detail
-- **Q61 Rotors** (§6.6 example 3), for the board data and engine:
-  - Exactly which hexes does a rotor cover (the 2 hexes either side of the centre point, or the 4 hexes around it)? Every ship on any of
-    them is carried?
-  - Which current sub-step does a rotor act in (as a single-arrow current, in the last sub-step)?
-  - A ship carried by a rotor onto a hex where another ship stays put (outside the rotor): blocked like other currents (she stays put)?
+- ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
   - Eddy, dashed eddy, gyre and maelstrom readings in §3.2 (to be replaced by the current diagram).
 2. **Q56 Critical hits**: keep the placeholder (re-roll + 1 DD) or design a critical damage deck? *(Designer: not yet.)*
@@ -885,6 +888,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.116 — currents act on ships whose hex has an arrow starting in it; rotor details confirmed.
 - v0.115 — current example 3: rotors turn ships around a point between hexes (example: 180°, ships swap and reverse). Designer to-do: show rotation amounts on the art.
 - v0.114 — current example 2: curved arrows move 1 hex and turn the ship 60° in the curve's direction.
 - v0.113 — confirmed: straight currents don't turn the ship.
