@@ -13,6 +13,7 @@ import { cardInSlot } from './movement';
 import type { Part } from './sailing';
 import type { GameState, Ship } from './state';
 import { takeDamage } from './take-damage';
+import { offerKnockLoose } from './treasure';
 
 export const HOLD_FIRE = 'holdFire';
 export const REPAIR_SLOT = 'repairSlot';
@@ -64,7 +65,10 @@ function fire(state: GameState, ship: Ship, part: Part, config: RulesConfig, ctx
   }
   ctx.emit({ type: 'CannonFired', rule: '7.1', ship: ship.id, targets, spared });
   // Each target only takes her own damage, so none of them can sink before her turn to be hit.
-  for (const id of targets) takeDamage(state, id, config.dd.cannonHit, 'cannon', part, config, ctx);
+  for (const id of targets) {
+    // §8.2.3: instead of the DD, she may knock a carrier's treasure loose.
+    if (!offerKnockLoose(state, ship, state.ships[id] as Ship, ctx)) takeDamage(state, id, config.dd.cannonHit, 'cannon', part, config, ctx);
+  }
 }
 
 /** §7.6: remove one damage marker, from any slot (the player chooses). */

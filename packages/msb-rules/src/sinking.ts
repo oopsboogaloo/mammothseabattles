@@ -7,6 +7,7 @@ import { createDecision, type ResolutionContext } from '@msb/engine';
 import { hexEquals, hexKey, neighbor, type Direction, type Hex } from '@msb/hex';
 import type { GameEvent, SinkReason } from './events';
 import { isLand } from './map';
+import { dropTreasure } from './treasure';
 import { tide } from './weather';
 import type { GameState, Ship, ShipCrew } from './state';
 
@@ -15,6 +16,7 @@ export const RETURN_HEADING = 'returnHeading';
 
 /** §7.8: sink a ship where she is, leaving a wreck there (§7.9). Mutates the resolution's working state. */
 export function sinkShip(state: GameState, ship: Ship, reason: SinkReason, ctx: ResolutionContext<GameEvent>): void {
+  dropTreasure(state, ship, ctx);
   ship.status = 'sunk';
   ship.anchored = false;
   ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason });

@@ -17,6 +17,7 @@ import type { DamageSource, GameEvent } from './events';
 import { runActions } from './actions';
 import { runCurrents } from './currents';
 import { returnSunkShips } from './sinking';
+import { digUpTreasure, spawnTreasure } from './treasure';
 import { refit, searchWrecks } from './upkeep';
 import { initiativeOrder } from './initiative';
 import { cardInSlot, currentWeatherOf, driftShip, inOwnPort, moveShip, steerShip, type MoveContext } from './movement';
@@ -64,12 +65,13 @@ function moveSteerDrift(state: GameState, part: Part, config: RulesConfig, ctx: 
     ship.anchored = ship.status === 'afloat' && cardInSlot(state, ship, `sail${part}`)?.sail === 'anchor';
   }
   const order = sailOrder(state, part, config);
-  for (const ship of afloat(order)) if (ship.status === 'afloat') moveShip(m, ship);
+  // The game ends the moment a team scores its target (§8.2.5), so each step stops if there's a winner.
+  for (const ship of afloat(order)) if (ship.status === 'afloat' && state.winner === undefined) moveShip(m, ship);
   for (const ship of afloat(order)) steerShip(m, ship);
-  runCurrents(m, order);
-  runActions(state, shipsInSeatOrder(state), part, config, ctx);
-  if (driftsInPart(currentWeatherOf(state).strength, part)) {
-    for (const ship of order) if (ship.status === 'afloat') driftShip(m, ship);
+  if (state.winner === undefined) runCurrents(m, order);
+  if (state.winner === undefined) runActions(state, shipsInSeatOrder(state), part, config, ctx);
+  if (state.winner === undefined && driftsInPart(currentWeatherOf(state).strength, part)) {
+    for (const ship of order) if (ship.status === 'afloat' && state.winner === undefined) driftShip(m, ship);
   }
 }
 
@@ -117,12 +119,16 @@ export function advanceWeatherAndTide(state: GameState, ctx: ResolutionContext<G
 
 /** §5.4 Upkeep (so far): used cards to the deck bottom, then each afloat ship draws. */
 function upkeep(state: GameState, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
-  // §5.4 step 1: sunk ships come back.
+  // End of Part III: ships next to treasure on land dig it up (§8.2.2).
+  digUpTreasure(state, shipsInSeatOrder(state), ctx);
+  // §5.4 step 2: sunk ships come back.
   const returned = returnSunkShips(state, shipsInSeatOrder(state), ctx);
   // Steps 3 and 4: refit in port (§7.7), then search wrecks (§7.9).
   refit(state, shipsInSeatOrder(state), config, ctx, returned);
   searchWrecks(state, shipsInSeatOrder(state), config, ctx);
-  // §3.5: Gale damage, 1 DD for each Part sailed at Full Sail. (Its place in the full Upkeep order comes with P6.)
+  // Step 5: a new treasure for each one scored this turn (§8.2.1).
+  for (; state.pendingSpawns > 0; state.pendingSpawns--) spawnTreasure(state, ctx.emit);
+  // Step 6: Gale damage, 1 DD for each Part sailed at Full Sail (§3.5).
   for (const ship of shipsInSeatOrder(state)) {
     const dd = ship.galeParts * config.dd.galePerFullSail;
     ship.galeParts = 0;
@@ -147,6 +153,10 @@ export function resolveTurn(config: RulesConfig) {
       state.part = part;
       ctx.emit({ type: 'PartStarted', rule: '5.2', part, revealed: revealPart(state, part) });
       moveSteerDrift(state, part, config, ctx);
+      if (state.winner !== undefined) {
+        state.phase = 'over';
+        return state;
+      }
       endOfPart(state, part, config, ctx);
     }
     ctx.emit({ type: 'UpkeepStarted', rule: '5.4', turn: state.turn });

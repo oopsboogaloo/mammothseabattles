@@ -14,6 +14,7 @@ import type { GameState, MapCave, Ship } from './state';
 import { takeDamage } from './take-damage';
 import { isLand } from './map';
 import { sinkShip } from './sinking';
+import { arrive, offerKnockLoose } from './treasure';
 import { currentWeather, tide } from './weather';
 
 export type StepResult = 'moved' | 'stopped' | 'sunk';
@@ -134,7 +135,8 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
     const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir as Direction, 'push');
     if (firstHit && other.status === 'afloat' && !sameTeam(state, ship, other)) {
       m.ctx.emit({ type: 'ShipRammed', rule: '6.5', ship: other.id, by: ship.id });
-      damage(m, other, config.dd.ram, 'ram');
+      // §8.2.3: instead of the DD, she may knock a carrier's treasure loose.
+      if (!offerKnockLoose(state, ship, other, m.ctx)) damage(m, other, config.dd.ram, 'ram');
     }
     // An anchored ship stops the mover even if the ram sinks her (§6.1).
     if (anchored) return stop(m, ship, 'anchored');
@@ -145,10 +147,12 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
   ship.pos = to;
   m.ctx.emit({ type: 'ShipMoved', rule: '6', ship: ship.id, from, to, cause });
   if (hex.terrain === 'deathReef') return sink(m, ship, 'deathReef');
+  arrive(state, ship, config, m.ctx);
   const partner = partnerWhirlpool(state, to);
   if (partner && !shipAt(state, partner)) {
     ship.pos = partner;
     m.ctx.emit({ type: 'Teleported', rule: '3.2.1', ship: ship.id, from: to, to: partner });
+    arrive(state, ship, config, m.ctx);
   }
   return 'moved';
 }

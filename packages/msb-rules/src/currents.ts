@@ -11,6 +11,7 @@
 
 import { hexEquals, hexKey, neighbor, rotate, type Direction, type Hex } from '@msb/hex';
 import { enterHex, parseHexKey, shipAt, type MoveContext } from './movement';
+import { arrive } from './treasure';
 import type { CurrentStrength, Rotor, Ship } from './state';
 
 /** Sub-step 1: triple only; 2: double and triple; 3: all. */
@@ -60,6 +61,7 @@ function turnRotor(m: MoveContext, rotor: Rotor, ships: readonly Ship[], moved: 
     moved.add(ship.id);
     m.ctx.emit({ type: 'ShipMoved', rule: '6', ship: ship.id, from, to: ship.pos, cause: 'current' });
     turnShip(m, ship, rotor.turn);
+    arrive(m.state, ship, m.config, m.ctx);
   });
 }
 

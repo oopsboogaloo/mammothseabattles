@@ -41,6 +41,9 @@ export function validateMap(map: GameMap): void {
     // A current may point off the map: that sinks a ship (rules §3.1). Its start hex is this hex, which is on the map.
     if (hex.current?.kind === 'flow' && !/^-?\d+,-?\d+$/.test(hex.current.to)) throw new Error(`Current in ${key} has a bad destination`);
   }
+  for (const [n, key] of Object.entries(map.spawnPoints ?? {})) {
+    if (!onMap(key)) throw new Error(`Spawn point ${n} (${key}) isn't on the map`);
+  }
   for (const rotor of map.rotors ?? []) {
     for (const [from, to] of Object.entries(rotor.moves)) {
       if (!onMap(from) || !onMap(to)) throw new Error(`Rotor move ${from} → ${to} leaves the map`);

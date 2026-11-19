@@ -23,6 +23,7 @@ import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
 import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
 import { setUpWeather, tide, type Tide } from './weather';
+import { spawnTreasure, treasuresInPlay } from './treasure';
 import { resolveTurn, shipsInSeatOrder } from './turn';
 
 export type Action = ProgramAction | { readonly type: 'answer'; readonly choice: number };
@@ -45,6 +46,10 @@ export interface GameView {
   readonly ready: readonly PlayerId[];
   /** The face-up weather (rules §3.5: the current card and the next one) and the tide. Other spaces stay hidden. */
   readonly weather: { readonly now: string; readonly next: string; readonly space: number; readonly tide: Tide };
+  /** Loose treasure on the map (hex keys), each team's score, and the winner once there is one (rules §8.2). */
+  readonly treasures: readonly string[];
+  readonly scores: Readonly<Record<string, number>>;
+  readonly winner?: string;
   /** The question being asked, if any; options are shown only to the player who must answer. */
   readonly decision?: { readonly player: PlayerId; readonly kind: string; readonly options?: readonly unknown[]; readonly defaultIndex?: number };
 }
@@ -79,6 +84,9 @@ export function newGame(setup: GameSetup): GameState {
     deck: rng.shuffle(setup.commandCards.map((c) => c.id)),
     discards: [],
     wrecks: [...(setup.map.startWrecks ?? [])],
+    treasures: [],
+    treasureDeck: [],
+    pendingSpawns: 0,
     part: 0,
     ready: [],
   };
@@ -86,7 +94,7 @@ export function newGame(setup: GameSetup): GameState {
   for (const seat of setup.seats) {
     if (state.players[seat.player]) throw new Error(`Duplicate player ${seat.player}`);
     const shipId = `${seat.player}-ship`;
-    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort };
+    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort, score: 0 };
     team.players.push(seat.player);
     state.teams[seat.team] = team;
     state.players[seat.player] = { id: seat.player, team: seat.team, name: seat.name, ships: [shipId] };
@@ -104,12 +112,17 @@ export function newGame(setup: GameSetup): GameState {
       anchored: false,
       stuck: false,
       refitting: false,
+      carrying: false,
       galeParts: 0,
     };
   }
   const ports = new Set(setup.seats.map((s) => hexKey(s.homePort)));
   if (ports.size !== setup.seats.length) throw new Error('Two seats share a home port; ships must start on different hexes');
   for (const ship of shipsInSeatOrder(state)) drawCards(state, ship);
+  // §8.2.1: the starting treasures, spawned with the treasure map deck.
+  state.treasureDeck = rng.shuffle(Object.keys(setup.map.spawnPoints ?? {}));
+  state.rng = rng.state;
+  for (let i = 0; i < treasuresInPlay(setup.seats.length); i++) spawnTreasure(state, () => undefined);
   return state;
 }
 
@@ -152,12 +165,17 @@ export function viewShip(state: GameState, viewer: PlayerId, ship: Ship): ShipVi
   return { ...open, handSize: hand.length, program: shown };
 }
 
-export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameState, Action, GameView, GameEvent, GameSetup, undefined> {
+export interface GameResult {
+  readonly winner: string;
+}
+
+export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameState, Action, GameView, GameEvent, GameSetup, GameResult> {
   const script = resolveTurn(config);
   return {
     init: newGame,
 
     legalActions(state, player) {
+      if (state.phase === 'over') return [];
       if (state.phase === 'programming') return programmingActions(state, player, config);
       const decision = state.pending as PendingDecision<unknown>;
       return decision.player === player ? decision.options.map((_, choice) => ({ type: 'answer', choice })) : [];
@@ -185,7 +203,19 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
       for (const ship of Object.values(state.ships)) ships[ship.id] = viewShip(state, player, ship);
       const { spaces, now } = state.weather;
       const weather = { now: spaces[now] as string, next: spaces[(now + 1) % 6] as string, space: now, tide: tide(state.weather) };
-      const base = { turn: state.turn, phase: state.phase, part: state.part, deckSize: state.deck.length, ships, ready: state.ready, weather };
+      const scores = Object.fromEntries(Object.values(state.teams).map((t) => [t.id, t.score]));
+      const base = {
+        turn: state.turn,
+        phase: state.phase,
+        part: state.part,
+        deckSize: state.deck.length,
+        ships,
+        ready: state.ready,
+        weather,
+        treasures: state.treasures,
+        scores,
+        ...(state.winner === undefined ? {} : { winner: state.winner }),
+      };
       const decision = state.pending;
       if (!decision) return base;
       return {
@@ -197,8 +227,8 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
       };
     },
 
-    result() {
-      return undefined;
+    result(state) {
+      return state.winner === undefined ? undefined : { winner: state.winner };
     },
   };
 }

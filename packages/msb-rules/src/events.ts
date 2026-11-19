@@ -44,6 +44,12 @@ export type GameEvent =
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
   | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
+  | { readonly type: 'TreasureSpawned'; readonly rule: '8.2.1'; readonly point: string; readonly at: string }
+  | { readonly type: 'TreasurePickedUp'; readonly rule: '8.2.2'; readonly ship: ShipId; readonly at: string }
+  | { readonly type: 'TreasureKnockedLoose'; readonly rule: '8.2.3'; readonly ship: ShipId; readonly by: ShipId; readonly to: Hex }
+  | { readonly type: 'TreasureDropped'; readonly rule: '7.8'; readonly ship: ShipId; readonly at: Hex }
+  | { readonly type: 'TreasureScored'; readonly rule: '8.2.4'; readonly ship: ShipId; readonly team: string; readonly score: number }
+  | { readonly type: 'GameWon'; readonly rule: '8.2.5'; readonly team: string }
   | { readonly type: 'WreckSearched'; readonly rule: '7.9'; readonly ship: ShipId; readonly at: string }
   | { readonly type: 'CrewGained'; readonly rule: '7.9'; readonly ship: ShipId; readonly crew: string; readonly replaced?: string }
   | { readonly type: 'ShipRefitted'; readonly rule: '7.7'; readonly ship: ShipId; readonly repair: boolean; readonly heal: boolean; readonly recruit: number }
