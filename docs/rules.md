@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.126**
+> Status: **Draft v0.127**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -68,6 +68,8 @@ interact with each other and with the sea.
 ### 3.1.1 Building the map *(designer, v0.108)*
 <img src="images/board-layout-example.jpg" width="420">
 
+> **All board art so far is prototype examples** (for showing the rules), not final, balanced boards. Real board design is still to do.
+
 - **Main boards** are large **hexagonal boards** of **37 hexes** (3 hexes from centre to edge). **Port tiles** are small **4-hex** pieces,
   one per player (or team).
 - 37-hex boards are the standard, not a rule: other formats may come later (e.g. one large rectangular board with the ports printed on it,
@@ -83,7 +85,10 @@ interact with each other and with the sea.
     (beaches)** rather than cliffs.
   - **Category 3**: as dense as the example boards: complex currents, rotors, eddies, reefs and cliffs. Mentally demanding, which
     experienced players enjoy.
-  - Category 2 sits in between. ❓ Whether boards of different categories can be mixed in one map is not decided (Q64).
+  - Category 2 sits in between.
+  - It's a **broad guide, not a strict rule**: it helps players choose boards that suit their experience and the kind of game they want
+    (fewer currents make for a more open battle). There's no rule on what a category may contain, and nothing stops players mixing
+    categories. Details wait until the real boards are designed.
 - **Joining boards**: no fixed rule. Players agree how the boards fit together, as long as it makes an interesting map.
 - **Computer version:** the map is **generated automatically** from a few settings (number of boards, density); players don't design it
   (web-spec §5.1). Rules here that say "players agree" apply to the physical game only.
@@ -913,7 +918,7 @@ _Things the designer has said they'll do or supply._
 - **Current-types diagram** (turning amounts, eddies, gyres, maelstrom) for players and for this spec (Q19/Q20).
 - **Gale card**: add "1 DD for each Part sailed at Full Sail, taken at Upkeep" to the card text (§3.5).
 - **Suggested layouts** for the rulebook (§3.1.1).
-- **Grade each main board** Category 1, 2 or 3, and design Category 1 boards (open sea, simple currents, mostly beaches) (§3.1.1).
+- **Real board design**: the current boards are prototype examples. Design the real boards, and grade each one Category 1, 2 or 3 (§3.1.1).
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
@@ -940,8 +945,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 ### C. Detail
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q65 Currents to a non-adjacent hex~~ → straight to the end hex, in-between hexes ignored; one step; occupied end hex = stay put (v0.126).
-- **Q64 Board categories** (§3.1.1): can a map mix boards of different categories (e.g. one Category 1 and one Category 2 board), and
-  is the category printed on the board? How many boards of each category are planned for the first box?
+- ~~Q64 Board categories~~ → a broad guide only, not strict; details when the real boards are designed (v0.127).
 - ~~Q62 Ring round a hex corner~~ → two hex sides (120°), like a 3-hex rotor (v0.122; corrects v0.120); bobbles on the art planned.
 - ~~Q61 Rotors~~ → 4 hexes around the centre, all carried; single-arrow step; blocked = stay put (answered).
 - **Unconfirmed assumptions** still marked ❓ in the sections (confirm or correct):
@@ -957,6 +961,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.127 — board categories are a loose guide (Q64); all board art so far is prototype examples.
 - v0.126 — Q65 confirmed: non-adjacent current jumps ignore in-between hexes, count as one step, blocked = stay put.
 - v0.125 — current example: 2-hex rotor round an edge, 180° swap.
 - v0.124 — currents may carry a ship to a non-adjacent hex (e.g. across a hex corner); in-between hexes ignored ❓ (Q65).
