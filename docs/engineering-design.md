@@ -197,7 +197,7 @@ The mock-up's map files hold only the art alignment (hex size, origin, list of h
 | Content | Source | Notes |
 |---|---|---|
 | Command cards | `data/cards/command-cards.csv` (45 cards) | Replaces the copy in `client/src/data/content.ts`. Needs the answers on the two 360s, Anchor, Row and Hard About (mock-up README, questions 1–2) |
-| Weather cards | `data/cards/weather-cards.csv` (28 cards) | Lightning Storm and Hurricane need rules (question 4) |
+| Weather cards | `data/cards/weather-cards.csv` (28 cards) | Lightning Storm and Hurricane are **left out for now** (designer, rules v0.136) |
 | Crew | Captain (draws 3 cards) and basic crew; core game has no powers (rules §9) | The core crew deck list is a rules gap (Q48) |
 | Treasure map cards | 1–9 | |
 | Scenarios | Map + seat count + home ports used + wrecks + win target | One per map and player count to start |
@@ -302,7 +302,7 @@ These are rules questions, not engineering ones. Where no answer exists the engi
 | **Real boards** (rules §3.1.1: all art so far is prototype) | Play on real maps | A hand-made test map that uses every feature |
 | ~~Board edge~~ | | Answered: leaving the map sinks her (rules §3.1) |
 | Anchor, Row Ahead/Back, Hard About, the two 360s | Card data | The mock-up's assumptions (mock-up README) |
-| Lightning Storm, Hurricane (Q37) | Weather | Left out of the v1 deck |
+| ~~Lightning Storm, Hurricane~~ | | Designer: left out for now (rules §3.5, v0.136) |
 | How the weather board refills (Q66) | Weather | When the board advances, the card leaving "now" goes to a weather discard pile and the empty space gets the top card of the weather deck; the discards are shuffled into a new deck when it runs out. **New Weather Front** follows its card text: reshuffle the whole weather deck (with this card) and deal 6 new cards |
 | Core crew deck list (Q48); recruits at refit | Setup, refit, wrecks | Captain + Pirates only |
 | ~~Used cards~~ | | Answered: shuffled onto the bottom of the deck; discard down to 9 after programming (rules §5.1) |

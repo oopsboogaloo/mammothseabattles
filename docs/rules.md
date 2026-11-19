@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.135**
+> Status: **Draft v0.136**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -259,6 +259,8 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Strong (e.g. NE) | Strong | **+1 Full Sail moves** | 2 (Parts II, III) |
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
+
+**Lightning Storm** and **Hurricane** cards exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*.
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 
@@ -982,6 +984,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.136 — Lightning Storm and Hurricane weather cards left out for now.
 - v0.135 — Q67c: Anchor lasts only for its own Part. Q67 closed.
 - v0.134 — Q67b: currents (eddies included) don't turn an anchored ship; only her Steer card does.
 - v0.133 — Q67a: anchored ships stop movers and take the ram damage.
