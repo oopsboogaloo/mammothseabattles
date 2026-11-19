@@ -78,6 +78,8 @@ interact with each other and with the sea.
   - **Fewer boards** → a tighter, more intense, more interactive game (more combat).
   - **More boards** → more racing and navigation, less combat.
 - **Joining boards**: no fixed rule. Players agree how the boards fit together, as long as it makes an interesting map.
+- **Computer version:** the map is **generated automatically** from a few settings (number of boards, density); players don't design it
+  (web-spec §5.1). Rules here that say "players agree" apply to the physical game only.
 - **Spawn points and wrecks**: placed as part of designing the map, by **mutual agreement** or **taking turns** (see `suggestions.md` for
   fairer methods under consideration).
 - **Ports** are attached to the **outer edge** of the map:

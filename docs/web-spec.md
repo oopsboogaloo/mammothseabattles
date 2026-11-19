@@ -168,7 +168,8 @@ side by side; to be tested in the mock-up. Each ship has her **own hand** (rules
 | **Menu** | Rules help, settings, quit | Fold-out |
 
 ### 4.3 Key screens and flows
-1. **Start / new game:** choose a scenario, number of AI players and their difficulty, modules, and simple or points-of-sail rules.
+1. **Start / new game:** choose the number of players and AI players (and their difficulty), the **map settings** (§5.1), modules, and simple
+   or points-of-sail rules. The game then **generates the map**.
 2. **Programming:** place cards; the ghost preview draws your ship's expected path for each Part; "Ready" when done.
 3. **Resolution:** an animated step-by-step replay of Parts I–III with captions ("Broad reach, Strong wind: Full Sail = 4 hexes"); pauses
    for decisions (damage placement, hold fire, knock loose).
@@ -200,7 +201,32 @@ side by side; to be tested in the mock-up. Each ship has her **own hand** (rules
 ## 5. Data and content
 - All game content is **data**: command cards, crew, weather cards, board tiles (hex terrain, currents, edges), scenarios.
 - **Validated against schemas** at build time and in tests.
-- **Board tile format** to be designed from the designer's tile diagram (each hex: terrain, current arrows, edges with wall reefs and caves, features).
+- **Board format:** each 37-hex main board and each 4-hex port tile is data: every hex's terrain, current arrows and features, plus edges
+  (wall reefs, cave mouths). Boards can be rotated in 60° steps when placed. (Rules §3.1.1.)
+
+### 5.1 Map generation (a deliberate difference from the board game)
+In the **physical game**, players design the map together: which boards, how they join, where ports, spawn points and wrecks go
+(rules §3.1.1). **The computer game doesn't do that.** Designing the map together is considerable extra complexity, so it's **left out**,
+certainly for v1. Instead **the game generates the map automatically** from a few settings:
+
+| Setting | Meaning |
+|---|---|
+| **Number of main boards** | e.g. 2–4; default from the number of ships |
+| **Density** | how tightly the boards are packed: compact (more combat) to spread out (more racing and navigation) |
+| **Seed** | optional; the same seed and settings always give the same map (NFR-3), so a good map can be shared and replayed |
+
+The generator, part of the headless rules package and covered by tests like everything else:
+1. **Places main boards**, each rotated in 60° steps, joined edge to edge by one of several **joining patterns** (e.g. in a line, a
+   triangle, a cluster), with the gap or overlap set by **density**.
+2. **Attaches one port tile per player or team** on the outer edge, following the physical rules: the port's sea hex joins a sea hex, and
+   no two ports share a side of a main board. Ports are **spread out fairly** (similar sailing distance to the middle of the map).
+3. **Places the 9 spawn points and one wreck per ship** with fairness rules: sea or land as set, not too close to any port, and roughly
+   equal distance from every port.
+4. **Validates the map:** every port can reach every spawn point by sea; no port starts next to a death reef or maelstrom. If a map fails,
+   it tries again with the next seed.
+
+Fairness can then be **measured with the simulator** (win rate by starting port over thousands of AI games) and the generator tuned.
+Hand-made **suggested layouts** from the rulebook can also be offered as fixed maps.
 
 ---
 
@@ -227,4 +253,6 @@ side by side; to be tested in the mock-up. Each ship has her **own hand** (rules
 - W4. Analytics in v1 (anonymous, opt-in) to learn where new players struggle?
 - W5. Email list (M5): data protection consent and privacy policy will be needed.
 - W6. Rules gaps that block M1: ~~starting state, critical hits, Upkeep order~~ (decided, placeholders where noted); still **the current
-  diagram** and **the board tile format**.
+  diagram** and the **board data** for each main board and port tile (the format is now defined, §5).
+- W7. Map generator: what "density" should mean exactly (gaps between boards? how much of their edges must touch?), and which joining
+  patterns to start with. Proposed: test candidate settings with the simulator.

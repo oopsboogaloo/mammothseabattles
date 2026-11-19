@@ -29,6 +29,11 @@
 - **Show what's coming.** The weather board shows the current and next weather card and tide, as in the physical game.
 - **Practice against bots** so you can learn alone, before or without friends.
 
+## Differences from the board game
+- **The map is generated automatically** from a few settings (number of boards, density). Players don't design it together, as they do at
+  the table. See `web-spec.md` §5.1.
+- Anything the physical rules leave to "mutual agreement" is decided by the game: a fixed rule or the generator.
+
 ## Decisions made during resolution
 Some rules need a player decision **in the middle of resolution**:
 - holding fire on a target (rules §7.1)
