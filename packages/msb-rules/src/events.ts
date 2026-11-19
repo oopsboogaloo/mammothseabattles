@@ -45,7 +45,7 @@ export type GameEvent =
   | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause }
   | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason }
   | { readonly type: 'ShipRammed'; readonly rule: '6.5'; readonly ship: ShipId; readonly by: ShipId }
-  | { readonly type: 'ShipTurned'; readonly rule: '5.2'; readonly ship: ShipId; readonly from: Direction; readonly to: Direction; readonly cause: 'steer' | 'cave' }
+  | { readonly type: 'ShipTurned'; readonly rule: '5.2'; readonly ship: ShipId; readonly from: Direction; readonly to: Direction; readonly cause: 'steer' | 'cave' | 'current' }
   | { readonly type: 'Teleported'; readonly rule: '3.2.1'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex }
   | { readonly type: 'WentThroughCave'; readonly rule: '3.2.2'; readonly ship: ShipId; readonly letter: string; readonly to: Hex }
   | {

@@ -32,6 +32,31 @@ export interface MapHex {
   readonly terrain: Terrain;
   /** Whirlpool portal number; paired with the other hex of the same number (rules §3.2.1). */
   readonly whirlpool?: number;
+  /** A current starting in this hex (rules §6.6). Rotors are listed on the map instead. */
+  readonly current?: Current;
+}
+
+/** Arrows: 1 = single, 2 = double, 3 = triple (rules §6.6: they act in 1, 2 or 3 of the sub-steps). */
+export type CurrentStrength = 1 | 2 | 3;
+
+/**
+ * A current (rules §6.6; engineering design §7.1). Turns are in hex sides, + = clockwise.
+ * - flow: carries the ship to `to` (usually the next hex; it may be further away, example 8) and turns her by `turn`
+ *   (0 straight, ±1 curved).
+ * - eddy: turns her in place by `turn` (±1, ±2 or 3).
+ */
+export type Current =
+  | { readonly kind: 'flow'; readonly to: string; readonly turn: number; readonly strength: CurrentStrength }
+  | { readonly kind: 'eddy'; readonly turn: number; readonly strength: CurrentStrength };
+
+/**
+ * A rotor (rules §6.6 examples 3, 5 and 9): a ring of arrows round a point. Every ship on it moves to the hex the rotation takes
+ * her to (`moves`: hex key → hex key) and turns by `turn`, all together.
+ */
+export interface Rotor {
+  readonly moves: Readonly<Record<string, string>>;
+  readonly turn: number;
+  readonly strength: CurrentStrength;
 }
 
 /** A hex edge: the edge of `hex` (a hex key) on its `side`. */
@@ -53,6 +78,7 @@ export interface GameMap {
   /** Wall reefs along hex edges (rules §3.2.0). */
   readonly wallReefs?: readonly MapEdge[];
   readonly caves?: readonly MapCave[];
+  readonly rotors?: readonly Rotor[];
 }
 
 export interface SeatSetup {

@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.138**
+> Status: **Draft v0.139**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -966,6 +966,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
+- **Q70 Blocked curved current** (§6.6): when a curved arrow (or a rotor) can't carry a ship because the hex is occupied, she stays put.
+  Is she **still turned**? *Engine assumption: no, a blocked current neither moves nor turns her.*
 - **Q69 Caves, edge cases** (§3.2.2): (a) if a ship **can't come out** of the partner cave (an anchored ship or land in the exit hex),
   does she stay where she was before entering? *Engine assumption: yes.* (b) Does a ship coming out of a cave **ram** the ship she
   pushes (1 DD), like sailing? *Engine assumption: yes.*
@@ -988,6 +990,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.139 — Q70 blocked curved currents (engine assumption from step P4).
 - v0.138 — Q69 cave edge cases (engine assumptions from step P3).
 - v0.137 — Q66 answered: weather board refill (discard the old card, refill from the deck, reshuffle discards when empty).
 - v0.136 — Lightning Storm and Hurricane weather cards left out for now.

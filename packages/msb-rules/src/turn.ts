@@ -6,13 +6,14 @@
  * - §5.2 step 1 Move (sail, row, anchor; pushing and ramming; terrain at the tide; whirlpools; caves; map edge),
  *   step 2 Steer, step 5 wind drift, step 6 end of Part: rough water 2 DD, storm 3 DD (§3.2.0).
  * - Damage placement (§7.2–7.4); Gale damage at Upkeep (§3.5).
- * Currents come in step P4, actions in P5, the rest of Upkeep in P6.
+ * - §5.2 step 3 currents (§6.6). Actions come in P5, the rest of Upkeep in P6.
  */
 
 import { hexKey } from '@msb/hex';
 import { Rng, type ResolutionContext } from '@msb/engine';
 import type { RulesConfig } from './config';
 import type { DamageSource, GameEvent } from './events';
+import { runCurrents } from './currents';
 import { initiativeOrder } from './initiative';
 import { cardInSlot, currentWeatherOf, driftShip, moveShip, steerShip, type MoveContext } from './movement';
 import { driftsInPart, type Part } from './sailing';
@@ -49,13 +50,14 @@ function afloat(ships: readonly Ship[]): Ship[] {
   return ships.filter((s) => s.status === 'afloat');
 }
 
-/** §5.2 steps 1, 2 and 5. Currents (step 3) come in P4 and actions (step 4) in P5. */
+/** §5.2 steps 1, 2, 3 and 5. Actions (step 4) come in P5. */
 function moveSteerDrift(state: GameState, part: Part, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   const m: MoveContext = { state, config, part, ctx };
   for (const ship of Object.values(state.ships)) ship.anchored = false;
   const order = sailOrder(state, part, config);
   for (const ship of afloat(order)) if (ship.status === 'afloat') moveShip(m, ship);
   for (const ship of afloat(order)) steerShip(m, ship);
+  runCurrents(m, order);
   if (driftsInPart(currentWeatherOf(state).strength, part)) {
     for (const ship of order) if (ship.status === 'afloat') driftShip(m, ship);
   }

@@ -114,8 +114,18 @@ export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: Move
   const cave = caveEntered(state, from, dir);
   if (cave) return throughCave(m, ship, cave);
 
+  return enterHex(m, ship, neighbor(from, dir), dir, cause);
+}
+
+/**
+ * Steps 2–5 of moving into hex `to`: the map edge, terrain, ships in the way, then hex effects.
+ * `dir` is the direction of travel; it is undefined for a current that jumps to a non-adjacent hex (§6.6 example 8),
+ * which never pushes anyway.
+ */
+export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | undefined, cause: MoveCause): StepResult {
+  const { state, config } = m;
+  const from = ship.pos;
   // 2. Off the map: she sinks in the hex she was leaving, or stops with the Safe edge rule (§3.1).
-  const to = neighbor(from, dir);
   const hex = state.setup.map.hexes[hexKey(to)];
   if (!hex) return config.safeEdge ? stop(m, ship, 'edge') : sink(m, ship, 'edge');
 
@@ -131,7 +141,7 @@ export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: Move
   if (other) {
     if (!PUSHES.has(cause)) return stop(m, ship, 'ship');
     const firstHit = cause !== 'push';
-    const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir, 'push');
+    const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir as Direction, 'push');
     if (firstHit && other.status === 'afloat' && !sameTeam(state, ship, other)) {
       m.ctx.emit({ type: 'ShipRammed', rule: '6.5', ship: other.id, by: ship.id });
       damage(m, other, config.dd.ram, 'ram');
