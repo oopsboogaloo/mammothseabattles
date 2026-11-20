@@ -8,6 +8,8 @@ import './play.css';
 import { DIRECTION_NAMES, hexEquals, hexKey, neighbor, type Direction, type Hex } from '@msb/hex';
 import {
   DEFAULT_CONFIG,
+  currentWeather,
+  driftsInPart,
   HIDDEN,
   isLand,
   parseHexKey,
@@ -262,7 +264,17 @@ function renderShipBoard() {
     }
     if (row === 'action') {
       el.appendChild(h('<div class="sb-strip-label">then</div>'));
-      el.appendChild(h(`<div class="sb-strip">${PARTS.map(() => `<span>Drift</span>`).join('')}</div>`));
+      // Wind drift happens only in some Parts, by wind strength (§5.2): the others are ghosted out.
+      const w = currentWeather(S().state.weather, S().setup.weatherCards);
+      const arrow = ['↑', '↗', '↘', '↓', '↙', '↖'][w.direction]!;
+      const when: Record<string, string> = { gale: 'Gale: every Part', strong: 'Strong: Parts II and III', firm: 'Firm: Part III only' };
+      el.appendChild(
+        h(`<div class="sb-strip drift">${PARTS.map((p) =>
+          driftsInPart(w.strength, p)
+            ? `<span class="on" title="Wind drift this Part (${when[w.strength]}): 1 hex ${DIRECTION_NAMES[w.direction]}">Drift ${arrow}</span>`
+            : `<span class="off" title="No wind drift this Part with this weather">no drift</span>`,
+        ).join('')}</div>`),
+      );
     }
   });
 }
@@ -463,12 +475,42 @@ function renderTable() {
 }
 
 // ---------------- playback ----------------
+const MOVE_COLOUR = { sail: '#ffffff', row: '#ffe08a', push: '#ff9a3c', current: '#3fd4ff', drift: '#c9b8ff' } as const;
+const MOVE_WORD = { sail: 'sails', row: 'rows', push: '💥 pushed', current: '🌊 current', drift: '🌬 drifts' } as const;
+const ORDER_WORD: Record<string, string> = { none: 'No Sail', half: 'Half Sail', full: 'Full Sail', anchor: 'Anchor', rowAhead: 'Row Ahead', rowBack: 'Row Back' };
+const STOP_WORD: Record<string, string> = { cliff: 'cliff', beach: 'land', wallReef: 'wall reef', ship: 'a ship in the way', anchored: 'an anchored ship', edge: 'map edge', stuck: 'stranded' };
+const turnWord = (from: Direction, to: Direction) => {
+  const d = (to - from + 6) % 6;
+  return d === 3 ? '↻ 180°' : d < 3 ? `↻ ${d * 60}° starboard` : `↺ ${(6 - d) * 60}° port`;
+};
+
+/** Which step of the turn an event belongs to, for the step banner (rules §5.2). */
+function stepOf(e: GameEvent): string | null {
+  switch (e.type) {
+    case 'SailSet':
+      return 'Move';
+    case 'ShipMoved':
+      return e.cause === 'sail' || e.cause === 'row' || e.cause === 'push' ? null : e.cause === 'current' ? 'Currents' : 'Wind drift';
+    case 'ShipTurned':
+      return e.cause === 'steer' ? 'Steer' : e.cause === 'current' ? 'Currents' : null;
+    case 'CannonFired':
+    case 'SlotRepaired':
+    case 'CrewHealed':
+    case 'PortGunsFired':
+      return 'Action';
+    case 'UpkeepStarted':
+      return 'Upkeep';
+    default:
+      return null;
+  }
+}
+
 function caption(e: GameEvent): string | null {
   const n = (id: string) => esc(shipName(id));
   switch (e.type) {
     case 'TurnStarted': return `Turn ${e.turn}`;
     case 'PartStarted': return `<b>Part ${PART_NAME[e.part]}</b>: cards revealed`;
-    case 'SailSet': return `${n(e.ship)}: ${esc(e.order)}`;
+    case 'SailSet': return `${n(e.ship)}: ${ORDER_WORD[e.order] ?? esc(e.order)}`;
     case 'ShipMoved': return e.cause === 'sail' || e.cause === 'row' ? null : `${n(e.ship)} ${e.cause === 'push' ? 'is pushed' : e.cause === 'current' ? 'is carried by the current' : 'drifts'}`;
     case 'ShipStopped': return `${n(e.ship)} stops (${e.by})`;
     case 'ShipRammed': return `💥 ${n(e.by)} rams ${n(e.ship)}`;
@@ -523,9 +565,19 @@ async function play(events: readonly GameEvent[]) {
   $('#app').classList.remove('programming');
   $('#dock').hidden = true;
   const ms = () => (fast ? 150 : 550);
+  let phase = '';
+  let part = S().state.part;
   for (const e of events) {
     noteCause(e);
     moveTreasure(e);
+    if (e.type === 'PartStarted') (part = e.part), (phase = '');
+    // A step banner whenever the turn moves on to a new step (Move, Steer, Currents, Action, Wind drift).
+    const step = stepOf(e);
+    if (step && step !== phase) {
+      phase = step;
+      banner(`<b>${e.type === 'UpkeepStarted' ? '' : `Part ${PART_NAME[part] ?? ''} · `}${step}</b>`);
+      await sleep(ms() * 1.6);
+    }
     const text = caption(e);
     if (text) {
       log.push(text);
@@ -536,37 +588,58 @@ async function play(events: readonly GameEvent[]) {
     switch (e.type) {
       case 'ShipMoved':
         if (x) {
+          table.pulse(e.ship, MOVE_COLOUR[e.cause]);
+          table.trail(e.from, e.to, MOVE_COLOUR[e.cause], ms() * 3);
+          if (e.cause !== 'sail' && e.cause !== 'row') float(e.ship, MOVE_WORD[e.cause]);
           x.hex = e.to;
-          await table.animateShip(e.ship, [e.to], x.heading, x.sail, ms());
+          await table.animateShip(e.ship, [e.to], x.heading, x.sail, ms() * 1.3);
         }
         break;
       case 'ShipTurned':
         if (x) {
+          table.pulse(e.ship, e.cause === 'steer' ? '#ffe08a' : MOVE_COLOUR.current);
+          float(e.ship, `${turnWord(x.heading, e.to)}${e.cause === 'steer' ? '' : ` (${e.cause})`}`);
           x.heading = e.to;
-          await table.animateShip(e.ship, [], e.to, x.sail, ms());
+          await table.animateShip(e.ship, [], e.to, x.sail, ms() * 1.3);
         }
         break;
       case 'SailSet':
-        if (x) x.sail = e.sail;
+        if (x) {
+          x.sail = e.sail;
+          table.pulse(e.ship, '#ffffff', ms() * 1.5);
+          float(e.ship, `⛵ ${ORDER_WORD[e.order] ?? e.order}`);
+        }
         renderTable();
+        await sleep(ms());
+        break;
+      case 'ShipStopped':
+        table.pulse(e.ship, '#e0402a', ms() * 2);
+        float(e.ship, `✋ stopped: ${STOP_WORD[e.by] ?? e.by}`);
+        await sleep(ms() * 1.5);
         break;
       case 'Teleported':
       case 'WentThroughCave':
         if (x) {
+          float(e.ship, e.type === 'Teleported' ? '🌀 whirlpool!' : '🕳 cave!');
+          await table.teleport(e.ship, e.to, x.heading, ms() * 2.4);
           x.hex = e.to;
           renderTable();
-          await sleep(ms());
+          table.pulse(e.ship, MOVE_COLOUR.current, ms() * 2);
         }
         break;
       case 'ShipSank':
+        float(e.ship, '☠ sinks');
+        await table.sink(e.ship, ms() * 2.5);
         if (x) x.afloat = false;
         renderTable();
-        await sleep(ms() * 2);
+        await sleep(ms());
         break;
       case 'ShipReturned':
         if (x) Object.assign(x, { hex: e.at, heading: e.heading, afloat: true, sail: 'none' });
         renderTable();
-        await sleep(ms());
+        table.pulse(e.ship, '#7cff9a', ms() * 2);
+        float(e.ship, '⚓ back in play');
+        await sleep(ms() * 1.5);
         break;
       case 'CannonFired': {
         const from = table.shipPosition(e.ship);
@@ -1043,6 +1116,16 @@ document.querySelectorAll<HTMLElement>('#viewctl [data-v]').forEach((b) => {
   };
 });
 new ResizeObserver(() => viewer && session && renderHand()).observe($('#hand'));
+
+// Draw the weather card at the board's angle, so its directions line up with the board's (rules §3.5 aid).
+const tiltCard = () => {
+  const { tilt, turn } = table.viewAngles();
+  const w = $('#weather');
+  w.style.setProperty('--tilt', `${tilt}rad`);
+  w.style.setProperty('--turn', `${-turn}rad`);
+  requestAnimationFrame(tiltCard);
+};
+tiltCard();
 
 // Expose for automated checks (screenshot script).
 (window as unknown as { msb: unknown }).msb = { get session() { return session; }, get busy() { return busy; }, table, refresh: () => (syncShown(), renderTable()), HIDDEN };

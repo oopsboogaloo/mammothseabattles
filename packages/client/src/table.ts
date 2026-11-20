@@ -265,6 +265,11 @@ export class Table {
     return { x: ((v.x + 1) / 2) * r.width, y: ((1 - v.y) / 2) * r.height };
   }
 
+  /** The camera's tilt from straight down and its turn, in radians (for drawing the weather card at the board's angle). */
+  viewAngles(): { tilt: number; turn: number } {
+    return { tilt: this.controls.getPolarAngle(), turn: this.controls.getAzimuthalAngle() };
+  }
+
   /** Where a ship model stands (or undefined if she isn't on the table). */
   shipPosition(id: string): THREE.Vector3 | undefined {
     return this.ships.get(id)?.root.position.clone();
@@ -299,6 +304,97 @@ export class Table {
         if (fade) setTimeout(() => this.arcs.remove(g), 900);
       };
       step();
+    });
+  }
+
+  /** A flat arrow drawn on the board from one hex to the next, fading out: the track a ship just moved along. */
+  trail(from: Hex, to: Hex, colour: string, ms = 1600) {
+    const a = this.hexToWorld(from, 0.1), b = this.hexToWorld(to, 0.1);
+    const dir = b.clone().sub(a);
+    const len = dir.length();
+    if (len < 1e-3) return;
+    const mat = new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.85, depthWrite: false });
+    const shaft = new THREE.Mesh(new THREE.PlaneGeometry(0.22, len * 0.62), mat);
+    shaft.rotation.x = -Math.PI / 2;
+    const head = new THREE.Mesh(new THREE.CircleGeometry(0.32, 3), mat);
+    head.rotation.x = -Math.PI / 2;
+    const g = new THREE.Group();
+    g.add(shaft, head);
+    shaft.position.set(0, 0, -len * 0.06);
+    head.position.set(0, 0, -len * 0.4);
+    head.rotation.z = Math.PI / 2;
+    g.position.copy(a.clone().lerp(b, 0.5));
+    g.rotation.y = Math.atan2(-dir.x, -dir.z);
+    this.fx.add(g);
+    const t0 = performance.now();
+    const f = () => {
+      const t = (performance.now() - t0) / ms;
+      mat.opacity = 0.85 * Math.max(0, 1 - t);
+      if (t < 1) requestAnimationFrame(f);
+      else this.fx.remove(g);
+    };
+    f();
+  }
+
+  /** A ring pulsing under a ship while she acts, so the eye knows which one to follow. */
+  pulse(id: string, colour = '#fff', ms = 900) {
+    const p = this.ships.get(id)?.root.position;
+    if (!p) return;
+    const r = (this.map.size / PX) * 0.9;
+    const mat = new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(r * 0.8, r, 6), mat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.copy(p).setY(0.1);
+    this.fx.add(ring);
+    const t0 = performance.now();
+    const f = () => {
+      const t = (performance.now() - t0) / ms;
+      ring.scale.setScalar(1 + t * 0.35);
+      mat.opacity = 0.9 * Math.max(0, 1 - t);
+      if (t < 1) requestAnimationFrame(f);
+      else this.fx.remove(ring);
+    };
+    f();
+  }
+
+  /** Swallow a ship into a whirlpool or cave and bring her up at the other end: shrink and spin, jump, grow. */
+  async teleport(id: string, to: Hex, heading: Direction, ms: number): Promise<void> {
+    const obj = this.ships.get(id);
+    if (!obj) return;
+    const spin = (from: number, toS: number, turns: number) =>
+      new Promise<void>((res) => {
+        const t0 = performance.now(), a0 = obj.root.rotation.y;
+        const f = () => {
+          const t = Math.min(1, (performance.now() - t0) / (ms / 2));
+          obj.root.scale.setScalar(from + (toS - from) * t);
+          obj.root.rotation.y = a0 + turns * Math.PI * 2 * t;
+          if (t < 1) requestAnimationFrame(f);
+          else res();
+        };
+        f();
+      });
+    await spin(1, 0.05, 1);
+    obj.root.position.copy(this.hexToWorld(to));
+    obj.root.rotation.y = Table.headingAngle(heading) - Math.PI * 2;
+    await spin(0.05, 1, 1);
+    obj.root.scale.setScalar(1);
+    obj.root.rotation.y = Table.headingAngle(heading);
+  }
+
+  /** Sink a ship: she tilts and goes down, then disappears. */
+  sink(id: string, ms: number): Promise<void> {
+    const obj = this.ships.get(id);
+    if (!obj) return Promise.resolve();
+    const t0 = performance.now(), y0 = obj.root.position.y;
+    return new Promise((res) => {
+      const f = () => {
+        const t = Math.min(1, (performance.now() - t0) / ms);
+        obj.root.position.y = y0 - t * 1.6;
+        obj.root.rotation.z = t * 0.6;
+        if (t < 1) requestAnimationFrame(f);
+        else (obj.root.rotation.z = 0), res();
+      };
+      f();
     });
   }
 
