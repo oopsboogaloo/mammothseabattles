@@ -103,6 +103,12 @@ describe('what the AI plans for', () => {
     const s = game();
     expect(goals(s, ship(s))).toEqual(s.treasures);
     expect(goals(s, { ...ship(s), carrying: true })).toEqual([k(s.teams['T1']!.homePort)]);
+    // No treasure loose: go after a rival carrying it; none at all, nowhere to go.
+    const none = clone(s);
+    none.treasures = [];
+    expect(goals(none, ship(none))).toEqual([]);
+    ship(none, 'P2').carrying = true;
+    expect(goals(none, ship(none))).toEqual([k(ship(none, 'P2').pos)]);
   });
 
   it('plays fair: forgets rivals’ programs (not a teammate’s) and the dice to come', () => {
@@ -144,7 +150,7 @@ describe('simulating and scoring a turn', () => {
       return evaluate(before, { state: after, sank: new Set(sank) } as Simulation, 'P1-ship', dist, {});
     };
     const base = at(0, -2);
-    expect(at(0, -2, () => undefined, ['P1-ship'])).toBe(WEIGHTS.sunk);
+    expect(at(0, -2, () => undefined, ['P1-ship'])).toBe(base + WEIGHTS.sunk);
     expect(at(0, -2, (s) => (s.teams['T1']!.score = 1))).toBe(base + WEIGHTS.scored);
     expect(at(0, -2, (s) => (ship(s).carrying = true))).toBe(base + WEIGHTS.pickUp);
     expect(at(0, -2, (s) => ship(s).blocked.push('sail1'))).toBe(base + WEIGHTS.slotDamaged);
@@ -361,6 +367,14 @@ describe('personalities and looking ahead (engineering design §10)', () => {
     expect(STYLES.raider.weights.enemyHurt).toBeGreaterThan(WEIGHTS.enemyHurt);
     expect(STYLES.cautious.weights.slotDamaged).toBeLessThan(WEIGHTS.slotDamaged);
     expect(PERSONALITIES.filter((p) => STYLES[p].raider)).toEqual(['raider']);
+  });
+
+  it('never prefers sinking, even with nowhere to go (a hunter used to sail off the map from her own port)', () => {
+    const s = game(2);
+    const nowhere = distanceMap(s, [], planningWeather(s), config);
+    const afloat = evaluate(s, { state: clone(s), sank: new Set() }, 'P1-ship', nowhere, {}, undefined, STYLES.hunter.weights);
+    const sunk = evaluate(s, { state: clone(s), sank: new Set(['P1-ship']) }, 'P1-ship', nowhere, {}, undefined, STYLES.hunter.weights);
+    expect(sunk).toBe(afloat + STYLES.hunter.weights.sunk);
   });
 
   it('a raider heads for a rival carrying treasure, else for treasure and rival ships alike; home when she carries it herself', () => {

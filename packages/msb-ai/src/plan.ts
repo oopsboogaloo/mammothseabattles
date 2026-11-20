@@ -46,16 +46,16 @@ export function planningWeather(state: GameState): Weather {
 }
 
 /**
- * Where the ship is heading for: her home port when carrying treasure, else the loose treasure. A raider goes for rivals instead:
- * any rival carrying treasure, or else rival ships and treasure alike.
+ * Where the ship is heading for: her home port when carrying treasure, else the loose treasure, or (none loose) a rival carrying
+ * it, to knock it loose. A raider goes for rivals first: any rival carrying treasure, or else rival ships and treasure alike.
  */
 export function goals(state: GameState, ship: Ship, raider = false): string[] {
   const team = (state.players[ship.player] as Player).team;
   if (ship.carrying) return [hexKey((state.teams[team] as Team).homePort)];
-  if (!raider) return [...state.treasures];
   const rivals = Object.values(state.ships).filter((s) => s.status === 'afloat' && (state.players[s.player] as Player).team !== team);
-  const carriers = rivals.filter((s) => s.carrying);
-  return carriers.length > 0 ? carriers.map((s) => hexKey(s.pos)) : [...state.treasures, ...rivals.map((s) => hexKey(s.pos))];
+  const carriers = rivals.filter((s) => s.carrying).map((s) => hexKey(s.pos));
+  if (!raider) return state.treasures.length > 0 ? [...state.treasures] : carriers;
+  return carriers.length > 0 ? carriers : [...state.treasures, ...rivals.map((s) => hexKey(s.pos))];
 }
 
 /** Forget what this player couldn't know: rivals' programs and hands, and the dice (the RNG) to come. */
@@ -116,7 +116,9 @@ export function evaluate(
   let score = Object.keys(program).length * w.cardUsed;
   const scored = scoreOf(after) - scoreOf(before);
   score += scored * w.scored;
-  if (sim.sank.has(shipId)) return score + w.sunk;
+  // Sinking costs the same whatever else happens: she's back in port, so score where she is now as well (skipping that made
+  // sinking look good when far from every goal, so ships sailed off the map on purpose).
+  if (sim.sank.has(shipId)) score += w.sunk;
   if (me.carrying && !was.carrying) score += w.pickUp;
   if (!me.carrying && was.carrying && scored === 0) score += w.loseTreasure;
   score += distanceOf(dist, me.pos) * w.perDistance;
