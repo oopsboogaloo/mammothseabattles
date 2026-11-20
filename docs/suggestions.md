@@ -120,6 +120,11 @@ Further ideas to try:
 - Broadside arcs shown for each Fire card placed.
 - A guided first game (tutorial) on a Category 1 board, with the Safe edge option.
 
+## Tornado *(designer, 2026-11-20; future idea, just logged)*
+- A **tornado** (waterspout) that **transports ships** in some way: e.g. picks up a ship it touches and sets her down some hexes away,
+  perhaps spinning her to a random heading. How it moves, how far it carries, and whether it damages are all open. Could be a weather
+  card (like the Hurricane and Lightning Storm ideas above) or a roaming hazard like the sea monster.
+
 ## Graphical polish (future) *(designer, 2026-11-20)*
 - **Wind on the board**: a gentle wind blowing across the board in the wind's direction, and when the weather changes, the wind
   **softly turning to the new direction and strength**. Mainly to **communicate the weather change**; it shouldn't blow all the time,
