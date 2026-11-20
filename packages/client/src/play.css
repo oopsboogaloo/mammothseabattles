@@ -34,13 +34,13 @@
 #decide .opts .btn.default::after { content: 'default'; margin-left: auto; font-weight: 500; font-size: .85em; opacity: .55; }
 #decide .token.mini { width: 2em; height: 2em; border-radius: 50%; background: center / cover; flex: none; box-shadow: 0 0 0 2px #6b4a2a; }
 #decide .token.mini.wounded { filter: grayscale(1) brightness(.7); }
-.mini-board { display: grid; grid-template-columns: 2em repeat(3, 1fr); gap: 4px; align-items: center; }
+.mini-board { display: grid; grid-template-columns: 28px repeat(3, 96px); gap: 5px; align-items: center; justify-content: start; }
 .mini-board .mh { text-align: center; font: 700 .9em var(--serif); }
 .mini-board .mr { text-align: center; }
-.mini-board .slot { min-height: 46px; aspect-ratio: 2.2; font-size: 0; }
+.mini-board .slot { width: 96px; height: 44px; min-height: 0; aspect-ratio: auto; font-size: 0; padding: 0; }
 .mini-board .slot:not(:disabled) { outline: 3px solid var(--gold); outline-offset: 1px; cursor: pointer; }
 .mini-board .slot:not(:disabled):hover { outline-color: #e0402a; outline-width: 4px; }
-.mini-board .slot.default::after { content: 'default'; position: absolute; bottom: 2px; right: 4px; font: 700 10px var(--sans); color: #000; background: rgba(255,255,255,.8); border-radius: 3px; padding: 0 3px; }
+.mini-board .slot.default::after { content: 'default'; position: absolute; bottom: 2px; right: 4px; font: 700 10px/1.2 var(--sans); color: #000; background: rgba(255,255,255,.85); border-radius: 3px; padding: 0 3px; }
 .mini-board .slot:disabled { opacity: .55; cursor: default; }
 .mini-board .slot.filled .init { display: none; }
 .mini-note { grid-column: 1 / -1; font-size: .85em; opacity: .75; margin-top: .3em; }
@@ -61,3 +61,4 @@
 .card.dragging, #shipboard .slot.dragging { opacity: .35; }
 #shipboard .slot.hover, #hand.hover { outline: 4px solid #fff; }
 #shipboard .slot.filled { cursor: grab; touch-action: none; }
+.mini-board .slot.damaged::before { font-size: 24px; }
