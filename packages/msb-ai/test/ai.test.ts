@@ -128,6 +128,9 @@ describe('simulating and scoring a turn', () => {
     expect(ship(sim.state).status).toBe('afloat');
     expect(ship(s).program).toEqual({}); // the input state is untouched
     expect(simulate(s, 'P1-ship', {}, config).sank.size).toBe(0);
+    // Played cards leave her hand (they go back in the deck at Upkeep), so next turn can't use them again.
+    const card = ship(s).hand[0]!;
+    expect(ship(simulate(s, 'P1-ship', { action1: card }, config).state).hand).not.toContain(card);
   });
 
   it('weighs each thing the AI cares about', () => {

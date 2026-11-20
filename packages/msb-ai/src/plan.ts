@@ -80,7 +80,11 @@ export interface Simulation {
 /** Run the whole turn on a copy, with every question answered by its default. */
 export function simulate(base: GameState, shipId: string, program: Program, config: RulesConfig): Simulation {
   const state = JSON.parse(JSON.stringify(base)) as GameState;
-  (state.ships[shipId] as Ship).program = { ...program };
+  const ship = state.ships[shipId] as Ship;
+  // Played cards leave the hand, as when placed for real (so a look at next turn can't use them again).
+  const used = Object.values(program);
+  ship.hand = ship.hand.filter((c) => !used.includes(c));
+  ship.program = { ...program };
   state.phase = 'resolving';
   const sank = new Set<string>();
   const ctx: ResolutionContext<GameEvent> = {
