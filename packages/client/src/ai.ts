@@ -1,5 +1,5 @@
 /** Ask the computer for its actions: in a Web Worker when the browser has one, else on the main thread. */
-import { answerDecision, programmingTurn, type AiLevel } from '@msb/msb-ai';
+import { answerDecision, programmingTurn, type AiLevel, type Personality } from '@msb/msb-ai';
 import type { Action, GameState, RulesConfig } from '@msb/msb-rules';
 import type { AiRequest } from './ai-worker';
 
@@ -21,12 +21,12 @@ function getWorker(): Worker | null {
   }
 }
 
-export function askAi(kind: AiRequest['kind'], state: GameState, player: string, config: RulesConfig, level: AiLevel): Promise<Action[]> {
+export function askAi(kind: AiRequest['kind'], state: GameState, player: string, config: RulesConfig, level: AiLevel, personality: Personality = 'balanced'): Promise<Action[]> {
   const w = getWorker();
-  if (!w) return Promise.resolve(kind === 'program' ? programmingTurn(state, player, config, undefined, level) : [answerDecision(state, config)]);
+  if (!w) return Promise.resolve(kind === 'program' ? programmingTurn(state, player, config, { level, personality }) : [answerDecision(state, config)]);
   const id = nextId++;
   return new Promise((resolve) => {
     waiting.set(id, resolve);
-    w.postMessage({ id, kind, state, player, config, level } satisfies AiRequest);
+    w.postMessage({ id, kind, state, player, config, level, personality } satisfies AiRequest);
   });
 }

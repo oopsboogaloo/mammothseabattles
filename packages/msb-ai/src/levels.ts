@@ -9,9 +9,11 @@
  */
 
 import { Rng } from '@msb/engine';
-import { freeSlots, type GameState, type Player, type PlayerId, type RulesConfig, type Ship } from '@msb/msb-rules';
+import { freeSlots, type Weather, type GameState, type Player, type PlayerId, type RulesConfig, type Ship } from '@msb/msb-rules';
 import { distanceMap } from './distance';
+import type { DistanceMap } from './distance';
 import { determinize, evaluate, goals, planningWeather, rankPrograms, simulate, type Program } from './plan';
+import { BALANCED, type Style } from './weights';
 
 export type AiLevel = 'easy' | 'normal' | 'hard';
 export const AI_LEVELS: readonly AiLevel[] = ['easy', 'normal', 'hard'];
@@ -20,7 +22,7 @@ export const AI_LEVELS: readonly AiLevel[] = ['easy', 'normal', 'hard'];
 export const EASY_FILL = 0.6;
 
 /** Hard: how many of Normal's plans to test, and against how many sampled futures. */
-export const HARD = { candidates: 5, samples: 4 } as const;
+export const HARD = { candidates: 5, samples: 4, lookAhead: 0.5 } as const;
 
 /** A seed for this player's choices in this position (fixed, but different for each player and each turn). */
 export function seedFor(state: GameState, player: PlayerId): number {
@@ -42,14 +44,27 @@ export function sampleWorld(state: GameState, player: PlayerId, config: RulesCon
   const placed = (id: string) => Object.values((state.ships[id] as Ship).program);
   const unseen = rng.shuffle([...world.deck, ...rivals.flatMap((s) => [...s.hand, ...placed(s.id)])]);
   for (const ship of rivals) ship.hand = unseen.splice(0, ship.hand.length + placed(ship.id).length);
+  // What's left is the deck, in an order this player can't know (so looking ahead can't foresee the next draw).
+  world.deck = unseen;
   for (const ship of rivals) if (!ship.refitting) ship.program = (rankPrograms(world, ship.id, config, 1)[0] as { program: Program }).program;
   world.rng = ((rng.int(1, 0x7fffffff) ^ world.rng) | 1) >>> 0;
   return world;
 }
 
+/**
+ * Hard looks two turns ahead: the score of this turn's plan, plus part of the best score it could then get next turn (planned the
+ * Basic way, narrow search), so a plan that sets up a good next turn beats one that only looks good now.
+ */
+export function lookAhead(world: GameState, shipId: string, program: Program, config: RulesConfig, style: Style, dist: DistanceMap, weather: Weather): number {
+  const sim = simulate(world, shipId, program, config);
+  const now = evaluate(world, sim, shipId, dist, program, weather, style.weights);
+  if (sim.sank.has(shipId) || sim.state.phase !== 'programming') return now;
+  return now + HARD.lookAhead * (rankPrograms(sim.state, shipId, config, 1, style)[0] as { score: number }).score;
+}
+
 /** Easy: Normal's Part I, then random cards (or none) in the later Parts' free slots. */
-function easyProgram(state: GameState, ship: Ship, config: RulesConfig, rng: Rng): Program {
-  const best = (rankPrograms(state, ship.id, config, 2)[0] as { program: Program }).program;
+function easyProgram(state: GameState, ship: Ship, config: RulesConfig, rng: Rng, style: Style): Program {
+  const best = (rankPrograms(state, ship.id, config, 2, style)[0] as { program: Program }).program;
   const program: Record<string, string> = Object.fromEntries(Object.entries(best).filter(([slot]) => slot.endsWith('1')));
   const left = rng.shuffle(ship.hand.filter((c) => !Object.values(program).includes(c)));
   for (const slot of freeSlots(ship)) {
@@ -60,19 +75,19 @@ function easyProgram(state: GameState, ship: Ship, config: RulesConfig, rng: Rng
 }
 
 /** The program a ship's player chooses at this level. */
-export function chooseProgram(state: GameState, shipId: string, config: RulesConfig, level: AiLevel): Program {
+export function chooseProgram(state: GameState, shipId: string, config: RulesConfig, level: AiLevel, style: Style = BALANCED): Program {
   const ship = state.ships[shipId] as Ship;
   const rng = new Rng(seedFor(state, ship.player));
-  if (level === 'easy') return easyProgram(state, ship, config, rng);
-  if (level === 'normal') return (rankPrograms(state, shipId, config)[0] as { program: Program }).program;
-  const candidates = rankPrograms(state, shipId, config, HARD.candidates);
+  if (level === 'easy') return easyProgram(state, ship, config, rng, style);
+  if (level === 'normal') return (rankPrograms(state, shipId, config, undefined, style)[0] as { program: Program }).program;
+  const candidates = rankPrograms(state, shipId, config, HARD.candidates, style);
   const weather = planningWeather(state);
-  const dist = distanceMap(state, goals(state, ship), weather, config);
+  const dist = distanceMap(state, goals(state, ship, style.raider), weather, config);
   const totals = candidates.map(() => 0);
   for (let i = 0; i < HARD.samples; i++) {
     const world = sampleWorld(state, ship.player, config, rng);
     candidates.forEach((c, k) => {
-      totals[k]! += evaluate(world, simulate(world, shipId, c.program, config), shipId, dist, c.program, weather);
+      totals[k]! += lookAhead(world, shipId, c.program, config, style, dist, weather);
     });
   }
   return (candidates[bestIndex(totals)] as { program: Program }).program;

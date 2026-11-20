@@ -25,7 +25,7 @@ import {
   type SlotRow,
 } from '@msb/msb-rules';
 import { prototypeSetup } from '@msb/msb-data';
-import type { AiLevel } from '@msb/msb-ai';
+import type { AiLevel, Personality } from '@msb/msb-ai';
 import { askAi } from './ai';
 import { ACTION_LABEL, SAIL_LABEL, STEER_LABEL, TIDES, cardArt, weatherArt } from './data/content';
 import { PLAYER_COLOURS } from './game';
@@ -107,25 +107,34 @@ function startScreen() {
   const names = box.querySelector<HTMLElement>('#names')!;
   const draw = () => {
     const old = [...names.querySelectorAll('input')].map((i) => i.value);
-    const oldWho = [...names.querySelectorAll('select')].map((s) => s.value);
+    const oldWho = [...names.querySelectorAll<HTMLSelectElement>('select.who')].map((s) => s.value);
+    const oldStyle = [...names.querySelectorAll<HTMLSelectElement>('select.style')].map((s) => s.value);
     names.innerHTML = '';
     for (let i = 0; i < n; i++)
       names.appendChild(
         h(`<div class="row"><span class="sw" style="--c:${PLAYER_COLOURS[i]}"></span><input type="text" value="${esc(old[i] ?? `Player ${i + 1}`)}" aria-label="Player ${i + 1} name">
-          <select class="btn who" aria-label="Player ${i + 1} is played by">${WHO.map(([v, label]) => `<option value="${v}" ${oldWho[i] === v ? 'selected' : ''}>${label}</option>`).join('')}</select></div>`),
+          <select class="btn who" aria-label="Player ${i + 1} is played by">${WHO.map(([v, label]) => `<option value="${v}" ${oldWho[i] === v ? 'selected' : ''}>${label}</option>`).join('')}</select>
+          <select class="btn style" aria-label="Player ${i + 1} computer personality" ${oldWho[i] && oldWho[i] !== 'human' ? '' : 'hidden'}>${STYLE_NAMES.map(([v, label]) => `<option value="${v}" ${oldStyle[i] === v ? 'selected' : ''}>${label}</option>`).join('')}</select></div>`),
       );
   };
   draw();
+  // The personality choice only matters for a computer player.
+  names.onchange = (e) => {
+    const sel = e.target as HTMLSelectElement;
+    if (sel.classList.contains('who')) (sel.nextElementSibling as HTMLSelectElement).hidden = sel.value === 'human';
+  };
   box.querySelector<HTMLElement>('#add')!.onclick = () => ((n = Math.min(4, n + 1)), draw());
   box.querySelector<HTMLElement>('#del')!.onclick = () => ((n = Math.max(1, n - 1)), draw());
   box.querySelector<HTMLElement>('#go')!.onclick = () => {
     const players = [...names.querySelectorAll('input')].map((i, k) => ({ name: i.value.trim() || `Player ${k + 1}` }));
     const safe = box.querySelector<HTMLInputElement>('#safe')!.checked;
     Session.clear();
-    const who = [...names.querySelectorAll('select')].map((sel) => sel.value);
+    const who = [...names.querySelectorAll<HTMLSelectElement>('select.who')].map((sel) => sel.value);
+    const style = [...names.querySelectorAll<HTMLSelectElement>('select.style')].map((sel) => sel.value as Personality);
     const ai = who.flatMap((w, k) => (w === 'human' ? [] : [`P${k + 1}`]));
     const levels = Object.fromEntries(who.flatMap((w, k) => (w === 'human' ? [] : [[`P${k + 1}`, w as AiLevel]])));
-    void begin(new Session(prototypeSetup(players, (Date.now() % 1_000_000_007) >>> 0), safe, [], ai, levels));
+    const styles = Object.fromEntries(who.flatMap((w, k) => (w === 'human' ? [] : [[`P${k + 1}`, style[k] as Personality]])));
+    void begin(new Session(prototypeSetup(players, (Date.now() % 1_000_000_007) >>> 0), safe, [], ai, levels, styles));
   };
   const resume = box.querySelector<HTMLElement>('#resume');
   if (resume && saved) resume.onclick = () => void begin(saved);
@@ -171,6 +180,9 @@ function next() {
 
 const isAi = (player: string) => S().ai.includes(player);
 const levelOf = (player: string): AiLevel => S().levels[player] ?? 'normal';
+const styleOf = (player: string): Personality => S().styles[player] ?? 'balanced';
+const STYLE_NAMES: readonly [Personality, string][] = [['balanced', 'Balanced'], ['hunter', 'Treasure hunter'], ['raider', 'Raider'], ['cautious', 'Cautious']];
+const styleLabel = (player: string) => (STYLE_NAMES.find(([v]) => v === styleOf(player)) as [Personality, string])[1].toLowerCase();
 const WHO: readonly [string, string][] = [['human', 'Human'], ['easy', 'Computer: Easy'], ['normal', 'Computer: Normal'], ['hard', 'Computer: Hard']];
 
 /** Let the computer take its actions (after a moment, so the screen can show it thinking), then play out what they caused. */
@@ -178,7 +190,7 @@ async function computerAct(kind: 'program' | 'answer', player: string) {
   busy = true;
   banner(`🤖 ${esc(playerName(player))} is thinking…`);
   // The thinking happens in a Web Worker (src/ai-worker.ts), so the table keeps moving meanwhile.
-  const [actions] = await Promise.all([askAi(kind, S().state, player, S().config, levelOf(player)), sleep(250)]);
+  const [actions] = await Promise.all([askAi(kind, S().state, player, S().config, levelOf(player), styleOf(player)), sleep(250)]);
   const events: GameEvent[] = [];
   for (const action of actions) events.push(...act(action, player));
   $('#banner').hidden = true;
@@ -497,7 +509,7 @@ function renderPanels(v: GameView | null) {
     const ship = view.ships[`${seat.player}-ship`]!;
     const healthy = ship.crew.filter((c) => c.state === 'healthy').length;
     const row = h(`<button class="score-row ${seat.player === viewer ? 'me' : ''}" style="--c:${colours[seat.player]}">
-      <span class="sw"></span><span><b>${isAi(seat.player) ? '🤖 ' : ''}${esc(seat.name)}</b>${isAi(seat.player) ? ` <small>(${levelOf(seat.player)})</small>` : ''}${ship.carrying ? ' · 💎' : ''}${ship.status === 'sunk' ? ' · sunk' : ''}${ship.refitting ? ' · refitting' : ''}${ship.stuck ? ' · stranded' : ''}</span>
+      <span class="sw"></span><span><b>${isAi(seat.player) ? '🤖 ' : ''}${esc(seat.name)}</b>${isAi(seat.player) ? ` <small>(${levelOf(seat.player)}, ${styleLabel(seat.player)})</small>` : ''}${ship.carrying ? ' · 💎' : ''}${ship.status === 'sunk' ? ' · sunk' : ''}${ship.refitting ? ' · refitting' : ''}${ship.stuck ? ' · stranded' : ''}</span>
       <span title="treasure scored">💎 ${view.scores[seat.team] ?? 0}</span><span title="healthy crew">👥 ${healthy}/${ship.crew.length}</span><span title="damaged slots">✕ ${ship.blocked.length}</span></button>`);
     row.onclick = () => table.focus(ship.pos);
     rivals.appendChild(row);

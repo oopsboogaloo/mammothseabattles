@@ -3,7 +3,7 @@
  * rules engine and saves after every action, so a game survives a page reload. The UI talks only to this.
  */
 import { replay, type LogEntry } from '@msb/engine';
-import type { AiLevel } from '@msb/msb-ai';
+import type { AiLevel, Personality } from '@msb/msb-ai';
 import { createGame, makeConfig, type Action, type GameEvent, type GameSetup, type GameState, type GameView } from '@msb/msb-rules';
 
 const SAVE_KEY = 'msb-hotseat-save-v1';
@@ -15,6 +15,8 @@ export interface SaveFile {
   readonly ai?: readonly string[];
   /** Each computer player's level; Normal if missing (saves from before levels existed). */
   readonly levels?: Readonly<Record<string, AiLevel>>;
+  /** Each computer player's personality; balanced if missing. */
+  readonly styles?: Readonly<Record<string, Personality>>;
   readonly log: readonly LogEntry<Action>[];
 }
 
@@ -30,6 +32,7 @@ export class Session {
     log: readonly LogEntry<Action>[] = [],
     readonly ai: readonly string[] = [],
     readonly levels: Readonly<Record<string, AiLevel>> = {},
+    readonly styles: Readonly<Record<string, Personality>> = {},
   ) {
     this.config = makeConfig({ safeEdge });
     this.game = createGame(this.config);
@@ -55,7 +58,7 @@ export class Session {
   }
 
   save(): void {
-    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, levels: this.levels, log: this.log };
+    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, levels: this.levels, styles: this.styles, log: this.log };
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(file));
     } catch {
@@ -68,7 +71,7 @@ export class Session {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return undefined;
       const file = JSON.parse(raw) as SaveFile;
-      return new Session(file.setup, file.safeEdge, file.log, file.ai ?? [], file.levels ?? {});
+      return new Session(file.setup, file.safeEdge, file.log, file.ai ?? [], file.levels ?? {}, file.styles ?? {});
     } catch {
       return undefined;
     }

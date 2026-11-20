@@ -23,29 +23,13 @@ import {
 } from '@msb/msb-rules';
 import { distanceMap, distanceOf, type DistanceMap } from './distance';
 import { chooseProgram, type AiLevel } from './levels';
+import { BALANCED, WEIGHTS, type Style, type Weights } from './weights';
+import { STYLES, type Personality } from './personality';
+
+export { WEIGHTS } from './weights';
 
 /** How many partial programs to keep after each Part (beam width). */
 export const BEAM = 4;
-
-/** Score weights: what the AI cares about. Bigger = more important. */
-export const WEIGHTS = {
-  sunk: -5000,
-  scored: 2000,
-  pickUp: 600,
-  loseTreasure: -600,
-  perDistance: -40,
-  facingGoal: 25,
-  slotDamaged: -60,
-  crewHurt: -70,
-  enemyHurt: 30,
-  enemySunk: 300,
-  inHazard: -120,
-  stranded: -200,
-  /** Ending the turn where next turn's wind drift (or a stray move) would carry her off the map. */
-  driftOffMap: -800,
-  onEdge: -15,
-  cardUsed: -1,
-} as const;
 
 /** A program: slot key → card id. */
 export type Program = Readonly<Record<string, string>>;
@@ -61,11 +45,17 @@ export function planningWeather(state: GameState): Weather {
   return { strength: pick.strength, direction: pick.direction ?? 0 };
 }
 
-/** Where the ship is heading for: her home port when carrying treasure, else the loose treasure. */
-export function goals(state: GameState, ship: Ship): string[] {
-  const team = state.teams[(state.players[ship.player] as Player).team] as Team;
-  if (ship.carrying) return [hexKey(team.homePort)];
-  return [...state.treasures];
+/**
+ * Where the ship is heading for: her home port when carrying treasure, else the loose treasure. A raider goes for rivals instead:
+ * any rival carrying treasure, or else rival ships and treasure alike.
+ */
+export function goals(state: GameState, ship: Ship, raider = false): string[] {
+  const team = (state.players[ship.player] as Player).team;
+  if (ship.carrying) return [hexKey((state.teams[team] as Team).homePort)];
+  if (!raider) return [...state.treasures];
+  const rivals = Object.values(state.ships).filter((s) => s.status === 'afloat' && (state.players[s.player] as Player).team !== team);
+  const carriers = rivals.filter((s) => s.carrying);
+  return carriers.length > 0 ? carriers.map((s) => hexKey(s.pos)) : [...state.treasures, ...rivals.map((s) => hexKey(s.pos))];
 }
 
 /** Forget what this player couldn't know: rivals' programs and hands, and the dice (the RNG) to come. */
@@ -105,37 +95,45 @@ export function simulate(base: GameState, shipId: string, program: Program, conf
 const healthy = (s: Ship) => s.crew.filter((c) => c.state === 'healthy').length;
 
 /** How good the position after a turn is, for this ship. */
-export function evaluate(before: GameState, sim: Simulation, shipId: string, dist: DistanceMap, program: Program, weather?: Weather): number {
+export function evaluate(
+  before: GameState,
+  sim: Simulation,
+  shipId: string,
+  dist: DistanceMap,
+  program: Program,
+  weather?: Weather,
+  w: Weights = WEIGHTS,
+): number {
   const after = sim.state;
   const was = before.ships[shipId] as Ship;
   const me = after.ships[shipId] as Ship;
   const team = (before.players[was.player] as Player).team;
   const scoreOf = (s: GameState) => (s.teams[team] as Team).score;
-  let score = Object.keys(program).length * WEIGHTS.cardUsed;
+  let score = Object.keys(program).length * w.cardUsed;
   const scored = scoreOf(after) - scoreOf(before);
-  score += scored * WEIGHTS.scored;
-  if (sim.sank.has(shipId)) return score + WEIGHTS.sunk;
-  if (me.carrying && !was.carrying) score += WEIGHTS.pickUp;
-  if (!me.carrying && was.carrying && scored === 0) score += WEIGHTS.loseTreasure;
-  score += distanceOf(dist, me.pos) * WEIGHTS.perDistance;
+  score += scored * w.scored;
+  if (sim.sank.has(shipId)) return score + w.sunk;
+  if (me.carrying && !was.carrying) score += w.pickUp;
+  if (!me.carrying && was.carrying && scored === 0) score += w.loseTreasure;
+  score += distanceOf(dist, me.pos) * w.perDistance;
   // Facing a nearer hex is worth a little: next turn starts in the right direction.
   const ahead = neighbor(me.pos, me.heading);
-  if (distanceOf(dist, ahead) < distanceOf(dist, me.pos)) score += WEIGHTS.facingGoal;
-  score += (me.blocked.length - was.blocked.length) * WEIGHTS.slotDamaged;
-  score += (healthy(was) - healthy(me)) * WEIGHTS.crewHurt;
+  if (distanceOf(dist, ahead) < distanceOf(dist, me.pos)) score += w.facingGoal;
+  score += (me.blocked.length - was.blocked.length) * w.slotDamaged;
+  score += (healthy(was) - healthy(me)) * w.crewHurt;
   const terrain = after.setup.map.hexes[hexKey(me.pos)]?.terrain;
-  if (terrain === 'roughWater' || terrain === 'storm') score += WEIGHTS.inHazard;
-  if (me.stuck) score += WEIGHTS.stranded;
+  if (terrain === 'roughWater' || terrain === 'storm') score += w.inHazard;
+  if (me.stuck) score += w.stranded;
   const onMap = (h: Hex) => after.setup.map.hexes[hexKey(h)] !== undefined;
   // No drift in her own port (§8.2.4), and the port is on the rim, so the edge is no danger there.
   const inPort = hexKey(me.pos) === hexKey((after.teams[team] as Team).homePort);
-  if (!inPort && ([0, 1, 2, 3, 4, 5] as Direction[]).some((d) => !onMap(neighbor(me.pos, d)))) score += WEIGHTS.onEdge;
-  if (!inPort && weather && weather.strength !== 'deadCalm' && weather.strength !== 'light' && !onMap(neighbor(me.pos, weather.direction))) score += WEIGHTS.driftOffMap;
+  if (!inPort && ([0, 1, 2, 3, 4, 5] as Direction[]).some((d) => !onMap(neighbor(me.pos, d)))) score += w.onEdge;
+  if (!inPort && weather && weather.strength !== 'deadCalm' && weather.strength !== 'light' && !onMap(neighbor(me.pos, weather.direction))) score += w.driftOffMap;
   for (const [id, other] of Object.entries(after.ships)) {
     const old = before.ships[id] as Ship;
     if ((before.players[old.player] as Player).team === team) continue;
-    if (sim.sank.has(id)) score += WEIGHTS.enemySunk;
-    else score += (other.blocked.length - old.blocked.length + healthy(old) - healthy(other)) * WEIGHTS.enemyHurt;
+    if (sim.sank.has(id)) score += w.enemySunk;
+    else score += (other.blocked.length - old.blocked.length + healthy(old) - healthy(other)) * w.enemyHurt;
   }
   return score;
 }
@@ -190,11 +188,11 @@ export interface Ranked {
 }
 
 /** The best programs found (up to `beam` of them), best first. */
-export function rankPrograms(state: GameState, shipId: string, config: RulesConfig, beam = BEAM): Ranked[] {
+export function rankPrograms(state: GameState, shipId: string, config: RulesConfig, beam = BEAM, style: Style = BALANCED): Ranked[] {
   const ship = state.ships[shipId] as Ship;
   const world = determinize(state, ship.player);
   const weather = planningWeather(state);
-  const dist = distanceMap(state, goals(state, ship), weather, config);
+  const dist = distanceMap(state, goals(state, ship, style.raider), weather, config);
   const cards = new Map(state.setup.commandCards.map((c) => [c.id, c]));
   const free = new Set(freeSlots(ship));
   let beams: { program: Program; score: number }[] = [{ program: {}, score: -Infinity }];
@@ -219,7 +217,7 @@ export function rankPrograms(state: GameState, shipId: string, config: RulesConf
             });
             // Every beam and every combination differ, so each program is new.
             const after = simulate(world, shipId, program, config);
-            next.push({ program, score: evaluate(world, after, shipId, dist, program, weather) });
+            next.push({ program, score: evaluate(world, after, shipId, dist, program, weather, style.weights) });
           }
     }
     beams = next.sort((a, b) => b.score - a.score).slice(0, beam);
@@ -232,12 +230,22 @@ export function rankPrograms(state: GameState, shipId: string, config: RulesConf
  * (keeping the cards with the most useful orders is a later refinement: it drops the first ones), then ready.
  */
 /** `beam` trades strength for speed: the simulator uses a narrower one to play many games. */
-export function programmingTurn(state: GameState, player: PlayerId, config: RulesConfig, beam = BEAM, level?: AiLevel): Action[] {
+/** How a computer player plays: search width (when no level is given), difficulty level and personality. */
+export interface AiOptions {
+  readonly beam?: number | undefined;
+  readonly level?: AiLevel | undefined;
+  readonly personality?: Personality | undefined;
+}
+
+export function programmingTurn(state: GameState, player: PlayerId, config: RulesConfig, options: AiOptions = {}): Action[] {
+  const style = STYLES[options.personality ?? 'balanced'];
   const actions: Action[] = [];
   for (const id of (state.players[player] as Player).ships) {
     const ship = state.ships[id] as Ship;
     if (ship.status !== 'afloat' || ship.refitting) continue;
-    const program = level ? chooseProgram(state, id, config, level) : planProgram(state, id, config, beam);
+    const program = options.level
+      ? chooseProgram(state, id, config, options.level, style)
+      : (rankPrograms(state, id, config, options.beam, style)[0] as Ranked).program;
     for (const [slot, card] of Object.entries(program)) actions.push({ type: 'place', ship: id, slot, card });
     const left = ship.hand.filter((c) => !Object.values(program).includes(c));
     for (const card of left.slice(0, Math.max(0, left.length - config.handLimit))) actions.push({ type: 'discard', ship: id, card });

@@ -18,8 +18,13 @@ import {
 import {
   AI_LEVELS,
   EASY_FILL,
+  BALANCED,
   HARD,
+  PERSONALITIES,
+  STYLES,
   WEIGHTS,
+  lookAhead,
+  scaled,
   answerDecision,
   assignCards,
   bestIndex,
@@ -338,7 +343,69 @@ describe('difficulty levels (engineering design §10)', () => {
   it('a programming turn at a level is legal', () => {
     const g = createGame(config);
     let s = game(2);
-    for (const a of programmingTurn(s, 'P1', config, undefined, 'hard')) s = g.apply(s, 'P1', a).state;
+    for (const a of programmingTurn(s, 'P1', config, { level: 'hard', personality: 'raider' })) s = g.apply(s, 'P1', a).state;
     expect(s.ready).toEqual(['P1']);
   }, 60_000);
+});
+
+describe('personalities and looking ahead (engineering design §10)', () => {
+  it('each personality scales the standard weights its own way', () => {
+    expect(PERSONALITIES).toEqual(['balanced', 'hunter', 'raider', 'cautious']);
+    expect(STYLES.balanced).toBe(BALANCED);
+    expect(scaled({ pickUp: 2 })).toEqual({ ...WEIGHTS, pickUp: WEIGHTS.pickUp * 2 });
+    expect(STYLES.hunter.weights.pickUp).toBeGreaterThan(WEIGHTS.pickUp);
+    expect(STYLES.hunter.weights.enemyHurt).toBeLessThan(WEIGHTS.enemyHurt);
+    expect(STYLES.raider.weights.enemyHurt).toBeGreaterThan(WEIGHTS.enemyHurt);
+    expect(STYLES.cautious.weights.slotDamaged).toBeLessThan(WEIGHTS.slotDamaged);
+    expect(PERSONALITIES.filter((p) => STYLES[p].raider)).toEqual(['raider']);
+  });
+
+  it('a raider heads for a rival carrying treasure, else for treasure and rival ships alike; home when she carries it herself', () => {
+    const s = game(3);
+    s.players['P3']!.team = 'T1'; // a teammate isn't a target
+    const rival = k(ship(s, 'P2').pos);
+    expect(goals(s, ship(s), true)).toEqual([...s.treasures, rival]);
+    ship(s, 'P2').carrying = true;
+    expect(goals(s, ship(s), true)).toEqual([rival]);
+    ship(s, 'P2').status = 'sunk';
+    expect(goals(s, ship(s), true)).toEqual([...s.treasures]);
+    expect(goals(s, { ...ship(s), carrying: true }, true)).toEqual([k(s.teams['T1']!.homePort)]);
+  });
+
+  it('the plan a personality picks is its own, and every personality plays legally', () => {
+    const g = createGame(config);
+    for (const personality of PERSONALITIES) {
+      let s = game(2);
+      for (const a of programmingTurn(s, 'P1', config, { beam: 1, personality })) s = g.apply(s, 'P1', a).state;
+      expect(s.ready).toEqual(['P1']);
+    }
+    const s = game(2);
+    expect(programmingTurn(s, 'P1', config, { beam: 2, personality: 'cautious' })).toEqual(programmingTurn(s, 'P1', config, { beam: 2, personality: 'cautious' }));
+  }, 60_000);
+
+  it('Hard adds part of the best next-turn score; not when she sinks or the game ends', () => {
+    const s = game(1);
+    const weather = planningWeather(s);
+    const dist = distanceMap(s, goals(s, ship(s)), weather, config);
+    const score = (world: GameState, program: Record<string, string>) => lookAhead(world, 'P1-ship', program, config, BALANCED, dist, weather);
+    const now = (world: GameState, program: Record<string, string>) => evaluate(world, simulate(world, 'P1-ship', program, config), 'P1-ship', dist, program, weather);
+    const next = simulate(s, 'P1-ship', {}, config).state;
+    expect(score(s, {})).toBeCloseTo(now(s, {}) + HARD.lookAhead * rankPrograms(next, 'P1-ship', config, 1)[0]!.score);
+    // Rowing back off the map sinks her: nothing to plan next turn.
+    const row = s.setup.commandCards.find((c) => c.sail === 'rowBack')!.id;
+    expect(score(s, { sail1: row })).toBe(now(s, { sail1: row }));
+    // The Solo Challenge's last turn: the game is over after it.
+    const last = clone(s);
+    last.turn = config.soloTurns;
+    expect(simulate(last, 'P1-ship', {}, config).state.phase).toBe('over');
+    expect(score(last, {})).toBe(now(last, {}));
+  }, 60_000);
+
+  it('a sampled world reshuffles the rest of the deck, so looking ahead can’t foresee the next draw', () => {
+    const s = game(2);
+    const w = sampleWorld(s, 'P1', config, new Rng(5));
+    const pool = [...s.deck, ...ship(s, 'P2').hand].sort();
+    expect([...w.deck, ...ship(w, 'P2').hand].sort()).toEqual(pool);
+    expect(w.deck).not.toEqual(s.deck.slice(0, w.deck.length));
+  });
 });
