@@ -83,7 +83,7 @@ export const DEFAULT_CONFIG: RulesConfig = {
     galePerFullSail: 1,
     cliff: 2,
     wallReef: 2,
-    roughWater: 2,
+    roughWater: 1,
     storm: 3,
     homePortGuns: 1,
   },

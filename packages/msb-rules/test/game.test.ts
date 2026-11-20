@@ -136,9 +136,9 @@ describe('programming phase (rules §5.1; cards come in step P2)', () => {
 });
 
 describe('end of Part hazards (rules §5.2 step 6, §3.2.0)', () => {
-  it('rough water deals 2 DD and a storm 3 DD; other terrain none', () => {
+  it('rough water deals 1 DD (v0.148) and a storm 3 DD; other terrain none', () => {
     const s = start(setup('roughWater', 'storm'));
-    expect(endOfPartHazard(s, s.ships['A-ship']!, DEFAULT_CONFIG)).toEqual({ dd: 2, source: 'roughWater' });
+    expect(endOfPartHazard(s, s.ships['A-ship']!, DEFAULT_CONFIG)).toEqual({ dd: 1, source: 'roughWater' });
     expect(endOfPartHazard(s, s.ships['B-ship']!, DEFAULT_CONFIG)).toEqual({ dd: 3, source: 'storm' });
     const off = { ...s.ships['A-ship']!, pos: hex(9, 9) };
     expect(endOfPartHazard(s, off, DEFAULT_CONFIG)).toBeUndefined();
