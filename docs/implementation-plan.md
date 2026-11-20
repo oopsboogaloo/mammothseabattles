@@ -93,10 +93,11 @@ card picture loads.
 turn by trying candidate programs Part by Part (a beam of 4) through the **real rules engine**, and scores where the ship ends up:
 sailing distance to the goal (treasure, or home when carrying; a wind-aware map round islands and away from the wind's eye), sinking,
 damage taken and dealt, hazards, the map edge with next turn's drift, treasure picked up and scored. It plays fair: before simulating
-it forgets rivals' programs and uses a different dice stream. Mid-turn questions: never fire on a teammate, knock treasure towards its
-own port, come back facing the treasure; the rest take the rules' defaults. About 0.1 s a turn. **Results:** Solo Challenge average
-1.7 treasure in 14 turns (random play: 0); AI-against-AI games end with a winner in 20–40 turns, edge sinkings down from 6–13 a game
-(random) to 0–2. *Seen in AI-against-AI games:* seat 1 (west port) won 5 of 6; worth a look at the test map or turn order.
+it forgets rivals' programs and uses a different dice stream. Mid-turn questions: always fire (teammates are never targets), knock treasure towards its
+own port, come back facing the treasure; the rest take the rules' defaults. About 0.15 s a turn. **Results:** Solo Challenge average
+1.6 treasure in 14 turns (random play: 0); AI-against-AI games end with a winner in 20–40 turns, edge sinkings down from 6–13 a game
+(random) to 0–5, and with cannon fire 3–30 hits a game and ships sunk in battle too. (An early version never fired, which also
+made seat 1 look strong; with firing, seats 1 and 2 won 1 and 3 of 6.)
 In the client: each seat is Human or Computer on the start screen; the computer programs and answers without a hand-over screen.
 *Next:* the simulator (many games, statistics) and a Monte Carlo "Good" AI.
 

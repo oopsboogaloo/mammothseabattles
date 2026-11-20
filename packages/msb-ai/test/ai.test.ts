@@ -18,6 +18,7 @@ import {
 import {
   WEIGHTS,
   answerDecision,
+  assignCards,
   determinize,
   distanceMap,
   distanceOf,
@@ -174,6 +175,14 @@ describe('simulating and scoring a turn', () => {
 });
 
 describe('planning a program (Basic AI)', () => {
+  it('finds different cards for a choice of orders when the hand allows it', () => {
+    // Card a is the only first choice for both rows, but b can fill one of them.
+    expect(assignCards([['a'], ['a', 'b'], undefined])).toEqual(['a', 'b', undefined]);
+    expect(assignCards([['a', 'b'], ['a'], ['c']])).toEqual(['b', 'a', 'c']);
+    expect(assignCards([['a'], ['a'], undefined])).toBeUndefined();
+    expect(assignCards([undefined, undefined, undefined])).toEqual([undefined, undefined, undefined]);
+  });
+
   it('never sails off the map when it can help it, and leaves damaged slots empty', () => {
     const s = game(1);
     const plan = planProgram(s, 'P1-ship', config);
@@ -209,9 +218,9 @@ describe('answering questions mid-turn', () => {
     return answerDecision(s, config);
   };
 
-  it('never fires on a teammate; knocks treasure loose towards its own port', () => {
+  it('fires on every enemy in its broadside; knocks treasure loose towards its own port', () => {
     const s = game(2);
-    expect(ask(s, HOLD_FIRE, ['fire:P2-ship', 'hold:P2-ship'])).toEqual({ type: 'answer', choice: 1 });
+    expect(ask(s, HOLD_FIRE, ['fire:P2-ship', 'hold:P2-ship'])).toEqual({ type: 'answer', choice: 0 });
     const home = s.teams['T1']!.homePort;
     expect(ask(s, KNOCK_LOOSE, ['damage', hex(4, 0), neighbor(home, 1)])).toEqual({ type: 'answer', choice: 2 });
   });

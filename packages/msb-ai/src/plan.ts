@@ -139,15 +139,39 @@ export function evaluate(before: GameState, sim: Simulation, shipId: string, dis
   return score;
 }
 
-/** One option per distinct order for a row: the first card in the hand that carries it. */
-function choicesFor(row: 'sail' | 'steer' | 'action', hand: readonly string[], cards: ReadonlyMap<string, CommandCard>): string[] {
-  const seen = new Map<string, string>();
+type Row = 'sail' | 'steer' | 'action';
+const ROWS: readonly Row[] = ['sail', 'steer', 'action'];
+
+/** The cards in the hand grouped by the order they carry in this row. */
+function byOrder(row: Row, hand: readonly string[], cards: ReadonlyMap<string, CommandCard>): Map<string, string[]> {
+  const groups = new Map<string, string[]>();
   for (const id of hand) {
-    const card = cards.get(id) as CommandCard;
-    const order = card[row];
-    if (!seen.has(order)) seen.set(order, id);
+    const order = (cards.get(id) as CommandCard)[row];
+    groups.set(order, [...(groups.get(order) ?? []), id]);
   }
-  return [...seen.values()];
+  return groups;
+}
+
+/**
+ * Distinct cards for a choice of orders (one per row, or none): a small backtracking search, so a combination is only skipped when
+ * the hand really can't supply it with different cards.
+ */
+export function assignCards(wanted: readonly (readonly string[] | undefined)[]): (string | undefined)[] | undefined {
+  const pick = (i: number, used: ReadonlySet<string>): (string | undefined)[] | undefined => {
+    if (i === wanted.length) return [];
+    const options = wanted[i];
+    if (options === undefined) {
+      const rest = pick(i + 1, used);
+      return rest && [undefined, ...rest];
+    }
+    for (const card of options) {
+      if (used.has(card)) continue;
+      const rest = pick(i + 1, new Set([...used, card]));
+      if (rest) return [card, ...rest];
+    }
+    return undefined;
+  };
+  return pick(0, new Set());
 }
 
 /**
@@ -167,19 +191,20 @@ export function planProgram(state: GameState, shipId: string, config: RulesConfi
     for (const beam of beams) {
       const used = new Set(Object.values(beam.program));
       const hand = ship.hand.filter((c) => !used.has(c));
-      const rows = (['sail', 'steer', 'action'] as const).map((row) => ({
+      // For each row: leave it empty, or one of the distinct orders the hand carries for it.
+      const rows = ROWS.map((row) => ({
         slot: `${row}${part}`,
-        options: free.has(`${row}${part}`) ? [undefined, ...choicesFor(row, hand, cards)] : [undefined],
+        options: [undefined, ...(free.has(`${row}${part}`) ? byOrder(row, hand, cards).values() : [])],
       }));
       for (const sail of rows[0]!.options)
         for (const steer of rows[1]!.options)
           for (const action of rows[2]!.options) {
-            const picked = [sail, steer, action].filter((c): c is string => c !== undefined);
-            if (new Set(picked).size !== picked.length) continue; // one card can't fill two slots
+            const chosen = assignCards([sail, steer, action]);
+            if (!chosen) continue; // the hand can't supply these orders with different cards
             const program: Record<string, string> = { ...beam.program };
-            if (sail) program[rows[0]!.slot] = sail;
-            if (steer) program[rows[1]!.slot] = steer;
-            if (action) program[rows[2]!.slot] = action;
+            chosen.forEach((card, i) => {
+              if (card) program[(rows[i] as { slot: string }).slot] = card;
+            });
             // Every beam and every combination differ, so each program is new.
             const after = simulate(world, shipId, program, config);
             next.push({ program, score: evaluate(world, after, shipId, dist, program, weather) });

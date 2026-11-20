@@ -27,8 +27,8 @@ export function answerDecision(state: GameState, config: RulesConfig): Action {
   const toGoal = () => distanceMap(state, goals(state, { ...ship, carrying: false }), planningWeather(state), config);
   switch (d.kind) {
     case HOLD_FIRE:
-      // Never fire on a teammate.
-      return { type: 'answer', choice: options.findIndex((o) => String(o).startsWith('hold')) };
+      // Asked for every enemy in the broadside (teammates are never targets): always fire.
+      return { type: 'answer', choice: options.findIndex((o) => String(o).startsWith('fire')) };
     case KNOCK_LOOSE:
       // Always knock it loose (denies the rival a score), into the hex nearest our own port.
       return { type: 'answer', choice: 1 + best(options.slice(1) as Hex[], (h) => distance(h, home)) };

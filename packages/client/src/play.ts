@@ -744,7 +744,7 @@ function float(ship: string, text: string) {
 const DECISION_TITLE: Record<string, string> = {
   placeShipDamage: 'Choose a slot to take ship damage',
   placeCrewDamage: 'Choose which crew member takes damage',
-  holdFire: 'A friendly ship is in your broadside: fire or hold?',
+  holdFire: 'A ship is in your broadside: fire, or hold fire?',
   repairSlot: 'Choose a damaged slot to repair',
   healCrew: 'Choose a crew member to heal',
   knockLoose: 'You rammed a treasure ship: knock the treasure loose to a hex, or deal damage?',
@@ -871,7 +871,7 @@ function causeFor(kind: string, player: string, opts: unknown[]): Cause | null {
       return cause;
     case 'holdFire': {
       const friend = (opts[0] as string).split(':')[1] as string;
-      return { ship: friend, fromShip: mine, text: `Your broadside covers ${esc(shipName(friend))}, a teammate` };
+      return { ship: friend, fromShip: mine, text: `Your broadside covers ${esc(shipName(friend))}` };
     }
     case 'knockLoose': {
       const victim = lastRam?.by === mine ? lastRam.ship : Object.entries(lastShot).find(([, by]) => by === mine)?.[0];
