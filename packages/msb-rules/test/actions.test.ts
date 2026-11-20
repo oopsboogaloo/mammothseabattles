@@ -8,6 +8,7 @@ import {
   REPAIR_SLOT,
   RETURN_HEADING,
   RETURN_HEX,
+  returnHexes,
   actionOrder,
   createGame,
   fireContext,
@@ -222,7 +223,7 @@ describe('sinking and coming back (rules §7.8, §7.9)', () => {
     expect(ship(s, 'B').hand).toHaveLength(3);
   });
 
-  it('if her port is occupied she comes back next to it, in a free sea hex of her choice; if none is free, she waits', () => {
+  it('if her port is occupied she comes back at the nearest free sea hex, her choice among equally near ones (Q71)', () => {
     const P = hex(5, -5);
     const m = () => map({ [k(neighbor(P, SW))]: { terrain: 'beach' }, [k(neighbor(P, 2))]: { terrain: 'deathReef' } }); // round P: S sea, SW beach, NW sea, SE a death reef (never offered)
     const s = game(m());
@@ -231,11 +232,31 @@ describe('sinking and coming back (rules §7.8, §7.9)', () => {
     const { asked } = run(s, (ctx) => returnSunkShips(s, ships(s), ctx), (d) => (d.kind === RETURN_HEX ? 1 : d.defaultIndex));
     expect(asked[0]).toMatchObject({ kind: RETURN_HEX, options: [neighbor(P, S), neighbor(P, 5)] });
     expect(ship(s, 'B').pos).toEqual(neighbor(P, 5));
+    // Port and every free hex next to it taken: the nearest free hexes are 2 away, offered clockwise from north.
     const t = game(m());
     ship(t, 'B').status = 'sunk';
     place(t, 'A', P);
     place(t, 'C', neighbor(P, S));
     place(t, 'D', neighbor(P, 5));
+    const two = run(t, (ctx) => returnSunkShips(t, ships(t), ctx), (d) => d.defaultIndex);
+    const options = two.asked[0]?.options as Hex[];
+    for (const h of options) expect(distance(P, h)).toBe(2);
+    expect(options.map((h) => k(h))).toEqual(['5,-3', '4,-3', '3,-3', '3,-4', '3,-5']);
+    expect(ship(t, 'B')).toMatchObject({ status: 'afloat', pos: options[0] });
+  });
+
+  it('comes back in her port if it’s free (no question), and waits only if the map has no free sea hex at all', () => {
+    const P = hex(5, -5);
+    const s = game();
+    ship(s, 'B').status = 'sunk';
+    expect(returnHexes(s, P)).toEqual([P]);
+    // Every hex but her port is cliff, and her port is taken.
+    const land: Record<string, MapHex> = {};
+    for (const key of Object.keys(map().hexes)) if (key !== k(P)) land[key] = { terrain: 'cliff' };
+    const t = game(map(land));
+    ship(t, 'B').status = 'sunk';
+    place(t, 'D', P);
+    expect(returnHexes(t, P)).toEqual([]);
     // A whole turn: she stays sunk, and doesn't draw.
     const g = createGame(MISS);
     let u = t;

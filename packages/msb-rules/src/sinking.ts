@@ -4,9 +4,10 @@
  */
 
 import { createDecision, type ResolutionContext } from '@msb/engine';
-import { hexEquals, hexKey, neighbor, type Direction, type Hex } from '@msb/hex';
+import { distance, hexEquals, hexKey, type Direction, type Hex } from '@msb/hex';
 import type { GameEvent, SinkReason } from './events';
 import { isLand } from './map';
+import { parseHexKey } from './movement';
 import { dropTreasure } from './treasure';
 import { tide } from './weather';
 import type { GameState, Ship, ShipCrew } from './state';
@@ -41,8 +42,29 @@ export function recruitCrew(ship: Ship, count: number, tag: string): ShipCrew[] 
   }));
 }
 
+/** Clockwise bearing of `h` from `from`, starting at north (flat-topped hexes), so equally near hexes are offered in a fixed order. */
+function bearing(from: Hex, h: Hex): number {
+  const dq = h.q - from.q, dr = h.r - from.r;
+  const a = Math.atan2(1.5 * dq, -Math.sqrt(3) * (dr + dq / 2));
+  return a < 0 ? a + 2 * Math.PI : a;
+}
+
 /**
- * §7.8, at Upkeep: every sunk ship comes back at her home port (or a free hex next to it, the player's choice, if it's occupied),
+ * §7.8 (Q71): where a returning ship can come back: her home port if it's free, otherwise the nearest free hexes to it (her
+ * player chooses among equally near ones). Never land, and never a death reef, which would sink her at once (§3.2.0).
+ */
+export function returnHexes(state: GameState, port: Hex): Hex[] {
+  if (!occupied(state, port)) return [port];
+  const free = Object.entries(state.setup.map.hexes)
+    .filter(([, hex]) => hex.terrain !== 'deathReef' && !isLand(hex.terrain, tide(state.weather)))
+    .map(([key]) => parseHexKey(key))
+    .filter((h) => !occupied(state, h));
+  const nearest = Math.min(...free.map((h) => distance(port, h)));
+  return free.filter((h) => distance(port, h) === nearest).sort((a, b) => bearing(port, a) - bearing(port, b));
+}
+
+/**
+ * §7.8, at Upkeep: every sunk ship comes back at her home port (or the nearest free hex, the player's choice, if it's occupied),
  * heading of her player's choice, sail down, fully repaired, with 3 random crew and no Captain. Her old hand is discarded;
  * she draws a new hand with everyone else at the end of Upkeep.
  */
@@ -52,19 +74,10 @@ export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: R
     if (ship.status !== 'sunk') continue;
     const team = state.players[ship.player]?.team as string;
     const port = state.teams[team]?.homePort as Hex;
-    let at = port;
-    if (occupied(state, port)) {
-      const free = ([0, 1, 2, 3, 4, 5] as Direction[])
-        .map((d) => neighbor(port, d))
-        .filter((h) => {
-          const hex = state.setup.map.hexes[hexKey(h)];
-          // Never onto land, and never onto a death reef, which would sink her at once (§3.2.0).
-          return hex !== undefined && hex.terrain !== 'deathReef' && !isLand(hex.terrain, tide(state.weather)) && !occupied(state, h);
-        });
-      // ❓ If every hex round the port is full too, she waits for the next Upkeep.
-      if (free.length === 0) continue;
-      at = ctx.ask(createDecision(RETURN_HEX, ship.player, free));
-    }
+    const free = returnHexes(state, port);
+    // Only a map with no free sea hex at all leaves her nowhere: she waits for the next Upkeep.
+    if (free.length === 0) continue;
+    const at = ctx.ask(createDecision(RETURN_HEX, ship.player, free));
     const seat = state.setup.seats.find((s) => s.player === ship.player) as { heading: Direction };
     const headings: Direction[] = [0, 1, 2, 3, 4, 5];
     const heading = ctx.ask(createDecision(RETURN_HEADING, ship.player, headings, seat.heading));

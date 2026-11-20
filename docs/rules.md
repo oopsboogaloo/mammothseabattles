@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.141**
+> Status: **Draft v0.142**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -701,7 +701,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 ### 7.8 Sinking and coming back
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
 - **Board edge**: leaving the map sinks a ship in the hex she was about to leave (§3.1).
-- **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in an **adjacent hex**.
+- **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in the **nearest free hex** (sea, never a death reef; her player chooses between equally near ones) (Q71).
 - **She comes back at Upkeep** (not straight away) and plays the **next turn as normal** (she doesn't miss it).
 - She **discards her hand** of command cards and **draws a new hand** from her new crew.
 - **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
@@ -969,8 +969,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
-- **Q71 Nowhere to come back** (§7.8): a sunk ship comes back at Upkeep in her port hex, or next to it if that's occupied. If the port
-  **and every hex next to it** are occupied (or land), what happens? *Engine assumption: she waits and comes back at the next Upkeep.*
+- ~~Q71 Nowhere to come back~~ → if her port is occupied she comes back at the **nearest free hex** (designer, v0.142). ❓ Equally
+  near hexes: her player chooses. "Nearest" counts hexes in a straight line, ignoring land in between.
 - ~~Q70 Blocked curved current~~ → a blocked current neither moves nor turns her (designer agreed, v0.140).
 - ~~Q69 Caves, edge cases~~ → caves just join two hexes for movement; normal pushing and blocking rules apply (v0.140).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
@@ -992,6 +992,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.142 — Q71 answered: a returning ship whose port is occupied comes back at the nearest free hex.
 - v0.141 — §7.3 corrected (a blocked Sail slot means No Sail); Q71 a sunk ship with nowhere to come back (engine assumption from step P5).
 - v0.140 — Q69: caves join two hexes for movement (not cannon fire); normal pushing and blocking apply. Q70 agreed: a blocked current doesn't turn the ship.
 - v0.139 — Q70 blocked curved currents (engine assumption from step P4).
