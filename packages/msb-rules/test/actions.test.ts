@@ -182,13 +182,17 @@ describe('home port guns (rules §8.2.4)', () => {
     const s = game(map({ [k(hex(4, -3))]: { terrain: 'sea', fog: true } }));
     place(s, 'A', hex(-4, 0)); // 1 from her own port: safe
     place(s, 'C', hex(3, -3)); // 2 from B's port: hit
-    place(s, 'D', hex(4, -3)); // 1 from B's port, but in fog
+    place(s, 'D', hex(4, -3)); // 2 from B's port, but in fog
     place(s, 'B', hex(-3, 0)); // 2 from the red port: hit
     const { events } = act(s);
     expect(events.filter((e) => e.type === 'PortGunsFired')).toEqual([
       { type: 'PortGunsFired', rule: '8.2.4', team: 'red', targets: ['B-ship'] },
       { type: 'PortGunsFired', rule: '8.2.4', team: 'blue', targets: ['C-ship'] },
     ]);
+    // §7.1 (v0.146): fog doesn't hide a ship right next to the port.
+    const t = game(map({ [k(hex(4, -4))]: { terrain: 'sea', fog: true } }));
+    place(t, 'D', hex(4, -4));
+    expect(act(t).events.filter((e) => e.type === 'PortGunsFired')).toEqual([{ type: 'PortGunsFired', rule: '8.2.4', team: 'blue', targets: ['D-ship'] }]);
   });
 });
 

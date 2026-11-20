@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.145**
+> Status: **Draft v0.146**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -125,7 +125,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Sandbanks | Yellow patterned areas | **Confirmed** (§3.2.0): land except at High tide |
 | Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
 | Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
-| Fog bank | White cloud (centre) | **Confirmed** (§7.1): prevents aiming; no other effect |
+| Fog bank | White cloud (centre) | **Confirmed** (§7.1): no firing into, out of or through it, except at an adjacent target; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
 | Port town | Harbour town printed on a main board | **Scenery** (land) for now; home ports are separate port tiles (§3.1.1) |
 | Small wreck on sandbar | Upper left | **Confirmed**: a **starting shipwreck** (§7.9) |
@@ -645,7 +645,9 @@ Ideas to playtest:
 - **Other weapons** (forward, aft, special) come only from **crew and equipment**; there's no ammunition or reload limit.
 - **Cannon fire does not pass through whirlpool portals or sea caves.**
 - Cannons **fire over land and cliffs** (they don't block line of sight).
-- **Fog**: a ship **in fog can't fire** (can't aim) and **can't be hit**, and **cannon fire can't pass through fog**. Fog has no other effect.
+- **Fog** *(changed v0.146, designer)*: you **may not fire through fog, into it or out of it, unless you are adjacent to your target**.
+  So a ship in fog can't fire at or be hit by a ship 2 or more hexes away, and cannon fire can't pass through fog, but two **adjacent**
+  ships can always fire at each other. Fog has no other effect.
   The mechanic may be reused: **fog tokens** could be placed for various reasons (scenarios, weather, equipment).
 - *Line of sight, damage per hit and timing: Q33.*
 
@@ -855,7 +857,7 @@ mode is a plug-in objective module on top of a shared rules core.
 **8.2.4 Home port & scoring**
 - Each player (or team) has a **home port**: a **4-hex port tile** attached to the edge of the map at setup (§3.1.1). It is **indestructible** and **has guns**
   with **range 2 hexes** dealing **1 DD**, so other ships keep their distance. They fire **every Action phase**, in **all directions**,
-  at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them.
+  at **every rival ship** within range, **after all ships have fired**. Fog hides a ship from them unless she is **next to the port** (§7.1). ❓ *(The adjacent exception applied to port guns too.)*
 - A ship must **enter** the port hex to be in port (to score treasure, refit or come back after sinking). The **port hex** is the tile's
   **only sea hex** (marked ✗ in the example); it's the only hex of the tile a ship can enter.
 - **Shelter from the weather:** **no weather effects or consequences of any kind occur while a ship is in her port**, from the moment she
@@ -1026,6 +1028,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.146 — §7.1 fog: no firing into, out of or through fog unless the target is adjacent (designer).
 - v0.145 — §3.7 treasure pieces: physical rum, diamonds, rubies, pearls and gold that fit in the ship model; all worth the same (designer).
 - v0.144 — §3.5 Points-of-Sail player aid: bigger weather cards with the Half / Full move printed on each edge (designer).
 - v0.143 — §8.8 Solo Challenge (M6): one ship, 14 turns, score = treasure brought home (designer).

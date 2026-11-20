@@ -930,7 +930,7 @@ function describeHex(x: Hex): string {
   if (!hx) return '';
   const tide = S().view(seats()[0]!.player).weather.tide;
   const lines: string[] = [TERRAIN_TIP[hx.terrain]!(tide)];
-  if (hx.fog) lines.push('<b>Fog</b>: a ship in fog can’t fire and can’t be hit; cannon fire can’t pass through it');
+  if (hx.fog) lines.push('<b>Fog</b>: no cannon fire into, out of or through it, except at an adjacent ship');
   if (hx.whirlpool !== undefined) {
     lines.push(`<b>Whirlpool ${hx.whirlpool}</b>: a ship that moves onto it is sent at once to the other whirlpool ${hx.whirlpool}, keeping her heading (not if that one is occupied)`);
   }

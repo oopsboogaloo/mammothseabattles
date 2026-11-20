@@ -1,9 +1,9 @@
 /**
  * Cannon fire (rules §7.1): both broadsides, 60° wedges abeam, range 4; every enemy in either arc is hit
- * unless spared; no firing from, into or through fog; no firing through portals or caves.
+ * unless spared; no firing from, into or through fog unless the target is adjacent (v0.146); no firing through portals or caves.
  */
 
-import { hexEquals, hexKey, line, rotate, wedge, type Direction, type Hex } from '@msb/hex';
+import { distance, hexEquals, hexKey, line, rotate, wedge, type Direction, type Hex } from '@msb/hex';
 import type { RulesConfig } from './config';
 
 /** The hexes covered by both broadsides of a ship at `position` facing `heading`. */
@@ -30,8 +30,12 @@ export interface FireContext {
   readonly portals: ReadonlySet<string>;
 }
 
-/** True if a shot from `from` to `to` is blocked by fog (at either end or in between) or by a portal in between. */
+/**
+ * True if a shot from `from` to `to` is blocked by fog (at either end or in between) or by a portal in between.
+ * §7.1 (v0.146): fog doesn't stop a shot at an adjacent target (and there's nothing in between to block).
+ */
 export function lineOfFireBlocked(from: Hex, to: Hex, ctx: FireContext): boolean {
+  if (distance(from, to) <= 1) return false;
   if (ctx.fog.has(hexKey(from)) || ctx.fog.has(hexKey(to))) return true;
   const between = line(from, to).slice(1, -1);
   return between.some((h) => ctx.fog.has(hexKey(h)) || ctx.portals.has(hexKey(h)));

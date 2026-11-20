@@ -94,6 +94,13 @@ describe('§7.1 cannon targets', () => {
     const ctx = { fog: only(middle), portals: new Set<string>() };
     expect(cannonTargets(O, Direction.N, [{ id: 't', position: target, friendly: false }], ctx, DEFAULT_CONFIG)).toEqual([]);
   });
+
+  it('fog doesn’t stop a shot at an adjacent target, from, into or out of it (v0.146)', () => {
+    const next = hex(1, -1); // north-east of O, in the starboard broadside
+    const fogBoth = { fog: new Set([hexKey(O), hexKey(next)]), portals: new Set<string>() };
+    expect(lineOfFireBlocked(O, next, fogBoth)).toBe(false);
+    expect(cannonTargets(O, Direction.N, [{ id: 'n', position: next, friendly: false }], fogBoth, DEFAULT_CONFIG)).toEqual(['n']);
+  });
 });
 
 describe('§7.2 damage die', () => {
