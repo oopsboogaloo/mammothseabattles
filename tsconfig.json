@@ -17,7 +17,8 @@
       "@msb/hex": ["./packages/hex/src/index.ts"],
       "@msb/msb-rules": ["./packages/msb-rules/src/index.ts"],
       "@msb/msb-data": ["./packages/msb-data/src/index.ts"],
-      "@msb/msb-ai": ["./packages/msb-ai/src/index.ts"]
+      "@msb/msb-ai": ["./packages/msb-ai/src/index.ts"],
+      "@msb/sim": ["./packages/sim/src/index.ts"]
     }
   },
   "include": ["./packages/*/src", "packages/*/test", "vitest.config.ts"],
