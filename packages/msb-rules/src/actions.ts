@@ -89,12 +89,12 @@ function heal(ship: Ship, ctx: ResolutionContext<GameEvent>): void {
   ctx.emit({ type: 'CrewHealed', rule: '7.6', ship: ship.id, crew: id });
 }
 
-/** §8.2.4: each home port fires 1 DD at every rival ship within range 2, after all ships have fired. Fog hides a ship. */
+/** §8.2.4: each home port fires 1 DD at every rival ship within range 2, after all ships have fired. Fog hides a ship unless she's next to the port (§7.1). */
 function portGuns(state: GameState, part: Part, config: RulesConfig, ctx: ResolutionContext<GameEvent>, order: readonly Ship[]): void {
   const { fog } = fireContext(state);
   for (const team of Object.values(state.teams)) {
     const targets = afloatShips(state, order).filter(
-      (s) => state.players[s.player]?.team !== team.id && distance(s.pos, team.homePort as Hex) <= config.homePortGunRange && !fog.has(hexKey(s.pos)),
+      (s) => state.players[s.player]?.team !== team.id && distance(s.pos, team.homePort as Hex) <= config.homePortGunRange && (!fog.has(hexKey(s.pos)) || distance(s.pos, team.homePort as Hex) <= 1),
     );
     if (targets.length === 0) continue;
     ctx.emit({ type: 'PortGunsFired', rule: '8.2.4', team: team.id, targets: targets.map((s) => s.id) });

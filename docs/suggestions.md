@@ -28,6 +28,11 @@ them workable online (web-spec §4, `online-version.md`).
 | **Pilot's Chart** | Choose whether each whirlpool or cave you enter this turn triggers. | Start of a Part (it then applies for the rest of the turn) | Portals and caves (§3.2.1–3.2.2) | |
 | **Rum Ration** | Heal all wounded crew, but your next Sail slot is ignored (the crew are drunk). | Upkeep, before cards are drawn | Crew (§7.4) | A fun drawback, like Fireworks. |
 | **Lucky Fossil** | Re-roll one damage die, one you rolled or one rolled against you. | After a damage die is rolled, before its damage is applied | Damage dice (§7.2) | Reacts to another player's attack: online needs a window "after damage is rolled, before it's applied". |
+| **Weather Dance Steps Book** *(designer)* | Draw 4 weather cards and choose tomorrow's weather from them. | Upkeep, before the weather board advances ❓ | Weather (§3.5) | Overlaps the existing "rearrange the weather" card. |
+| **Voodoo Ship Doll** *(designer)* | 2 DD to a target ship. | ❓ | Damage (§7.2) | Range and targeting ❓ (anywhere on the map?). |
+| **Voodoo Captain Doll** *(designer)* | 1 crew damage to a target ship's **Captain**. | ❓ | Crew (§7.4) | Hits the Captain directly, skipping the usual wound-first order. |
+| **Prayer Card of Miracles** *(designer)* | Your ship **magically reappears in her home port**. Any treasure she carries is **not** transported: it's left where she was. | ❓ (e.g. any time, or Action phase) | Escape, ports (§8.2.4) | A get-out-of-trouble card. |
+| **Smoke Machine** *(designer)* | Your ship is surrounded by fog: she **can't be targeted by cannon** and **can't fire her cannon**, unless the target is adjacent (the fog rule, §7.1). | ❓ (for a Part, or a turn) | Fog (§7.1) | Supersedes **Smoke Pots** above. |
 | **Monster Bait** *(sea monster add-on)* | +3 influence over the sea monster this Upkeep. | Upkeep, before the monster moves | Sea monster (§9.1) | |
 
 **Design notes**
