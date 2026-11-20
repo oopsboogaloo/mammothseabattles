@@ -98,3 +98,22 @@ Ideas from the designer (v0.109) for later; the current rule is "agree, or take 
 
 **Concept:** a smaller **extreme weather deck**, with a pair of **extreme weather cards** in the main weather deck that call a card from it.
 Needs thought.
+
+## Making the game easier to play without simplifying it *(designer, 2026-11-20)*
+From the designer's first solo play-tests of the digital prototype: **the game is too hard**, but its complexity is what makes it
+unique, so the rules stay as they are for now. The first answer is to **show players what is going on and why**; the same will apply to
+the physical boards (clearer printed currents, features that explain themselves).
+
+Done in the digital prototype (2026-11-20):
+- Decisions appear in a **small panel on the board**, next to the ship they're about, with the **cause** shown: an animated arcing arrow
+  from the shooter (or rammer, or port) to the target, and the dice rolled. Ship damage is chosen on a miniature of the ship board.
+- **Mouse-over** on PC: the hex under the pointer is outlined, and pausing shows what's there (terrain and its effect at the current tide,
+  currents, eddies, rotors, whirlpools, caves, wall reefs, spawn points, ports, treasure, wrecks, ships).
+- **Clearer current arrows**: broad ribbons coloured by strength (pale blue, cyan, gold) with one chevron per hex moved, and a badge for turns.
+- During play-back: a large caption of what's happening, arrows for cannon fire and rams, dice results floating over the ship.
+- Cards can be **dragged** onto the ship board as well as tapped.
+
+Further ideas to try:
+- A **preview** while programming: the ghost of where the ship will end each Part (the layout A mock-up has one).
+- Broadside arcs shown for each Fire card placed.
+- A guided first game (tutorial) on a Category 1 board, with the Safe edge option.

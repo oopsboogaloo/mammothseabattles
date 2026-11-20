@@ -103,6 +103,109 @@ function label(g: CanvasRenderingContext2D, text: string, x: number, y: number, 
   g.fillText(text, x, y);
 }
 
+/** Current strength 1, 2, 3: pale blue, bright cyan, gold (stronger = warmer, and more chevrons). */
+const CURRENT_COLOUR: Record<1 | 2 | 3, string> = { 1: '#bfe9ff', 2: '#3fd4ff', 3: '#ffd23f' };
+
+/** A broad current ribbon from one hex centre towards the next, with one chevron per hex of movement. */
+function ribbon(g: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, strength: number, colour: string, dashed: boolean) {
+  const a = Math.atan2(y1 - y0, x1 - x0);
+  const sx = x0 + Math.cos(a) * S * 0.15, sy = y0 + Math.sin(a) * S * 0.15;
+  const ex = x1 - Math.cos(a) * S * 0.45, ey = y1 - Math.sin(a) * S * 0.45;
+  g.save();
+  g.lineCap = 'round';
+  g.setLineDash(dashed ? [30, 22] : []);
+  g.strokeStyle = 'rgba(10,30,50,.55)';
+  g.lineWidth = 34;
+  g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.stroke();
+  g.strokeStyle = colour;
+  g.globalAlpha = 0.85;
+  g.lineWidth = 24;
+  g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.stroke();
+  g.restore();
+  // Arrowhead.
+  g.fillStyle = colour;
+  g.strokeStyle = 'rgba(10,30,50,.7)';
+  g.lineWidth = 5;
+  g.beginPath();
+  g.moveTo(ex + Math.cos(a) * 34, ey + Math.sin(a) * 34);
+  g.lineTo(ex + Math.cos(a + 2.2) * 40, ey + Math.sin(a + 2.2) * 40);
+  g.lineTo(ex + Math.cos(a - 2.2) * 40, ey + Math.sin(a - 2.2) * 40);
+  g.closePath();
+  g.stroke(); g.fill();
+  // Chevrons along the shaft, one per hex the current moves a ship.
+  for (let i = 0; i < strength; i++) {
+    const t = (i + 1) / (strength + 1);
+    const cx = sx + (ex - sx) * t, cy = sy + (ey - sy) * t;
+    g.strokeStyle = '#0b2236';
+    g.lineWidth = 6;
+    g.beginPath();
+    g.moveTo(cx - Math.cos(a - 0.9) * 13, cy - Math.sin(a - 0.9) * 13);
+    g.lineTo(cx + Math.cos(a) * 5, cy + Math.sin(a) * 5);
+    g.lineTo(cx - Math.cos(a + 0.9) * 13, cy - Math.sin(a + 0.9) * 13);
+    g.stroke();
+  }
+}
+
+/** A circle of arrow round a hex centre (eddies). */
+function circularArrow(g: CanvasRenderingContext2D, x: number, y: number, r: number, clockwise: boolean, colour: string, width: number) {
+  const a0 = clockwise ? -Math.PI * 0.45 : Math.PI * 1.45;
+  const a1 = clockwise ? Math.PI * 1.25 : -Math.PI * 0.25;
+  g.save();
+  g.lineCap = 'round';
+  g.strokeStyle = 'rgba(10,30,50,.55)';
+  g.lineWidth = width + 10;
+  g.beginPath(); g.arc(x, y, r, a0, a1, !clockwise); g.stroke();
+  g.strokeStyle = colour;
+  g.lineWidth = width;
+  g.beginPath(); g.arc(x, y, r, a0, a1, !clockwise); g.stroke();
+  g.restore();
+  const hx = x + Math.cos(a1) * r, hy = y + Math.sin(a1) * r;
+  const tan = a1 + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+  arrowHead(g, hx, hy, tan, colour, 32);
+}
+
+function curvedArrow(g: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, qx: number, qy: number, colour: string, width: number) {
+  // Trim the ends so arrows from neighbouring hexes don't meet in a blob.
+  const p = (t: number) => [(1 - t) ** 2 * x0 + 2 * (1 - t) * t * qx + t * t * x1, (1 - t) ** 2 * y0 + 2 * (1 - t) * t * qy + t * t * y1] as const;
+  const [sx, sy] = p(0.22), [ex, ey] = p(0.72), [cx, cy] = p(0.47);
+  g.save();
+  g.lineCap = 'round';
+  for (const [w, c] of [[width + 10, 'rgba(10,30,50,.55)'], [width, colour]] as const) {
+    g.strokeStyle = c;
+    g.lineWidth = w;
+    g.beginPath(); g.moveTo(sx, sy); g.quadraticCurveTo(2 * cx - (sx + ex) / 2, 2 * cy - (sy + ey) / 2, ex, ey); g.stroke();
+  }
+  g.restore();
+  const [bx, by] = p(0.68);
+  arrowHead(g, ex, ey, Math.atan2(ey - by, ex - bx), colour, 32);
+}
+
+function arrowHead(g: CanvasRenderingContext2D, x: number, y: number, a: number, colour: string, size: number) {
+  g.fillStyle = colour;
+  g.strokeStyle = 'rgba(10,30,50,.7)';
+  g.lineWidth = 5;
+  g.beginPath();
+  g.moveTo(x + Math.cos(a) * size, y + Math.sin(a) * size);
+  g.lineTo(x + Math.cos(a + 2.3) * size, y + Math.sin(a + 2.3) * size);
+  g.lineTo(x + Math.cos(a - 2.3) * size, y + Math.sin(a - 2.3) * size);
+  g.closePath();
+  g.stroke(); g.fill();
+}
+
+/** A rounded label on a dark pill, for turn amounts. */
+function badge(g: CanvasRenderingContext2D, text: string, x: number, y: number, colour: string) {
+  g.font = '800 30px Georgia, serif';
+  const w = g.measureText(text).width + 24;
+  g.fillStyle = 'rgba(10,30,50,.85)';
+  g.beginPath();
+  g.roundRect(x - w / 2, y - 22, w, 44, 22);
+  g.fill();
+  g.fillStyle = colour;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(text, x, y + 1);
+}
+
 /** Draw the board. `ports` maps a hex key to the colour of the team whose port it is. */
 export function drawBoard(map: GameMap, ports: Readonly<Record<string, string>>): BoardArt {
   const info = layoutMap(map);
@@ -156,45 +259,41 @@ export function drawBoard(map: GameMap, ports: Readonly<Record<string, string>>)
     }
   }
 
-  // Currents: arrows from the hex they start in. Strength = number of arrows (single, double, triple).
+  // Currents (rules §6.6), drawn to read at a glance: a broad ribbon from the hex the current starts in to the hex it carries a
+  // ship to, coloured and chevroned by strength (1, 2 or 3 chevrons = moves 1, 2 or 3 hexes), with a badge for any turn.
   for (const [key, hex] of Object.entries(map.hexes)) {
     const c = hex.current;
     if (!c) continue;
     const [x, y] = at(key);
+    const colour = CURRENT_COLOUR[c.strength];
     if (c.kind === 'eddy') {
-      g.strokeStyle = '#e8eef8';
-      g.lineWidth = 8;
-      g.beginPath();
-      g.arc(x, y, S * 0.5, 0, Math.PI * 1.6, c.turn < 0);
-      g.stroke();
-      label(g, `${c.turn > 0 ? '↻' : '↺'} ${Math.abs(c.turn) * 60}°`, x, y, 34, '#fff');
+      circularArrow(g, x, y, S * 0.52, c.turn > 0, colour, 14);
+      badge(g, `${Math.abs(c.turn) * 60}°`, x, y, colour);
       continue;
     }
     const [tx, ty] = at(c.to);
-    const dx = tx - x, dy = ty - y;
-    const len = Math.hypot(dx, dy);
-    const ux = dx / len, uy = dy / len;
-    for (let i = 0; i < c.strength; i++) {
-      const off = (i - (c.strength - 1) / 2) * 26;
-      const px = -uy * off, py = ux * off;
-      arrow(g, x - ux * S * 0.55 + px, y - uy * S * 0.55 + py, x + ux * S * 0.95 + px, y + uy * S * 0.95 + py, 10, 'rgba(232,238,248,.95)');
-    }
-    if (c.turn !== 0) label(g, `${c.turn > 0 ? '↻' : '↺'} ${Math.abs(c.turn) * 60}°`, x, y - S * 0.5, 28);
-    if (len > HH * 1.2) label(g, 'jump', x, y + S * 0.5, 26);
+    const jump = Math.hypot(tx - x, ty - y) > HH * 1.2;
+    ribbon(g, x, y, tx, ty, c.strength, colour, jump);
+    if (c.turn !== 0) badge(g, `${c.turn > 0 ? '↻' : '↺'}${Math.abs(c.turn) * 60}°`, x, y, colour);
+    if (jump) label(g, 'JUMP', (x + tx) / 2, (y + ty) / 2 - 30, 26, colour);
   }
 
-  // Rotors: a ring through the rotor's hexes, labelled with the angle.
+  // Rotors: a curved arrow from each hex to the hex it carries a ship to, round the rotor's centre, and the turn in the middle.
   for (const rotor of map.rotors ?? []) {
     const pts = Object.keys(rotor.moves).map(at);
     const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
     const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
-    const r = Math.max(...pts.map(([px, py]) => Math.hypot(px - cx, py - cy)));
-    g.strokeStyle = 'rgba(232,238,248,.95)';
-    g.lineWidth = 12;
-    g.beginPath();
-    g.arc(cx, cy, r, 0, Math.PI * 1.75, rotor.turn < 0);
-    g.stroke();
-    label(g, `rotor ${Math.abs(rotor.turn) * 60}°`, cx, cy, 30);
+    for (const [from, to] of Object.entries(rotor.moves)) {
+      const [x0, y0] = at(from), [x1, y1] = at(to);
+      // Bend outwards, away from the centre, so the arrows read as a ring.
+      const mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+      const ox = mx - cx, oy = my - cy, ol = Math.hypot(ox, oy) || 1;
+      const bend = pts.length === 2 ? (rotor.turn > 0 ? 1 : -1) * S * 0.55 : S * 0.35;
+      const nx = pts.length === 2 ? -(y1 - y0) / Math.hypot(x1 - x0, y1 - y0) : ox / ol;
+      const ny = pts.length === 2 ? (x1 - x0) / Math.hypot(x1 - x0, y1 - y0) : oy / ol;
+      curvedArrow(g, x0, y0, x1, y1, mx + nx * bend, my + ny * bend, CURRENT_COLOUR[rotor.strength], 14);
+    }
+    badge(g, `rotor ${Math.abs(rotor.turn) * 60}°`, cx, cy, CURRENT_COLOUR[rotor.strength]);
   }
 
   // Wall reefs: a jagged line along the edge.
