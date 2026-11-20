@@ -89,3 +89,6 @@
 #board-col { display: flex; flex-direction: column; gap: calc(.4 * var(--u)); }
 .whose { display: flex; align-items: center; gap: .45em; font: 800 max(13px, calc(1.5 * var(--u))) var(--sans); color: #f4e6c8; }
 .whose .sw { width: 1em; height: 1em; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px #f4e6c8; display: inline-block; }
+
+/* A card flying back from the ship board to the hand. */
+.swoosh { position: fixed; z-index: 60; pointer-events: none; border-radius: calc(1 * var(--u)); background: #3a2a1c center / cover no-repeat; box-shadow: 0 10px 24px rgba(0,0,0,.55); }
