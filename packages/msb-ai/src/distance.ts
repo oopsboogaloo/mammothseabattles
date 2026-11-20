@@ -12,7 +12,7 @@ export type DistanceMap = ReadonlyMap<string, number>;
 const DIRECTIONS: readonly Direction[] = [0, 1, 2, 3, 4, 5];
 /** Cost of a step straight into the wind: the ship must tack round or row. */
 const UPWIND_STEP = 3;
-const HAZARD: Readonly<Record<string, number>> = { roughWater: 2, storm: 3 };
+const HAZARD: Readonly<Record<string, number>> = { roughWater: 1, storm: 3 };
 
 /** The cost of sailing one hex in direction `d`. */
 export function stepCost(d: Direction, weather: Weather, config: RulesConfig): number {

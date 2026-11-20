@@ -220,6 +220,7 @@ function act(action: Action, player = viewer as string): GameEvent[] {
 function renderProgramming() {
   if (!viewer) return;
   const v = S().view(viewer);
+  $('#whose').innerHTML = `<span class="sw" style="--c:${colours[viewer]}"></span>${esc(playerName(viewer))}’s ship: program your orders`;
   renderPanels(v);
   renderShipBoard();
   renderHand();
@@ -239,7 +240,7 @@ function renderProgramming() {
   $('#clear').onclick = () => {
     const ship = myShip();
     if (!ship) return;
-    for (const slot of SLOT_KEYS) if (ship.program[slot] !== undefined) act({ type: 'remove', ship: ship.id, slot });
+    for (const slot of SLOT_KEYS) if (ship.program[slot] !== undefined) takeBack(ship.id, slot);
     selectedCard = null;
     renderProgramming();
   };
@@ -270,16 +271,29 @@ function renderShipBoard() {
         if (programmable)
           dragSource(
             b,
-            () => (act({ type: 'remove', ship: ship.id, slot: key }), renderProgramming()),
-            (slot) => (act({ type: 'remove', ship: ship.id, slot: key }), act({ type: 'place', ship: ship.id, slot, card: id })),
-            () => act({ type: 'remove', ship: ship.id, slot: key }),
+            // Tap: with a card selected, it replaces this one; otherwise this one goes back to the hand.
+            () => {
+              if (selectedCard) placeCard(ship.id, key, selectedCard);
+              else takeBack(ship.id, key);
+              selectedCard = null;
+              renderProgramming();
+            },
+            // Dragged to another slot: the two swap (or it just moves, if that slot was empty).
+            (slot) => {
+              const other = myShip()?.program[slot];
+              act({ type: 'remove', ship: ship.id, slot: key });
+              if (other) act({ type: 'remove', ship: ship.id, slot });
+              act({ type: 'place', ship: ship.id, slot, card: id });
+              if (other) act({ type: 'place', ship: ship.id, slot: key, card: other });
+            },
+            () => takeBack(ship.id, key),
           );
       } else if (programmable) {
         b.textContent = selectedCard ? 'tap to place' : row === 'sail' ? 'No Sail' : '';
         if (selectedCard) b.classList.add('target');
         b.onclick = () => {
           if (!selectedCard) return;
-          act({ type: 'place', ship: ship.id, slot: key, card: selectedCard });
+          placeCard(ship.id, key, selectedCard);
           selectedCard = null;
           renderProgramming();
         };
@@ -324,7 +338,7 @@ function renderHand() {
   const discarding = legal.some((a) => a.type === 'discard');
   const hand = ship.hand;
   const placed = SLOT_KEYS.filter((k) => ship.program[k] !== undefined).length;
-  el.innerHTML = `<div class="hand-info">${discarding ? `<b>Hand over the limit: tap cards to discard</b> (${hand.length})` : `Hand ${hand.length} · placed ${placed} · drag a card onto a slot (or tap the card, then the slot) · drag or tap a placed card to take it back`}</div>`;
+  el.innerHTML = `<div class="hand-info">${discarding ? `<b>Hand over the limit: tap cards to discard</b> (${hand.length})` : `Hand ${hand.length} · placed ${placed} · drag a card onto a slot (or tap the card, then the slot); a card already there comes back · tap a placed card to take it back, or drag it to another slot to swap`}</div>`;
   const W = el.clientWidth || 600, H = el.clientHeight || 200;
   const n = hand.length;
   const cardH = Math.min(H * 0.9, (W / Math.max(n, 1)) * 3);
@@ -345,9 +359,63 @@ function renderHand() {
       } else selectedCard = selectedCard === id ? null : id;
       renderProgramming();
     };
-    dragSource(c, tap, discarding ? null : (slot) => act({ type: 'place', ship: ship.id, slot, card: id }));
+    dragSource(c, tap, discarding ? null : (slot) => placeCard(ship.id, slot, id));
     el.appendChild(c);
   });
+  swoosh();
+}
+
+// ---------------- placing and taking back ----------------
+/** Cards on their way back to the hand, and where they left from, for the swoosh after the next redraw. */
+let returning: { card: string; from: DOMRect }[] = [];
+
+function slotRect(slot: string): DOMRect | undefined {
+  return document.querySelector(`#shipboard .slot[data-slot="${slot}"]`)?.getBoundingClientRect();
+}
+
+/** Take a card off the ship board, back into the hand (it swooshes back). */
+function takeBack(shipId: string, slot: string) {
+  const card = myShip()?.program[slot];
+  const from = slotRect(slot);
+  act({ type: 'remove', ship: shipId, slot });
+  if (card && from) returning.push({ card, from });
+}
+
+/** Put a card in a slot; a card already there goes back to the hand. */
+function placeCard(shipId: string, slot: string, card: string) {
+  if (myShip()?.program[slot] !== undefined) takeBack(shipId, slot);
+  act({ type: 'place', ship: shipId, slot, card });
+}
+
+/** Fly each returning card from its slot to its place in the hand. */
+function swoosh() {
+  const flights = returning;
+  returning = [];
+  for (const { card, from } of flights) {
+    const target = document.querySelector<HTMLElement>(`#hand .card[data-card="${card}"]`);
+    if (!target) continue;
+    const to = target.getBoundingClientRect();
+    const fly = h(`<div class="swoosh" style="background-image:url(${cardArt(card)}),url(art/cards/back.webp)"></div>`);
+    Object.assign(fly.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` });
+    document.body.appendChild(fly);
+    target.style.visibility = 'hidden';
+    const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+    const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+    const scale = Math.max(0.2, from.width / to.width);
+    fly
+      .animate(
+        [
+          { transform: `translate(${dx}px, ${dy}px) scale(${scale}) rotate(-8deg)`, opacity: 0.6 },
+          { transform: `translate(${dx * 0.35}px, ${dy * 0.35 - 40}px) scale(${(1 + scale) / 2}) rotate(6deg)`, opacity: 1, offset: 0.55 },
+          { transform: 'none', opacity: 1 },
+        ],
+        { duration: 380, easing: 'cubic-bezier(.2,.8,.3,1)' },
+      )
+      .finished.then(() => {
+        fly.remove();
+        target.style.visibility = '';
+      });
+  }
 }
 
 // ---------------- drag and drop ----------------
@@ -364,7 +432,7 @@ function dragSource(el: HTMLElement, tap: () => void, drop: ((slot: string) => v
     let over: HTMLElement | null = null;
     const target = (x: number, y: number) => {
       const under = document.elementsFromPoint(x, y);
-      const slot = under.find((e) => e instanceof HTMLElement && e.matches('#shipboard .slot:not(.filled):not(.damaged)')) as HTMLElement | undefined;
+      const slot = under.find((e) => e instanceof HTMLElement && e !== el && e.matches('#shipboard .slot:not(.damaged)')) as HTMLElement | undefined;
       if (slot) return slot;
       return toHand && under.some((e) => e.id === 'hand') ? $('#hand') : null;
     };
@@ -377,7 +445,7 @@ function dragSource(el: HTMLElement, tap: () => void, drop: ((slot: string) => v
         Object.assign(ghost.style, { left: '0', top: '0', width: `${r.width}px`, height: `${r.height}px`, transform: 'none', rotate: '0deg' });
         document.body.appendChild(ghost);
         el.classList.add('dragging');
-        document.querySelectorAll('#shipboard .slot:not(.filled):not(.damaged)').forEach((s) => s.classList.add('target'));
+        document.querySelectorAll('#shipboard .slot:not(.damaged)').forEach((s) => s !== el && s.classList.add('target'));
       }
       ghost.style.translate = `${e.clientX - ghost.offsetWidth / 2}px ${e.clientY - ghost.offsetHeight / 2}px`;
       const t = target(e.clientX, e.clientY);
@@ -411,7 +479,9 @@ function renderPanels(v: GameView | null) {
   const view = v ?? S().view(seats()[0]!.player);
   const s = S().state;
   const phase = s.phase === 'programming' ? `<b>Programming</b> · ${s.ready.length} of ${seats().length} ready` : s.phase === 'over' ? '<b>Game over</b>' : `<b>Resolution</b> · Part ${PART_NAME[s.part] ?? ''}`;
-  $('#status').innerHTML = `Turn ${s.turn}${view.turnLimit ? ` of ${view.turnLimit}` : ''} · ${phase}`;
+  // Whose turn it is, so anyone walking up to the screen can tell (programming: the player whose cards are showing).
+  const who = viewer && s.phase === 'programming' ? `<span class="who-chip" style="--c:${colours[viewer]}"><span class="sw"></span>${esc(playerName(viewer))}’s turn</span> · ` : '';
+  $('#status').innerHTML = `${who}Turn ${s.turn}${view.turnLimit ? ` of ${view.turnLimit}` : ''} · ${phase}`;
   const target = s.setup.seats.length >= 7 ? 2 : 3;
   const rivals = $('#rivals');
   rivals.innerHTML = view.turnLimit
@@ -437,7 +507,7 @@ function renderPanels(v: GameView | null) {
   const ship = viewer ? myShip() : undefined;
   crew.hidden = !ship;
   if (ship) {
-    crew.innerHTML = `<h3>Your crew <small>${ship.crew.length}/6</small></h3><div class="crew-row">${ship.crew
+    crew.innerHTML = `<h3>${esc(playerName(viewer as string))}’s crew <small>${ship.crew.length}/6</small></h3><div class="crew-row">${ship.crew
       .map((c) => `<span class="token ${c.state === 'wounded' ? 'wounded' : ''}" style="background-image:url(art/crew/${c.captain ? 'captain-mammoth' : 'pirate'}.webp)" title="${c.captain ? 'Captain' : 'Pirate'}${c.state === 'wounded' ? ' (wounded)' : ''}"></span>`)
       .join('')}</div>`;
   }
@@ -697,7 +767,10 @@ async function play(events: readonly GameEvent[]) {
         if (a && b) await table.arc(a, b, '#ffb03a', ms(), true);
         break;
       }
-      case 'DamageRolled':
+      case 'DamageRolled': {
+        const at = table.shipPosition(e.ship) ?? (shown[e.ship] ? table.hexToWorld(shown[e.ship]!.hex) : undefined);
+        if (at) await table.rollDice(at, e.rolls, fast ? 500 : 1100, fast ? 700 : 1600);
+      }
         float(e.ship, `🎲 ${e.rolls.join(' ')} → ${e.shipDamage ? `−${e.shipDamage} slot${e.shipDamage > 1 ? 's' : ''}` : ''}${e.shipDamage && e.crewDamage ? ', ' : ''}${e.crewDamage ? `−${e.crewDamage} crew` : ''}${!e.shipDamage && !e.crewDamage ? 'miss' : ''}`);
         await sleep(ms() * 2);
         break;

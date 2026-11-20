@@ -8,6 +8,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { hexKey, type Direction, type Hex } from '@msb/hex';
 import type { SailLevel, TreasureKind } from '@msb/msb-rules';
 import { setTreasureEnvironment, treasurePiece } from './treasure-models';
+import { makeDie, restingHeight, restingRotation } from './dice';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { hexToOffset, offsetToHex } from './game';
 
@@ -63,6 +64,7 @@ export class Table {
   private hoverMesh: THREE.Mesh | null = null;
   private arcs = new THREE.Group();
   private treasureGroup = new THREE.Group();
+  private env: THREE.Texture | null = null;
   /** The ship model's size once scaled, for placing cargo in her hold. */
   private shipBox = new THREE.Box3();
   private ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.05);
@@ -100,7 +102,8 @@ export class Table {
     this.scene.add(sun);
     this.scene.add(this.board, this.ghosts, this.overlay, this.fx, this.arcs, this.treasureGroup);
     this.addTableTop();
-    setTreasureEnvironment(new THREE.PMREMGenerator(this.renderer).fromScene(new RoomEnvironment(), 0.04).texture);
+    this.env = new THREE.PMREMGenerator(this.renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+    setTreasureEnvironment(this.env);
 
     new ResizeObserver(() => this.resize()).observe(host);
     this.resize();
@@ -395,6 +398,62 @@ export class Table {
         else (obj.root.rotation.z = 0), res();
       };
       f();
+    });
+  }
+
+  /**
+   * Roll damage dice onto the board next to a point (rules §7.2): one d12 per value, tumbling in and landing with that number on
+   * top. Resolves when they've landed; they stay a moment, then sink away.
+   */
+  rollDice(at: THREE.Vector3, values: readonly number[], ms = 1100, hold = 1400): Promise<void> {
+    const rest = restingHeight();
+    const toCamera = this.camera.position.clone().sub(at).setY(0).normalize();
+    const side = new THREE.Vector3(-toCamera.z, 0, toCamera.x);
+    const dice = values.map((value, i) => {
+      const die = makeDie(this.env);
+      // Land in a row beside the ship, on the side nearest the viewer.
+      const offset = ((values.length - 1) / 2 - i) * 1.25;
+      const end = at.clone().add(toCamera.clone().multiplyScalar(1.25)).add(side.clone().multiplyScalar(offset)).setY(rest + 0.05);
+      const start = end.clone().add(side.clone().multiplyScalar(-2.5 + Math.random())).add(toCamera.clone().multiplyScalar(1.5)).setY(3.2);
+      const from = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random() * 6, Math.random() * 6, Math.random() * 6));
+      const to = restingRotation(value, Math.random() * Math.PI * 2);
+      const spinAxis = new THREE.Vector3(Math.random() - 0.5, 1, Math.random() - 0.5).normalize();
+      die.position.copy(start);
+      die.quaternion.copy(from);
+      this.fx.add(die);
+      return { die, start, end, from, to, spinAxis, delay: i * 90 };
+    });
+    const t0 = performance.now();
+    return new Promise((resolve) => {
+      const step = () => {
+        let done = true;
+        for (const d of dice) {
+          const t = Math.min(1, Math.max(0, (performance.now() - t0 - d.delay) / ms));
+          if (t < 1) done = false;
+          // Fall and two small bounces; slide sideways while slowing.
+          const ease = 1 - (1 - t) ** 3;
+          d.die.position.lerpVectors(d.start, d.end, ease);
+          const fall = t < 0.5 ? 1 - (t / 0.5) ** 2 : t < 0.78 ? 0.18 * Math.sin(((t - 0.5) / 0.28) * Math.PI) : 0.05 * Math.sin(((t - 0.78) / 0.22) * Math.PI);
+          d.die.position.y = d.end.y + Math.max(0, fall) * (d.start.y - d.end.y);
+          // Tumble, settling onto the face that was rolled.
+          const tumble = new THREE.Quaternion().setFromAxisAngle(d.spinAxis, (1 - ease) * 9);
+          d.die.quaternion.slerpQuaternions(d.from, d.to, Math.min(1, ease * 1.15)).premultiply(tumble);
+        }
+        if (!done) return void requestAnimationFrame(step);
+        for (const d of dice) d.die.quaternion.copy(d.to);
+        resolve();
+        setTimeout(() => {
+          const s0 = performance.now();
+          const fade = () => {
+            const k = Math.min(1, (performance.now() - s0) / 400);
+            for (const d of dice) d.die.scale.setScalar(1 - k);
+            if (k < 1) requestAnimationFrame(fade);
+            else for (const d of dice) this.fx.remove(d.die);
+          };
+          fade();
+        }, hold);
+      };
+      step();
     });
   }
 

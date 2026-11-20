@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.147**
+> Status: **Draft v0.148**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -135,7 +135,7 @@ Interpretations marked ❓ are guesses, to be confirmed by the designer.
 | Death reef | Rocky hex with a wrecked ship and a skull | **Confirmed** (§3.2.0): kills ships that enter |
 | Sandbanks | Yellow patterned areas | **Confirmed** (§3.2.0): land except at High tide |
 | Underwater reef | Pale green diagonal stripes | **Confirmed** (§3.2.0): water except at Low tide |
-| Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 2 DD if you're in it at the end of a Part |
+| Rough water | Red/purple churning hex | **Confirmed** (§3.2.0): 1 DD if you're in it at the end of a Part |
 | Fog bank | White cloud (centre) | **Confirmed** (§7.1): no firing into, out of or through it, except at an adjacent target; no other effect |
 | Storm | Dark cloud with lightning (left edge) | **Provisional** (§3.2.0): 3 DD if you're in it at the end of a Part |
 | Port town | Harbour town printed on a main board | **Scenery** (land) for now; home ports are separate port tiles (§3.1.1) |
@@ -156,7 +156,7 @@ and **death reefs sink any ship that enters them, however she got there**.
 | **Death reef** | Rocky hex with a **skull** icon | **Kills any ship that enters it** (sinks) |
 | **Wall reef** | Spiky reef along a **hex edge** | **Blocks** movement across that edge; trying to cross = **stopped + 2 DD**. Does **not** block cannon fire |
 | **Storm** *(provisional)* | Dark cloud with lightning | **3 DD** to a ship in it at the **end of a Part**. Something bad; may change |
-| **Rough water** | Red/purple churning water | Passable; **2 DD** to a ship that is in it at the **end of a Part** (after wind drift) |
+| **Rough water** | Red/purple churning water | Passable; **1 DD** to a ship that is in it at the **end of a Part** (after wind drift) *(was 2 DD; designer, v0.148)* |
 
 **Tide summary** (Full Metal Planète-style staggered thresholds, §6.4):
 
@@ -1039,6 +1039,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.148 — §3.2.0 rough water: 1 DD at the end of each Part a ship is in it (was 2 DD), after play-testing; still each Part, so sitting in it keeps hurting (designer).
 - v0.147 — §3.1.1 single large board (91 hexes, A3) being considered as the first physical format, with the test map's density as a recipe (designer).
 - v0.146 — §7.1 fog: no firing into, out of or through fog unless the target is adjacent (designer).
 - v0.145 — §3.7 treasure pieces: physical rum, diamonds, rubies, pearls and gold that fit in the ship model; all worth the same (designer).
