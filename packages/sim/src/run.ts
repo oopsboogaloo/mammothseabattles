@@ -5,7 +5,7 @@
  */
 
 import { prototypeSetup } from '@msb/msb-data';
-import { answerDecision, programmingTurn } from '@msb/msb-ai';
+import { answerDecision, programmingTurn, type AiLevel } from '@msb/msb-ai';
 import { createGame, makeConfig, newGame, type GameEvent, type GameState, type RulesConfig } from '@msb/msb-rules';
 
 export interface GameOptions {
@@ -17,6 +17,8 @@ export interface GameOptions {
   readonly maxTurns?: number;
   /** AI search width: smaller is faster and a little weaker. */
   readonly beam?: number;
+  /** Difficulty level for each seat in turn (engineering design §10); when given, it replaces `beam`. */
+  readonly levels?: readonly AiLevel[];
 }
 
 /** What happened in one game. Seats are numbered from 1, as on the start screen. */
@@ -101,7 +103,8 @@ export function runGame(options: GameOptions): GameReport {
     }
     // Programming: each seat in turn; the last Ready starts the turn.
     const seat = setup.seats.find((s) => !state.ready.includes(s.player)) as { player: string };
-    for (const action of programmingTurn(state, seat.player, config, options.beam)) {
+    const level = options.levels?.[setup.seats.indexOf(seat as (typeof setup.seats)[number])];
+    for (const action of programmingTurn(state, seat.player, config, options.beam, level)) {
       const out = game.apply(state, seat.player, action);
       state = out.state;
       note(out.events);

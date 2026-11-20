@@ -78,6 +78,8 @@ export interface ExperimentOptions {
   readonly firstSeed?: number;
   readonly maxTurns?: number;
   readonly beam?: number;
+  /** Difficulty level for each seat in turn; when given, it replaces `beam`. */
+  readonly levels?: GameOptions['levels'];
   /** Called after each game (for progress output). */
   readonly onGame?: (variant: string, report: GameReport) => void;
 }
@@ -92,6 +94,7 @@ export function runExperiment(variants: readonly Variant[], options: ExperimentO
         ...(v.rules ? { rules: v.rules } : {}),
         ...(options.maxTurns === undefined ? {} : { maxTurns: options.maxTurns }),
         ...(options.beam === undefined ? {} : { beam: options.beam }),
+        ...(options.levels ? { levels: options.levels } : {}),
       });
       options.onGame?.(v.name, report);
       return report;

@@ -16,6 +16,8 @@ export default defineConfig({
     },
   },
   server: { host: true },
+  // The AI runs in a module worker (src/ai-worker.ts), which needs ES output to share code with the page.
+  worker: { format: 'es' },
   build: {
     chunkSizeWarningLimit: 1200,
     // Two pages: the layout A mock-up (index.html) and the hot-seat prototype on the real rules engine (play.html).

@@ -124,6 +124,8 @@ describe('summaries and tables', () => {
     expect(out.map((s) => s.name)).toEqual(['base', 'safe']);
     expect(seen).toEqual(['base:1', 'safe:1']);
     expect(runExperiment([{ name: 'x' }], { players: 1, games: 1, firstSeed: 5, beam: 1 })[0]!.games).toBe(1);
+    // Difficulty levels per seat.
+    expect(runExperiment([{ name: 'z' }], { players: 1, games: 1, maxTurns: 1, levels: ['easy'] })[0]!.games).toBe(1);
     // The AI's normal search width when none is given.
     expect(runExperiment([{ name: 'y' }], { players: 1, games: 1, maxTurns: 1 })[0]!.turns.mean).toBe(1);
   }, 120_000);
