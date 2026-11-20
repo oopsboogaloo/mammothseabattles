@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.144**
+> Status: **Draft v0.145**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -308,6 +308,15 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 **drawn at random**).
 - **Wounded crew** give **no card icons** and their **powers stop** until healed. **Captains can be wounded and killed** like any crew.
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
+
+### 3.7 Treasure pieces *(designer, v0.145)*
+- Treasure is **small physical replicas**: **barrels of rum, diamonds, rubies, pearls and bars of gold**. A piece lies on the map where
+  treasure spawns, and a ship carrying treasure holds it **in the back of the ship model** (as in the classic board game *Buccaneer*, a
+  partial inspiration for this game).
+- **All pieces are worth the same**: one treasure each (§8.2). The kind is only for looks and fun.
+- ❓ Number of each piece in the box: to be decided (at least as many as treasures can be in play at once, §8.2.1).
+- *Digital version:* the pieces are 3D objects; they come out in turn (gold, diamond, rum, ruby, pearl, …), each keeps its identity
+  when carried, knocked loose or dropped, and the pieces each team brings home are shown in its port.
 
 ## 4. Setup
 1. Build the map together (§3.1.1): main boards, then one **port tile** per player or team on the outer edge. Place spawn points and wreck tokens (scenario).
@@ -1017,6 +1026,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.145 — §3.7 treasure pieces: physical rum, diamonds, rubies, pearls and gold that fit in the ship model; all worth the same (designer).
 - v0.144 — §3.5 Points-of-Sail player aid: bigger weather cards with the Half / Full move printed on each edge (designer).
 - v0.143 — §8.8 Solo Challenge (M6): one ship, 14 turns, score = treasure brought home (designer).
 - v0.142 — Q71 answered: a returning ship whose port is occupied comes back at the nearest free hex.

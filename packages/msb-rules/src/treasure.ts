@@ -7,7 +7,7 @@ import { hexEquals, hexKey, neighbor, type Direction, type Hex } from '@msb/hex'
 import type { RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { isLand } from './map';
-import type { GameState, Ship } from './state';
+import { TREASURE_KINDS, type GameState, type Ship, type TreasureKind } from './state';
 import { tide } from './weather';
 
 export const KNOCK_LOOSE = 'knockLoose';
@@ -44,10 +44,34 @@ function landNow(state: GameState, key: string): boolean {
 
 type Emit = (event: GameEvent) => void;
 
+/** The piece on a treasure hex (rules §3.7). Every loose treasure has one; gold stands in for any missing from an older save. */
+function kindAt(state: GameState, key: string): TreasureKind {
+  return (state.treasureKinds as Partial<Record<string, TreasureKind>>)[key] ?? 'gold';
+}
+
+/** Put a piece on the map. */
+function layTreasure(state: GameState, key: string, kind: TreasureKind): void {
+  state.treasures.push(key);
+  state.treasureKinds = { ...state.treasureKinds, [key]: kind };
+}
+
+/** Take the piece off the map and give it to the ship. */
 function takeTreasure(state: GameState, ship: Ship, key: string, emit: Emit): void {
+  const kind = kindAt(state, key);
   state.treasures.splice(state.treasures.indexOf(key), 1);
+  const { [key]: _, ...rest } = state.treasureKinds;
+  state.treasureKinds = rest;
   ship.carrying = true;
-  emit({ type: 'TreasurePickedUp', rule: '8.2.2', ship: ship.id, at: key });
+  ship.cargo = kind;
+  emit({ type: 'TreasurePickedUp', rule: '8.2.2', ship: ship.id, at: key, kind });
+}
+
+/** Take the piece out of the ship's hold. */
+function unload(ship: Ship): TreasureKind {
+  const kind = ship.cargo ?? 'gold';
+  ship.carrying = false;
+  delete ship.cargo;
+  return kind;
 }
 
 /**
@@ -64,8 +88,11 @@ export function spawnTreasure(state: GameState, emit: Emit): void {
     const n = state.treasureDeck.shift() as string;
     const key = points[n] as string;
     if (state.treasures.includes(key)) continue;
-    state.treasures.push(key);
-    emit({ type: 'TreasureSpawned', rule: '8.2.1', point: n, at: key });
+    // §3.7: the pieces come out in turn (gold, diamond, rum, ruby, pearl, …); all are worth the same.
+    const kind = TREASURE_KINDS[state.treasureSpawns % TREASURE_KINDS.length] as TreasureKind;
+    state.treasureSpawns += 1;
+    layTreasure(state, key, kind);
+    emit({ type: 'TreasureSpawned', rule: '8.2.1', point: n, at: key, kind });
     const ship = shipAtHex(state, key);
     if (ship && !ship.carrying && !landNow(state, key)) takeTreasure(state, ship, key, emit);
     break;
@@ -76,10 +103,11 @@ export function spawnTreasure(state: GameState, emit: Emit): void {
 /** The team's score, and the win (§8.2.5). */
 function score(state: GameState, ship: Ship, config: RulesConfig, ctx: ResolutionContext<GameEvent>): void {
   const team = state.teams[state.players[ship.player]?.team as string] as GameState['teams'][string];
-  ship.carrying = false;
+  const kind = unload(ship);
   team.score += 1;
+  team.hold = [...team.hold, kind];
   state.pendingSpawns += 1;
-  ctx.emit({ type: 'TreasureScored', rule: '8.2.4', ship: ship.id, team: team.id, score: team.score });
+  ctx.emit({ type: 'TreasureScored', rule: '8.2.4', ship: ship.id, team: team.id, score: team.score, kind });
   // §8.8: the Solo Challenge has no target; the score counts at the end.
   if (!isSolo(state) && state.winner === undefined && team.score >= treasureTarget(Object.keys(state.ships).length, config)) {
     state.winner = team.id;
@@ -127,16 +155,16 @@ export function offerKnockLoose(state: GameState, attacker: Ship, victim: Ship, 
   if (hexes.length === 0) return false;
   const choice = ctx.ask(createDecision<Hex | 'damage'>(KNOCK_LOOSE, attacker.player, ['damage', ...hexes]));
   if (choice === 'damage') return false;
-  victim.carrying = false;
-  state.treasures.push(hexKey(choice));
-  ctx.emit({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: victim.id, by: attacker.id, to: choice });
+  const kind = unload(victim);
+  layTreasure(state, hexKey(choice), kind);
+  ctx.emit({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: victim.id, by: attacker.id, to: choice, kind });
   return true;
 }
 
 /** §7.8: a sinking carrier drops her treasure in the hex where she sank. */
 export function dropTreasure(state: GameState, ship: Ship, ctx: ResolutionContext<GameEvent>): void {
   if (!ship.carrying) return;
-  ship.carrying = false;
-  state.treasures.push(hexKey(ship.pos));
-  ctx.emit({ type: 'TreasureDropped', rule: '7.8', ship: ship.id, at: ship.pos });
+  const kind = unload(ship);
+  layTreasure(state, hexKey(ship.pos), kind);
+  ctx.emit({ type: 'TreasureDropped', rule: '7.8', ship: ship.id, at: ship.pos, kind });
 }

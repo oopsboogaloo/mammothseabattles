@@ -84,7 +84,7 @@ describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
     expect(s.ships['A-ship']).toMatchObject({ pos: PORT_A, heading: Direction.N, sail: 'none', status: 'afloat', blocked: [] });
     expect(s.ships['A-ship']?.crew.map((c) => [c.cardIcons, c.captain])).toEqual([[3, true], [1, false], [1, false]]);
     expect(s.players['A']).toEqual({ id: 'A', team: 'red', name: 'Ann', ships: ['A-ship'] });
-    expect(s.teams['red']).toEqual({ id: 'red', players: ['A'], homePort: PORT_A, score: 0 });
+    expect(s.teams['red']).toEqual({ id: 'red', players: ['A'], homePort: PORT_A, score: 0, hold: [] });
   });
 
   it('lets two players share a team', () => {

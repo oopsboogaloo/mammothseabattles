@@ -18,6 +18,7 @@ import {
   type GameView,
   type RefitChoice,
   type SailLevel,
+  type TreasureKind,
   type Slot,
   type SlotRow,
 } from '@msb/msb-rules';
@@ -27,6 +28,7 @@ import { PLAYER_COLOURS } from './game';
 import { drawBoard } from './board-art';
 import { Session } from './session';
 import { POINT_COLOUR, POINT_NAME, sailRose } from './sail-rose';
+import { TREASURE_NAME } from './treasure-models';
 import { Table } from './table';
 
 // ---------------- helpers ----------------
@@ -61,7 +63,10 @@ let selectedCard: string | null = null;
 let viewer: string | null = null;
 let busy = false;
 /** Ship positions as shown on the table (they lag the state while events play back). */
-let shown: Record<string, { hex: Hex; heading: Direction; sail: SailLevel; afloat: boolean }> = {};
+let shown: Record<string, { hex: Hex; heading: Direction; sail: SailLevel; afloat: boolean; cargo?: TreasureKind }> = {};
+/** Treasure as shown on the table: loose pieces by hex, and each team's pieces brought home (they lag the state during play-back). */
+let shownLoose: Record<string, TreasureKind> = {};
+let shownHolds: Record<string, TreasureKind[]> = {};
 let log: string[] = [];
 
 const table = new Table($('#table'), $('#labels'));
@@ -408,19 +413,50 @@ function weatherName(id: string): string {
 // ---------------- table ----------------
 function syncShown() {
   shown = {};
-  for (const ship of Object.values(S().state.ships))
-    shown[ship.id] = { hex: ship.pos, heading: ship.heading, sail: ship.sail, afloat: ship.status === 'afloat' };
+  const s = S().state;
+  for (const ship of Object.values(s.ships))
+    shown[ship.id] = { hex: ship.pos, heading: ship.heading, sail: ship.sail, afloat: ship.status === 'afloat', ...(ship.cargo ? { cargo: ship.cargo } : {}) };
+  shownLoose = Object.fromEntries(s.treasures.map((k) => [k, s.treasureKinds[k] ?? 'gold']));
+  shownHolds = Object.fromEntries(Object.values(s.teams).map((t) => [t.id, [...(t.hold ?? [])]]));
+}
+
+/** Keep the shown treasure in step with an event as it plays. */
+function moveTreasure(e: GameEvent) {
+  switch (e.type) {
+    case 'TreasureSpawned':
+      shownLoose[e.at] = e.kind;
+      break;
+    case 'TreasurePickedUp':
+      delete shownLoose[e.at];
+      if (shown[e.ship]) shown[e.ship]!.cargo = e.kind;
+      break;
+    case 'TreasureKnockedLoose':
+    case 'TreasureDropped':
+      if (shown[e.ship]) delete shown[e.ship]!.cargo;
+      shownLoose[hexKey(e.type === 'TreasureDropped' ? e.at : e.to)] = e.kind;
+      break;
+    case 'TreasureScored':
+      if (shown[e.ship]) delete shown[e.ship]!.cargo;
+      (shownHolds[e.team] ??= []).push(e.kind);
+      break;
+    default:
+      return;
+  }
+  renderTable();
 }
 
 function renderTable() {
   table.setShips(
     Object.entries(shown)
       .filter(([, x]) => x.afloat)
-      .map(([id, x]) => ({ id, name: shipName(id), colour: colours[S().state.ships[id]!.player]!, hex: x.hex, heading: x.heading, sail: x.sail, selected: false })),
+      .map(([id, x]) => ({ id, name: shipName(id), colour: colours[S().state.ships[id]!.player]!, hex: x.hex, heading: x.heading, sail: x.sail, selected: false, ...(x.cargo ? { cargo: x.cargo } : {}) })),
   );
   const s = S().state;
+  table.setTreasures(
+    Object.entries(shownLoose).map(([k, kind]) => ({ hex: parseHexKey(k), kind })),
+    Object.entries(shownHolds).map(([team, kinds]) => ({ hex: s.teams[team]!.homePort, kinds })),
+  );
   const marks = [
-    ...s.treasures.map((k) => ({ text: '💎', pos: table.hexToWorld(parseHexKey(k), 0.3), cls: 'tok' })),
     ...s.wrecks.map((k) => ({ text: '⚓︎☠', pos: table.hexToWorld(parseHexKey(k), 0.3), cls: 'tok' })),
   ];
   table.setLabels('tokens', marks);
@@ -446,11 +482,11 @@ function caption(e: GameEvent): string | null {
     case 'CrewKilled': return `${n(e.ship)}: a crew member is killed`;
     case 'ShipSank': return `☠ ${n(e.ship)} sinks (${e.reason})`;
     case 'WreckPlaced': return 'A wreck is left behind';
-    case 'TreasureSpawned': return `💎 Treasure appears at spawn point ${esc(e.point)}`;
-    case 'TreasurePickedUp': return `💎 ${n(e.ship)} picks up treasure`;
-    case 'TreasureKnockedLoose': return `💎 ${n(e.by)} knocks ${n(e.ship)}'s treasure loose`;
-    case 'TreasureDropped': return `💎 ${n(e.ship)} drops her treasure`;
-    case 'TreasureScored': return `🏆 ${n(e.ship)} brings treasure home: ${esc(teamName(e.team))} has ${e.score}`;
+    case 'TreasureSpawned': return `💎 Treasure (${TREASURE_NAME[e.kind]}) appears at spawn point ${esc(e.point)}`;
+    case 'TreasurePickedUp': return `💎 ${n(e.ship)} picks up ${TREASURE_NAME[e.kind]}`;
+    case 'TreasureKnockedLoose': return `💎 ${n(e.by)} knocks ${n(e.ship)}'s ${TREASURE_NAME[e.kind].replace(/^an? /, '')} loose`;
+    case 'TreasureDropped': return `💎 ${n(e.ship)} drops ${TREASURE_NAME[e.kind]}`;
+    case 'TreasureScored': return `🏆 ${n(e.ship)} brings ${TREASURE_NAME[e.kind]} home: ${esc(teamName(e.team))} has ${e.score}`;
     case 'GameWon': return `🏆 ${esc(teamName(e.team))} wins!`;
     case 'WreckSearched': return `${n(e.ship)} searches a wreck`;
     case 'CrewGained': return `${n(e.ship)} gains a crew member${e.replaced ? ' (swapped)' : ''}`;
@@ -489,6 +525,7 @@ async function play(events: readonly GameEvent[]) {
   const ms = () => (fast ? 150 : 550);
   for (const e of events) {
     noteCause(e);
+    moveTreasure(e);
     const text = caption(e);
     if (text) {
       log.push(text);
@@ -920,12 +957,12 @@ function describeHex(x: Hex): string {
   if (spawn) lines.push(`<b>Treasure spawn point ${spawn}</b>${isLand(hx.terrain, tide) ? ' (on land: dig it up from a hex next to it)' : ''}`);
   const port = seats().find((seat) => hexEquals(seat.homePort, x));
   if (port) lines.push(`<b>${esc(port.name)}’s home port</b>: bring treasure here to score; refit here; no drift, storm or Gale damage here`);
-  if (s.treasures.includes(key)) lines.push('💎 <b>Treasure</b>: sail through to pick it up');
+  if (s.treasures.includes(key)) lines.push(`💎 <b>Treasure: ${TREASURE_NAME[s.treasureKinds[key] ?? 'gold']}</b> (every piece is worth 1): sail through to pick it up${isLand(hx.terrain, tide) ? ', or dig it up from a hex next to it at the end of the turn' : ''}`);
   if (s.wrecks.includes(key)) lines.push('⚓︎☠ <b>Shipwreck</b>: end a turn on it (or next to it, if it’s on land) to search it for a crew member');
   for (const ship of Object.values(s.ships)) {
     if (ship.status !== 'afloat' || !hexEquals(ship.pos, x)) continue;
     const healthy = ship.crew.filter((m) => m.state === 'healthy').length;
-    lines.push(`<span class="sw" style="--c:${colours[ship.player]}"></span> <b>${esc(shipName(ship.id))}</b>: facing ${DIRECTION_NAMES[ship.heading]}, crew ${healthy}/${ship.crew.length} healthy, ${ship.blocked.length} damaged slot${ship.blocked.length === 1 ? '' : 's'}${ship.carrying ? ', carrying treasure 💎' : ''}${ship.stuck ? ', stranded' : ''}${ship.refitting ? ', refitting' : ''}`);
+    lines.push(`<span class="sw" style="--c:${colours[ship.player]}"></span> <b>${esc(shipName(ship.id))}</b>: facing ${DIRECTION_NAMES[ship.heading]}, crew ${healthy}/${ship.crew.length} healthy, ${ship.blocked.length} damaged slot${ship.blocked.length === 1 ? '' : 's'}${ship.carrying ? `, carrying ${TREASURE_NAME[ship.cargo ?? 'gold']} 💎` : ''}${ship.stuck ? ', stranded' : ''}${ship.refitting ? ', refitting' : ''}`);
   }
   return lines.map((l) => `<div>${l}</div>`).join('');
 }
@@ -1008,6 +1045,6 @@ document.querySelectorAll<HTMLElement>('#viewctl [data-v]').forEach((b) => {
 new ResizeObserver(() => viewer && session && renderHand()).observe($('#hand'));
 
 // Expose for automated checks (screenshot script).
-(window as unknown as { msb: unknown }).msb = { get session() { return session; }, get busy() { return busy; }, table, HIDDEN };
+(window as unknown as { msb: unknown }).msb = { get session() { return session; }, get busy() { return busy; }, table, refresh: () => (syncShown(), renderTable()), HIDDEN };
 $('#dock').hidden = true;
 startScreen();

@@ -119,3 +119,9 @@ Further ideas to try:
 - A **preview** while programming: the ghost of where the ship will end each Part (the layout A mock-up has one).
 - Broadside arcs shown for each Fire card placed.
 - A guided first game (tutorial) on a Category 1 board, with the Safe edge option.
+
+## Graphical polish (future) *(designer, 2026-11-20)*
+- **Wind on the board**: a gentle wind blowing across the board in the wind's direction, and when the weather changes, the wind
+  **softly turning to the new direction and strength**. Mainly to **communicate the weather change**; it shouldn't blow all the time,
+  or if it does, only **very subtly** (e.g. faint streaks or ripples drifting across the sea, stronger and faster for stronger winds,
+  easing round over a second or two at Upkeep).

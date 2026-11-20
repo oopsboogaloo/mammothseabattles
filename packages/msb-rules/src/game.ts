@@ -21,7 +21,7 @@ import { validateMap } from './map';
 import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
-import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
+import type { GameSetup, GameState, PlayerId, Ship, ShipCrew, TreasureKind } from './state';
 import { setUpWeather, tide, type Tide } from './weather';
 import { isSolo, soloScore, spawnTreasure, treasuresInPlay } from './treasure';
 import { resolveTurn, shipsInSeatOrder } from './turn';
@@ -48,6 +48,9 @@ export interface GameView {
   readonly weather: { readonly now: string; readonly next: string; readonly space: number; readonly tide: Tide };
   /** Loose treasure on the map (hex keys), each team's score, and the winner once there is one (rules §8.2). */
   readonly treasures: readonly string[];
+  /** Which piece lies on each treasure hex, and each team's pieces brought home (rules §3.7). */
+  readonly treasureKinds: Readonly<Record<string, TreasureKind>>;
+  readonly holds: Readonly<Record<string, readonly TreasureKind[]>>;
   readonly scores: Readonly<Record<string, number>>;
   readonly winner?: string;
   /** §8.8 Solo Challenge: the number of turns played. */
@@ -87,6 +90,8 @@ export function newGame(setup: GameSetup): GameState {
     discards: [],
     wrecks: [...(setup.map.startWrecks ?? [])],
     treasures: [],
+    treasureKinds: {},
+    treasureSpawns: 0,
     treasureDeck: [],
     pendingSpawns: 0,
     part: 0,
@@ -96,7 +101,7 @@ export function newGame(setup: GameSetup): GameState {
   for (const seat of setup.seats) {
     if (state.players[seat.player]) throw new Error(`Duplicate player ${seat.player}`);
     const shipId = `${seat.player}-ship`;
-    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort, score: 0 };
+    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort, score: 0, hold: [] };
     team.players.push(seat.player);
     state.teams[seat.team] = team;
     state.players[seat.player] = { id: seat.player, team: seat.team, name: seat.name, ships: [shipId] };
@@ -217,6 +222,8 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
         ready: state.ready,
         weather,
         treasures: state.treasures,
+        treasureKinds: state.treasureKinds,
+        holds: Object.fromEntries(Object.values(state.teams).map((t) => [t.id, t.hold])),
         scores,
         ...(state.winner === undefined ? {} : { winner: state.winner }),
         ...(isSolo(state) ? { turnLimit: config.soloTurns } : {}),

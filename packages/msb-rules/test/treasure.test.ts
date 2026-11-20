@@ -7,9 +7,11 @@ import {
   arrive,
   createGame,
   digUpTreasure,
+  dropTreasure,
   makeConfig,
   newGame,
   offerKnockLoose,
+  parseHexKey,
   runActions,
   runCurrents,
   spawnTreasure,
@@ -63,6 +65,33 @@ function run(s: GameState, fn: (m: MoveContext) => void, answer?: (d: PendingDec
   fn({ state: s, config, part: 1, ctx });
   return { events, asked };
 }
+
+describe('treasure pieces (rules §3.7: rum, diamond, ruby, pearl, gold; all worth the same)', () => {
+  it('the pieces come out in turn, and each keeps its identity when picked up, knocked loose, dropped and brought home', () => {
+    const points = { '1': k(hex(1, 1)), '2': k(hex(2, 1)), '3': k(hex(1, 2)), '4': k(hex(2, 2)), '5': k(hex(3, 1)), '6': k(hex(0, 2)) };
+    const s = game(map({}, points), 4);
+    expect(s.treasures.map((t) => s.treasureKinds[t])).toEqual(['gold', 'diamond']);
+    for (let i = 0; i < 4; i++) spawnTreasure(s, () => undefined);
+    expect(s.treasures.map((t) => s.treasureKinds[t])).toEqual(['gold', 'diamond', 'rum', 'ruby', 'pearl', 'gold']);
+    // Pick up the diamond, drop it by sinking, then pick it up and bring it home.
+    const at = s.treasures[1]!;
+    place(s, 'A', parseHexKey(at));
+    const pick = run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    expect(pick.events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at, kind: 'diamond' }]);
+    expect(ship(s, 'A').cargo).toBe('diamond');
+    expect(s.treasureKinds[at]).toBeUndefined();
+    const drop = run(s, (m) => dropTreasure(s, ship(s, 'A'), m.ctx));
+    expect(drop.events).toEqual([{ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: parseHexKey(at), kind: 'diamond' }]);
+    expect(ship(s, 'A').cargo).toBeUndefined();
+    expect(s.treasureKinds[at]).toBe('diamond');
+    run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    place(s, 'A', PORT_A);
+    const home = run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    expect(home.events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1, kind: 'diamond' });
+    expect(s.teams['red']!.hold).toEqual(['diamond']);
+    expect(createGame(MISS).view(s, 'B')).toMatchObject({ holds: { red: ['diamond'] }, treasureKinds: s.treasureKinds });
+  });
+});
 
 describe('how many treasures, and the target (rules §8.2.1, §8.2.5)', () => {
   it('treasures in play = half the ships, rounded down; target 3, or 2 with 7–8 ships', () => {
@@ -124,7 +153,7 @@ describe('picking up (rules §8.2.2)', () => {
     place(s, 'A', O);
     place(s, 'B', hex(3, -3));
     const { events } = run(s, (m) => digUpTreasure(s, [ship(s, 'B'), ship(s, 'A')], m.ctx));
-    expect(events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at: k(land) }]);
+    expect(events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at: k(land), kind: 'gold' }]);
     // Arriving next to it doesn't count, and a sunk or full ship digs nothing.
     s.treasures = [k(land)];
     ship(s, 'A').carrying = true;
@@ -155,7 +184,7 @@ describe('knocking loose and dropping (rules §8.2.3, §7.8)', () => {
     const { events, asked } = run(s, (m) => stepShip(m, ship(s, 'A'), N, 'row'), () => 1);
     expect(asked[0]).toMatchObject({ kind: KNOCK_LOOSE, player: 'A', defaultIndex: 0 });
     expect(asked[0]!.options).toHaveLength(6); // 'damage' + 5 hexes (one already has treasure)
-    expect(events).toContainEqual({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: 'B-ship', by: 'A-ship', to: asked[0]!.options[1] });
+    expect(events).toContainEqual({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: 'B-ship', by: 'A-ship', to: asked[0]!.options[1], kind: 'gold' });
     expect(events.some((e) => e.type === 'DamageRolled')).toBe(false);
     expect(ship(s, 'B').carrying).toBe(false);
   });
@@ -189,7 +218,7 @@ describe('knocking loose and dropping (rules §8.2.3, §7.8)', () => {
     place(s, 'A', O, N);
     ship(s, 'A').carrying = true;
     const { events } = run(s, (m) => stepShip(m, ship(s, 'A'), N, 'sail'));
-    expect(events).toContainEqual({ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: neighbor(O, N) });
+    expect(events).toContainEqual({ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: neighbor(O, N), kind: 'gold' });
     expect(s.treasures).toEqual([k(neighbor(O, N))]);
   });
 });
@@ -217,7 +246,7 @@ describe('scoring and winning (rules §8.2.4, §8.2.5)', () => {
       s = out.state;
       events.push(...out.events);
     }
-    expect(events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1 });
+    expect(events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1, kind: 'gold' });
     expect(s.teams['red']!.score).toBe(1);
     expect(s.treasures).toHaveLength(2);
     expect(g.view(s, 'B').scores).toEqual({ red: 1, blue: 0 });
