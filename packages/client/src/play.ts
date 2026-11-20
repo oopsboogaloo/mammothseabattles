@@ -767,7 +767,10 @@ async function play(events: readonly GameEvent[]) {
         if (a && b) await table.arc(a, b, '#ffb03a', ms(), true);
         break;
       }
-      case 'DamageRolled':
+      case 'DamageRolled': {
+        const at = table.shipPosition(e.ship) ?? (shown[e.ship] ? table.hexToWorld(shown[e.ship]!.hex) : undefined);
+        if (at) await table.rollDice(at, e.rolls, fast ? 500 : 1100, fast ? 700 : 1600);
+      }
         float(e.ship, `🎲 ${e.rolls.join(' ')} → ${e.shipDamage ? `−${e.shipDamage} slot${e.shipDamage > 1 ? 's' : ''}` : ''}${e.shipDamage && e.crewDamage ? ', ' : ''}${e.crewDamage ? `−${e.crewDamage} crew` : ''}${!e.shipDamage && !e.crewDamage ? 'miss' : ''}`);
         await sleep(ms() * 2);
         break;
