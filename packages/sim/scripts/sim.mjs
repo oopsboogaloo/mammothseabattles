@@ -1,5 +1,5 @@
 // The simulator from the command line: plays AI-only games and prints a Markdown table (engineering design §10).
-// Usage: npm run sim -- [--players 2] [--games 20] [--seed 1] [--beam 2] [--max-turns 60] [--variants base,safe-edge] [--out file.md]
+// Usage: npm run sim -- [--players 2] [--games 20] [--seed 1] [--beam 2] [--levels hard,normal] [--max-turns 60] [--variants base,safe-edge] [--out file.md]
 // Variants (rule changes to compare, all on the same deals):
 //   base, safe-edge, target-2, target-4, no-points-of-sail
 import { createServer } from 'vite';
@@ -52,6 +52,7 @@ const summaries = runExperiment(
     firstSeed: num('seed', 1),
     maxTurns: num('max-turns', 60),
     beam: num('beam', 2),
+    ...(args.levels ? { levels: args.levels.split(',') } : {}),
     onGame: (variant, r) => {
       done++;
       process.stderr.write(`\r${variant}: game ${done} of ${games * names.length} (${Math.round((Date.now() - t0) / 1000)} s)   `);

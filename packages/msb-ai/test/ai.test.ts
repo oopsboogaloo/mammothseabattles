@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createDecision } from '@msb/engine';
+import { Rng, createDecision } from '@msb/engine';
 import { hex, hexKey, neighbor, type Direction } from '@msb/hex';
 import { prototypeSetup } from '@msb/msb-data';
 import {
@@ -16,9 +16,17 @@ import {
   type Ship,
 } from '@msb/msb-rules';
 import {
+  AI_LEVELS,
+  EASY_FILL,
+  HARD,
   WEIGHTS,
   answerDecision,
   assignCards,
+  bestIndex,
+  chooseProgram,
+  rankPrograms,
+  sampleWorld,
+  seedFor,
   determinize,
   distanceMap,
   distanceOf,
@@ -270,4 +278,67 @@ describe('whole games', () => {
     const { s } = play(2, 6, 30);
     expect(Object.values(s.teams).reduce((n, t) => n + t.score, 0)).toBeGreaterThanOrEqual(1);
   }, 120_000);
+});
+
+describe('difficulty levels (engineering design §10)', () => {
+  it('each player and turn gets its own fixed seed', () => {
+    const s = game(2);
+    expect(seedFor(s, 'P1')).toBe(seedFor(s, 'P1'));
+    expect(seedFor(s, 'P1')).not.toBe(seedFor(s, 'P2'));
+    expect(seedFor(s, 'P1') % 2).toBe(1);
+    expect(seedFor({ ...s, turn: 2 }, 'P1')).not.toBe(seedFor(s, 'P1'));
+  });
+
+  it('a sampled world deals rivals plausible hands from the unseen cards and plans their programs; mine and my teammates stay as they are', () => {
+    const s = game(4);
+    s.players['P3']!.team = 'T1';
+    ship(s, 'P3').program = { sail1: ship(s, 'P3').hand[0]! };
+    ship(s, 'P4').refitting = true;
+    // P2 has already programmed two cards: they leave her hand but still count as hers.
+    const [c1, c2] = ship(s, 'P2').hand;
+    ship(s, 'P2').program = { sail1: c1!, steer1: c2! };
+    ship(s, 'P2').hand = ship(s, 'P2').hand.slice(2);
+    const unseen = new Set([...s.deck, ...['P2', 'P4'].flatMap((p) => [...ship(s, p).hand, ...Object.values(ship(s, p).program)])]);
+    const w = sampleWorld(s, 'P1', config, new Rng(5));
+    expect(ship(w).hand).toEqual(ship(s).hand);
+    expect(ship(w, 'P3').program).toEqual(ship(s, 'P3').program);
+    expect(ship(w, 'P2').hand).toHaveLength(ship(s, 'P2').hand.length + 2);
+    for (const p of ['P2', 'P4']) {
+      for (const c of ship(w, p).hand) expect(unseen.has(c)).toBe(true);
+    }
+    expect(Object.values(ship(w, 'P2').program).every((c) => ship(w, 'P2').hand.includes(c))).toBe(true);
+    expect(ship(w, 'P4').program).toEqual({}); // refitting: no program
+    expect(w.rng).not.toBe(s.rng);
+    expect(w.rng % 2).toBe(1);
+  });
+
+  it('Easy picks one of its few best plans, Normal the best, Hard the best of Normal’s plans against sampled futures; all repeatable', () => {
+    const s = game(2);
+    // Easy keeps Normal's Part I and fills later slots with random cards from its hand.
+    const easy = chooseProgram(s, 'P1-ship', config, 'easy');
+    const best = rankPrograms(s, 'P1-ship', config, 2)[0]!.program;
+    expect(Object.fromEntries(Object.entries(easy).filter(([k]) => k.endsWith('1')))).toEqual(Object.fromEntries(Object.entries(best).filter(([k]) => k.endsWith('1'))));
+    expect(new Set(Object.values(easy)).size).toBe(Object.values(easy).length);
+    for (const c of Object.values(easy)) expect(ship(s).hand).toContain(c);
+    expect(chooseProgram(s, 'P1-ship', config, 'easy')).toEqual(easy);
+    // With a single card left it stops when the hand runs out.
+    const thin = clone(s);
+    ship(thin).hand = ship(thin).hand.slice(0, 1);
+    expect(Object.keys(chooseProgram(thin, 'P1-ship', config, 'easy')).length).toBeLessThanOrEqual(1);
+    expect(EASY_FILL).toBeGreaterThan(0);
+    expect(chooseProgram(s, 'P1-ship', config, 'normal')).toEqual(planProgram(s, 'P1-ship', config));
+    const top = rankPrograms(s, 'P1-ship', config, HARD.candidates).map((r) => r.program);
+    const hard = chooseProgram(s, 'P1-ship', config, 'hard');
+    expect(top).toContainEqual(hard);
+    expect(chooseProgram(s, 'P1-ship', config, 'hard')).toEqual(hard);
+    expect(AI_LEVELS).toEqual(['easy', 'normal', 'hard']);
+    expect([bestIndex([1, 3, 2]), bestIndex([2, 2]), bestIndex([5])]).toEqual([1, 0, 0]);
+  }, 60_000);
+
+  it('a programming turn at a level is legal', () => {
+    const g = createGame(config);
+    let s = game(2);
+    for (const a of programmingTurn(s, 'P1', config, undefined, 'hard')) s = g.apply(s, 'P1', a).state;
+    expect(s.ready).toEqual(['P1']);
+  }, 60_000);
 });

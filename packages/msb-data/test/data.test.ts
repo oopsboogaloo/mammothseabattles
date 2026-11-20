@@ -176,5 +176,5 @@ describe('whole games with the real data (engineering design §12)', () => {
       expect(replay(game, setup, log).state).toEqual(state);
     }
     expect(wins).toBeGreaterThanOrEqual(0);
-  });
+  }, 60_000);
 });

@@ -102,7 +102,14 @@ In the client: each seat is Human or Computer on the start screen; the computer 
 **Simulator (after the AI):** `packages/sim`: AI-only games with statistics, rule variants compared on the same deals, Markdown tables;
 `npm run sim`. First results in [`sim/README.md`](sim/README.md): games are long (two players about 40 turns; target 2 gives 25),
 treasure changes hands a lot, four players is very bloody, Safe edge does its job, no seat advantage with two players.
-*Next:* a Monte Carlo "Good" AI; the simulator in a Web Worker for the browser.
+**AI levels (after the simulator):** Easy (thinks one move ahead: plans Part I like Normal, then random cards in later Parts), Normal (the Basic AI), Hard (Monte Carlo: Normal's
+5 best plans each played against 4 sampled futures, with rivals dealt plausible hands from the unseen cards and planning with the
+Basic AI, and different dice; the best average wins). All fair and repeatable. In the client each seat is Human or Computer: Easy,
+Normal or Hard, and the AI thinks in a **Web Worker** (`src/ai-worker.ts`), so the board keeps moving. Hard takes about 0.5 s a turn.
+The simulator takes `--levels hard,normal` (one per seat). Head-to-head, 2 players, 8 games each seating: **Hard beat Normal in 8 of
+13 decided games (62%)**; **Normal beat Easy in 14 of 14**. (A first Easy, picking at random among Normal's 5 best plans, actually beat
+Normal 8 of 12: those plans are all about as good, so Easy now plays randomly after its first move instead.)
+*Next:* personalities (scoring weights), two-turn planning.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).

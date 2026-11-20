@@ -22,6 +22,7 @@ import {
   type WindStrength,
 } from '@msb/msb-rules';
 import { distanceMap, distanceOf, type DistanceMap } from './distance';
+import { chooseProgram, type AiLevel } from './levels';
 
 /** How many partial programs to keep after each Part (beam width). */
 export const BEAM = 4;
@@ -179,6 +180,17 @@ export function assignCards(wanted: readonly (readonly string[] | undefined)[]):
  * simulate the turn, and keep the best few to build on.
  */
 export function planProgram(state: GameState, shipId: string, config: RulesConfig, beam = BEAM): Program {
+  return (rankPrograms(state, shipId, config, beam)[0] as Ranked).program;
+}
+
+/** A candidate program and its score. */
+export interface Ranked {
+  readonly program: Program;
+  readonly score: number;
+}
+
+/** The best programs found (up to `beam` of them), best first. */
+export function rankPrograms(state: GameState, shipId: string, config: RulesConfig, beam = BEAM): Ranked[] {
   const ship = state.ships[shipId] as Ship;
   const world = determinize(state, ship.player);
   const weather = planningWeather(state);
@@ -212,7 +224,7 @@ export function planProgram(state: GameState, shipId: string, config: RulesConfi
     }
     beams = next.sort((a, b) => b.score - a.score).slice(0, beam);
   }
-  return (beams[0] as { program: Program }).program;
+  return beams;
 }
 
 /**
@@ -220,12 +232,12 @@ export function planProgram(state: GameState, shipId: string, config: RulesConfi
  * (keeping the cards with the most useful orders is a later refinement: it drops the first ones), then ready.
  */
 /** `beam` trades strength for speed: the simulator uses a narrower one to play many games. */
-export function programmingTurn(state: GameState, player: PlayerId, config: RulesConfig, beam = BEAM): Action[] {
+export function programmingTurn(state: GameState, player: PlayerId, config: RulesConfig, beam = BEAM, level?: AiLevel): Action[] {
   const actions: Action[] = [];
   for (const id of (state.players[player] as Player).ships) {
     const ship = state.ships[id] as Ship;
     if (ship.status !== 'afloat' || ship.refitting) continue;
-    const program = planProgram(state, id, config, beam);
+    const program = level ? chooseProgram(state, id, config, level) : planProgram(state, id, config, beam);
     for (const [slot, card] of Object.entries(program)) actions.push({ type: 'place', ship: id, slot, card });
     const left = ship.hand.filter((c) => !Object.values(program).includes(c));
     for (const card of left.slice(0, Math.max(0, left.length - config.handLimit))) actions.push({ type: 'discard', ship: id, card });
