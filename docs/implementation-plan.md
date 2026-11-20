@@ -89,6 +89,18 @@ resume restores all actions). *Not yet:* ghost preview of the program, broadside
 best score kept in the browser), so the designer can play-test alone; name fields readable; the hand shows the card back while a
 card picture loads.
 
+**AI opponent (Basic, after P8):** `packages/msb-ai`, pure and deterministic like the rules (purity test, 100% coverage). It plans a
+turn by trying candidate programs Part by Part (a beam of 4) through the **real rules engine**, and scores where the ship ends up:
+sailing distance to the goal (treasure, or home when carrying; a wind-aware map round islands and away from the wind's eye), sinking,
+damage taken and dealt, hazards, the map edge with next turn's drift, treasure picked up and scored. It plays fair: before simulating
+it forgets rivals' programs and uses a different dice stream. Mid-turn questions: always fire (teammates are never targets), knock treasure towards its
+own port, come back facing the treasure; the rest take the rules' defaults. About 0.15 s a turn. **Results:** Solo Challenge average
+1.6 treasure in 14 turns (random play: 0); AI-against-AI games end with a winner in 20–40 turns, edge sinkings down from 6–13 a game
+(random) to 0–5, and with cannon fire 3–30 hits a game and ships sunk in battle too. (An early version never fired, which also
+made seat 1 look strong; with firing, seats 1 and 2 won 1 and 3 of 6.)
+In the client: each seat is Human or Computer on the start screen; the computer programs and answers without a hand-over screen.
+*Next:* the simulator (many games, statistics) and a Monte Carlo "Good" AI.
+
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
 

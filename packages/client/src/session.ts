@@ -10,16 +10,25 @@ const SAVE_KEY = 'msb-hotseat-save-v1';
 export interface SaveFile {
   readonly setup: GameSetup;
   readonly safeEdge: boolean;
+  /** Players the computer plays (engineering design §10). */
+  readonly ai?: readonly string[];
   readonly log: readonly LogEntry<Action>[];
 }
 
 export class Session {
   readonly game;
+  readonly config;
   state: GameState;
   log: LogEntry<Action>[];
 
-  constructor(readonly setup: GameSetup, readonly safeEdge: boolean, log: readonly LogEntry<Action>[] = []) {
-    this.game = createGame(makeConfig({ safeEdge }));
+  constructor(
+    readonly setup: GameSetup,
+    readonly safeEdge: boolean,
+    log: readonly LogEntry<Action>[] = [],
+    readonly ai: readonly string[] = [],
+  ) {
+    this.config = makeConfig({ safeEdge });
+    this.game = createGame(this.config);
     this.log = [...log];
     this.state = replay(this.game, setup, this.log).state;
   }
@@ -42,7 +51,7 @@ export class Session {
   }
 
   save(): void {
-    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, log: this.log };
+    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, log: this.log };
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(file));
     } catch {
@@ -55,7 +64,7 @@ export class Session {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return undefined;
       const file = JSON.parse(raw) as SaveFile;
-      return new Session(file.setup, file.safeEdge, file.log);
+      return new Session(file.setup, file.safeEdge, file.log, file.ai ?? []);
     } catch {
       return undefined;
     }

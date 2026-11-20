@@ -10,6 +10,7 @@ export default defineConfig({
       '@msb/hex': pkg('hex'),
       '@msb/msb-rules': pkg('msb-rules'),
       '@msb/msb-data': pkg('msb-data'),
+      '@msb/msb-ai': pkg('msb-ai'),
     },
   },
   test: {
