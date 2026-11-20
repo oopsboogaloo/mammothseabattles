@@ -311,6 +311,9 @@ function renderShipBoard() {
         if (selectedCard) b.classList.add('target');
         b.onclick = () => {
           if (!selectedCard) return;
+          // Tapped into place: the card flies from the hand to the slot (a dragged card is already there).
+          const from = document.querySelector(`#hand .card[data-card="${selectedCard}"]`)?.getBoundingClientRect();
+          if (from) flights.push({ card: selectedCard, from, to: `#shipboard .slot[data-slot="${key}"]` });
           placeCard(ship.id, key, selectedCard);
           selectedCard = null;
           renderProgramming();
@@ -384,8 +387,13 @@ function renderHand() {
 }
 
 // ---------------- placing and taking back ----------------
-/** Cards on their way back to the hand, and where they left from, for the swoosh after the next redraw. */
-let returning: { card: string; from: DOMRect }[] = [];
+/**
+ * Cards on the move, for the swoosh after the next redraw: where each left from, and the element it lands on (a hand card going
+ * back, or a slot when tapped into place).
+ */
+let flights: { card: string; from: DOMRect; to: string }[] = [];
+/** How long a card takes to fly between the hand and the ship board (ms): slow enough to follow by eye. */
+const SWOOSH_MS = 500;
 
 function slotRect(slot: string): DOMRect | undefined {
   return document.querySelector(`#shipboard .slot[data-slot="${slot}"]`)?.getBoundingClientRect();
@@ -396,7 +404,7 @@ function takeBack(shipId: string, slot: string) {
   const card = myShip()?.program[slot];
   const from = slotRect(slot);
   act({ type: 'remove', ship: shipId, slot });
-  if (card && from) returning.push({ card, from });
+  if (card && from) flights.push({ card, from, to: `#hand .card[data-card="${card}"]` });
 }
 
 /** Put a card in a slot; a card already there goes back to the hand. */
@@ -405,12 +413,12 @@ function placeCard(shipId: string, slot: string, card: string) {
   act({ type: 'place', ship: shipId, slot, card });
 }
 
-/** Fly each returning card from its slot to its place in the hand. */
+/** Fly each moving card from where it was to where it is now (slot to hand, or hand to slot). */
 function swoosh() {
-  const flights = returning;
-  returning = [];
-  for (const { card, from } of flights) {
-    const target = document.querySelector<HTMLElement>(`#hand .card[data-card="${card}"]`);
+  const moving = flights;
+  flights = [];
+  for (const { card, from, to: where } of moving) {
+    const target = document.querySelector<HTMLElement>(where);
     if (!target) continue;
     const to = target.getBoundingClientRect();
     const fly = h(`<div class="swoosh" style="background-image:url(${cardArt(card)}),url(art/cards/back.webp)"></div>`);
@@ -427,7 +435,7 @@ function swoosh() {
           { transform: `translate(${dx * 0.35}px, ${dy * 0.35 - 40}px) scale(${(1 + scale) / 2}) rotate(6deg)`, opacity: 1, offset: 0.55 },
           { transform: 'none', opacity: 1 },
         ],
-        { duration: 380, easing: 'cubic-bezier(.2,.8,.3,1)' },
+        { duration: SWOOSH_MS, easing: 'cubic-bezier(.2,.8,.3,1)' },
       )
       .finished.then(() => {
         fly.remove();
