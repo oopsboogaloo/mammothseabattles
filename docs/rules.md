@@ -969,8 +969,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
-- ~~Q71 Nowhere to come back~~ → if her port is occupied she comes back at the **nearest free hex** (designer, v0.142). ❓ Equally
-  near hexes: her player chooses. "Nearest" counts hexes in a straight line, ignoring land in between.
+- ~~Q71 Nowhere to come back~~ → if her port is occupied she comes back at the **nearest free hex** (designer, v0.142). "Nearest"
+  counts hexes in a straight line, ignoring land in between (designer). ❓ Equally near hexes: her player chooses.
 - ~~Q70 Blocked curved current~~ → a blocked current neither moves nor turns her (designer agreed, v0.140).
 - ~~Q69 Caves, edge cases~~ → caves just join two hexes for movement; normal pushing and blocking rules apply (v0.140).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
