@@ -109,7 +109,19 @@ Normal or Hard, and the AI thinks in a **Web Worker** (`src/ai-worker.ts`), so t
 The simulator takes `--levels hard,normal` (one per seat). Head-to-head, 2 players, 8 games each seating: **Hard beat Normal in 8 of
 13 decided games (62%)**; **Normal beat Easy in 14 of 14**. (A first Easy, picking at random among Normal's 5 best plans, actually beat
 Normal 8 of 12: those plans are all about as good, so Easy now plays randomly after its first move instead.)
-*Next:* personalities (scoring weights), two-turn planning.
+**Personalities and look-ahead (after the AI levels):** each computer seat also has a personality, the same planner with different
+scoring weights (`msb-ai/src/personality.ts`): **Balanced**; **Treasure hunter** (races for treasure, avoids fights); **Raider**
+(heads for rivals, above all ones carrying treasure, and loves landing hits); **Cautious** (hates damage, hazards and the edge).
+Chosen beside each computer seat on the setup screen and saved with the game; the simulator takes `--personalities raider,balanced`.
+**Hard now looks two turns ahead:** each candidate scores this turn plus half the best score it could get next turn. Sampled worlds
+reshuffle the rest of the deck and played cards leave the hand, so it can't foresee or reuse cards. A Hard turn takes about 1–2 s.
+Results (2 players, Normal level unless said, both seatings, decided games): **Hard (look-ahead) beat Normal 9 of 15 (60%)**, no
+clear gain on the old Hard's 62%; **Raider vs Balanced 8 of 15** (and a lot more cannon fire: ~23 hits a game against ~15);
+**Cautious vs Balanced 7 of 17**; **Treasure hunter vs Balanced 5 of 17**, then 4 of 19 after making it warier of the edge.
+The hunter sinks off the map edge a lot (5 times in one 40-turn game). It isn't only the hunter: every AI sometimes sails or drifts
+off the edge on a turn whose weather it couldn't know, and the hunter's routes hug the edge more. Samples are small (10 games a seating).
+*Next:* plan for the weather it can't see (score a plan against the possible next weather cards, not just the likeliest), which
+should cut edge sinkings for every personality; then retune the hunter.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
