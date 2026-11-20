@@ -17,7 +17,7 @@ import {
 } from '@msb/msb-rules';
 import {
   AI_LEVELS,
-  EASY_CHOICES,
+  EASY_FILL,
   HARD,
   WEIGHTS,
   answerDecision,
@@ -314,8 +314,18 @@ describe('difficulty levels (engineering design §10)', () => {
 
   it('Easy picks one of its few best plans, Normal the best, Hard the best of Normal’s plans against sampled futures; all repeatable', () => {
     const s = game(2);
-    const few = rankPrograms(s, 'P1-ship', config, EASY_CHOICES).map((r) => r.program);
-    expect(few).toContainEqual(chooseProgram(s, 'P1-ship', config, 'easy'));
+    // Easy keeps Normal's Part I and fills later slots with random cards from its hand.
+    const easy = chooseProgram(s, 'P1-ship', config, 'easy');
+    const best = rankPrograms(s, 'P1-ship', config, 2)[0]!.program;
+    expect(Object.fromEntries(Object.entries(easy).filter(([k]) => k.endsWith('1')))).toEqual(Object.fromEntries(Object.entries(best).filter(([k]) => k.endsWith('1'))));
+    expect(new Set(Object.values(easy)).size).toBe(Object.values(easy).length);
+    for (const c of Object.values(easy)) expect(ship(s).hand).toContain(c);
+    expect(chooseProgram(s, 'P1-ship', config, 'easy')).toEqual(easy);
+    // With a single card left it stops when the hand runs out.
+    const thin = clone(s);
+    ship(thin).hand = ship(thin).hand.slice(0, 1);
+    expect(Object.keys(chooseProgram(thin, 'P1-ship', config, 'easy')).length).toBeLessThanOrEqual(1);
+    expect(EASY_FILL).toBeGreaterThan(0);
     expect(chooseProgram(s, 'P1-ship', config, 'normal')).toEqual(planProgram(s, 'P1-ship', config));
     const top = rankPrograms(s, 'P1-ship', config, HARD.candidates).map((r) => r.program);
     const hard = chooseProgram(s, 'P1-ship', config, 'hard');

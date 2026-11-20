@@ -1,6 +1,6 @@
 /**
  * Difficulty levels (engineering design §10).
- * - **Easy**: picks at random among its five best plans, so it often settles for second best.
+ * - **Easy**: thinks one move ahead, like a beginner: it plans Part I properly, then fills Parts II and III with random cards.
  * - **Normal**: the Basic AI (plan.ts): the best plan assuming rivals stand still and average luck.
  * - **Hard** ("Good", Monte Carlo): takes Normal's best few plans and plays each against several sampled futures: rivals given
  *   plausible hands (dealt from the cards it can't see) and planning with the Basic AI, and different dice. It picks the plan that
@@ -9,15 +9,15 @@
  */
 
 import { Rng } from '@msb/engine';
-import type { GameState, Player, PlayerId, RulesConfig, Ship } from '@msb/msb-rules';
+import { freeSlots, type GameState, type Player, type PlayerId, type RulesConfig, type Ship } from '@msb/msb-rules';
 import { distanceMap } from './distance';
 import { determinize, evaluate, goals, planningWeather, rankPrograms, simulate, type Program } from './plan';
 
 export type AiLevel = 'easy' | 'normal' | 'hard';
 export const AI_LEVELS: readonly AiLevel[] = ['easy', 'normal', 'hard'];
 
-/** Easy: how many of its best plans it picks among at random. */
-export const EASY_CHOICES = 5;
+/** Easy: how likely it is to put a card in each later slot it hasn't thought about. */
+export const EASY_FILL = 0.6;
 
 /** Hard: how many of Normal's plans to test, and against how many sampled futures. */
 export const HARD = { candidates: 5, samples: 4 } as const;
@@ -47,14 +47,23 @@ export function sampleWorld(state: GameState, player: PlayerId, config: RulesCon
   return world;
 }
 
+/** Easy: Normal's Part I, then random cards (or none) in the later Parts' free slots. */
+function easyProgram(state: GameState, ship: Ship, config: RulesConfig, rng: Rng): Program {
+  const best = (rankPrograms(state, ship.id, config, 2)[0] as { program: Program }).program;
+  const program: Record<string, string> = Object.fromEntries(Object.entries(best).filter(([slot]) => slot.endsWith('1')));
+  const left = rng.shuffle(ship.hand.filter((c) => !Object.values(program).includes(c)));
+  for (const slot of freeSlots(ship)) {
+    if (slot.endsWith('1') || left.length === 0 || rng.float() >= EASY_FILL) continue;
+    program[slot] = left.pop() as string;
+  }
+  return program;
+}
+
 /** The program a ship's player chooses at this level. */
 export function chooseProgram(state: GameState, shipId: string, config: RulesConfig, level: AiLevel): Program {
   const ship = state.ships[shipId] as Ship;
   const rng = new Rng(seedFor(state, ship.player));
-  if (level === 'easy') {
-    const ranked = rankPrograms(state, shipId, config, EASY_CHOICES);
-    return (ranked[rng.int(0, ranked.length - 1)] as { program: Program }).program;
-  }
+  if (level === 'easy') return easyProgram(state, ship, config, rng);
   if (level === 'normal') return (rankPrograms(state, shipId, config)[0] as { program: Program }).program;
   const candidates = rankPrograms(state, shipId, config, HARD.candidates);
   const weather = planningWeather(state);
