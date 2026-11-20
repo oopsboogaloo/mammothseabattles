@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.146**
+> Status: **Draft v0.147**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -74,6 +74,17 @@ interact with each other and with the sea.
   one per player (or team).
 - 37-hex boards are the standard, not a rule: other formats may come later (e.g. one large rectangular board with the ports printed on it,
   used on its own).
+- **Single large board** *(designer, v0.147; being considered)*: play-testing the digital test map, the designer found that **one board of
+  91 hexes** (6 hexes along each edge, 11 across) **plays a whole game well**, and good layouts are hard to build from modular sections.
+  So the first physical boards may be **a couple of large single boards** with the same density as the test map, with the modular
+  37-hex sections kept for later. The two aren't incompatible: a large board is just another format (above).
+  - **Size:** with 1-inch hexes (flat side to flat side) it is about **249 × 279 mm**, so it prints on **A3** (A4 fits only with hexes
+    of about 20 mm).
+  - **Density recipe** (the test map, for 91 hexes): 4 land hexes (2 cliff, 2 beach) as a central island with 1 sea cave through it;
+    2 sandbanks, 2 underwater reefs, 1 death reef; 1 rough water, 1 storm; 2 fog; 1 pair of whirlpools; currents: a triple (2 hexes),
+    a double (2 hexes), a single curved and a single jump, 2 eddies (60° and 120°), a 2-hex and a 3-hex rotor; 1 wall reef;
+    9 treasure spawn points; 4 ports on the rim; a starting wreck per ship. **28 of the 91 hexes carry a feature** (34 counting
+    the sea spawn points): about a third; the rest is open sea.
 - **The players choose the layout together**: the host decides, or players take turns placing boards. The rulebook will offer some
   **suggested layouts** to get people started, but choosing your own is more fun.
 - **How many main boards**: usually **at least 2**; **2–4** is a normal game. **More ships → more boards.**
@@ -1028,6 +1039,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.147 — §3.1.1 single large board (91 hexes, A3) being considered as the first physical format, with the test map's density as a recipe (designer).
 - v0.146 — §7.1 fog: no firing into, out of or through fog unless the target is adjacent (designer).
 - v0.145 — §3.7 treasure pieces: physical rum, diamonds, rubies, pearls and gold that fit in the ship model; all worth the same (designer).
 - v0.144 — §3.5 Points-of-Sail player aid: bigger weather cards with the Half / Full move printed on each edge (designer).

@@ -11,6 +11,7 @@ export default defineConfig({
       '@msb/msb-rules': pkg('msb-rules'),
       '@msb/msb-data': pkg('msb-data'),
       '@msb/msb-ai': pkg('msb-ai'),
+      '@msb/sim': pkg('sim'),
     },
   },
   test: {

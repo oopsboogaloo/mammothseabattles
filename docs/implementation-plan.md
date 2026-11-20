@@ -99,7 +99,10 @@ own port, come back facing the treasure; the rest take the rules' defaults. Abou
 (random) to 0–5, and with cannon fire 3–30 hits a game and ships sunk in battle too. (An early version never fired, which also
 made seat 1 look strong; with firing, seats 1 and 2 won 1 and 3 of 6.)
 In the client: each seat is Human or Computer on the start screen; the computer programs and answers without a hand-over screen.
-*Next:* the simulator (many games, statistics) and a Monte Carlo "Good" AI.
+**Simulator (after the AI):** `packages/sim`: AI-only games with statistics, rule variants compared on the same deals, Markdown tables;
+`npm run sim`. First results in [`sim/README.md`](sim/README.md): games are long (two players about 40 turns; target 2 gives 25),
+treasure changes hands a lot, four players is very bloody, Safe edge does its job, no seat advantage with two players.
+*Next:* a Monte Carlo "Good" AI; the simulator in a Web Worker for the browser.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
