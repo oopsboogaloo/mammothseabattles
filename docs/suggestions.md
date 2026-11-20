@@ -83,6 +83,22 @@ Ideas from the designer (v0.109) for later; the current rule is "agree, or take 
 - **Independent ports:** the town printed on a main board could become a neutral port where anyone can repair.
 - **One-piece boards:** e.g. a large rectangular board with ports printed on it, used on its own instead of modular 37-hex boards.
 
+## Large boards that fit with the modular boards *(2026-11-20, for the designer)*
+The 91-hex test board plays well on its own (rules §3.1.1). Two ways to make large and small boards work together:
+
+1. **Shape the large board like 2 or 3 of the 37-hex boards joined.** The 37-hex boards tile the table, so a large board with exactly the
+   outline of 3 of them (**111 hexes**, a three-lobed shape) or 2 of them (**74 hexes**) slots in among small boards like any group of
+   them. Size with 1-inch hexes: 3-board shape **315 × 317 mm** (needs A2, or A3 with hexes of about 0.9"); 2-board shape **315 × 190 mm**
+   (A3).
+
+   <img src="images/boards/large-board-trefoil.png" width="420">
+
+2. **Keep the 91-hex hexagon and cut it into smaller boards**: 3 diamonds of 30 hexes (5 × 6), or 6 triangles of 15 hexes, around
+   a single centre hex (a fixed island, or a whirlpool tile). Pieces from different large boards then mix inside the same outline.
+   These pieces don't fit with the 37-hex boards.
+
+   <img src="images/boards/large-board-modules.png" width="420">
+
 ## Weather ideas *(designer, 2026-11-19; future ideas, not rules)*
 
 **The two storm cards in the art** (left out of the deck for now, rules §3.5), with their intended text:
