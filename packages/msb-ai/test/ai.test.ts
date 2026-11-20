@@ -294,12 +294,16 @@ describe('difficulty levels (engineering design §10)', () => {
     s.players['P3']!.team = 'T1';
     ship(s, 'P3').program = { sail1: ship(s, 'P3').hand[0]! };
     ship(s, 'P4').refitting = true;
-    const unseen = new Set([...s.deck, ...['P2', 'P4'].flatMap((p) => ship(s, p).hand)]);
+    // P2 has already programmed two cards: they leave her hand but still count as hers.
+    const [c1, c2] = ship(s, 'P2').hand;
+    ship(s, 'P2').program = { sail1: c1!, steer1: c2! };
+    ship(s, 'P2').hand = ship(s, 'P2').hand.slice(2);
+    const unseen = new Set([...s.deck, ...['P2', 'P4'].flatMap((p) => [...ship(s, p).hand, ...Object.values(ship(s, p).program)])]);
     const w = sampleWorld(s, 'P1', config, new Rng(5));
     expect(ship(w).hand).toEqual(ship(s).hand);
     expect(ship(w, 'P3').program).toEqual(ship(s, 'P3').program);
+    expect(ship(w, 'P2').hand).toHaveLength(ship(s, 'P2').hand.length + 2);
     for (const p of ['P2', 'P4']) {
-      expect(ship(w, p).hand).toHaveLength(ship(s, p).hand.length);
       for (const c of ship(w, p).hand) expect(unseen.has(c)).toBe(true);
     }
     expect(Object.values(ship(w, 'P2').program).every((c) => ship(w, 'P2').hand.includes(c))).toBe(true);

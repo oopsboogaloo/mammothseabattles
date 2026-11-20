@@ -37,8 +37,11 @@ export function sampleWorld(state: GameState, player: PlayerId, config: RulesCon
   const world = determinize(state, player);
   const team = (world.players[player] as Player).team;
   const rivals = Object.values(world.ships).filter((s) => (world.players[s.player] as Player).team !== team && s.status === 'afloat');
-  const unseen = rng.shuffle([...world.deck, ...rivals.flatMap((s) => s.hand)]);
-  for (const ship of rivals) ship.hand = unseen.splice(0, ship.hand.length);
+  // A rival who has already programmed holds those cards too (the slots show as filled, not which cards): put them back in the
+  // pool and deal her a hand of her full size, so she isn't imagined short of cards.
+  const placed = (id: string) => Object.values((state.ships[id] as Ship).program);
+  const unseen = rng.shuffle([...world.deck, ...rivals.flatMap((s) => [...s.hand, ...placed(s.id)])]);
+  for (const ship of rivals) ship.hand = unseen.splice(0, ship.hand.length + placed(ship.id).length);
   for (const ship of rivals) if (!ship.refitting) ship.program = (rankPrograms(world, ship.id, config, 1)[0] as { program: Program }).program;
   world.rng = ((rng.int(1, 0x7fffffff) ^ world.rng) | 1) >>> 0;
   return world;
