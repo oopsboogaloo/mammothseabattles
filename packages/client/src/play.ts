@@ -220,6 +220,7 @@ function act(action: Action, player = viewer as string): GameEvent[] {
 function renderProgramming() {
   if (!viewer) return;
   const v = S().view(viewer);
+  $('#whose').innerHTML = `<span class="sw" style="--c:${colours[viewer]}"></span>${esc(playerName(viewer))}’s ship: program your orders`;
   renderPanels(v);
   renderShipBoard();
   renderHand();
@@ -411,7 +412,9 @@ function renderPanels(v: GameView | null) {
   const view = v ?? S().view(seats()[0]!.player);
   const s = S().state;
   const phase = s.phase === 'programming' ? `<b>Programming</b> · ${s.ready.length} of ${seats().length} ready` : s.phase === 'over' ? '<b>Game over</b>' : `<b>Resolution</b> · Part ${PART_NAME[s.part] ?? ''}`;
-  $('#status').innerHTML = `Turn ${s.turn}${view.turnLimit ? ` of ${view.turnLimit}` : ''} · ${phase}`;
+  // Whose turn it is, so anyone walking up to the screen can tell (programming: the player whose cards are showing).
+  const who = viewer && s.phase === 'programming' ? `<span class="who-chip" style="--c:${colours[viewer]}"><span class="sw"></span>${esc(playerName(viewer))}’s turn</span> · ` : '';
+  $('#status').innerHTML = `${who}Turn ${s.turn}${view.turnLimit ? ` of ${view.turnLimit}` : ''} · ${phase}`;
   const target = s.setup.seats.length >= 7 ? 2 : 3;
   const rivals = $('#rivals');
   rivals.innerHTML = view.turnLimit
@@ -437,7 +440,7 @@ function renderPanels(v: GameView | null) {
   const ship = viewer ? myShip() : undefined;
   crew.hidden = !ship;
   if (ship) {
-    crew.innerHTML = `<h3>Your crew <small>${ship.crew.length}/6</small></h3><div class="crew-row">${ship.crew
+    crew.innerHTML = `<h3>${esc(playerName(viewer as string))}’s crew <small>${ship.crew.length}/6</small></h3><div class="crew-row">${ship.crew
       .map((c) => `<span class="token ${c.state === 'wounded' ? 'wounded' : ''}" style="background-image:url(art/crew/${c.captain ? 'captain-mammoth' : 'pirate'}.webp)" title="${c.captain ? 'Captain' : 'Pirate'}${c.state === 'wounded' ? ' (wounded)' : ''}"></span>`)
       .join('')}</div>`;
   }
