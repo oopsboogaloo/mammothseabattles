@@ -26,6 +26,7 @@ import { ACTION_LABEL, SAIL_LABEL, STEER_LABEL, TIDES, cardArt, weatherArt } fro
 import { PLAYER_COLOURS } from './game';
 import { drawBoard } from './board-art';
 import { Session } from './session';
+import { POINT_COLOUR, POINT_NAME, sailRose } from './sail-rose';
 import { Table } from './table';
 
 // ---------------- helpers ----------------
@@ -381,8 +382,11 @@ function renderPanels(v: GameView | null) {
     rivals.appendChild(row);
   }
   const w = view.weather;
-  $('#weather').innerHTML = `<h3>Weather &amp; tide</h3>
-    <div class="wx"><img src="${weatherArt(baseId(w.now))}" alt="${esc(weatherName(w.now))}"><div class="next">next<img src="${weatherArt(baseId(w.next))}" alt="${esc(weatherName(w.next))}"></div></div>
+  const nowCard = S().setup.weatherCards.find((c) => c.id === w.now);
+  const mine = viewer ? myShip() : undefined;
+  $('#weather').innerHTML = `<h3>Weather &amp; tide <small>edges: Half / Full Sail move</small></h3>
+    <div class="wx rose">${nowCard ? sailRose(nowCard, weatherArt(baseId(w.now)), mine?.status === 'afloat' ? mine.heading : undefined) : ''}<div class="next">next<img src="${weatherArt(baseId(w.next))}" alt="${esc(weatherName(w.next))}"></div></div>
+    <div class="rose-key">${(['running', 'broadReach', 'closeHauled', 'windward'] as const).map((p) => `<span><i style="background:${POINT_COLOUR[p]}"></i>${POINT_NAME[p]}</span>`).join('')}${mine ? '<span><i class="me"></i>your heading</span>' : ''}</div>
     <div class="wx-tide">Now: <b>${esc(weatherName(w.now))}</b> · Tide: <b>${TIDE_NAME[w.tide]}</b> <small>(${TIDES[w.space % 6]})</small></div>`;
   const crew = $('#crew');
   const ship = viewer ? myShip() : undefined;

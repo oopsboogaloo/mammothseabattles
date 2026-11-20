@@ -112,6 +112,8 @@ Done in the digital prototype (2026-11-20):
 - **Clearer current arrows**: broad ribbons coloured by strength (pale blue, cyan, gold) with one chevron per hex moved, and a badge for turns.
 - During play-back: a large caption of what's happening, arrows for cannon fire and rams, dice results floating over the ship.
 - Cards can be **dragged** onto the ship board as well as tapped.
+- **Points of sail** (the hardest part): the weather card, shown bigger, carries the Half / Full move on each edge, coloured by point of
+  sail, and rings the edge the player's ship faces. Designer decision for the physical cards too (rules v0.144, §3.5).
 
 Further ideas to try:
 - A **preview** while programming: the ghost of where the ship will end each Part (the layout A mock-up has one).

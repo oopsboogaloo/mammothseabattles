@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.143**
+> Status: **Draft v0.144**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -234,6 +234,19 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   renaming the cards (e.g. "Wind to the North" / "Northward", or just the arrow) to avoid arguments at the table.
 - Weather cards are **hex-shaped**. Each shows a **wind strength** and a **wind direction** on a 6-point compass
   (**N, NE, SE, S, SW, NW**). These are the 6 directions of flat-topped hex sides, so the wind always runs along a hex direction.
+- **Points-of-Sail player aid** *(designer, v0.144)*: each weather card is printed **bigger** and shows, **on each of its six edges**, the
+  **Half Sail / Full Sail move for a ship heading that way**, with the card's own sail modifier already counted (§6.2, §6.3). A player
+  finds the edge her ship faces and reads the move: no rotating and no sums. Edges are coloured by point of sail (windward, close
+  hauled, broad reach, running). The weather card must lie **north-up**, like the board. Values (Half / Full; ← = backwards):
+
+  | Heading vs wind | Dead Calm | Light | Firm | Strong | Gale |
+  |---|---|---|---|---|---|
+  | Running (downwind edge) | 0 / 0 | 0 / 1 | 1 / 2 | 1 / 3 | 2 / 3 |
+  | Broad reach (2 edges) | 0 / 0 | 1 / 2 | 2 / 3 | 2 / 4 | 3 / 4 |
+  | Close hauled (2 edges) | 0 / 0 | 0 / 1 | 1 / 2 | 1 / 3 | 2 / 3 |
+  | Windward (upwind edge) | 0 / 0 | 0 / 0 | 0 / ←1 | 0 / ←2 | ←1 / ←2 |
+
+  The digital version draws the same card. *(Card art: designer to-do.)*
 - **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next
   card face up**. The circuit also **marks the tides** (§6.4).
 
@@ -959,6 +972,7 @@ _Things the designer has said they'll do or supply._
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors and eddies (eddies come in 60°, 120° and 180°; draw the 180° eddy),
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
   *Designer's plan: little bobbles on the arrow, one per hex side turned.*
+- **Weather cards, Points-of-Sail aid**: make the weather cards bigger and print the Half / Full move on each edge, coloured by point of sail (§3.5, table there).
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 - **Fix the duplicate 360 card**: *Row Ahead 1 / Hard About / Repair* should be **380** (the other, *Row Back 1 / Hard About / Heal*, stays 360). Correct the card art and `data/cards/command-cards.csv`.
 
@@ -1003,6 +1017,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.144 — §3.5 Points-of-Sail player aid: bigger weather cards with the Half / Full move printed on each edge (designer).
 - v0.143 — §8.8 Solo Challenge (M6): one ship, 14 turns, score = treasure brought home (designer).
 - v0.142 — Q71 answered: a returning ship whose port is occupied comes back at the nearest free hex.
 - v0.141 — §7.3 corrected (a blocked Sail slot means No Sail); Q71 a sunk ship with nowhere to come back (engine assumption from step P5).
