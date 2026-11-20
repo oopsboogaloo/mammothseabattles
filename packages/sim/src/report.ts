@@ -116,7 +116,7 @@ export function formatTable(summaries: readonly Summary[]): string {
   const seats = Math.max(0, ...summaries.map((s) => s.winRateBySeat.length));
   for (let i = 0; i < seats; i++) rows.push([`Wins, seat ${i + 1}`, (s) => (s.winRateBySeat[i] === undefined ? '—' : pct(s.winRateBySeat[i]!))]);
   for (const k of keys((s) => s.sinkingsPerGame)) rows.push([`Sinkings per game: ${k}`, (s) => f1(s.sinkingsPerGame[k] ?? 0)]);
-  for (const k of keys((s) => s.damagePerGame)) rows.push([`Damage rolls per game: ${k}`, (s) => f1(s.damagePerGame[k] ?? 0)]);
+  for (const k of keys((s) => s.damagePerGame)) rows.push([`Times damaged per game: ${k}`, (s) => f1(s.damagePerGame[k] ?? 0)]);
   for (const k of Object.keys(summaries[0]?.perGame ?? {}) as (keyof Summary['perGame'])[]) rows.push([`${k} per game`, (s) => f1(s.perGame[k])]);
   const head = `| | ${summaries.map((s) => s.name).join(' | ')} |\n|---|${summaries.map(() => '---').join('|')}|`;
   return [head, ...rows.map(([label, cell]) => `| ${label} | ${summaries.map(cell).join(' | ')} |`)].join('\n');

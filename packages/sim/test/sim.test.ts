@@ -102,7 +102,7 @@ describe('summaries and tables', () => {
     expect(table.split('\n')[0]).toBe('| | base | safe-edge |');
     expect(table).toContain('| Wins, seat 1 | 100% | 0% |');
     expect(table).toContain('| Sinkings per game: edge | 1 | 0 |');
-    expect(table).toContain('| Damage rolls per game: cliff | 0 | 2 |');
+    expect(table).toContain('| Times damaged per game: cliff | 0 | 2 |');
     expect(table).toContain('| Treasure home per ship |');
     const solo = formatTable([summarize('solo', [report({ players: 1, scores: [2] })])]);
     expect(solo).toContain('| Solo score (treasure in the turn limit) | 2 (2–2) |');

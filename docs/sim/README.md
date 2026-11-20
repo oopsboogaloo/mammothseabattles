@@ -18,7 +18,7 @@ the game); 10–30 games per variant is a small sample (seat win rates in partic
 2. **Treasure changes hands a lot.** Two players pick up treasure about 8 times a game but bring it home about 3 times; it's knocked
    loose 3.5 times. With four players: 31 pick-ups, 23.5 knocked loose, about 4 brought home. Knocking loose may be too easy (any ram or
    cannon hit on a carrier) once several ships crowd the treasure.
-3. **Four players is a bloodbath.** About 20 ships sunk by crew loss and 5 by damaged rows per game, and over 100 cannon damage rolls.
+3. **Four players is a bloodbath.** About 20 ships sunk by crew loss and 5 by damaged rows per game, and over 100 cannon hits that dealt damage.
    (The AI fires at everything, which exaggerates this.)
 4. **Safe edge works as intended:** edge sinkings go to zero (1.8 a game with two players, 6.2 with four), games finish more often, and
    the Solo Challenge score rises from **1.4 to 2.0**.
@@ -37,10 +37,10 @@ the game); 10–30 games per variant is a small sample (seat win rates in partic
 | Sinkings per game: crew | 0 | 0 |
 | Sinkings per game: edge | 0.2 | 0 |
 | Sinkings per game: row | 0 | 0 |
-| Damage rolls per game: gale | 0 | 0.3 |
-| Damage rolls per game: roughWater | 0 | 0 |
-| Damage rolls per game: storm | 0 | 0.1 |
-| Damage rolls per game: wallReef | 0 | 0.1 |
+| Times damaged per game: gale | 0 | 0.3 |
+| Times damaged per game: roughWater | 0 | 0 |
+| Times damaged per game: storm | 0 | 0.1 |
+| Times damaged per game: wallReef | 0 | 0.1 |
 | cannonHits per game | 0 | 0 |
 | rams per game | 0 | 0 |
 | treasuresPickedUp per game | 2 | 2.4 |
@@ -63,14 +63,14 @@ the game); 10–30 games per variant is a small sample (seat win rates in partic
 | Sinkings per game: deathReef | 0.3 | 0.1 | 0.2 |
 | Sinkings per game: edge | 1.8 | 0 | 1.1 |
 | Sinkings per game: row | 0.8 | 0.8 | 0.6 |
-| Damage rolls per game: cannon | 18.1 | 21.9 | 11.1 |
-| Damage rolls per game: cliff | 0.4 | 0.4 | 0.4 |
-| Damage rolls per game: gale | 1.8 | 1.5 | 1.2 |
-| Damage rolls per game: portGuns | 3.7 | 2.5 | 2.9 |
-| Damage rolls per game: ram | 1.1 | 2.3 | 0.6 |
-| Damage rolls per game: roughWater | 0.5 | 0.3 | 0.2 |
-| Damage rolls per game: storm | 0.9 | 0.4 | 0.6 |
-| Damage rolls per game: wallReef | 0.3 | 0.4 | 0.2 |
+| Times damaged per game: cannon | 18.1 | 21.9 | 11.1 |
+| Times damaged per game: cliff | 0.4 | 0.4 | 0.4 |
+| Times damaged per game: gale | 1.8 | 1.5 | 1.2 |
+| Times damaged per game: portGuns | 3.7 | 2.5 | 2.9 |
+| Times damaged per game: ram | 1.1 | 2.3 | 0.6 |
+| Times damaged per game: roughWater | 0.5 | 0.3 | 0.2 |
+| Times damaged per game: storm | 0.9 | 0.4 | 0.6 |
+| Times damaged per game: wallReef | 0.3 | 0.4 | 0.2 |
 | cannonHits per game | 20.8 | 26 | 12.9 |
 | rams per game | 1.8 | 2.9 | 1 |
 | treasuresPickedUp per game | 8 | 8.7 | 5.2 |
@@ -95,14 +95,14 @@ the game); 10–30 games per variant is a small sample (seat win rates in partic
 | Sinkings per game: deathReef | 0.8 | 0.5 |
 | Sinkings per game: edge | 6.2 | 0 |
 | Sinkings per game: row | 5.3 | 5 |
-| Damage rolls per game: cannon | 109.6 | 105.5 |
-| Damage rolls per game: cliff | 2.4 | 1.8 |
-| Damage rolls per game: gale | 4.7 | 4.5 |
-| Damage rolls per game: portGuns | 28.4 | 31.4 |
-| Damage rolls per game: ram | 8 | 8.1 |
-| Damage rolls per game: roughWater | 2.3 | 1 |
-| Damage rolls per game: storm | 0.6 | 1 |
-| Damage rolls per game: wallReef | 1.2 | 0.6 |
+| Times damaged per game: cannon | 109.6 | 105.5 |
+| Times damaged per game: cliff | 2.4 | 1.8 |
+| Times damaged per game: gale | 4.7 | 4.5 |
+| Times damaged per game: portGuns | 28.4 | 31.4 |
+| Times damaged per game: ram | 8 | 8.1 |
+| Times damaged per game: roughWater | 2.3 | 1 |
+| Times damaged per game: storm | 0.6 | 1 |
+| Times damaged per game: wallReef | 1.2 | 0.6 |
 | cannonHits per game | 130.1 | 126.1 |
 | rams per game | 11 | 11.3 |
 | treasuresPickedUp per game | 31 | 31.5 |

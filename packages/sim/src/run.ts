@@ -39,7 +39,7 @@ export interface GameReport {
   readonly whirlpools: number;
   readonly caves: number;
   readonly strandings: number;
-  /** Damage rolls by source (rules §7.2): rough water, storms, cliffs, rams, cannon, … */
+  /** Times a ship took damage, by source (rules §7.2), counting each damage event once however many dice it rolled. */
   readonly damageBySource: Readonly<Record<string, number>>;
 }
 
