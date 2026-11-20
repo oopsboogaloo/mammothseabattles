@@ -93,9 +93,10 @@ describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
     expect(s.teams['all']?.players).toEqual(['A', 'B']);
   });
 
-  it('needs 2 seats and distinct players', () => {
+  it('needs a seat (1 is the Solo Challenge, §8.8) and distinct players', () => {
     const base = setup();
-    expect(() => newGame({ ...base, seats: base.seats.slice(0, 1) })).toThrow('at least 2');
+    expect(() => newGame({ ...base, seats: [] })).toThrow('at least 1');
+    expect(Object.keys(newGame({ ...base, seats: base.seats.slice(0, 1) }).ships)).toEqual(['A-ship']);
     expect(() => newGame({ ...base, seats: [base.seats[0]!, base.seats[0]!] })).toThrow('Duplicate');
   });
 });

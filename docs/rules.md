@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.142**
+> Status: **Draft v0.143**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -52,7 +52,7 @@ interact with each other and with the sea.
   conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
 
 ## 2. Players & duration
-- Players: **minimum 2**; **2–4 for the first version; the target is up to 8**. A **single-player version** is wanted eventually (see M5).
+- Players: **minimum 2**; **2–4 for the first version; the target is up to 8**. **1 player**: the Solo Challenge (§8.8); a fuller single-player version is wanted eventually (see M5).
 - Rules, components and the online engine should be designed so 8 is possible, even though playtesting starts at 4.
 - Play time: _TBD_
 - Age: _TBD_
@@ -776,6 +776,7 @@ mode is a plug-in objective module on top of a shared rules core.
 | M2 | **Treasure Hunt** | Free-for-all | **Core game.** Pick up treasure and **return it to port**; first to **3 or 5** treasure wins. Treasure **spawns randomly** and **can be stolen**. | Defined below |
 | M3 | **Deathmatch** | Usually teams | Fight. | Outline |
 | M4 | **Capture the Flag** | Teams | Take the enemy flag back to base. | Outline |
+| M6 | **Solo Challenge** | 1 vs the board | Bring home as much treasure as possible in **14 turns**; the treasure is the score. | Defined below (v0.143) |
 | M5 | **Solo / Co-op Adventure** | 1+ vs the game | Explore, fight **ghost ships and monsters**. | **Deferred** until the core game is finished. Hardest mode (needs AI-controlled enemies). |
 
 ### 8.1 M1 Race
@@ -894,6 +895,16 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
+### 8.8 M6 Solo Challenge
+One player against the board, for a score, like the solo modes of many board games (designer, v0.143). A first version, to be made more
+elaborate later.
+- **Setup** as Treasure Hunt (§8.2) with **one ship**.
+- **Treasure Hunt rules apply**, except that there is **no target**: the game lasts **14 turns** (`soloTurns`), and ends after **Part III of
+  the 14th turn** (no Upkeep).
+- **Score** = treasure brought home to her port. Players compare scores between games.
+- ❓ **1 treasure** on the map at a time (half of one ship rounds down to none); a new one spawns at Upkeep after each one scored (§8.2.1).
+- ❓ One starting wreck (§7.9), as for each ship in other games.
+
 ## 9. Optional modules
 **Core game** = §3–8 minus the modules below. Crew in the core game are **basic crew** (card icons only, no powers), plus Captains.
 
@@ -992,6 +1003,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.143 — §8.8 Solo Challenge (M6): one ship, 14 turns, score = treasure brought home (designer).
 - v0.142 — Q71 answered: a returning ship whose port is occupied comes back at the nearest free hex.
 - v0.141 — §7.3 corrected (a blocked Sail slot means No Sail); Q71 a sunk ship with nowhere to come back (engine assumption from step P5).
 - v0.140 — Q69: caves join two hexes for movement (not cannon fire); normal pushing and blocking apply. Q70 agreed: a blocked current doesn't turn the ship.

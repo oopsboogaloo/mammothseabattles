@@ -17,7 +17,7 @@ import type { DamageSource, GameEvent } from './events';
 import { runActions } from './actions';
 import { runCurrents } from './currents';
 import { returnSunkShips } from './sinking';
-import { digUpTreasure, spawnTreasure } from './treasure';
+import { digUpTreasure, isSolo, soloScore, spawnTreasure } from './treasure';
 import { refit, searchWrecks } from './upkeep';
 import { initiativeOrder } from './initiative';
 import { cardInSlot, currentWeatherOf, driftShip, inOwnPort, moveShip, steerShip, type MoveContext } from './movement';
@@ -158,6 +158,12 @@ export function resolveTurn(config: RulesConfig) {
         return state;
       }
       endOfPart(state, part, config, ctx);
+    }
+    // §8.8: the Solo Challenge ends after its last turn's Part III; the score is the treasure brought home.
+    if (isSolo(state) && state.turn >= config.soloTurns) {
+      state.phase = 'over';
+      ctx.emit({ type: 'SoloFinished', rule: '8.8', turns: state.turn, score: soloScore(state) });
+      return state;
     }
     ctx.emit({ type: 'UpkeepStarted', rule: '5.4', turn: state.turn });
     upkeep(state, config, ctx);

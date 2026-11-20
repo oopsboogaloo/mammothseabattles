@@ -17,10 +17,10 @@ export interface PrototypePlayer {
 /** Each port's default heading, pointing into the map (west port faces east, …). */
 const INTO_MAP: readonly Direction[] = [2, 4, 3, 0];
 
-/** 2–4 players, one ship each, each on her own team, on the test map; one starting wreck per ship (rules §7.9). */
+/** 1–4 players (1 is the Solo Challenge, rules §8.8), one ship each, each on her own team, on the test map; one starting wreck per ship (rules §7.9). */
 export function prototypeSetup(players: readonly PrototypePlayer[], seed: number): GameSetup {
-  if (players.length < 2 || players.length > TEST_MAP_PORTS.length) {
-    throw new Error(`The test map takes 2–${TEST_MAP_PORTS.length} players`);
+  if (players.length < 1 || players.length > TEST_MAP_PORTS.length) {
+    throw new Error(`The test map takes 1–${TEST_MAP_PORTS.length} players`);
   }
   return {
     seed,

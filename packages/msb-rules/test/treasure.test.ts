@@ -66,7 +66,7 @@ function run(s: GameState, fn: (m: MoveContext) => void, answer?: (d: PendingDec
 
 describe('how many treasures, and the target (rules §8.2.1, §8.2.5)', () => {
   it('treasures in play = half the ships, rounded down; target 3, or 2 with 7–8 ships', () => {
-    expect([2, 3, 4, 5, 6, 7, 8].map(treasuresInPlay)).toEqual([1, 1, 2, 2, 3, 3, 4]);
+    expect([1, 2, 3, 4, 5, 6, 7, 8].map(treasuresInPlay)).toEqual([1, 1, 1, 2, 2, 3, 3, 4]);
     expect([2, 6, 7, 8].map((n) => treasureTarget(n, DEFAULT_CONFIG))).toEqual([3, 3, 2, 2]);
   });
 
@@ -226,6 +226,42 @@ describe('scoring and winning (rules §8.2.4, §8.2.5)', () => {
     ship(t, 'B').carrying = true;
     run(t, (m) => arrive(t, ship(t, 'B'), MISS, m.ctx));
     expect(t.teams['blue']!.score).toBe(0);
+  });
+
+  it('Solo Challenge (§8.8): no target; after the last turn’s Part III the game ends and the treasure brought home is the score', () => {
+    const config = makeConfig({ ...MISS, soloTurns: 2 });
+    const g = createGame(config);
+    let s = game(map({}, {}), 1);
+    expect(s.treasures).toHaveLength(0); // no spawn points on this map
+    s.teams['red']!.score = 5;
+    place(s, 'A', neighbor(PORT_A, Direction.SE), Direction.NW);
+    ship(s, 'A').carrying = true;
+    const row = TEST_CARDS.find((c) => c.sail === 'rowAhead')!.id;
+    s.deck = s.deck.filter((c) => c !== row);
+    ship(s, 'A').hand = ship(s, 'A').hand.filter((c) => c !== row).concat(row);
+    s = g.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card: row }).state;
+    // Answer any question (the refit in port) with its default.
+    const settle = (out: { state: GameState; events: GameEvent[] }) => {
+      while (out.state.pending) {
+        const next = g.apply(out.state, 'A', { type: 'answer', choice: out.state.pending.defaultIndex });
+        out = { state: next.state, events: [...out.events, ...next.events] };
+      }
+      return out;
+    };
+    const one = settle(g.apply(s, 'A', { type: 'ready' }));
+    expect(one.state.teams['red']!.score).toBe(6);
+    expect(one.events.some((e) => e.type === 'GameWon')).toBe(false);
+    expect(one.state).toMatchObject({ phase: 'programming', turn: 2 });
+    expect(g.view(one.state, 'A').turnLimit).toBe(2);
+    expect(g.result(one.state)).toBeUndefined();
+    const two = settle(g.apply(one.state, 'A', { type: 'ready' }));
+    expect(two.events).toContainEqual({ type: 'SoloFinished', rule: '8.8', turns: 2, score: 6 });
+    expect(two.events.some((e) => e.type === 'UpkeepStarted')).toBe(false);
+    expect(two.state.phase).toBe('over');
+    expect(g.result(two.state)).toEqual({ score: 6 });
+    expect(g.view(game(), 'A').turnLimit).toBeUndefined();
+    const solo = game(map(), 1);
+    expect(solo.treasures).toHaveLength(1);
   });
 
   it('reaching the target ends the game at once', () => {

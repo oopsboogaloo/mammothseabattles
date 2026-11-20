@@ -132,17 +132,17 @@ describe('the test map (implementation plan P7)', () => {
 });
 
 describe('prototype setup', () => {
-  it('2–4 players on the test map, one wreck per ship, real decks', () => {
-    for (const n of [2, 3, 4]) {
+  it('1–4 players on the test map (1: the Solo Challenge), one wreck per ship, real decks', () => {
+    for (const n of [1, 2, 3, 4]) {
       const setup = prototypeSetup(Array.from({ length: n }, (_, i) => ({ name: `Player ${i + 1}` })), 7);
       const s = newGame(setup);
       expect(Object.keys(s.ships)).toHaveLength(n);
       expect(s.wrecks).toHaveLength(n);
-      expect(s.treasures).toHaveLength(Math.floor(n / 2));
+      expect(s.treasures).toHaveLength(Math.max(1, Math.floor(n / 2)));
     }
     expect(prototypeSetup([{ name: 'a', heading: 1 }, { name: 'b' }], 1).seats[0]!.heading).toBe(1);
-    expect(() => prototypeSetup([{ name: 'solo' }], 1)).toThrow('2–4 players');
-    expect(() => prototypeSetup(Array(5).fill({ name: 'x' }), 1)).toThrow('2–4 players');
+    expect(() => prototypeSetup([], 1)).toThrow('1–4 players');
+    expect(() => prototypeSetup(Array(5).fill({ name: 'x' }), 1)).toThrow('1–4 players');
   });
 });
 
@@ -156,7 +156,7 @@ describe('whole games with the real data (engineering design §12)', () => {
     const game = createGame();
     let wins = 0;
     for (let seed = 1; seed <= 12; seed++) {
-      const players = Array.from({ length: 2 + (seed % 3) }, (_, i) => ({ name: `P${i + 1}` }));
+      const players = Array.from({ length: 1 + (seed % 4) }, (_, i) => ({ name: `P${i + 1}` }));
       const setup = prototypeSetup(players, seed);
       const rng = new Rng(seed);
       let state = newGame(setup);

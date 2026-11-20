@@ -86,7 +86,7 @@ function startScreen() {
   viewer = null;
   const saved = Session.load();
   const box = screen(`<h1>Mammoth Sea Battles</h1>
-    <p>Hot-seat prototype: 2–4 players share this device. Each player plays one ship on the test map.</p>
+    <p>Hot-seat prototype: 2–4 players share this device, one ship each, on the test map. <b>1 player</b> is the <b>Solo Challenge</b>: bring home as much treasure as you can in 14 turns${bestScore() === undefined ? '' : ` (your best: ${bestScore()})`}.</p>
     <div id="names"></div>
     <div class="row"><button class="btn" id="add">+ Add player</button><button class="btn" id="del">− Remove player</button></div>
     <label class="row"><input type="checkbox" id="safe"> Safe edge (optional rule: the map edge stops ships instead of sinking them)</label>
@@ -101,7 +101,7 @@ function startScreen() {
   };
   draw();
   box.querySelector<HTMLElement>('#add')!.onclick = () => ((n = Math.min(4, n + 1)), draw());
-  box.querySelector<HTMLElement>('#del')!.onclick = () => ((n = Math.max(2, n - 1)), draw());
+  box.querySelector<HTMLElement>('#del')!.onclick = () => ((n = Math.max(1, n - 1)), draw());
   box.querySelector<HTMLElement>('#go')!.onclick = () => {
     const players = [...names.querySelectorAll('input')].map((i, k) => ({ name: i.value.trim() || `Player ${k + 1}` }));
     const safe = box.querySelector<HTMLInputElement>('#safe')!.checked;
@@ -115,6 +115,8 @@ function startScreen() {
 async function begin(s: Session) {
   session = s;
   cards = new Map(s.setup.commandCards.map((c) => [c.id, c]));
+  // Fetch every card picture now, so a hand never shows blank cards while they load.
+  for (const src of [...cards.keys()].map(cardArt).concat("art/cards/back.webp")) new Image().src = src;
   colours = Object.fromEntries(s.setup.seats.map((seat, i) => [seat.player, PLAYER_COLOURS[i]!]));
   const ports = Object.fromEntries(s.setup.seats.map((seat) => [hexKey(seat.homePort), colours[seat.player]!]));
   const art = drawBoard(s.setup.map, ports);
@@ -142,6 +144,8 @@ function next() {
 }
 
 function handOver(player: string) {
+  // Solo Challenge: no one to hide the cards from.
+  if (seats().length === 1) return showHand(player);
   viewer = null;
   $('#app').classList.add('programming');
   $('#dock').hidden = true;
@@ -150,16 +154,18 @@ function handOver(player: string) {
     <h1 style="color:${colours[player]}">${esc(playerName(player))}</h1>
     <p>Everyone else, look away: your cards are secret.</p>
     <div class="row"><button class="btn primary big" id="me">I'm ${esc(playerName(player))}: show my cards</button></div>`);
-  box.querySelector<HTMLElement>('#me')!.onclick = () => {
-    viewer = player;
-    selectedCard = null;
-    hideScreen();
-    $('#dock').hidden = false;
-    $('#playback').hidden = true;
-    renderProgramming();
-    const ship = myShip();
-    if (ship) table.focus(ship.pos);
-  };
+  box.querySelector<HTMLElement>('#me')!.onclick = () => showHand(player);
+}
+
+function showHand(player: string) {
+  viewer = player;
+  selectedCard = null;
+  hideScreen();
+  $('#dock').hidden = false;
+  $('#playback').hidden = true;
+  renderProgramming();
+  const ship = myShip();
+  if (ship) table.focus(ship.pos);
 }
 
 function myShip() {
@@ -273,7 +279,7 @@ function renderHand() {
   const step = n > 1 ? Math.min(cw * 0.98, (W - cw) / (n - 1)) : 0;
   const x0 = (W - (cw + step * (n - 1))) / 2;
   hand.forEach((id, i) => {
-    const c = h(`<button class="card ${selectedCard === id ? 'sel' : ''}" style="background-image:url(${cardArt(id)})" data-card="${id}" aria-label="Card ${cards.get(id)?.initiative}"></button>`);
+    const c = h(`<button class="card ${selectedCard === id ? 'sel' : ''}" style="background-image:url(${cardArt(id)}),url(art/cards/back.webp)" data-card="${id}" aria-label="Card ${cards.get(id)?.initiative}"></button>`);
     c.title = `${cards.get(id)?.initiative}: ${describeBand(id, 'sail')} / ${describeBand(id, 'steer')} / ${describeBand(id, 'action')}`;
     const t = n > 1 ? i / (n - 1) - 0.5 : 0;
     c.style.left = `${x0 + i * step}px`;
@@ -294,10 +300,12 @@ function renderPanels(v: GameView | null) {
   const view = v ?? S().view(seats()[0]!.player);
   const s = S().state;
   const phase = s.phase === 'programming' ? `<b>Programming</b> · ${s.ready.length} of ${seats().length} ready` : s.phase === 'over' ? '<b>Game over</b>' : `<b>Resolution</b> · Part ${PART_NAME[s.part] ?? ''}`;
-  $('#status').innerHTML = `Turn ${s.turn} · ${phase}`;
+  $('#status').innerHTML = `Turn ${s.turn}${view.turnLimit ? ` of ${view.turnLimit}` : ''} · ${phase}`;
   const target = s.setup.seats.length >= 7 ? 2 : 3;
   const rivals = $('#rivals');
-  rivals.innerHTML = `<h3>Players <small>first to ${target} treasure wins</small></h3>`;
+  rivals.innerHTML = view.turnLimit
+    ? `<h3>Solo Challenge <small>treasure home in ${view.turnLimit} turns${bestScore() === undefined ? '' : ` · best ${bestScore()}`}</small></h3>`
+    : `<h3>Players <small>first to ${target} treasure wins</small></h3>`;
   for (const seat of seats()) {
     const ship = view.ships[`${seat.player}-ship`]!;
     const healthy = ship.crew.filter((c) => c.state === 'healthy').length;
@@ -390,6 +398,7 @@ function caption(e: GameEvent): string | null {
     case 'CardsDrawn': return null;
     case 'CardsReturned': return null;
     case 'UpkeepStarted': return '<b>Upkeep</b>';
+    case 'SoloFinished': return `🏁 Solo Challenge over: ${e.score} treasure in ${e.turns} turns`;
     case 'PlayerReady': return null;
     case 'DecisionRequested': return null;
   }
@@ -457,6 +466,7 @@ async function play(events: readonly GameEvent[]) {
         break;
       case 'PartStarted':
       case 'UpkeepStarted':
+      case 'SoloFinished':
       case 'DamageRolled':
       case 'TreasureScored':
       case 'GameWon':
@@ -567,6 +577,12 @@ function toast(msg: string) {
 }
 
 // ---------------- end ----------------
+const BEST_KEY = 'msb-solo-best-v1';
+function bestScore(): number | undefined {
+  const raw = localStorage.getItem(BEST_KEY);
+  return raw === null ? undefined : Number(raw);
+}
+
 function endScreen() {
   const s = S().state;
   const v = S().view(seats()[0]!.player);
@@ -574,7 +590,16 @@ function endScreen() {
     .sort((a, b) => b.score - a.score)
     .map((t) => `<div class="score-row" style="--c:${colours[t.players[0]!]}"><span class="sw"></span><b>${esc(teamName(t.id))}</b><span>💎 ${t.score}</span><span></span><span></span></div>`)
     .join('');
-  const box = screen(`<h1>🏆 ${esc(v.winner ? teamName(v.winner) : '')} wins!</h1><p>After ${s.turn} turns.</p>${rows}
+  let title = `🏆 ${esc(v.winner ? teamName(v.winner) : '')} wins!`;
+  let note = `After ${s.turn} turns.`;
+  if (v.turnLimit) {
+    const score = v.scores[seats()[0]!.team] ?? 0;
+    const best = bestScore();
+    title = `🏁 Solo Challenge: ${score} treasure`;
+    note = `In ${s.turn} turns. ${best === undefined || score > best ? 'A new best score!' : `Your best: ${best}.`}`;
+    if (best === undefined || score > best) localStorage.setItem(BEST_KEY, String(score));
+  }
+  const box = screen(`<h1>${title}</h1><p>${note}</p>${v.turnLimit ? '' : rows}
     <div class="row" style="margin-top:1em"><button class="btn primary big" id="again">New game</button></div>`);
   box.querySelector<HTMLElement>('#again')!.onclick = () => (Session.clear(), startScreen());
 }

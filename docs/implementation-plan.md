@@ -85,6 +85,10 @@ must make it, with the default marked; hex choices are numbered on the map. End 
 log to the browser after every action, so a reload resumes the game. Checked by driving 4 full turns in headless Chromium (5 decisions,
 resume restores all actions). *Not yet:* ghost preview of the program, broadside arcs, a weather-board view, card zoom.
 
+**After P8 (designer's own play-testing first):** a **Solo Challenge** (rules §8.8: 1 player, 14 turns, score = treasure brought home;
+best score kept in the browser), so the designer can play-test alone; name fields readable; the hand shows the card back while a
+card picture loads.
+
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
 

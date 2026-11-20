@@ -78,4 +78,5 @@ export type GameEvent =
       readonly options: readonly unknown[];
       readonly defaultIndex: number;
     }
-  | { readonly type: 'UpkeepStarted'; readonly rule: '5.4'; readonly turn: number };
+  | { readonly type: 'UpkeepStarted'; readonly rule: '5.4'; readonly turn: number }
+  | { readonly type: 'SoloFinished'; readonly rule: '8.8'; readonly turns: number; readonly score: number };

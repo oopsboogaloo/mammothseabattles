@@ -47,6 +47,8 @@ export interface RulesConfig {
   /** §8.2.5 treasures to win, and with 7–8 ships. */
   readonly treasureTarget: number;
   readonly treasureTargetLarge: number;
+  /** §8.8 Solo Challenge: turns played, then the treasure brought home is the score. */
+  readonly soloTurns: number;
 }
 
 export const DEFAULT_DAMAGE_DIE: readonly DamageFace[] = [
@@ -93,6 +95,7 @@ export const DEFAULT_CONFIG: RulesConfig = {
   safeEdge: false,
   treasureTarget: 3,
   treasureTargetLarge: 2,
+  soloTurns: 14,
 };
 
 /** Make a config from the defaults with some values overridden (shallow per section). */

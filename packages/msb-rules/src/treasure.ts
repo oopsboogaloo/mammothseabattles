@@ -14,7 +14,18 @@ export const KNOCK_LOOSE = 'knockLoose';
 
 /** §8.2.1: treasures in play at once = half the number of ships, rounded down (= (ships − 1) ÷ 2 rounded up). */
 export function treasuresInPlay(ships: number): number {
-  return Math.floor(ships / 2);
+  // §8.8: the Solo Challenge has 1.
+  return Math.max(1, Math.floor(ships / 2));
+}
+
+/** §8.8 Solo Challenge: one player against the board. */
+export function isSolo(state: GameState): boolean {
+  return state.setup.seats.length === 1;
+}
+
+/** §8.8: the Solo Challenge score, the treasure brought home (the one team's score). */
+export function soloScore(state: GameState): number {
+  return Object.values(state.teams).reduce((n, t) => n + t.score, 0);
 }
 
 /** §8.2.5: the target is 3, or 2 with 7–8 ships. */
@@ -69,7 +80,8 @@ function score(state: GameState, ship: Ship, config: RulesConfig, ctx: Resolutio
   team.score += 1;
   state.pendingSpawns += 1;
   ctx.emit({ type: 'TreasureScored', rule: '8.2.4', ship: ship.id, team: team.id, score: team.score });
-  if (state.winner === undefined && team.score >= treasureTarget(Object.keys(state.ships).length, config)) {
+  // §8.8: the Solo Challenge has no target; the score counts at the end.
+  if (!isSolo(state) && state.winner === undefined && team.score >= treasureTarget(Object.keys(state.ships).length, config)) {
     state.winner = team.id;
     ctx.emit({ type: 'GameWon', rule: '8.2.5', team: team.id });
   }
