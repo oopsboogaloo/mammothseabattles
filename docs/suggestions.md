@@ -98,3 +98,35 @@ Ideas from the designer (v0.109) for later; the current rule is "agree, or take 
 
 **Concept:** a smaller **extreme weather deck**, with a pair of **extreme weather cards** in the main weather deck that call a card from it.
 Needs thought.
+
+## Making the game easier to play without simplifying it *(designer, 2026-11-20)*
+From the designer's first solo play-tests of the digital prototype: **the game is too hard**, but its complexity is what makes it
+unique, so the rules stay as they are for now. The first answer is to **show players what is going on and why**; the same will apply to
+the physical boards (clearer printed currents, features that explain themselves).
+
+Done in the digital prototype (2026-11-20):
+- Decisions appear in a **small panel on the board**, next to the ship they're about, with the **cause** shown: an animated arcing arrow
+  from the shooter (or rammer, or port) to the target, and the dice rolled. Ship damage is chosen on a miniature of the ship board.
+- **Mouse-over** on PC: the hex under the pointer is outlined, and pausing shows what's there (terrain and its effect at the current tide,
+  currents, eddies, rotors, whirlpools, caves, wall reefs, spawn points, ports, treasure, wrecks, ships).
+- **Clearer current arrows**: broad ribbons coloured by strength (pale blue, cyan, gold) with one chevron per hex moved, and a badge for turns.
+- During play-back: a large caption of what's happening, arrows for cannon fire and rams, dice results floating over the ship.
+- Cards can be **dragged** onto the ship board as well as tapped.
+- **Points of sail** (the hardest part): the weather card, shown bigger, carries the Half / Full move on each edge, coloured by point of
+  sail, and rings the edge the player's ship faces. Designer decision for the physical cards too (rules v0.144, §3.5).
+
+Further ideas to try:
+- A **preview** while programming: the ghost of where the ship will end each Part (the layout A mock-up has one).
+- Broadside arcs shown for each Fire card placed.
+- A guided first game (tutorial) on a Category 1 board, with the Safe edge option.
+
+## Tornado *(designer, 2026-11-20; future idea, just logged)*
+- A **tornado** (waterspout) that **transports ships** in some way: e.g. picks up a ship it touches and sets her down some hexes away,
+  perhaps spinning her to a random heading. How it moves, how far it carries, and whether it damages are all open. Could be a weather
+  card (like the Hurricane and Lightning Storm ideas above) or a roaming hazard like the sea monster.
+
+## Graphical polish (future) *(designer, 2026-11-20)*
+- **Wind on the board**: a gentle wind blowing across the board in the wind's direction, and when the weather changes, the wind
+  **softly turning to the new direction and strength**. Mainly to **communicate the weather change**; it shouldn't blow all the time,
+  or if it does, only **very subtly** (e.g. faint streaks or ripples drifting across the sea, stronger and faster for stronger winds,
+  easing round over a second or two at Upkeep).

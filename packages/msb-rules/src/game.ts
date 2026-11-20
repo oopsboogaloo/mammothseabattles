@@ -21,9 +21,9 @@ import { validateMap } from './map';
 import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent } from './events';
 import { applyProgramming, drawCards, programmingActions, type ProgramAction } from './programming';
-import type { GameSetup, GameState, PlayerId, Ship, ShipCrew } from './state';
+import type { GameSetup, GameState, PlayerId, Ship, ShipCrew, TreasureKind } from './state';
 import { setUpWeather, tide, type Tide } from './weather';
-import { spawnTreasure, treasuresInPlay } from './treasure';
+import { isSolo, soloScore, spawnTreasure, treasuresInPlay } from './treasure';
 import { resolveTurn, shipsInSeatOrder } from './turn';
 
 export type Action = ProgramAction | { readonly type: 'answer'; readonly choice: number };
@@ -48,8 +48,13 @@ export interface GameView {
   readonly weather: { readonly now: string; readonly next: string; readonly space: number; readonly tide: Tide };
   /** Loose treasure on the map (hex keys), each team's score, and the winner once there is one (rules §8.2). */
   readonly treasures: readonly string[];
+  /** Which piece lies on each treasure hex, and each team's pieces brought home (rules §3.7). */
+  readonly treasureKinds: Readonly<Record<string, TreasureKind>>;
+  readonly holds: Readonly<Record<string, readonly TreasureKind[]>>;
   readonly scores: Readonly<Record<string, number>>;
   readonly winner?: string;
+  /** §8.8 Solo Challenge: the number of turns played. */
+  readonly turnLimit?: number;
   /** The question being asked, if any; options are shown only to the player who must answer. */
   readonly decision?: { readonly player: PlayerId; readonly kind: string; readonly options?: readonly unknown[]; readonly defaultIndex?: number };
 }
@@ -66,7 +71,7 @@ export function startingCrew(shipId: string): ShipCrew[] {
 }
 
 export function newGame(setup: GameSetup): GameState {
-  if (setup.seats.length < 2) throw new Error('A game needs at least 2 seats (rules §2)');
+  if (setup.seats.length < 1) throw new Error('A game needs at least 1 seat (rules §2; 1 is the Solo Challenge, §8.8)');
   validateCards(setup.commandCards);
   validateMap(setup.map);
   const rng = new Rng(seedRng(setup.seed));
@@ -85,6 +90,8 @@ export function newGame(setup: GameSetup): GameState {
     discards: [],
     wrecks: [...(setup.map.startWrecks ?? [])],
     treasures: [],
+    treasureKinds: {},
+    treasureSpawns: 0,
     treasureDeck: [],
     pendingSpawns: 0,
     part: 0,
@@ -94,7 +101,7 @@ export function newGame(setup: GameSetup): GameState {
   for (const seat of setup.seats) {
     if (state.players[seat.player]) throw new Error(`Duplicate player ${seat.player}`);
     const shipId = `${seat.player}-ship`;
-    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort, score: 0 };
+    const team = state.teams[seat.team] ?? { id: seat.team, players: [], homePort: seat.homePort, score: 0, hold: [] };
     team.players.push(seat.player);
     state.teams[seat.team] = team;
     state.players[seat.player] = { id: seat.player, team: seat.team, name: seat.name, ships: [shipId] };
@@ -165,8 +172,10 @@ export function viewShip(state: GameState, viewer: PlayerId, ship: Ship): ShipVi
   return { ...open, handSize: hand.length, program: shown };
 }
 
+/** The winning team, or for the Solo Challenge (§8.8) no winner and the score. */
 export interface GameResult {
-  readonly winner: string;
+  readonly winner?: string;
+  readonly score?: number;
 }
 
 export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameState, Action, GameView, GameEvent, GameSetup, GameResult> {
@@ -213,8 +222,11 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
         ready: state.ready,
         weather,
         treasures: state.treasures,
+        treasureKinds: state.treasureKinds,
+        holds: Object.fromEntries(Object.values(state.teams).map((t) => [t.id, t.hold])),
         scores,
         ...(state.winner === undefined ? {} : { winner: state.winner }),
+        ...(isSolo(state) ? { turnLimit: config.soloTurns } : {}),
       };
       const decision = state.pending;
       if (!decision) return base;
@@ -228,7 +240,9 @@ export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameSt
     },
 
     result(state) {
-      return state.winner === undefined ? undefined : { winner: state.winner };
+      if (state.winner !== undefined) return { winner: state.winner };
+      if (state.phase !== 'over') return undefined;
+      return { score: soloScore(state) };
     },
   };
 }

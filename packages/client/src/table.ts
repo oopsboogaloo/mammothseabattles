@@ -6,8 +6,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { hexKey, type Direction, type Hex } from '@msb/hex';
-import type { SailLevel } from '@msb/msb-rules';
-import { hexToOffset } from './game';
+import type { SailLevel, TreasureKind } from '@msb/msb-rules';
+import { setTreasureEnvironment, treasurePiece } from './treasure-models';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { hexToOffset, offsetToHex } from './game';
 
 export interface MapInfo {
   width: number;
@@ -28,12 +30,15 @@ export interface ShipView {
   heading: Direction;
   sail: SailLevel;
   selected: boolean;
+  /** The treasure piece in her hold, if any (rules §3.7). */
+  cargo?: TreasureKind;
 }
 
 interface ShipObj {
   root: THREE.Group;
   sails: THREE.Object3D[];
   label: HTMLElement;
+  cargo?: THREE.Object3D | undefined;
 }
 
 export class Table {
@@ -53,6 +58,14 @@ export class Table {
   private hexGeo!: THREE.CircleGeometry;
   private home = { target: new THREE.Vector3(), pos: new THREE.Vector3() };
   onShipClick: (id: string | null) => void = () => {};
+  /** Mouse over the board (not touch): the hex under the pointer, or null off the board. */
+  onHover: (h: Hex | null, clientX: number, clientY: number) => void = () => {};
+  private hoverMesh: THREE.Mesh | null = null;
+  private arcs = new THREE.Group();
+  private treasureGroup = new THREE.Group();
+  /** The ship model's size once scaled, for placing cargo in her hold. */
+  private shipBox = new THREE.Box3();
+  private ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.05);
 
   constructor(private host: HTMLElement, private labelLayer: HTMLElement) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -85,8 +98,9 @@ export class Table {
     sc.left = -24; sc.right = 24; sc.top = 26; sc.bottom = -26; sc.near = 1; sc.far = 80;
     sun.shadow.bias = -0.0005;
     this.scene.add(sun);
-    this.scene.add(this.board, this.ghosts, this.overlay, this.fx);
+    this.scene.add(this.board, this.ghosts, this.overlay, this.fx, this.arcs, this.treasureGroup);
     this.addTableTop();
+    setTreasureEnvironment(new THREE.PMREMGenerator(this.renderer).fromScene(new RoomEnvironment(), 0.04).texture);
 
     new ResizeObserver(() => this.resize()).observe(host);
     this.resize();
@@ -97,7 +111,21 @@ export class Table {
       if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) this.pick(e);
       down = null;
     });
+    el.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || !this.map) return;
+      const h = e.buttons ? null : this.hexAt(e.clientX, e.clientY);
+      this.showHover(h);
+      this.onHover(h, e.clientX, e.clientY);
+    });
+    el.addEventListener('pointerleave', () => (this.showHover(null), this.onHover(null, 0, 0)));
     const tick = () => {
+      // Loose treasure turns slowly and bobs, so it catches the eye.
+      const t = performance.now() / 1000;
+      for (const piece of this.treasureGroup.children) {
+        if (!piece.userData.loose) continue;
+        piece.rotation.y = t * 0.8 + piece.userData.phase;
+        piece.position.y = piece.userData.y + Math.sin(t * 2 + piece.userData.phase) * 0.06;
+      }
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
       this.placeLabels();
@@ -187,6 +215,9 @@ export class Table {
       }
     });
     this.shipTemplate = gltf.scene;
+    this.shipBox = new THREE.Box3().setFromObject(gltf.scene);
+    this.shipBox.min.multiplyScalar(SHIP_SCALE);
+    this.shipBox.max.multiplyScalar(SHIP_SCALE);
   }
 
   /** Hex centre in world space. */
@@ -196,6 +227,83 @@ export class Table {
     const px = m.originX + 1.5 * s * col;
     const py = m.originY + hh * (row + 0.5 * (col & 1));
     return new THREE.Vector3((px - m.width / 2) / PX, y, (py - m.height / 2) / PX);
+  }
+
+  /** The board hex under a screen point, or null. */
+  hexAt(clientX: number, clientY: number): Hex | null {
+    const r = this.renderer.domElement.getBoundingClientRect();
+    this.raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), this.camera);
+    const p = new THREE.Vector3();
+    if (!this.raycaster.ray.intersectPlane(this.ground, p)) return null;
+    const m = this.map, hh = Math.sqrt(3) * m.size;
+    const px = p.x * PX + m.width / 2, py = p.z * PX + m.height / 2;
+    let best: [number, number] | null = null, bestD = Infinity;
+    for (const [col, row] of m.hexes) {
+      const d = Math.hypot(m.originX + 1.5 * m.size * col - px, m.originY + hh * (row + 0.5 * (col & 1)) - py);
+      if (d < bestD) (bestD = d), (best = [col, row]);
+    }
+    return best && bestD < m.size ? offsetToHex(best[0], best[1]) : null;
+  }
+
+  private showHover(h: Hex | null) {
+    if (!this.hoverMesh) {
+      const r = (this.map.size / PX) * 0.98;
+      const ring = new THREE.RingGeometry(r * 0.86, r, 6, 1);
+      ring.rotateX(-Math.PI / 2);
+      this.hoverMesh = new THREE.Mesh(ring, new THREE.MeshBasicMaterial({ color: '#ffe680', transparent: true, opacity: 0.9, depthTest: false }));
+      this.hoverMesh.renderOrder = 10;
+      this.scene.add(this.hoverMesh);
+    }
+    this.hoverMesh.visible = !!h;
+    if (h) this.hoverMesh.position.copy(this.hexToWorld(h, 0.14));
+  }
+
+  /** A point's position on screen, relative to the table's top-left corner. */
+  toScreen(p: THREE.Vector3): { x: number; y: number } {
+    const r = this.host.getBoundingClientRect();
+    const v = p.clone().project(this.camera);
+    return { x: ((v.x + 1) / 2) * r.width, y: ((1 - v.y) / 2) * r.height };
+  }
+
+  /** Where a ship model stands (or undefined if she isn't on the table). */
+  shipPosition(id: string): THREE.Vector3 | undefined {
+    return this.ships.get(id)?.root.position.clone();
+  }
+
+  /**
+   * An arcing arrow from one point to another (cannon fire, a ram, a knock), drawn out over `ms`.
+   * Stays until clearArcs() unless `fade` is set.
+   */
+  arc(from: THREE.Vector3, to: THREE.Vector3, colour = '#ff7a2f', ms = 600, fade = false): Promise<void> {
+    const a = from.clone().setY(0.9), b = to.clone().setY(0.9);
+    const mid = a.clone().lerp(b, 0.5).setY(0.9 + Math.max(1.2, a.distanceTo(b) * 0.35));
+    const curve = new THREE.QuadraticBezierCurve3(a, mid, b);
+    const mat = new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.95, depthTest: false });
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 48, 0.09, 8, false), mat);
+    const head = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.7, 12), mat);
+    tube.renderOrder = head.renderOrder = 11;
+    const g = new THREE.Group();
+    g.add(tube, head);
+    this.arcs.add(g);
+    const total = (tube.geometry.index as THREE.BufferAttribute).count;
+    const t0 = performance.now();
+    return new Promise((res) => {
+      const step = () => {
+        const t = Math.min(1, (performance.now() - t0) / ms);
+        tube.geometry.setDrawRange(0, Math.floor((total * t) / 6) * 6);
+        const p = curve.getPoint(Math.max(t, 0.02)), d = curve.getTangent(Math.max(t, 0.02));
+        head.position.copy(p);
+        head.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize());
+        if (t < 1) return void requestAnimationFrame(step);
+        res();
+        if (fade) setTimeout(() => this.arcs.remove(g), 900);
+      };
+      step();
+    });
+  }
+
+  clearArcs() {
+    this.clearGroup(this.arcs);
   }
 
   static headingAngle(d: Direction): number {
@@ -241,6 +349,19 @@ export class Table {
       obj.root.rotation.y = Table.headingAngle(v.heading);
       Table.applySail(obj, v.sail);
       obj.label.textContent = v.name;
+      if (obj.cargo?.userData.kind !== v.cargo) {
+        if (obj.cargo) obj.root.remove(obj.cargo);
+        obj.cargo = undefined;
+        if (v.cargo) {
+          // In the back of the ship (the stern is +z when she faces north), on deck, like the physical pieces.
+          const piece = treasurePiece(v.cargo);
+          const b = this.shipBox;
+          piece.position.set((b.min.x + b.max.x) / 2, b.min.y + (b.max.y - b.min.y) * 0.22, b.min.z + (b.max.z - b.min.z) * 0.8);
+          piece.scale.setScalar(1.3);
+          obj.cargo = piece;
+          obj.root.add(piece);
+        }
+      }
       obj.label.classList.toggle('selected', v.selected);
       obj.label.style.setProperty('--c', v.colour);
     }
@@ -250,6 +371,36 @@ export class Table {
         obj.label.remove();
         this.ships.delete(id);
       }
+  }
+
+  /**
+   * Treasure on the table (rules §3.7): loose pieces on their hexes (bigger, turning, on a glowing disc), and each port's pieces
+   * brought home, set out round the port.
+   */
+  setTreasures(loose: { hex: Hex; kind: TreasureKind }[], holds: { hex: Hex; kinds: readonly TreasureKind[] }[]) {
+    this.treasureGroup.clear();
+    const glow = new THREE.MeshBasicMaterial({ color: '#ffe48a', transparent: true, opacity: 0.45, depthWrite: false });
+    loose.forEach(({ hex: h, kind }, i) => {
+      const disc = new THREE.Mesh(new THREE.CircleGeometry(0.42, 24), glow);
+      disc.rotation.x = -Math.PI / 2;
+      disc.position.copy(this.hexToWorld(h, 0.07));
+      const piece = treasurePiece(kind);
+      piece.scale.setScalar(1.7);
+      piece.position.copy(this.hexToWorld(h, 0.12));
+      Object.assign(piece.userData, { loose: true, y: 0.12, phase: i * 1.3 });
+      this.treasureGroup.add(disc, piece);
+    });
+    for (const { hex: h, kinds } of holds) {
+      const c = this.hexToWorld(h, 0.06);
+      const r = (this.map.size / PX) * 0.62;
+      kinds.forEach((kind, i) => {
+        const a = Math.PI * 0.75 + (i * Math.PI) / 3.5;
+        const piece = treasurePiece(kind);
+        piece.scale.setScalar(1.1);
+        piece.position.set(c.x + Math.cos(a) * r, 0.06, c.z + Math.sin(a) * r);
+        this.treasureGroup.add(piece);
+      });
+    }
   }
 
   /** Ghost preview: translucent ships at the end of each Part, and a dashed path. */

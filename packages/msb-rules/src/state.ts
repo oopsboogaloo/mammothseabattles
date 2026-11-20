@@ -135,6 +135,8 @@ export interface Ship {
   refitting: boolean;
   /** Carrying a treasure (rules §8.2.2: at most 1). */
   carrying: boolean;
+  /** Which treasure piece she carries (rules §3.7: all are worth the same; only the look differs). */
+  cargo?: TreasureKind;
   /** Parts sailed at Full Sail in a Gale this turn: 1 DD each at Upkeep (rules §3.5). */
   galeParts: number;
 }
@@ -145,6 +147,8 @@ export interface Team {
   homePort: Hex;
   /** Treasures scored (rules §8.2.4). */
   score: number;
+  /** The pieces brought home, in order (rules §3.7). */
+  hold: TreasureKind[];
 }
 
 export interface Player {
@@ -155,6 +159,10 @@ export interface Player {
 }
 
 export type Phase = 'programming' | 'resolving' | 'over';
+
+/** Treasure pieces (rules §3.7): small physical replicas that fit in the ship model's hold. All are worth the same. */
+export type TreasureKind = 'rum' | 'diamond' | 'ruby' | 'pearl' | 'gold';
+export const TREASURE_KINDS: readonly TreasureKind[] = ['gold', 'diamond', 'rum', 'ruby', 'pearl'];
 
 export interface GameState {
   setup: GameSetup;
@@ -171,6 +179,10 @@ export interface GameState {
   wrecks: string[];
   /** Treasure lying loose on the map, as hex keys (rules §8.2). Carried treasure is on the ship (`carrying`). */
   treasures: string[];
+  /** Which piece lies on each treasure hex (rules §3.7). */
+  treasureKinds: Record<string, TreasureKind>;
+  /** Treasures spawned so far: the next piece is the next kind in turn (rules §3.7). */
+  treasureSpawns: number;
   /** The treasure map deck: spawn point numbers, top first (rules §8.2.1). */
   treasureDeck: string[];
   /** Treasures scored this turn; one new treasure spawns for each at Upkeep (rules §8.2.1). */

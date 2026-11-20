@@ -5,7 +5,7 @@
 
 import type { Direction, Hex } from '@msb/hex';
 import type { Part, SailLevel } from './sailing';
-import type { PlayerId, ShipId } from './state';
+import type { PlayerId, ShipId, TreasureKind } from './state';
 
 export type DamageSource = 'roughWater' | 'storm' | 'cliff' | 'wallReef' | 'ram' | 'gale' | 'cannon' | 'portGuns';
 
@@ -44,11 +44,11 @@ export type GameEvent =
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
   | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
-  | { readonly type: 'TreasureSpawned'; readonly rule: '8.2.1'; readonly point: string; readonly at: string }
-  | { readonly type: 'TreasurePickedUp'; readonly rule: '8.2.2'; readonly ship: ShipId; readonly at: string }
-  | { readonly type: 'TreasureKnockedLoose'; readonly rule: '8.2.3'; readonly ship: ShipId; readonly by: ShipId; readonly to: Hex }
-  | { readonly type: 'TreasureDropped'; readonly rule: '7.8'; readonly ship: ShipId; readonly at: Hex }
-  | { readonly type: 'TreasureScored'; readonly rule: '8.2.4'; readonly ship: ShipId; readonly team: string; readonly score: number }
+  | { readonly type: 'TreasureSpawned'; readonly rule: '8.2.1'; readonly point: string; readonly at: string; readonly kind: TreasureKind }
+  | { readonly type: 'TreasurePickedUp'; readonly rule: '8.2.2'; readonly ship: ShipId; readonly at: string; readonly kind: TreasureKind }
+  | { readonly type: 'TreasureKnockedLoose'; readonly rule: '8.2.3'; readonly ship: ShipId; readonly by: ShipId; readonly to: Hex; readonly kind: TreasureKind }
+  | { readonly type: 'TreasureDropped'; readonly rule: '7.8'; readonly ship: ShipId; readonly at: Hex; readonly kind: TreasureKind }
+  | { readonly type: 'TreasureScored'; readonly rule: '8.2.4'; readonly ship: ShipId; readonly team: string; readonly score: number; readonly kind: TreasureKind }
   | { readonly type: 'GameWon'; readonly rule: '8.2.5'; readonly team: string }
   | { readonly type: 'WreckSearched'; readonly rule: '7.9'; readonly ship: ShipId; readonly at: string }
   | { readonly type: 'CrewGained'; readonly rule: '7.9'; readonly ship: ShipId; readonly crew: string; readonly replaced?: string }
@@ -78,4 +78,5 @@ export type GameEvent =
       readonly options: readonly unknown[];
       readonly defaultIndex: number;
     }
-  | { readonly type: 'UpkeepStarted'; readonly rule: '5.4'; readonly turn: number };
+  | { readonly type: 'UpkeepStarted'; readonly rule: '5.4'; readonly turn: number }
+  | { readonly type: 'SoloFinished'; readonly rule: '8.8'; readonly turns: number; readonly score: number };

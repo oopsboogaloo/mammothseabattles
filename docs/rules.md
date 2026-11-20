@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.141**
+> Status: **Draft v0.145**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -52,7 +52,7 @@ interact with each other and with the sea.
   conflict rule for when ships interfere (see Q8) that gives the same result simultaneous play would at the table.
 
 ## 2. Players & duration
-- Players: **minimum 2**; **2–4 for the first version; the target is up to 8**. A **single-player version** is wanted eventually (see M5).
+- Players: **minimum 2**; **2–4 for the first version; the target is up to 8**. **1 player**: the Solo Challenge (§8.8); a fuller single-player version is wanted eventually (see M5).
 - Rules, components and the online engine should be designed so 8 is possible, even though playtesting starts at 4.
 - Play time: _TBD_
 - Age: _TBD_
@@ -234,6 +234,19 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
   renaming the cards (e.g. "Wind to the North" / "Northward", or just the arrow) to avoid arguments at the table.
 - Weather cards are **hex-shaped**. Each shows a **wind strength** and a **wind direction** on a 6-point compass
   (**N, NE, SE, S, SW, NW**). These are the 6 directions of flat-topped hex sides, so the wind always runs along a hex direction.
+- **Points-of-Sail player aid** *(designer, v0.144)*: each weather card is printed **bigger** and shows, **on each of its six edges**, the
+  **Half Sail / Full Sail move for a ship heading that way**, with the card's own sail modifier already counted (§6.2, §6.3). A player
+  finds the edge her ship faces and reads the move: no rotating and no sums. Edges are coloured by point of sail (windward, close
+  hauled, broad reach, running). The weather card must lie **north-up**, like the board. Values (Half / Full; ← = backwards):
+
+  | Heading vs wind | Dead Calm | Light | Firm | Strong | Gale |
+  |---|---|---|---|---|---|
+  | Running (downwind edge) | 0 / 0 | 0 / 1 | 1 / 2 | 1 / 3 | 2 / 3 |
+  | Broad reach (2 edges) | 0 / 0 | 1 / 2 | 2 / 3 | 2 / 4 | 3 / 4 |
+  | Close hauled (2 edges) | 0 / 0 | 0 / 1 | 1 / 2 | 1 / 3 | 2 / 3 |
+  | Windward (upwind edge) | 0 / 0 | 0 / 0 | 0 / ←1 | 0 / ←2 | ←1 / ←2 |
+
+  The digital version draws the same card. *(Card art: designer to-do.)*
 - **Weather is predictable**: cards are drawn and placed on a **weather circuit** that shows the current weather and the **next
   card face up**. The circuit also **marks the tides** (§6.4).
 
@@ -295,6 +308,15 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 - **Every ship starts the game with a Captain + 2 crew** (3 in total; the 2 **drawn at random**).
 - **Wounded crew** give **no card icons** and their **powers stop** until healed. **Captains can be wounded and killed** like any crew.
 - The **crew deck** will have **at least 50 cards**, and **most crew have a skill** that helps. Captains are the most powerful crew; losing yours (killed, or ship sunk) is a big setback.
+
+### 3.7 Treasure pieces *(designer, v0.145)*
+- Treasure is **small physical replicas**: **barrels of rum, diamonds, rubies, pearls and bars of gold**. A piece lies on the map where
+  treasure spawns, and a ship carrying treasure holds it **in the back of the ship model** (as in the classic board game *Buccaneer*, a
+  partial inspiration for this game).
+- **All pieces are worth the same**: one treasure each (§8.2). The kind is only for looks and fun.
+- ❓ Number of each piece in the box: to be decided (at least as many as treasures can be in play at once, §8.2.1).
+- *Digital version:* the pieces are 3D objects; they come out in turn (gold, diamond, rum, ruby, pearl, …), each keeps its identity
+  when carried, knocked loose or dropped, and the pieces each team brings home are shown in its port.
 
 ## 4. Setup
 1. Build the map together (§3.1.1): main boards, then one **port tile** per player or team on the outer edge. Place spawn points and wreck tokens (scenario).
@@ -701,7 +723,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 ### 7.8 Sinking and coming back
 - A ship sinks when any whole row of slots is blocked (§7.3) or she has no healthy crew (§7.4).
 - **Board edge**: leaving the map sinks a ship in the hex she was about to leave (§3.1).
-- **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in an **adjacent hex**.
+- **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in the **nearest free hex** (sea, never a death reef; her player chooses between equally near ones) (Q71).
 - **She comes back at Upkeep** (not straight away) and plays the **next turn as normal** (she doesn't miss it).
 - She **discards her hand** of command cards and **draws a new hand** from her new crew.
 - **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
@@ -776,6 +798,7 @@ mode is a plug-in objective module on top of a shared rules core.
 | M2 | **Treasure Hunt** | Free-for-all | **Core game.** Pick up treasure and **return it to port**; first to **3 or 5** treasure wins. Treasure **spawns randomly** and **can be stolen**. | Defined below |
 | M3 | **Deathmatch** | Usually teams | Fight. | Outline |
 | M4 | **Capture the Flag** | Teams | Take the enemy flag back to base. | Outline |
+| M6 | **Solo Challenge** | 1 vs the board | Bring home as much treasure as possible in **14 turns**; the treasure is the score. | Defined below (v0.143) |
 | M5 | **Solo / Co-op Adventure** | 1+ vs the game | Explore, fight **ghost ships and monsters**. | **Deferred** until the core game is finished. Hardest mode (needs AI-controlled enemies). |
 
 ### 8.1 M1 Race
@@ -894,6 +917,16 @@ two robots each, which makes 2-player games full and rich (it gets heavy beyond 
 ### 8.5 M5 Solo / Co-op Adventure *(deferred)*
 - Exploration plus AI-controlled ghost ships and monsters. Overlaps with the optional sea monster (§9.1). Not to be designed until the core game is finished.
 
+### 8.8 M6 Solo Challenge
+One player against the board, for a score, like the solo modes of many board games (designer, v0.143). A first version, to be made more
+elaborate later.
+- **Setup** as Treasure Hunt (§8.2) with **one ship**.
+- **Treasure Hunt rules apply**, except that there is **no target**: the game lasts **14 turns** (`soloTurns`), and ends after **Part III of
+  the 14th turn** (no Upkeep).
+- **Score** = treasure brought home to her port. Players compare scores between games.
+- ❓ **1 treasure** on the map at a time (half of one ship rounds down to none); a new one spawns at Upkeep after each one scored (§8.2.1).
+- ❓ One starting wreck (§7.9), as for each ship in other games.
+
 ## 9. Optional modules
 **Core game** = §3–8 minus the modules below. Crew in the core game are **basic crew** (card icons only, no powers), plus Captains.
 
@@ -948,6 +981,7 @@ _Things the designer has said they'll do or supply._
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors and eddies (eddies come in 60°, 120° and 180°; draw the 180° eddy),
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
   *Designer's plan: little bobbles on the arrow, one per hex side turned.*
+- **Weather cards, Points-of-Sail aid**: make the weather cards bigger and print the Half / Full move on each edge, coloured by point of sail (§3.5, table there).
 - **Command deck list** (band combinations, unique initiative numbers) and **crew deck list** (≥ 50 cards).
 - **Fix the duplicate 360 card**: *Row Ahead 1 / Hard About / Repair* should be **380** (the other, *Row Back 1 / Hard About / Heal*, stays 360). Correct the card art and `data/cards/command-cards.csv`.
 
@@ -969,8 +1003,8 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 - ~~Q63 Eddy turning amount~~ → the 3-arrow eddy turns 120°; eddies come in 60°, 120° and 180° (v0.123).
 - ~~Q66 Refilling the weather board~~ → the card leaving "now" is discarded, the space gets the top card of the weather deck, and the
   discards are reshuffled when the deck runs out (designer approved, v0.137).
-- **Q71 Nowhere to come back** (§7.8): a sunk ship comes back at Upkeep in her port hex, or next to it if that's occupied. If the port
-  **and every hex next to it** are occupied (or land), what happens? *Engine assumption: she waits and comes back at the next Upkeep.*
+- ~~Q71 Nowhere to come back~~ → if her port is occupied she comes back at the **nearest free hex** (designer, v0.142). "Nearest"
+  counts hexes in a straight line, ignoring land in between (designer). ❓ Equally near hexes: her player chooses.
 - ~~Q70 Blocked curved current~~ → a blocked current neither moves nor turns her (designer agreed, v0.140).
 - ~~Q69 Caves, edge cases~~ → caves just join two hexes for movement; normal pushing and blocking rules apply (v0.140).
 - ~~Q68 Rowing~~ → pushes and rams like sailing (v0.132).
@@ -992,6 +1026,10 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.145 — §3.7 treasure pieces: physical rum, diamonds, rubies, pearls and gold that fit in the ship model; all worth the same (designer).
+- v0.144 — §3.5 Points-of-Sail player aid: bigger weather cards with the Half / Full move printed on each edge (designer).
+- v0.143 — §8.8 Solo Challenge (M6): one ship, 14 turns, score = treasure brought home (designer).
+- v0.142 — Q71 answered: a returning ship whose port is occupied comes back at the nearest free hex.
 - v0.141 — §7.3 corrected (a blocked Sail slot means No Sail); Q71 a sunk ship with nowhere to come back (engine assumption from step P5).
 - v0.140 — Q69: caves join two hexes for movement (not cannon fire); normal pushing and blocking apply. Q70 agreed: a blocked current doesn't turn the ship.
 - v0.139 — Q70 blocked curved currents (engine assumption from step P4).

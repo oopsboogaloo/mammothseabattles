@@ -7,9 +7,11 @@ import {
   arrive,
   createGame,
   digUpTreasure,
+  dropTreasure,
   makeConfig,
   newGame,
   offerKnockLoose,
+  parseHexKey,
   runActions,
   runCurrents,
   spawnTreasure,
@@ -64,9 +66,36 @@ function run(s: GameState, fn: (m: MoveContext) => void, answer?: (d: PendingDec
   return { events, asked };
 }
 
+describe('treasure pieces (rules §3.7: rum, diamond, ruby, pearl, gold; all worth the same)', () => {
+  it('the pieces come out in turn, and each keeps its identity when picked up, knocked loose, dropped and brought home', () => {
+    const points = { '1': k(hex(1, 1)), '2': k(hex(2, 1)), '3': k(hex(1, 2)), '4': k(hex(2, 2)), '5': k(hex(3, 1)), '6': k(hex(0, 2)) };
+    const s = game(map({}, points), 4);
+    expect(s.treasures.map((t) => s.treasureKinds[t])).toEqual(['gold', 'diamond']);
+    for (let i = 0; i < 4; i++) spawnTreasure(s, () => undefined);
+    expect(s.treasures.map((t) => s.treasureKinds[t])).toEqual(['gold', 'diamond', 'rum', 'ruby', 'pearl', 'gold']);
+    // Pick up the diamond, drop it by sinking, then pick it up and bring it home.
+    const at = s.treasures[1]!;
+    place(s, 'A', parseHexKey(at));
+    const pick = run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    expect(pick.events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at, kind: 'diamond' }]);
+    expect(ship(s, 'A').cargo).toBe('diamond');
+    expect(s.treasureKinds[at]).toBeUndefined();
+    const drop = run(s, (m) => dropTreasure(s, ship(s, 'A'), m.ctx));
+    expect(drop.events).toEqual([{ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: parseHexKey(at), kind: 'diamond' }]);
+    expect(ship(s, 'A').cargo).toBeUndefined();
+    expect(s.treasureKinds[at]).toBe('diamond');
+    run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    place(s, 'A', PORT_A);
+    const home = run(s, (m) => arrive(s, ship(s, 'A'), MISS, m.ctx));
+    expect(home.events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1, kind: 'diamond' });
+    expect(s.teams['red']!.hold).toEqual(['diamond']);
+    expect(createGame(MISS).view(s, 'B')).toMatchObject({ holds: { red: ['diamond'] }, treasureKinds: s.treasureKinds });
+  });
+});
+
 describe('how many treasures, and the target (rules §8.2.1, §8.2.5)', () => {
   it('treasures in play = half the ships, rounded down; target 3, or 2 with 7–8 ships', () => {
-    expect([2, 3, 4, 5, 6, 7, 8].map(treasuresInPlay)).toEqual([1, 1, 2, 2, 3, 3, 4]);
+    expect([1, 2, 3, 4, 5, 6, 7, 8].map(treasuresInPlay)).toEqual([1, 1, 1, 2, 2, 3, 3, 4]);
     expect([2, 6, 7, 8].map((n) => treasureTarget(n, DEFAULT_CONFIG))).toEqual([3, 3, 2, 2]);
   });
 
@@ -124,7 +153,7 @@ describe('picking up (rules §8.2.2)', () => {
     place(s, 'A', O);
     place(s, 'B', hex(3, -3));
     const { events } = run(s, (m) => digUpTreasure(s, [ship(s, 'B'), ship(s, 'A')], m.ctx));
-    expect(events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at: k(land) }]);
+    expect(events).toEqual([{ type: 'TreasurePickedUp', rule: '8.2.2', ship: 'A-ship', at: k(land), kind: 'gold' }]);
     // Arriving next to it doesn't count, and a sunk or full ship digs nothing.
     s.treasures = [k(land)];
     ship(s, 'A').carrying = true;
@@ -155,7 +184,7 @@ describe('knocking loose and dropping (rules §8.2.3, §7.8)', () => {
     const { events, asked } = run(s, (m) => stepShip(m, ship(s, 'A'), N, 'row'), () => 1);
     expect(asked[0]).toMatchObject({ kind: KNOCK_LOOSE, player: 'A', defaultIndex: 0 });
     expect(asked[0]!.options).toHaveLength(6); // 'damage' + 5 hexes (one already has treasure)
-    expect(events).toContainEqual({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: 'B-ship', by: 'A-ship', to: asked[0]!.options[1] });
+    expect(events).toContainEqual({ type: 'TreasureKnockedLoose', rule: '8.2.3', ship: 'B-ship', by: 'A-ship', to: asked[0]!.options[1], kind: 'gold' });
     expect(events.some((e) => e.type === 'DamageRolled')).toBe(false);
     expect(ship(s, 'B').carrying).toBe(false);
   });
@@ -189,7 +218,7 @@ describe('knocking loose and dropping (rules §8.2.3, §7.8)', () => {
     place(s, 'A', O, N);
     ship(s, 'A').carrying = true;
     const { events } = run(s, (m) => stepShip(m, ship(s, 'A'), N, 'sail'));
-    expect(events).toContainEqual({ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: neighbor(O, N) });
+    expect(events).toContainEqual({ type: 'TreasureDropped', rule: '7.8', ship: 'A-ship', at: neighbor(O, N), kind: 'gold' });
     expect(s.treasures).toEqual([k(neighbor(O, N))]);
   });
 });
@@ -217,7 +246,7 @@ describe('scoring and winning (rules §8.2.4, §8.2.5)', () => {
       s = out.state;
       events.push(...out.events);
     }
-    expect(events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1 });
+    expect(events).toContainEqual({ type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'red', score: 1, kind: 'gold' });
     expect(s.teams['red']!.score).toBe(1);
     expect(s.treasures).toHaveLength(2);
     expect(g.view(s, 'B').scores).toEqual({ red: 1, blue: 0 });
@@ -226,6 +255,42 @@ describe('scoring and winning (rules §8.2.4, §8.2.5)', () => {
     ship(t, 'B').carrying = true;
     run(t, (m) => arrive(t, ship(t, 'B'), MISS, m.ctx));
     expect(t.teams['blue']!.score).toBe(0);
+  });
+
+  it('Solo Challenge (§8.8): no target; after the last turn’s Part III the game ends and the treasure brought home is the score', () => {
+    const config = makeConfig({ ...MISS, soloTurns: 2 });
+    const g = createGame(config);
+    let s = game(map({}, {}), 1);
+    expect(s.treasures).toHaveLength(0); // no spawn points on this map
+    s.teams['red']!.score = 5;
+    place(s, 'A', neighbor(PORT_A, Direction.SE), Direction.NW);
+    ship(s, 'A').carrying = true;
+    const row = TEST_CARDS.find((c) => c.sail === 'rowAhead')!.id;
+    s.deck = s.deck.filter((c) => c !== row);
+    ship(s, 'A').hand = ship(s, 'A').hand.filter((c) => c !== row).concat(row);
+    s = g.apply(s, 'A', { type: 'place', ship: 'A-ship', slot: 'sail1', card: row }).state;
+    // Answer any question (the refit in port) with its default.
+    const settle = (out: { state: GameState; events: GameEvent[] }) => {
+      while (out.state.pending) {
+        const next = g.apply(out.state, 'A', { type: 'answer', choice: out.state.pending.defaultIndex });
+        out = { state: next.state, events: [...out.events, ...next.events] };
+      }
+      return out;
+    };
+    const one = settle(g.apply(s, 'A', { type: 'ready' }));
+    expect(one.state.teams['red']!.score).toBe(6);
+    expect(one.events.some((e) => e.type === 'GameWon')).toBe(false);
+    expect(one.state).toMatchObject({ phase: 'programming', turn: 2 });
+    expect(g.view(one.state, 'A').turnLimit).toBe(2);
+    expect(g.result(one.state)).toBeUndefined();
+    const two = settle(g.apply(one.state, 'A', { type: 'ready' }));
+    expect(two.events).toContainEqual({ type: 'SoloFinished', rule: '8.8', turns: 2, score: 6 });
+    expect(two.events.some((e) => e.type === 'UpkeepStarted')).toBe(false);
+    expect(two.state.phase).toBe('over');
+    expect(g.result(two.state)).toEqual({ score: 6 });
+    expect(g.view(game(), 'A').turnLimit).toBeUndefined();
+    const solo = game(map(), 1);
+    expect(solo.treasures).toHaveLength(1);
   });
 
   it('reaching the target ends the game at once', () => {

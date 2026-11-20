@@ -58,7 +58,7 @@ Map data stores each current's destination and turn (engineering design §7.1).
 no friendly fire, the firer may hold fire on each target, fog and whirlpools block), Repair (one marker of the player's choice) and Heal
 (one wounded crew member); then every home port's guns (1 DD to rivals within 2 hexes, fog hides). A card in a slot that takes Ship
 damage is lost. Sinking leaves a shipwreck; at Upkeep a sunk ship comes back at her port (or a free hex next to it, her player's choice),
-heading of her player's choice, repaired, with 3 Pirates and no Captain, and draws a new hand (Q71: if there's nowhere free, she waits).
+heading of her player's choice, repaired, with 3 Pirates and no Captain, and draws a new hand (Q71, answered in v0.142: if her port is occupied, the nearest free hex).
 
 **Done in P6:** the full Upkeep order (§5.4): dig up treasure on land, sunk ships come back, refit (any part; default full if damaged;
 costs the next turn), search wrecks (gain a Pirate; swap with a full crew), spawn treasure for each one scored, Gale damage, advance the
@@ -84,6 +84,10 @@ whirlpools, caves, sinking, returns, broadsides, damage rolls, treasure, Upkeep)
 must make it, with the default marked; hex choices are numbered on the map. End screen with the scores. `Session` saves the action
 log to the browser after every action, so a reload resumes the game. Checked by driving 4 full turns in headless Chromium (5 decisions,
 resume restores all actions). *Not yet:* ghost preview of the program, broadside arcs, a weather-board view, card zoom.
+
+**After P8 (designer's own play-testing first):** a **Solo Challenge** (rules §8.8: 1 player, 14 turns, score = treasure brought home;
+best score kept in the browser), so the designer can play-test alone; name fields readable; the hand shows the card back while a
+card picture loads.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
