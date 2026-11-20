@@ -25,6 +25,7 @@ import {
   type SlotRow,
 } from '@msb/msb-rules';
 import { prototypeSetup } from '@msb/msb-data';
+import { answerDecision, programmingTurn } from '@msb/msb-ai';
 import { ACTION_LABEL, SAIL_LABEL, STEER_LABEL, TIDES, cardArt, weatherArt } from './data/content';
 import { PLAYER_COLOURS } from './game';
 import { drawBoard } from './board-art';
@@ -105,9 +106,13 @@ function startScreen() {
   const names = box.querySelector<HTMLElement>('#names')!;
   const draw = () => {
     const old = [...names.querySelectorAll('input')].map((i) => i.value);
+    const oldAi = [...names.querySelectorAll('select')].map((s) => s.value === 'ai');
     names.innerHTML = '';
     for (let i = 0; i < n; i++)
-      names.appendChild(h(`<div class="row"><span class="sw" style="--c:${PLAYER_COLOURS[i]}"></span><input type="text" value="${esc(old[i] ?? `Player ${i + 1}`)}" aria-label="Player ${i + 1} name"></div>`));
+      names.appendChild(
+        h(`<div class="row"><span class="sw" style="--c:${PLAYER_COLOURS[i]}"></span><input type="text" value="${esc(old[i] ?? `Player ${i + 1}`)}" aria-label="Player ${i + 1} name">
+          <select class="btn who" aria-label="Player ${i + 1} is played by"><option value="human">Human</option><option value="ai" ${oldAi[i] ? 'selected' : ''}>Computer</option></select></div>`),
+      );
   };
   draw();
   box.querySelector<HTMLElement>('#add')!.onclick = () => ((n = Math.min(4, n + 1)), draw());
@@ -116,7 +121,8 @@ function startScreen() {
     const players = [...names.querySelectorAll('input')].map((i, k) => ({ name: i.value.trim() || `Player ${k + 1}` }));
     const safe = box.querySelector<HTMLInputElement>('#safe')!.checked;
     Session.clear();
-    void begin(new Session(prototypeSetup(players, (Date.now() % 1_000_000_007) >>> 0), safe));
+    const ai = [...names.querySelectorAll('select')].flatMap((sel, k) => (sel.value === 'ai' ? [`P${k + 1}`] : []));
+    void begin(new Session(prototypeSetup(players, (Date.now() % 1_000_000_007) >>> 0), safe, [], ai));
   };
   const resume = box.querySelector<HTMLElement>('#resume');
   if (resume && saved) resume.onclick = () => void begin(saved);
@@ -148,14 +154,36 @@ function next() {
   renderTable();
   renderPanels(null);
   if (s.phase === 'over') return endScreen();
-  if (s.phase === 'resolving' && s.pending) return decisionScreen();
+  if (s.phase === 'resolving' && s.pending) {
+    // The computer answers its own questions.
+    if (isAi(s.pending.player)) return void computerAct(() => [answerDecision(S().state, S().config)], s.pending.player);
+    return decisionScreen();
+  }
+  // The computer programs first (it can't see anyone's cards, so the order doesn't matter).
+  const robot = seats().find((seat) => !s.ready.includes(seat.player) && isAi(seat.player));
+  if (robot) return void computerAct(() => programmingTurn(S().state, robot.player, S().config), robot.player);
   const waiting = seats().find((seat) => !s.ready.includes(seat.player));
   if (waiting) handOver(waiting.player);
 }
 
+const isAi = (player: string) => S().ai.includes(player);
+
+/** Let the computer take its actions (after a moment, so the screen can show it thinking), then play out what they caused. */
+async function computerAct(plan: () => Action[], player: string) {
+  busy = true;
+  banner(`🤖 ${esc(playerName(player))} is thinking…`);
+  await sleep(250);
+  const events: GameEvent[] = [];
+  for (const action of plan()) events.push(...act(action, player));
+  $('#banner').hidden = true;
+  busy = false;
+  if (events.some((e) => e.type !== 'PlayerReady')) return void play(events);
+  next();
+}
+
 function handOver(player: string) {
-  // Solo Challenge: no one to hide the cards from.
-  if (seats().length === 1) return showHand(player);
+  // Only one human at the table: no one to hide the cards from.
+  if (seats().filter((seat) => !isAi(seat.player)).length === 1) return showHand(player);
   viewer = null;
   $('#app').classList.add('programming');
   $('#dock').hidden = true;
@@ -393,7 +421,7 @@ function renderPanels(v: GameView | null) {
     const ship = view.ships[`${seat.player}-ship`]!;
     const healthy = ship.crew.filter((c) => c.state === 'healthy').length;
     const row = h(`<button class="score-row ${seat.player === viewer ? 'me' : ''}" style="--c:${colours[seat.player]}">
-      <span class="sw"></span><span><b>${esc(seat.name)}</b>${ship.carrying ? ' · 💎' : ''}${ship.status === 'sunk' ? ' · sunk' : ''}${ship.refitting ? ' · refitting' : ''}${ship.stuck ? ' · stranded' : ''}</span>
+      <span class="sw"></span><span><b>${isAi(seat.player) ? '🤖 ' : ''}${esc(seat.name)}</b>${ship.carrying ? ' · 💎' : ''}${ship.status === 'sunk' ? ' · sunk' : ''}${ship.refitting ? ' · refitting' : ''}${ship.stuck ? ' · stranded' : ''}</span>
       <span title="treasure scored">💎 ${view.scores[seat.team] ?? 0}</span><span title="healthy crew">👥 ${healthy}/${ship.crew.length}</span><span title="damaged slots">✕ ${ship.blocked.length}</span></button>`);
     row.onclick = () => table.focus(ship.pos);
     rivals.appendChild(row);

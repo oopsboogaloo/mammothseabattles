@@ -81,3 +81,4 @@
 /* The weather card leans back like the board, so its edges point the same ways as the board's hex sides. */
 .wx.rose { perspective: 700px; }
 .wx.rose .sail-rose { transform: rotateX(var(--tilt, 0.5rad)) rotateZ(var(--turn, 0rad)); transform-origin: 50% 60%; transition: transform .1s linear; }
+#screen select.btn { min-height: var(--tap); }
