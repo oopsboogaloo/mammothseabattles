@@ -123,7 +123,12 @@ Results after the fix (2 players, Normal unless said, both seatings, decided gam
 **Hard (look-ahead) beat Normal 10 of 11**; Treasure hunter vs Balanced 7 of 18; Raider vs Balanced 4 of 15 (most cannon fire,
 ~31 hits a game); Cautious vs Balanced 4 of 14. Balanced, now also chasing carriers, is the strongest personality: the others are
 flavour, not handicaps you'd notice much at the table. Games got longer (about 40–50 turns) with more fighting over carried treasure.
-*Next:* discard choice (keep the most useful cards), and a stronger opening for 3–4 player games.
+**Discards (after the bug fix):** the AI discards on 30–40% of its turns (2–3 cards; hands reach 17–19). It used to drop the
+first cards in hand; now it keeps the most varied, useful hand (`msb-ai/src/discard.ts`: each distinct order has a value, a repeat
+is worth half the one before; Repair and Heal count more when needed, Fire more for a fighter). Smart discards against the old
+way, Normal vs Normal, 12 games each seating: **10 of 16 decided games** (4–4 and 6–2): a modest gain, small sample.
+**Client:** a ship that leaves the map is shown sailing over the edge, then sinking (`ShipSank` now carries the off-map hex).
+*Next:* a stronger opening for 3–4 player games.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
