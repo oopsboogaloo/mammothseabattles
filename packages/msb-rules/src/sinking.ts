@@ -16,11 +16,11 @@ export const RETURN_HEX = 'returnHex';
 export const RETURN_HEADING = 'returnHeading';
 
 /** §7.8: sink a ship where she is, leaving a wreck there (§7.9). Mutates the resolution's working state. */
-export function sinkShip(state: GameState, ship: Ship, reason: SinkReason, ctx: ResolutionContext<GameEvent>): void {
+export function sinkShip(state: GameState, ship: Ship, reason: SinkReason, ctx: ResolutionContext<GameEvent>, off?: Hex): void {
   dropTreasure(state, ship, ctx);
   ship.status = 'sunk';
   ship.anchored = false;
-  ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason });
+  ctx.emit({ type: 'ShipSank', rule: '7.8', ship: ship.id, reason, ...(off ? { off } : {}) });
   state.wrecks.push(hexKey(ship.pos));
   ctx.emit({ type: 'WreckPlaced', rule: '7.9', at: ship.pos });
 }
