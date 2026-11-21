@@ -5,12 +5,12 @@ light-se,Light SE Wind,Light,SE,-1,All sail moves,,,,1,weather/light-se.webp,
 light-s,Light South Wind,Light,S,-1,All sail moves,,,,1,weather/light-s.webp,
 light-sw,Light SW Wind,Light,SW,-1,All sail moves,,,,1,weather/light-sw.webp,
 light-nw,Light NW Wind,Light,NW,-1,All sail moves,,,,1,weather/light-nw.webp,
-firm-n,Firm North Wind,Firm,N,,,,,,3,weather/firm-n.webp,Three copies (designer; rules v0.149).
-firm-ne,Firm NE Wind,Firm,NE,,,,,,3,weather/firm-ne.webp,Three copies (designer; rules v0.149).
-firm-se,Firm SE Wind,Firm,SE,,,,,,3,weather/firm-se.webp,Three copies (designer; rules v0.149).
-firm-s,Firm South Wind,Firm,S,,,,,,3,weather/firm-s.webp,Three copies (designer; rules v0.149).
-firm-sw,Firm SW Wind,Firm,SW,,,,,,3,weather/firm-sw.webp,Three copies (designer; rules v0.149).
-firm-nw,Firm NW Wind,Firm,NW,,,,,,3,weather/firm-nw.webp,Three copies (designer; rules v0.149).
+firm-n,Firm North Wind,Firm,N,,,,,,4,weather/firm-n.webp,Four copies (designer; rules v0.150).
+firm-ne,Firm NE Wind,Firm,NE,,,,,,4,weather/firm-ne.webp,Four copies (designer; rules v0.150).
+firm-se,Firm SE Wind,Firm,SE,,,,,,4,weather/firm-se.webp,Four copies (designer; rules v0.150).
+firm-s,Firm South Wind,Firm,S,,,,,,4,weather/firm-s.webp,Four copies (designer; rules v0.150).
+firm-sw,Firm SW Wind,Firm,SW,,,,,,4,weather/firm-sw.webp,Four copies (designer; rules v0.150).
+firm-nw,Firm NW Wind,Firm,NW,,,,,,4,weather/firm-nw.webp,Four copies (designer; rules v0.150).
 strong-n,Strong North Wind,Strong,N,1,Full Sail moves,,,,1,weather/strong-n.webp,
 strong-ne,Strong NE Wind,Strong,NE,1,Full Sail moves,,,,1,weather/strong-ne.webp,
 strong-se,Strong SE Wind,Strong,SE,1,Full Sail moves,,,,1,weather/strong-se.webp,

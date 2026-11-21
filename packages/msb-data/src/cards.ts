@@ -61,7 +61,12 @@ const STRENGTH: Readonly<Record<string, WeatherCard['strength']>> = {
 const DIRECTION: Readonly<Record<string, Direction>> = { N: 0, NE: 1, SE: 2, S: 3, SW: 4, NW: 5 };
 
 /** Cards left out of the weather deck for now (rules §3.5, v0.136): their rules aren't settled. */
-export const LEFT_OUT_WEATHER: readonly string[] = ['lightning-storm', 'hurricane'];
+export const LEFT_OUT_WEATHER: readonly string[] = [
+  'lightning-storm',
+  'hurricane',
+  // Gales are out for now too (designer, rules v0.151).
+  ...['n', 'ne', 'se', 's', 'sw', 'nw'].map((d) => `gale-${d}`),
+];
 
 /** The weather deck (rules §3.5), from weather-cards.csv, without the cards left out for now. */
 export function weatherCards(csv: string = WEATHER_CARDS_CSV): WeatherCard[] {
