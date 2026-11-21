@@ -4,7 +4,7 @@
  */
 import { replay, type LogEntry } from '@msb/engine';
 import type { AiLevel, Personality } from '@msb/msb-ai';
-import { createGame, makeConfig, type Action, type GameEvent, type GameSetup, type GameState, type GameView } from '@msb/msb-rules';
+import { auditGame, createGame, makeConfig, type Action, type GameEvent, type GameSetup, type GameState, type GameView } from '@msb/msb-rules';
 
 const SAVE_KEY = 'msb-hotseat-save-v1';
 
@@ -18,6 +18,8 @@ export interface SaveFile {
   /** Each computer player's personality; balanced if missing. */
   readonly styles?: Readonly<Record<string, Personality>>;
   readonly log: readonly LogEntry<Action>[];
+  /** What the client noticed that the rules engine can't see, e.g. the board drawing a ship somewhere else (game log). */
+  readonly notes?: readonly string[];
 }
 
 export class Session {
@@ -25,6 +27,7 @@ export class Session {
   readonly config;
   state: GameState;
   log: LogEntry<Action>[];
+  notes: string[];
 
   constructor(
     readonly setup: GameSetup,
@@ -33,7 +36,9 @@ export class Session {
     readonly ai: readonly string[] = [],
     readonly levels: Readonly<Record<string, AiLevel>> = {},
     readonly styles: Readonly<Record<string, Personality>> = {},
+    notes: readonly string[] = [],
   ) {
+    this.notes = [...notes];
     this.config = makeConfig({ safeEdge });
     this.game = createGame(this.config);
     this.log = [...log];
@@ -58,7 +63,7 @@ export class Session {
   }
 
   save(): void {
-    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, levels: this.levels, styles: this.styles, log: this.log };
+    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, levels: this.levels, styles: this.styles, log: this.log, notes: this.notes };
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(file));
     } catch {
@@ -66,12 +71,46 @@ export class Session {
     }
   }
 
+  /** Record something odd the client saw, against the action it followed. */
+  note(text: string): void {
+    this.notes.push(`after #${this.log.length - 1} (turn ${this.state.turn}): ${text}`);
+    this.save();
+  }
+
+  /**
+   * The full game log as text (engineering design §11): everything needed to replay the game exactly, the problems found, and a
+   * trace of every action, card, event and the ship and board state. It shows every player's hidden cards.
+   */
+  report(build: string, when: string, browser: string): string {
+    const { trace, problems } = auditGame(this.setup, this.log, this.config);
+    const file: SaveFile = { setup: this.setup, safeEdge: this.safeEdge, ai: this.ai, levels: this.levels, styles: this.styles, log: this.log, notes: this.notes };
+    return [
+      `Mammoth Sea Battles game log`,
+      `build ${build} · exported ${when} · ${this.log.length} actions · turn ${this.state.turn} · seed ${this.setup.seed}`,
+      `browser: ${browser}`,
+      `Shows every player's hidden cards.`,
+      ``,
+      `=== PROBLEMS FOUND BY THE RULES CHECKS (${problems.length}) ===`,
+      ...(problems.length ? problems : ['none']),
+      ``,
+      `=== NOTES FROM THE BOARD (${this.notes.length}) ===`,
+      ...(this.notes.length ? this.notes : ['none']),
+      ``,
+      `=== TRACE ===`,
+      trace,
+      ``,
+      `=== REPLAY DATA (JSON: the setup and every action, to rebuild the game exactly) ===`,
+      JSON.stringify(file),
+      ``,
+    ].join('\n');
+  }
+
   static load(): Session | undefined {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return undefined;
       const file = JSON.parse(raw) as SaveFile;
-      return new Session(file.setup, file.safeEdge, file.log, file.ai ?? [], file.levels ?? {}, file.styles ?? {});
+      return new Session(file.setup, file.safeEdge, file.log, file.ai ?? [], file.levels ?? {}, file.styles ?? {}, file.notes ?? []);
     } catch {
       return undefined;
     }

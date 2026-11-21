@@ -130,6 +130,20 @@ way, Normal vs Normal, 12 games each seating: **10 of 16 decided games** (4–4 
 **Client:** a ship that leaves the map is shown sailing over the edge, then sinking (`ShipSank` now carries the off-map hex).
 *Next:* a stronger opening for 3–4 player games.
 
+**Game log (for investigating odd moments):** Menu → **📋 Copy game log** or **💾 Save game log** gives the whole game as text.
+- **Replay data:** the setup, seed and every action, so the game can be rebuilt exactly.
+- **Trace:** every action with its card's three orders, every event, and the full ship and board state after each turn step
+  (positions, headings, sails, damage, crew, hands, programs, weather, treasure, scores).
+- **Checks** (`msb-rules/src/audit.ts`):
+  - The ships are followed event by event, and must end where the engine has them.
+  - Invariants hold after every action: every card in exactly one place, no two ships in a hex, nothing afloat off the map,
+    treasure accounted for.
+- **The board's own check:** after each turn plays out, the board compares where it drew each ship (playback and 3D model)
+  with the game, and notes any difference.
+- **To re-check a log with the current code:** `npm run replay-log -- file.txt [--out trace.txt]`.
+- **First catch:** a ship going through a sea cave was reported as moving *from the island hex*, so the board glided her across
+  the island before the cave effect. The move now starts from her real hex and names the cave.
+
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).
 

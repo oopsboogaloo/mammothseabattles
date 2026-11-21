@@ -483,10 +483,11 @@ export class Table {
     return { root: group, sails, label };
   }
 
+  /** Sails as set (rules §6.1): Full, Half (reefed), or No Sail = furled on the yards, still there like on the model ship. */
   private static applySail(obj: ShipObj, sail: SailLevel) {
     for (const s of obj.sails) {
-      s.visible = sail !== 'none';
-      s.scale.y = sail === 'half' ? 0.55 : 1;
+      s.visible = true;
+      s.scale.y = sail === 'full' ? 1 : sail === 'half' ? 0.55 : 0.14;
     }
   }
 

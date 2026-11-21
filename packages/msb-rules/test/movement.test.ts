@@ -403,6 +403,8 @@ describe('sea caves (rules §3.2.2)', () => {
     expect(s.ships['A-ship']!.heading).toBe(NE);
     expect(events).toContainEqual({ type: 'WentThroughCave', rule: '3.2.2', ship: 'A-ship', letter: 'A', to: neighbor(I2, NE) });
     expect(events).toContainEqual({ type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: N, to: NE, cause: 'cave' });
+    // The move starts from her real hex (the cave mouth's sea hex), not the island, and names the cave (found by the game log).
+    expect(events).toContainEqual({ type: 'ShipMoved', rule: '6', ship: 'A-ship', from: neighbor(I1, S), to: neighbor(I2, NE), cause: 'sail', cave: 'A' });
   });
 
   it('caves are ordinary movement (Q69): sailing through pushes and rams; drift is blocked by a ship at the exit', () => {

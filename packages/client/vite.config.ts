@@ -16,6 +16,8 @@ export default defineConfig({
     },
   },
   server: { host: true },
+  // Which build this is, for the game log: the commit on GitHub, else a local build.
+  define: { __BUILD__: JSON.stringify(process.env['GITHUB_SHA']?.slice(0, 7) ?? 'local') },
   // The AI runs in a module worker (src/ai-worker.ts), which needs ES output to share code with the page.
   worker: { format: 'es' },
   build: {
