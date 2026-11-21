@@ -95,11 +95,11 @@ describe('sailing distance (engineering design §10)', () => {
 describe('what the AI plans for', () => {
   it('next turn’s wind if the next card is a wind, else the current one; Dead Calm has no direction', () => {
     const s = game();
-    setWeather(s, 'firm-n', 'gale-se');
+    setWeather(s, 'firm-n-1', 'gale-se');
     expect(planningWeather(s)).toEqual({ strength: 'gale', direction: 2 });
-    setWeather(s, 'firm-n', 'new-front');
+    setWeather(s, 'firm-n-1', 'new-front');
     expect(planningWeather(s)).toEqual({ strength: 'firm', direction: 0 });
-    setWeather(s, 'firm-n', 'dead-calm');
+    setWeather(s, 'firm-n-1', 'dead-calm');
     expect(planningWeather(s)).toEqual({ strength: 'deadCalm', direction: 0 });
   });
 
