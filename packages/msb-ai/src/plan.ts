@@ -25,6 +25,7 @@ import { distanceMap, distanceOf, type DistanceMap } from './distance';
 import { chooseProgram, type AiLevel } from './levels';
 import { BALANCED, WEIGHTS, type Style, type Weights } from './weights';
 import { STYLES, type Personality } from './personality';
+import { chooseDiscards } from './discard';
 
 export { WEIGHTS } from './weights';
 
@@ -233,7 +234,7 @@ export function rankPrograms(state: GameState, shipId: string, config: RulesConf
 
 /**
  * Every action a player's AI takes in the programming phase, in order: place the planned cards, discard down to the hand limit
- * (keeping the cards with the most useful orders is a later refinement: it drops the first ones), then ready.
+ * (keeping the most useful mix of orders: discard.ts), then ready.
  */
 /** `beam` trades strength for speed: the simulator uses a narrower one to play many games. */
 /** How a computer player plays: search width (when no level is given), difficulty level and personality. */
@@ -254,7 +255,8 @@ export function programmingTurn(state: GameState, player: PlayerId, config: Rule
       : (rankPrograms(state, id, config, options.beam, style)[0] as Ranked).program;
     for (const [slot, card] of Object.entries(program)) actions.push({ type: 'place', ship: id, slot, card });
     const left = ship.hand.filter((c) => !Object.values(program).includes(c));
-    for (const card of left.slice(0, Math.max(0, left.length - config.handLimit))) actions.push({ type: 'discard', ship: id, card });
+    const cards = new Map(state.setup.commandCards.map((c) => [c.id, c]));
+    for (const card of chooseDiscards(left, config.handLimit, ship, cards, style)) actions.push({ type: 'discard', ship: id, card });
   }
   actions.push({ type: 'ready' });
   return actions;

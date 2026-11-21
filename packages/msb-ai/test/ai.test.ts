@@ -20,6 +20,10 @@ import {
   EASY_FILL,
   BALANCED,
   HARD,
+  ORDER_VALUE,
+  chooseDiscards,
+  handValue,
+  orderValues,
   PERSONALITIES,
   STYLES,
   WEIGHTS,
@@ -424,5 +428,37 @@ describe('personalities and looking ahead (engineering design §10)', () => {
     const pool = [...s.deck, ...ship(s, 'P2').hand].sort();
     expect([...w.deck, ...ship(w, 'P2').hand].sort()).toEqual(pool);
     expect(w.deck).not.toEqual(s.deck.slice(0, w.deck.length));
+  });
+});
+
+describe('discarding down to the hand limit (rules §5.1)', () => {
+  const s = game(2);
+  const cards = new Map(s.setup.commandCards.map((c) => [c.id, c]));
+  const fresh = ship(s);
+
+  it('values a hand by its distinct orders; a repeat is worth half the one before', () => {
+    // 700: Full Sail / Ease Port / Fire; 720: Full Sail / Ease Port / Heal.
+    const one = handValue(['700'], cards, ORDER_VALUE);
+    expect(one).toBe(ORDER_VALUE['full']! + ORDER_VALUE['easePort']! + ORDER_VALUE['fire']!);
+    expect(handValue(['700', '720'], cards, ORDER_VALUE)).toBe(one + ORDER_VALUE['full']! / 2 + ORDER_VALUE['easePort']! / 2 + ORDER_VALUE['heal']!);
+  });
+
+  it('Repair matters on a damaged ship, Heal with crew hurt, Fire to a raider', () => {
+    expect(orderValues(fresh, BALANCED)).toEqual(ORDER_VALUE);
+    const hurt = { ...fresh, blocked: ['sail1'], crew: fresh.crew.map((c, i) => (i === 0 ? { ...c, state: 'wounded' as const } : c)) };
+    expect(orderValues(hurt, BALANCED)['repair']).toBeGreaterThan(ORDER_VALUE['repair']!);
+    expect(orderValues(hurt, BALANCED)['heal']).toBeGreaterThan(ORDER_VALUE['heal']!);
+    expect(orderValues(fresh, STYLES.raider)['fire']).toBe(ORDER_VALUE['fire']! * 2);
+    expect(orderValues(fresh, STYLES.hunter)['fire']).toBe(ORDER_VALUE['fire']! * 0.5);
+  });
+
+  it('drops repeats before a card that brings something new, and nothing when under the limit', () => {
+    // Three Full Sail / Ease Port cards and a Row Back / Hard About one: a Full Sail / Ease Port card goes.
+    const hand = ['700', '720', '740', '360'];
+    const out = chooseDiscards(hand, 3, fresh, cards, BALANCED);
+    expect(out).toHaveLength(1);
+    expect(['700', '720', '740']).toContain(out[0]);
+    expect(chooseDiscards(hand, 4, fresh, cards, BALANCED)).toEqual([]);
+    expect(chooseDiscards(hand, 1, fresh, cards, BALANCED)).toHaveLength(3);
   });
 });
