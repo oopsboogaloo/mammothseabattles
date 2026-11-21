@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.150**
+> Status: **Draft v0.151**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -289,13 +289,14 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
-**The weather deck** *(designer, v0.150)*: **44 cards**:
+**The weather deck** *(designer, v0.150–v0.151)*: **38 cards**:
 - 6 Light (one per direction);
-- **24 Firm (four per direction)**, so the regular weather is the most common, over half of all cards;
-- 6 Strong and 6 Gale (one per direction);
+- **24 Firm (four per direction)**, so the regular weather is the most common, about two-thirds of all cards;
+- 6 Strong (one per direction);
 - Dead Calm and New Weather Front.
+- **Gale cards are left out for now** *(designer, v0.151)*. Their rules above stay, for when they come back.
 
-**Lightning Storm** and **Hurricane** cards exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*; their intended text and more weather ideas are in [`suggestions.md`](suggestions.md).
+**Lightning Storm** and **Hurricane** cards also exist in the art but are **left out of the weather deck for now** *(designer, v0.136)*; their intended text and more weather ideas are in [`suggestions.md`](suggestions.md).
 
 Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die**, taken when damage occurs (§7.2).
 
@@ -1046,6 +1047,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.151 — §3.5 weather deck: Gale cards left out for now (38 cards: 6 Light, 24 Firm, 6 Strong, Dead Calm, New Weather Front) (designer).
 - v0.150 — §3.5 weather deck: four of each Firm wind card (24 of 44) (designer).
 - v0.149 — §3.5 weather deck: three of each Firm wind card (18 of 38), so regular weather is the most common (designer).
 - v0.148 — §3.2.0 rough water: 1 DD at the end of each Part a ship is in it (was 2 DD), after play-testing; still each Part, so sitting in it keeps hurting (designer).

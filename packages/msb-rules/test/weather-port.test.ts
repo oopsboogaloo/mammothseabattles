@@ -184,6 +184,31 @@ describe('home port shelter and leaving port (rules §8.2.4)', () => {
     expect(ship(s, 'A').galeParts).toBe(0);
   });
 
+  it('a ship sunk by Gale damage at Upkeep stays sunk for the rest of it: no stranding check and no cards for her', () => {
+    // Gales are out of the deck for now (v0.151) but the rule stays: every die kills crew, so the Gale DD sinks her.
+    const deadly = makeConfig({ damageDie: Array(12).fill({ ship: 0, crew: 6 }) });
+    const g = createGame(deadly);
+    let s = game();
+    place(s, 'A', O);
+    ship(s, 'A').galeParts = 1;
+    const events: GameEvent[] = [];
+    for (const p of ['A', 'B']) {
+      const out = g.apply(s, p, { type: 'ready' });
+      s = out.state;
+      events.push(...out.events);
+    }
+    while (s.phase === 'resolving') {
+      const d = s.pending as PendingDecision<unknown>;
+      const out = g.apply(s, d.player, { type: 'answer', choice: d.defaultIndex });
+      s = out.state;
+      events.push(...out.events);
+    }
+    expect(events).toContainEqual(expect.objectContaining({ type: 'DamageRolled', ship: 'A-ship', source: 'gale' }));
+    expect(events).toContainEqual(expect.objectContaining({ type: 'ShipSank', ship: 'A-ship' }));
+    expect(ship(s, 'A').status).toBe('sunk');
+    expect(events.filter((e) => e.type === 'CardsDrawn').map((e) => (e as { ship: string }).ship)).toEqual(['B-ship']);
+  });
+
   it('no end-of-Part storm damage in her own port', () => {
     const g = createGame();
     let s = game(map({ [k(PORT_A)]: { terrain: 'storm' } }));

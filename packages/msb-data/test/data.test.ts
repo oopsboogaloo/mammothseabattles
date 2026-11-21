@@ -73,16 +73,18 @@ describe('command cards (rules §3.3)', () => {
 });
 
 describe('weather cards (rules §3.5)', () => {
-  it('44 cards: four of each Firm wind (v0.150); the storm cards are left out for now; Dead Calm has no direction; New Weather Front is in', () => {
+  it('38 cards: four of each Firm wind (v0.150); Gales and the storm cards are left out for now (v0.151); Dead Calm has no direction; New Weather Front is in', () => {
     const cards = weatherCards();
-    expect(cards).toHaveLength(44);
+    expect(cards).toHaveLength(38);
     expect(cards.filter((c) => c.strength === 'firm')).toHaveLength(24);
     expect(cards.filter((c) => c.id.startsWith('firm-n-')).map((c) => c.id)).toEqual(['firm-n-1', 'firm-n-2', 'firm-n-3', 'firm-n-4']);
-    for (const s of ['light', 'strong', 'gale'] as const) expect(cards.filter((c) => c.strength === s)).toHaveLength(6);
+    for (const s of ['light', 'strong'] as const) expect(cards.filter((c) => c.strength === s)).toHaveLength(6);
+    expect(cards.filter((c) => c.strength === 'gale')).toEqual([]);
     expect(cards.some((c) => LEFT_OUT_WEATHER.includes(c.id))).toBe(false);
     expect(cards.find((c) => c.id === 'dead-calm')).toEqual({ id: 'dead-calm', strength: 'deadCalm' });
     expect(cards.find((c) => c.id === 'new-front')).toEqual({ id: 'new-front', strength: 'newFront' });
-    expect(cards.find((c) => c.id === 'gale-nw')).toEqual({ id: 'gale-nw', strength: 'gale', direction: 5 });
+    // A Gale card still reads correctly, for when they come back.
+    expect(weatherCards('id,name,wind_strength,wind_direction,copies\ntest-gale,Gale NW Wind,Gale,NW,1\n')).toEqual([{ id: 'test-gale', strength: 'gale', direction: 5 }]);
   });
 
   it('expands copies and rejects unknown strengths', () => {
