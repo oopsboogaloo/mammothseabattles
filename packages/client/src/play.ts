@@ -646,7 +646,7 @@ function caption(e: GameEvent): string | null {
     case 'CardLost': return `${n(e.ship)} loses card ${esc(e.card)}`;
     case 'CrewWounded': return `${n(e.ship)}: a crew member is wounded`;
     case 'CrewKilled': return `${n(e.ship)}: a crew member is killed`;
-    case 'ShipSank': return `☠ ${n(e.ship)} sinks (${e.reason})`;
+    case 'ShipSank': return e.reason === 'edge' ? `☠ ${n(e.ship)} goes off the edge of the map and sinks` : `☠ ${n(e.ship)} sinks (${e.reason})`;
     case 'WreckPlaced': return 'A wreck is left behind';
     case 'TreasureSpawned': return `💎 Treasure (${TREASURE_NAME[e.kind]}) appears at spawn point ${esc(e.point)}`;
     case 'TreasurePickedUp': return `💎 ${n(e.ship)} picks up ${TREASURE_NAME[e.kind]}`;
@@ -752,6 +752,14 @@ async function play(events: readonly GameEvent[]) {
         }
         break;
       case 'ShipSank':
+        // Off the map: show her sailing over the edge first, so it's clear why she sinks.
+        if (x && e.off) {
+          float(e.ship, '⚠ off the edge of the map!');
+          table.pulse(e.ship, '#e0402a', ms() * 2);
+          table.trail(x.hex, e.off, '#e0402a', ms() * 3);
+          await table.animateShip(e.ship, [e.off], x.heading, x.sail, ms() * 1.6);
+          await sleep(ms() * 0.5);
+        }
         float(e.ship, '☠ sinks');
         await table.sink(e.ship, ms() * 2.5);
         if (x) x.afloat = false;

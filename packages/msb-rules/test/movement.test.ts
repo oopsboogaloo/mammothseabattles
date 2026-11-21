@@ -326,7 +326,7 @@ describe('obstacles (rules §3.2.0, §3.1)', () => {
     const safe = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), makeConfig({ safeEdge: true }));
     expect(safe).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: hex(0, -4), by: 'edge' }]);
     const events = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'));
-    expect(events[0]).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'edge' });
+    expect(events[0]).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'edge', off: hex(0, -5) });
     expect(pos(s, 'A-ship')).toEqual(hex(0, -4));
   });
 });

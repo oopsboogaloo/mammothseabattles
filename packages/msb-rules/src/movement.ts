@@ -75,8 +75,8 @@ function stop(m: MoveContext, ship: Ship, by: StopReason): StepResult {
   return 'stopped';
 }
 
-function sink(m: MoveContext, ship: Ship, reason: 'edge' | 'deathReef'): StepResult {
-  sinkShip(m.state, ship, reason, m.ctx);
+function sink(m: MoveContext, ship: Ship, reason: 'edge' | 'deathReef', off?: Hex): StepResult {
+  sinkShip(m.state, ship, reason, m.ctx, off);
   return 'sunk';
 }
 
@@ -115,7 +115,7 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
   const from = ship.pos;
   // 2. Off the map: she sinks in the hex she was leaving, or stops with the Safe edge rule (§3.1).
   const hex = state.setup.map.hexes[hexKey(to)];
-  if (!hex) return config.safeEdge ? stop(m, ship, 'edge') : sink(m, ship, 'edge');
+  if (!hex) return config.safeEdge ? stop(m, ship, 'edge') : sink(m, ship, 'edge', to);
 
   // 3. Terrain at the current tide.
   if (hex.terrain === 'cliff') {

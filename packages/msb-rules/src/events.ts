@@ -42,7 +42,8 @@ export type GameEvent =
   | { readonly type: 'SlotBlocked'; readonly rule: '7.3'; readonly ship: ShipId; readonly slot: string }
   | { readonly type: 'CrewWounded'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'CrewKilled'; readonly rule: '7.4'; readonly ship: ShipId; readonly crew: string }
-  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason }
+  /** `off`: for a ship that left the map, the off-map hex she sailed (or was pushed or drifted) into, so a client can show it. */
+  | { readonly type: 'ShipSank'; readonly rule: '7.8'; readonly ship: ShipId; readonly reason: SinkReason; readonly off?: Hex }
   | { readonly type: 'WreckPlaced'; readonly rule: '7.9'; readonly at: Hex }
   | { readonly type: 'TreasureSpawned'; readonly rule: '8.2.1'; readonly point: string; readonly at: string; readonly kind: TreasureKind }
   | { readonly type: 'TreasurePickedUp'; readonly rule: '8.2.2'; readonly ship: ShipId; readonly at: string; readonly kind: TreasureKind }
