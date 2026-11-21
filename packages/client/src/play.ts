@@ -1257,7 +1257,8 @@ const tiltCard = () => {
   const { tilt, turn } = table.viewAngles();
   const w = $('#weather');
   w.style.setProperty('--tilt', `${tilt}rad`);
-  w.style.setProperty('--turn', `${-turn}rad`);
+  // Turning the camera by `turn` turns the board's north `turn` clockwise on screen; CSS rotateZ is clockwise too, so the same sign.
+  w.style.setProperty('--turn', `${turn}rad`);
   requestAnimationFrame(tiltCard);
 };
 tiltCard();
