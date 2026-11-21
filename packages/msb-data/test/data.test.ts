@@ -73,11 +73,11 @@ describe('command cards (rules §3.3)', () => {
 });
 
 describe('weather cards (rules §3.5)', () => {
-  it('38 cards: three of each Firm wind (v0.149); the storm cards are left out for now; Dead Calm has no direction; New Weather Front is in', () => {
+  it('44 cards: four of each Firm wind (v0.150); the storm cards are left out for now; Dead Calm has no direction; New Weather Front is in', () => {
     const cards = weatherCards();
-    expect(cards).toHaveLength(38);
-    expect(cards.filter((c) => c.strength === 'firm')).toHaveLength(18);
-    expect(cards.filter((c) => c.id.startsWith('firm-n-')).map((c) => c.id)).toEqual(['firm-n-1', 'firm-n-2', 'firm-n-3']);
+    expect(cards).toHaveLength(44);
+    expect(cards.filter((c) => c.strength === 'firm')).toHaveLength(24);
+    expect(cards.filter((c) => c.id.startsWith('firm-n-')).map((c) => c.id)).toEqual(['firm-n-1', 'firm-n-2', 'firm-n-3', 'firm-n-4']);
     for (const s of ['light', 'strong', 'gale'] as const) expect(cards.filter((c) => c.strength === s)).toHaveLength(6);
     expect(cards.some((c) => LEFT_OUT_WEATHER.includes(c.id))).toBe(false);
     expect(cards.find((c) => c.id === 'dead-calm')).toEqual({ id: 'dead-calm', strength: 'deadCalm' });

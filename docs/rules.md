@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.149**
+> Status: **Draft v0.150**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -289,9 +289,9 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 | Gale (e.g. NW) | Gale | **+1 all sail moves; 1 DD for each Part sailed at Full Sail** (up to 3 a turn), taken **at Upkeep** *(designer to add the timing to the card)* | 3 (Parts I–III) |
 | New Weather Front | — | **Reshuffle the weather deck and place new cards, including this one** | — |
 
-**The weather deck** *(designer, v0.149)*: **38 cards**:
+**The weather deck** *(designer, v0.150)*: **44 cards**:
 - 6 Light (one per direction);
-- **18 Firm (three per direction)**, so the regular weather is the most common, about half of all cards;
+- **24 Firm (four per direction)**, so the regular weather is the most common, over half of all cards;
 - 6 Strong and 6 Gale (one per direction);
 - Dead Calm and New Weather Front.
 
@@ -996,7 +996,7 @@ _Things the designer has said they'll do or supply._
 - **Weather board**: add a **rotating arrow** to mark "now" (a pencil for now) (§3.5).
 - **Check the derived rows** of the full sail-move table (§6.3).
 - **Weather cards**: mark the cards that bring **flotsam** with an icon (§7.11).
-- **Weather cards**: print **two more copies of each Firm wind** (12 cards) for the 38-card deck (§3.5, v0.149).
+- **Weather cards**: print **three more copies of each Firm wind** (18 cards) for the 44-card deck (§3.5, v0.150).
 - **Current art**: consider **colouring double and triple arrows** (e.g. orange and red) so speeds stand out.
 - **Current art**: make the **rotation amount explicit** on turning arrows (an icon or marking for 60°, 180°, etc.), especially on rotors and eddies (eddies come in 60°, 120° and 180°; draw the 180° eddy),
   where the 180° turn isn't yet clear from the arrows, and show when a curve turns only one hex side (§6.6, examples 2–4).
@@ -1046,6 +1046,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.150 — §3.5 weather deck: four of each Firm wind card (24 of 44) (designer).
 - v0.149 — §3.5 weather deck: three of each Firm wind card (18 of 38), so regular weather is the most common (designer).
 - v0.148 — §3.2.0 rough water: 1 DD at the end of each Part a ship is in it (was 2 DD), after play-testing; still each Part, so sitting in it keeps hurting (designer).
 - v0.147 — §3.1.1 single large board (91 hexes, A3) being considered as the first physical format, with the test map's density as a recipe (designer).
