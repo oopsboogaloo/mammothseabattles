@@ -115,13 +115,15 @@ scoring weights (`msb-ai/src/personality.ts`): **Balanced**; **Treasure hunter**
 Chosen beside each computer seat on the setup screen and saved with the game; the simulator takes `--personalities raider,balanced`.
 **Hard now looks two turns ahead:** each candidate scores this turn plus half the best score it could get next turn. Sampled worlds
 reshuffle the rest of the deck and played cards leave the hand, so it can't foresee or reuse cards. A Hard turn takes about 1–2 s.
-Results (2 players, Normal level unless said, both seatings, decided games): **Hard (look-ahead) beat Normal 9 of 15 (60%)**, no
-clear gain on the old Hard's 62%; **Raider vs Balanced 8 of 15** (and a lot more cannon fire: ~23 hits a game against ~15);
-**Cautious vs Balanced 7 of 17**; **Treasure hunter vs Balanced 5 of 17**, then 4 of 19 after making it warier of the edge.
-The hunter sinks off the map edge a lot (5 times in one 40-turn game). It isn't only the hunter: every AI sometimes sails or drifts
-off the edge on a turn whose weather it couldn't know, and the hunter's routes hug the edge more. Samples are small (10 games a seating).
-*Next:* plan for the weather it can't see (score a plan against the possible next weather cards, not just the likeliest), which
-should cut edge sinkings for every personality; then retune the hunter.
+**Bug found by the simulator (fixed):** with no treasure loose (a rival carrying it) a ship had no goal, so every hex scored as
+far away; sinking skipped that term and put her back in port, so for the Treasure hunter sinking scored *better* than staying, and
+she sailed off the map from her own port turn after turn (8–13 edge sinkings a game). Now a ship with no loose treasure chases the
+rival carrying it, and sinking always costs its full penalty. Edge sinkings fell to about 2 a game for every pairing.
+Results after the fix (2 players, Normal unless said, both seatings, decided games; 8–10 games a seating, so rough):
+**Hard (look-ahead) beat Normal 10 of 11**; Treasure hunter vs Balanced 7 of 18; Raider vs Balanced 4 of 15 (most cannon fire,
+~31 hits a game); Cautious vs Balanced 4 of 14. Balanced, now also chasing carriers, is the strongest personality: the others are
+flavour, not handicaps you'd notice much at the table. Games got longer (about 40–50 turns) with more fighting over carried treasure.
+*Next:* discard choice (keep the most useful cards), and a stronger opening for 3–4 player games.
 
 P7 can run alongside P3–P6. From P2 on, every step adds to a **fuzz test**: thousands of random games, each replayed from its log and
 checked against the invariants (engineering §12).

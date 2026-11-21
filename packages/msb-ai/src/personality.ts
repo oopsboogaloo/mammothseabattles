@@ -20,10 +20,7 @@ export function scaled(factors: Partial<Record<keyof Weights, number>>): Weights
 
 export const STYLES: Readonly<Record<Personality, Style>> = {
   balanced: BALANCED,
-  hunter: {
-    weights: scaled({ perDistance: 1.4, pickUp: 1.5, scored: 1.3, enemyHurt: 0.3, enemySunk: 0.3, onEdge: 2, driftOffMap: 1.5 }),
-    raider: false,
-  },
+  hunter: { weights: scaled({ perDistance: 1.4, pickUp: 1.5, scored: 1.3, enemyHurt: 0.3, enemySunk: 0.3 }), raider: false },
   raider: { weights: scaled({ enemyHurt: 3, enemySunk: 2.5, perDistance: 0.8 }), raider: true },
   cautious: {
     weights: scaled({ slotDamaged: 2, crewHurt: 2, inHazard: 2, onEdge: 3, driftOffMap: 1.5, sunk: 1.5, enemyHurt: 0.6 }),
