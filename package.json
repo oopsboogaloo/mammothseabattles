@@ -15,7 +15,8 @@
     "mockup:assets": "npm run assets -w @msb/client",
     "mockup:shoot": "npm run build -w @msb/client && node packages/client/scripts/shoot.mjs",
     "data": "npm run generate -w @msb/msb-data",
-    "sim": "node packages/sim/scripts/sim.mjs"
+    "sim": "node packages/sim/scripts/sim.mjs",
+    "replay-log": "node packages/sim/scripts/replay-log.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

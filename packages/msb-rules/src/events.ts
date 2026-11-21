@@ -65,7 +65,8 @@ export type GameEvent =
   | { readonly type: 'CrewHealed'; readonly rule: '7.6'; readonly ship: ShipId; readonly crew: string }
   | { readonly type: 'CardLost'; readonly rule: '7.3'; readonly ship: ShipId; readonly slot: string; readonly card: string }
   | { readonly type: 'SailSet'; readonly rule: '6.1'; readonly ship: ShipId; readonly sail: SailLevel; readonly order: string }
-  | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause }
+  /** `cave`: the letter of the sea cave she went through to get there (the two hexes aren't next to each other, rules §3.2.2). */
+  | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause; readonly cave?: string }
   | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason }
   | { readonly type: 'ShipRammed'; readonly rule: '6.5'; readonly ship: ShipId; readonly by: ShipId }
   | { readonly type: 'ShipTurned'; readonly rule: '5.2'; readonly ship: ShipId; readonly from: Direction; readonly to: Direction; readonly cause: 'steer' | 'cave' | 'current' }

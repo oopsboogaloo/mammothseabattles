@@ -110,7 +110,7 @@ export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: Move
  * `dir` is the direction of travel; it is undefined for a current that jumps to a non-adjacent hex (§6.6 example 8),
  * which never pushes anyway.
  */
-export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | undefined, cause: MoveCause): StepResult {
+export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | undefined, cause: MoveCause, cave?: string): StepResult {
   const { state, config } = m;
   const from = ship.pos;
   // 2. Off the map: she sinks in the hex she was leaving, or stops with the Safe edge rule (§3.1).
@@ -145,7 +145,7 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
 
   // 5. Move in, then hex effects.
   ship.pos = to;
-  m.ctx.emit({ type: 'ShipMoved', rule: '6', ship: ship.id, from, to, cause });
+  m.ctx.emit({ type: 'ShipMoved', rule: '6', ship: ship.id, from, to, cause, ...(cave ? { cave } : {}) });
   if (hex.terrain === 'deathReef') return sink(m, ship, 'deathReef');
   arrive(state, ship, config, m.ctx);
   const partner = partnerWhirlpool(state, to);
@@ -166,10 +166,10 @@ function throughCave(m: MoveContext, ship: Ship, cave: MapCave, cause: MoveCause
   const exit = partnerCave(m.state, cave);
   const before = { pos: ship.pos, heading: ship.heading };
   const mouth = parseHexKey(exit.hex);
-  ship.pos = mouth;
+  // She stays in her own hex until she moves: a ship in the way, the map edge or land at the exit leaves her (or sinks her) there.
   ship.heading = exit.side;
-  const result = enterHex(m, ship, neighbor(mouth, exit.side), exit.side, cause);
-  if (result !== 'moved' || hexEquals(ship.pos, mouth)) {
+  const result = enterHex(m, ship, neighbor(mouth, exit.side), exit.side, cause, cave.letter);
+  if (result !== 'moved' || hexEquals(ship.pos, before.pos)) {
     if (ship.status === 'afloat') Object.assign(ship, before);
     return result === 'sunk' ? 'sunk' : 'stopped';
   }

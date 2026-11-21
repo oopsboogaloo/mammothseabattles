@@ -20,3 +20,4 @@ export * from './actions';
 export * from './sinking';
 export * from './upkeep';
 export * from './treasure';
+export * from './audit';

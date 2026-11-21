@@ -546,6 +546,9 @@ function weatherName(id: string): string {
   return card.direction === undefined ? STRENGTH_NAME[card.strength]! : `${STRENGTH_NAME[card.strength]} ${DIRECTION_NAMES[card.direction]}`;
 }
 
+/** The build, for the game log (vite.config.ts: the commit when built by GitHub). */
+declare const __BUILD__: string;
+
 // ---------------- table ----------------
 function syncShown() {
   shown = {};
@@ -711,6 +714,8 @@ async function play(events: readonly GameEvent[]) {
     const x = 'ship' in e && typeof e.ship === 'string' ? shown[e.ship] : undefined;
     switch (e.type) {
       case 'ShipMoved':
+        // Through a sea cave: the WentThroughCave that follows shows it (she doesn't glide across the island).
+        if (x && e.cave) break;
         if (x) {
           table.pulse(e.ship, MOVE_COLOUR[e.cause]);
           table.trail(e.from, e.to, MOVE_COLOUR[e.cause], ms() * 3);
@@ -825,10 +830,52 @@ async function play(events: readonly GameEvent[]) {
         if (text) await sleep(ms());
     }
   }
+  checkBoard();
   syncShown();
   busy = false;
   $('#banner').hidden = true;
   next();
+}
+
+/**
+ * After a turn plays out, check that the board shows each ship where the game has her (for the game log): what the playback
+ * tracked from the events, and where the 3D model actually stands. Anything different is noted in the log.
+ */
+function checkBoard() {
+  const s = S().state;
+  if (s.phase === 'resolving') return; // mid-turn the state is still the turn's start (engineering design D1)
+  for (const ship of Object.values(s.ships)) {
+    const x = shown[ship.id];
+    const afloat = ship.status === 'afloat';
+    if (!x) continue;
+    if (x.afloat !== afloat) S().note(`the board shows ${ship.id} ${x.afloat ? 'afloat' : 'sunk'}, but she is ${ship.status}`);
+    if (!afloat) continue;
+    if (hexKey(x.hex) !== hexKey(ship.pos)) S().note(`the board's playback put ${ship.id} at ${hexKey(x.hex)}, but she is at ${hexKey(ship.pos)}`);
+    if (x.heading !== ship.heading) S().note(`the board's playback left ${ship.id} facing ${x.heading}, but she faces ${ship.heading}`);
+    const model = table.shipPosition(ship.id);
+    if (model && model.distanceTo(table.hexToWorld(ship.pos, model.y)) > 0.4) {
+      S().note(`the 3D model of ${ship.id} stands off her hex ${hexKey(ship.pos)} (${model.distanceTo(table.hexToWorld(ship.pos, model.y)).toFixed(2)} away)`);
+    }
+  }
+}
+
+/** The game log as text: copy it, or save it as a file, to look into anything odd (Menu). */
+async function exportLog(how: 'copy' | 'save') {
+  const text = S().report(__BUILD__, new Date().toISOString(), navigator.userAgent);
+  if (how === 'copy') {
+    try {
+      await navigator.clipboard.writeText(text);
+      return `Copied the game log (${Math.round(text.length / 1024)} KB): paste it where you need it.`;
+    } catch {
+      how = 'save'; // no clipboard here (e.g. not allowed): save a file instead
+    }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  a.download = `msb-game-log-turn${S().state.turn}-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}.txt`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  return `Saved the game log as ${a.download}.`;
 }
 
 /** The latest caption, large, at the top of the table while it plays out. */
@@ -1227,8 +1274,14 @@ $('#menu-btn').onclick = () => {
   m.innerHTML = `<h2>Mammoth Sea Battles <button class="btn sq" id="menu-x" aria-label="Close menu">✕</button></h2>
     <p>Hot-seat prototype on the real rules engine. The game saves after every move: reload the page to resume.</p>
     <div class="grid"><button class="btn" id="m-new">Abandon and start a new game</button></div>
+    ${session ? `<h4>Game log</h4><p>Everything that has happened in this game (every card, move and ship and board state, with automatic checks), as text, to look into anything odd. It shows every player's hidden cards.</p>
+    <div class="grid"><button class="btn" id="m-copy">📋 Copy game log</button><button class="btn" id="m-save">💾 Save game log</button></div><p id="m-log-msg" class="hint"></p>` : ''}
     <h4>Map key</h4><p>Arrows: currents (one, two or three arrows for strength). Rings: rotors. Spiral with a number: whirlpool. Letters: sea caves. Pink zigzag: wall reef. Numbered discs: treasure spawn points. 💎 loose treasure, ⚓︎☠ wreck.</p>`;
   m.querySelector<HTMLElement>('#menu-x')!.onclick = () => (m.hidden = true);
+  for (const how of ['copy', 'save'] as const) {
+    const b = m.querySelector<HTMLElement>(`#m-${how}`);
+    if (b) b.onclick = async () => (m.querySelector<HTMLElement>('#m-log-msg')!.textContent = await exportLog(how));
+  }
   m.querySelector<HTMLElement>('#m-new')!.onclick = () => {
     if (!confirm('Abandon this game?')) return;
     m.hidden = true;
