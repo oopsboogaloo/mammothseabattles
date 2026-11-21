@@ -88,6 +88,10 @@ describe('the game log (engineering design §11)', () => {
     const turned = trackedFrom(s);
     turned['P1-ship']!.heading = ((s.ships['P1-ship']!.heading + 1) % 6) as 0;
     expect(compareTracked(turned, s)[0]).toMatch(/^P1-ship faces \d in the state, but the events left her facing \d/);
+    // A whirlpool entered from where she is: fine.
+    const pool = trackedFrom(s);
+    expect(followEvents(pool, [{ type: 'Teleported', rule: '3.2.1', ship: 'P1-ship', from: p1, to: hex(1, 1) }])).toEqual([]);
+    expect(pool['P1-ship']!.pos).toEqual(hex(1, 1));
     const sunk = trackedFrom(s);
     expect(followEvents(sunk, [{ type: 'ShipSank', rule: '7.8', ship: 'P1-ship', reason: 'edge' }])).toEqual([]);
     expect(compareTracked(sunk, s)).toEqual(['P1-ship is afloat in the state, but the events left her sunk']);
@@ -110,7 +114,7 @@ describe('the game log (engineering design §11)', () => {
     bad.treasures = ['9,9', '9,9'];
     bad.ships['P2-ship']!.carrying = true;
     bad.teams['T1']!.score = 1;
-    expect(checkInvariants(bad)).toEqual([
+    expect([...checkInvariants(bad)].sort()).toEqual([
       'P1-ship is afloat off the map, at 9,9',
       'P2-ship is afloat off the map, at 9,9',
       'P2-ship and P1-ship are both in hex 9,9',
@@ -122,7 +126,7 @@ describe('the game log (engineering design §11)', () => {
       'two treasures in hex 9,9',
       'P2-ship is carrying treasure with no piece',
       'T1 scored 1 but has 0 pieces home',
-    ]);
+    ].sort());
     // A sunk ship's hex doesn't matter.
     const wreck = clone(s);
     wreck.ships['P1-ship']!.status = 'sunk';
