@@ -57,7 +57,7 @@ export function sampleWorld(state: GameState, player: PlayerId, config: RulesCon
  */
 export function lookAhead(world: GameState, shipId: string, program: Program, config: RulesConfig, style: Style, dist: DistanceMap, weather: Weather): number {
   const sim = simulate(world, shipId, program, config);
-  const now = evaluate(world, sim, shipId, dist, program, weather, style.weights);
+  const now = evaluate(world, sim, shipId, dist, program, config.windDrift ? weather : undefined, style.weights);
   if (sim.sank.has(shipId) || sim.state.phase !== 'programming') return now;
   return now + HARD.lookAhead * (rankPrograms(sim.state, shipId, config, 1, style)[0] as { score: number }).score;
 }

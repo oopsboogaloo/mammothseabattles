@@ -22,8 +22,10 @@ const server = await createServer({
   resolve: { alias: { '@msb/engine': pkg('engine'), '@msb/hex': pkg('hex'), '@msb/msb-rules': pkg('msb-rules') } },
 });
 const { auditGame, makeConfig } = await server.ssrLoadModule(pkg('msb-rules'));
-const { trace, problems } = auditGame(save.setup, save.log, makeConfig({ safeEdge: save.safeEdge }));
-console.log(`${save.log.length} actions, seed ${save.setup.seed}, computer players: ${(save.ai ?? []).join(' ') || 'none'}`);
+// Saves from before rules v0.152 don't record their rules: crew of 3, wind drift on.
+const rules = save.rules ?? { startingCrew: 3, windDrift: true };
+const { trace, problems } = auditGame(save.setup, save.log, makeConfig({ safeEdge: save.safeEdge, ...rules }));
+console.log(`${save.log.length} actions, seed ${save.setup.seed}, computer players: ${(save.ai ?? []).join(' ') || 'none'}, rules ${JSON.stringify(rules)}`);
 console.log(`Problems found now: ${problems.length}`);
 for (const p of problems) console.log(`  ${p}`);
 console.log(`Notes from the board: ${(save.notes ?? []).length}`);

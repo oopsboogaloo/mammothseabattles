@@ -9,6 +9,7 @@ import {
   defaultCrewIndex,
   defaultSlotIndex,
   endOfPartHazard,
+  makeConfig,
   newGame,
   pendingDecision,
   type Action,
@@ -78,11 +79,13 @@ function playTurnWithDefaults(state: GameState): { state: GameState; log: LogEnt
 }
 
 describe('setup (rules §4; NFR-13 teams, players and ships separate)', () => {
-  it('puts each ship in her home port, sail down, with a Captain and 2 crew', () => {
+  it('puts each ship in her home port, sail down, with a Captain and 3 crew (v0.152)', () => {
     const s = newGame(setup());
     expect(Object.keys(s.ships)).toEqual(['A-ship', 'B-ship']);
     expect(s.ships['A-ship']).toMatchObject({ pos: PORT_A, heading: Direction.N, sail: 'none', status: 'afloat', blocked: [] });
-    expect(s.ships['A-ship']?.crew.map((c) => [c.cardIcons, c.captain])).toEqual([[3, true], [1, false], [1, false]]);
+    expect(s.ships['A-ship']?.crew.map((c) => [c.cardIcons, c.captain])).toEqual([[3, true], [1, false], [1, false], [1, false]]);
+    // The crew size is a rule setting.
+    expect(newGame(setup(), makeConfig({ startingCrew: 3 })).ships['A-ship']!.crew).toHaveLength(3);
     expect(s.players['A']).toEqual({ id: 'A', team: 'red', name: 'Ann', ships: ['A-ship'] });
     expect(s.teams['red']).toEqual({ id: 'red', players: ['A'], homePort: PORT_A, score: 0, hold: [] });
   });

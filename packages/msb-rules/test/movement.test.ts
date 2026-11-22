@@ -529,8 +529,8 @@ describe('a whole turn (rules §5.2)', () => {
     expect(sailOrder(s, 1, DEFAULT_CONFIG).map((x) => x.id)).toEqual(['A-ship', 'C-ship']);
   });
 
-  it('sails, steers and drifts through Parts I–III, and Gale damage arrives at Upkeep', () => {
-    const g = createGame(NO_DAMAGE);
+  it('sails, steers and drifts through Parts I–III (drift on), and Gale damage arrives at Upkeep', () => {
+    const g = createGame({ ...NO_DAMAGE, windDrift: true });
     let s = game3(map(), CALM_WEATHER, false);
     setWeather(s, 'gale', SE);
     place(s, 'A-ship', hex(-4, 2), NE);
@@ -552,6 +552,28 @@ describe('a whole turn (rules §5.2)', () => {
     expect(out.state.ships['A-ship']!.galeParts).toBe(0);
     expect(out.state.ships['A-ship']!.pos).toEqual(hex(3, -2));
     expect(out.state.ships['B-ship']!.pos).toEqual(hex(0, 0));
+  });
+
+  it('wind drift is off by default (v0.152); switched on, a Firm wind drifts only in Part III', () => {
+    const turn = (config: typeof NO_DAMAGE) => {
+      const g = createGame(config);
+      let s = game3(map(), CALM_WEATHER, false);
+      setWeather(s, 'firm', SE);
+      place(s, 'A-ship', hex(-4, 2), NE);
+      place(s, 'B-ship', hex(-3, 0), N);
+      s = g.apply(s, 'A', { type: 'ready' }).state;
+      let out = g.apply(s, 'B', { type: 'ready' });
+      const events = [...out.events];
+      while (out.state.pending) {
+        out = g.apply(out.state, out.state.pending.player, { type: 'answer', choice: out.state.pending.defaultIndex });
+        events.push(...out.events);
+      }
+      return events;
+    };
+    const drifts = (events: GameEvent[]) => events.filter((e) => e.type === 'ShipMoved' && e.cause === 'drift');
+    expect(DEFAULT_CONFIG.windDrift).toBe(false);
+    expect(drifts(turn(NO_DAMAGE))).toEqual([]);
+    expect(drifts(turn({ ...NO_DAMAGE, windDrift: true }))).toHaveLength(2); // both ships, once, in Part III
   });
 
   it('a ship pushed off the map before her own move doesn’t move, steer or drift', () => {

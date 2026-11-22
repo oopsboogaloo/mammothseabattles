@@ -6,6 +6,7 @@ import {
   HIDDEN,
   SLOT_KEYS,
   createGame,
+  makeConfig,
   freeSlots,
   newGame,
   randomAction,
@@ -18,7 +19,9 @@ import {
 } from '@msb/msb-rules';
 import { CALM_WEATHER, TEST_CARDS } from './fixtures';
 
-const game = createGame();
+// These tests count cards dealt to a 3-person crew (the pre-v0.152 size); the default of 4 is tested in game.test.ts.
+const THREE_CREW = makeConfig({ startingCrew: 3 });
+const game = createGame(THREE_CREW);
 
 function setup(seed = 3, portTerrain: Terrain = 'sea', sameTeam = false): GameSetup {
   return {
@@ -44,7 +47,7 @@ function setup(seed = 3, portTerrain: Terrain = 'sea', sameTeam = false): GameSe
 
 /** A new game with the ships moved out of port to their stations. */
 function start(setup: GameSetup): GameState {
-  const s = newGame(setup);
+  const s = newGame(setup, THREE_CREW);
   s.ships['A-ship']!.pos = hex(0, 0);
   s.ships['B-ship']!.pos = hex(4, 0);
   return s;
