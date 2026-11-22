@@ -63,6 +63,11 @@ let session: Session | undefined;
 let cards = new Map<string, CommandCard>();
 let colours: Record<string, string> = {};
 let selectedCard: string | null = null;
+/** With a big hand, the first card of the window spread out in full (the rest bunch at the sides). */
+let handStart = 0;
+/** Options: spread out up to this many cards; above it, show (this − 2) at a time with ‹ › to move along. Kept on this device. */
+const HAND_KEY = 'msb-hand-spread';
+const handSpreadMax = () => Math.min(15, Math.max(3, Number(localStorage.getItem(HAND_KEY)) || 7));
 /** The player whose screen is showing (after the hand-over), or null when the screen is hidden. */
 let viewer: string | null = null;
 let busy = false;
@@ -362,18 +367,42 @@ function renderHand() {
   el.innerHTML = `<div class="hand-info">${discarding ? `<b>Hand over the limit: tap cards to discard</b> (${hand.length})` : `Hand ${hand.length} · placed ${placed} · drag a card onto a slot (or tap the card, then the slot); a card already there comes back · tap a placed card to take it back, or drag it to another slot to swap`}</div>`;
   const W = el.clientWidth || 600, H = el.clientHeight || 200;
   const n = hand.length;
-  const cardH = Math.min(H * 0.9, (W / Math.max(n, 1)) * 3);
+  // A big hand shows a window of cards spread out; the others bunch up at the sides, with ‹ › to move the window.
+  const windowed = n > handSpreadMax();
+  const shown = windowed ? handSpreadMax() - 2 : n;
+  handStart = windowed ? Math.min(Math.max(0, handStart), n - shown) : 0;
+  const left = handStart, right = n - handStart - shown;
+  const arrow = windowed ? Math.max(34, W * 0.04) : 0;
+  const inner = W - 2 * arrow;
+  const bunch = windowed ? Math.min(12, (inner * 0.25) / Math.max(1, left + right)) : 0;
+  const room = inner - (left + right) * bunch;
+  // Windowed, the spread cards show at least ~80% of their width each, so they can all be read (that's the point of it).
+  const cardH = windowed ? Math.min(H * 0.9, room / (1 + 0.8 * (shown - 1)) / (1064 / 1500)) : Math.min(H * 0.9, (room / Math.max(shown, 1)) * 3);
   const cw = cardH * (1064 / 1500);
   el.style.setProperty('--cw', `${cw}px`);
-  const step = n > 1 ? Math.min(cw * 0.98, (W - cw) / (n - 1)) : 0;
-  const x0 = (W - (cw + step * (n - 1))) / 2;
+  const step = shown > 1 ? Math.min(cw * 0.98, (room - cw) / (shown - 1)) : 0;
+  const x0 = arrow + (inner - ((left + right) * bunch + cw + step * (shown - 1))) / 2;
+  const lastX = x0 + left * bunch + (shown - 1) * step;
   hand.forEach((id, i) => {
-    const c = h(`<button class="card ${selectedCard === id ? 'sel' : ''}" style="background-image:url(${cardArt(id)}),url(art/cards/back.webp)" data-card="${id}" aria-label="Card ${cards.get(id)?.initiative}"></button>`);
+    const inView = i >= left && i < left + shown;
+    const c = h(`<button class="card ${selectedCard === id ? 'sel' : ''} ${inView ? '' : 'bunched'}" style="background-image:url(${cardArt(id)}),url(art/cards/back.webp)" data-card="${id}" aria-label="Card ${cards.get(id)?.initiative}"></button>`);
     c.title = `${cards.get(id)?.initiative}: ${describeBand(id, 'sail')} / ${describeBand(id, 'steer')} / ${describeBand(id, 'action')}`;
-    const t = n > 1 ? i / (n - 1) - 0.5 : 0;
-    c.style.left = `${x0 + i * step}px`;
-    c.style.transform = `rotate(${t * Math.min(12, n * 1.5)}deg) translateY(${t * t * 16}px)`;
-    c.style.zIndex = String(n - i);
+    const k = i - left;
+    const t = inView && shown > 1 ? k / (shown - 1) - 0.5 : 0;
+    c.style.left = `${i < left ? x0 + i * bunch : inView ? x0 + left * bunch + k * step : lastX + (i - left - shown + 1) * bunch}px`;
+    c.style.transform = `rotate(${t * Math.min(12, shown * 1.5)}deg) translateY(${t * t * 16}px)`;
+    // Spread cards on top (the leftmost highest, as before); bunched cards tucked under them, peeking out at the sides.
+    c.style.zIndex = String(inView ? 100 + shown - k : i < left ? 1 + i : 50 - (i - left - shown));
+    if (!inView) {
+      // A bunched card: tap it to bring it into view.
+      c.title += ' (tap to bring into view)';
+      c.onclick = () => {
+        handStart = i < left ? i : i - shown + 1;
+        renderHand();
+      };
+      el.appendChild(c);
+      return;
+    }
     const tap = () => {
       if (discarding) {
         act({ type: 'discard', ship: ship.id, card: id });
@@ -383,6 +412,17 @@ function renderHand() {
     dragSource(c, tap, discarding ? null : (slot) => placeCard(ship.id, slot, id));
     el.appendChild(c);
   });
+  if (windowed) {
+    for (const [dir, label] of [[-1, '‹'], [1, '›']] as const) {
+      const more = dir < 0 ? left : right;
+      const b = h(`<button class="hand-arrow ${dir < 0 ? 'left' : 'right'}" aria-label="${dir < 0 ? 'Earlier' : 'Later'} cards (${more} more)" ${more ? '' : 'disabled'}><span>${label}</span><small>${more}</small></button>`);
+      b.onclick = () => {
+        handStart += dir;
+        renderHand();
+      };
+      el.appendChild(b);
+    }
+  }
   swoosh();
 }
 
@@ -1276,8 +1316,16 @@ $('#menu-btn').onclick = () => {
     <div class="grid"><button class="btn" id="m-new">Abandon and start a new game</button></div>
     ${session ? `<h4>Game log</h4><p>Everything that has happened in this game (every card, move and ship and board state, with automatic checks), as text, to look into anything odd. It shows every player's hidden cards.</p>
     <div class="grid"><button class="btn" id="m-copy">📋 Copy game log</button><button class="btn" id="m-save">💾 Save game log</button></div><p id="m-log-msg" class="hint"></p>` : ''}
+    <h4>Options</h4><label class="row">Spread out up to <input type="number" id="m-handmax" min="3" max="15" value="${handSpreadMax()}" style="width:4em"> cards in your hand; with more, show ${'<span id="m-handshow">' + (handSpreadMax() - 2) + '</span>'} at a time and bunch the rest (‹ › to move along).</label>
     <h4>Map key</h4><p>Arrows: currents (one, two or three arrows for strength). Rings: rotors. Spiral with a number: whirlpool. Letters: sea caves. Pink zigzag: wall reef. Numbered discs: treasure spawn points. 💎 loose treasure, ⚓︎☠ wreck.</p>`;
   m.querySelector<HTMLElement>('#menu-x')!.onclick = () => (m.hidden = true);
+  const handMax = m.querySelector<HTMLInputElement>('#m-handmax')!;
+  handMax.onchange = () => {
+    localStorage.setItem(HAND_KEY, String(Math.min(15, Math.max(3, Number(handMax.value) || 7))));
+    handMax.value = String(handSpreadMax());
+    m.querySelector<HTMLElement>('#m-handshow')!.textContent = String(handSpreadMax() - 2);
+    if (viewer) renderHand();
+  };
   for (const how of ['copy', 'save'] as const) {
     const b = m.querySelector<HTMLElement>(`#m-${how}`);
     if (b) b.onclick = async () => (m.querySelector<HTMLElement>('#m-log-msg')!.textContent = await exportLog(how));

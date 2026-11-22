@@ -94,3 +94,12 @@
 
 /* A card flying back from the ship board to the hand. */
 .swoosh { position: fixed; z-index: 60; pointer-events: none; border-radius: calc(1 * var(--u)); background: #3a2a1c center / cover no-repeat; box-shadow: 0 10px 24px rgba(0,0,0,.55); }
+
+/* A big hand (more than the Options number): bunched cards at the sides, and arrows to move along. */
+#hand .card.bunched { cursor: pointer; filter: brightness(.75); }
+#hand .card.bunched:hover { filter: brightness(1); }
+#hand .hand-arrow { position: absolute; top: 50%; translate: 0 -40%; z-index: 200; width: max(30px, calc(3.4 * var(--u))); height: max(64px, calc(9 * var(--u))); border-radius: calc(1 * var(--u)); border: 0; background: rgba(243, 231, 204, .92); color: var(--ink); font: 900 max(22px, calc(3 * var(--u))) / 1 Georgia, serif; box-shadow: 0 3px 10px rgba(0,0,0,.5); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#hand .hand-arrow small { font: 700 max(11px, calc(1.2 * var(--u))) system-ui, sans-serif; opacity: .7; }
+#hand .hand-arrow.left { left: 2px; }
+#hand .hand-arrow.right { right: 2px; }
+#hand .hand-arrow:disabled { opacity: .3; cursor: default; }
