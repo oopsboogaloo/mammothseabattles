@@ -333,9 +333,9 @@ function renderShipBoard() {
       const when: Record<string, string> = { gale: 'Gale: every Part', strong: 'Strong: Parts II and III', firm: 'Firm: Part III only' };
       el.appendChild(
         h(`<div class="sb-strip drift">${PARTS.map((p) =>
-          driftsInPart(w.strength, p)
+          S().config.windDrift && driftsInPart(w.strength, p)
             ? `<span class="on" title="Wind drift this Part (${when[w.strength]}): 1 hex ${DIRECTION_NAMES[w.direction]}">Drift ${arrow}</span>`
-            : `<span class="off" title="No wind drift this Part with this weather">no drift</span>`,
+            : `<span class="off" title="${S().config.windDrift ? 'No wind drift this Part with this weather' : 'No wind drift: the rule is off for now (rules v0.152)'}">no drift</span>`,
         ).join('')}</div>`),
       );
     }

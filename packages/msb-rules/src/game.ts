@@ -61,16 +61,15 @@ export interface GameView {
 
 export const HIDDEN = 'hidden';
 
-/** Starting crew (rules §4): the Captain (3 card icons) and 2 crew. Core game: Pirates, 1 icon each. */
-export function startingCrew(shipId: string): ShipCrew[] {
+/** Starting crew (rules §4): the Captain (3 card icons) and Pirates (1 icon each) to make `size` (4 since v0.152). */
+export function startingCrew(shipId: string, size = DEFAULT_CONFIG.startingCrew): ShipCrew[] {
   return [
     { id: `${shipId}-captain`, state: 'healthy', cardIcons: 3, captain: true },
-    { id: `${shipId}-pirate-1`, state: 'healthy', cardIcons: 1, captain: false },
-    { id: `${shipId}-pirate-2`, state: 'healthy', cardIcons: 1, captain: false },
+    ...Array.from({ length: size - 1 }, (_, i): ShipCrew => ({ id: `${shipId}-pirate-${i + 1}`, state: 'healthy', cardIcons: 1, captain: false })),
   ];
 }
 
-export function newGame(setup: GameSetup): GameState {
+export function newGame(setup: GameSetup, config: RulesConfig = DEFAULT_CONFIG): GameState {
   if (setup.seats.length < 1) throw new Error('A game needs at least 1 seat (rules §2; 1 is the Solo Challenge, §8.8)');
   validateCards(setup.commandCards);
   validateMap(setup.map);
@@ -113,7 +112,7 @@ export function newGame(setup: GameSetup): GameState {
       sail: 'none',
       status: 'afloat',
       blocked: [],
-      crew: startingCrew(shipId),
+      crew: startingCrew(shipId, config.startingCrew),
       hand: [],
       program: {},
       anchored: false,
@@ -181,7 +180,7 @@ export interface GameResult {
 export function createGame(config: RulesConfig = DEFAULT_CONFIG): GameDef<GameState, Action, GameView, GameEvent, GameSetup, GameResult> {
   const script = resolveTurn(config);
   return {
-    init: newGame,
+    init: (setup) => newGame(setup, config),
 
     legalActions(state, player) {
       if (state.phase === 'over') return [];

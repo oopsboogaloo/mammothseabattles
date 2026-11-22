@@ -3,7 +3,7 @@
 > Working spec, built up incrementally. This is the precise source of truth for
 > the online version; player-facing instructions will be written from it later.
 >
-> Status: **Draft v0.151**
+> Status: **Draft v0.152**
 
 ## 1. Overview
 A pirate sea battle and race game between crews of **anthropomorphic mammoth and
@@ -280,7 +280,7 @@ The board also works as the turn-sequence reminder, printing Currents and Wind d
 - **Refilling** *(v0.137)*: when the board advances, the card leaving "now" goes to a **weather discard pile**, and the empty space gets
   the **top card of the weather deck**. When the deck runs out, shuffle the discards to make a new deck.
 
-| Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2) |
+| Card | Strength | Sail modifier (printed) | Wind drift per turn (§5.2; ⛔ off for now, v0.152) |
 |---|---|---|---|
 | Dead Calm | — | **No sail move** | 0 |
 | Light (e.g. North) | Light | **−1 all sail moves** | 0 |
@@ -339,7 +339,7 @@ Notes: the Gale card is spelled "GAIL" on the current artwork. **DD = Damage Die
 ## 4. Setup
 1. Build the map together (§3.1.1): main boards, then one **port tile** per player or team on the outer edge. Place spawn points and wreck tokens (scenario).
 2. Spawn the starting treasures (§8.2.1).
-3. Each player: ship board, Captain + 2 random crew, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
+3. Each player: ship board, **Captain + 3 random crew** *(was 2; designer, v0.152: one more card a turn to help navigation)*, ship **in her home port** with **sail down (No Sail)**, **heading of her choice**.
 4. Weather board filled; current card and the next one face up.
 5. Draw command cards (§5.1).
 
@@ -368,7 +368,7 @@ All ships act **at the same time** in each phase (pillar P1). When they interfer
    **Currents don't push** (§6.6). Conflicts: Sail-slot initiative.
 4. **Action phase**: Fire Cannons, Repair, Heal, in **Action-slot initiative order**, with damage **applied immediately** (§5.3, §7).
    Then home port guns fire, and the **sea monster** attacks if in play (§9.1).
-5. **Wind drift**: each drifting ship moves **1 hex downwind** (heading unchanged). **Drift doesn't push**: a ship drifting into an
+5. **Wind drift** — ⛔ **off for now** *(designer, v0.152: play-testing without it; it may come back as a rule)*. When on: each drifting ship moves **1 hex downwind** (heading unchanged). **Drift doesn't push**: a ship drifting into an
    occupied hex stays put. Terrain, portals and caves still apply. Which winds drift depends on the Part:
 
    | Part | Wind strengths that drift |
@@ -746,7 +746,7 @@ For the physical game this could be a **custom d12 with icons**; online it's a l
 - **On return** her player chooses her **heading**; her **sail is down**. If the port hex is occupied, she comes back in the **nearest free hex** (sea, never a death reef; her player chooses between equally near ones) (Q71).
 - **She comes back at Upkeep** (not straight away) and plays the **next turn as normal** (she doesn't miss it).
 - She **discards her hand** of command cards and **draws a new hand** from her new crew.
-- **She comes back at her home port**, **fully repaired** with **3 healthy crew, drawn at random** (her old crew, **including her
+- **She comes back at her home port**, **fully repaired** with **4 healthy crew, drawn at random** *(was 3; v0.152 ❓ assumed to match the bigger starting crew)* (her old crew, **including her
   Captain, are lost**). No player elimination (P6).
 - **That's the penalty for sinking**: the **Captain** is the most powerful crew card (e.g. *Captain Mammoth* draws 3 command cards,
   a *Pirate* draws 1), so a ship rebuilt with 3 random crew is much weaker than one with her Captain.
@@ -1047,6 +1047,7 @@ _None: all prototype questions are answered (apart from the designer's diagrams 
 
 ## Change log
 - v0.1 — skeleton created.
+- v0.152 — §4 starting crew is the Captain + 3 (was + 2), one more card a turn; §7.8 a returning ship comes back with 4 crew to match (❓ assumed); §5.2 wind drift is **off for now**, for play-testing (designer).
 - v0.151 — §3.5 weather deck: Gale cards left out for now (38 cards: 6 Light, 24 Firm, 6 Strong, Dead Calm, New Weather Front) (designer).
 - v0.150 — §3.5 weather deck: four of each Firm wind card (24 of 44) (designer).
 - v0.149 — §3.5 weather deck: three of each Firm wind card (18 of 38), so regular weather is the most common (designer).

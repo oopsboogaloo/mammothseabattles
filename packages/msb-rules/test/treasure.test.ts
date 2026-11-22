@@ -283,7 +283,10 @@ describe('scoring and winning (rules §8.2.4, §8.2.5)', () => {
     expect(one.state).toMatchObject({ phase: 'programming', turn: 2 });
     expect(g.view(one.state, 'A').turnLimit).toBe(2);
     expect(g.result(one.state)).toBeUndefined();
-    const two = settle(g.apply(one.state, 'A', { type: 'ready' }));
+    // A crew of 4 draws 6 a turn (v0.152): discard down to the hand limit first.
+    let mid = one.state;
+    for (const card of ship(mid, 'A').hand.slice(config.handLimit)) mid = g.apply(mid, 'A', { type: 'discard', ship: 'A-ship', card }).state;
+    const two = settle(g.apply(mid, 'A', { type: 'ready' }));
     expect(two.events).toContainEqual({ type: 'SoloFinished', rule: '8.8', turns: 2, score: 6 });
     expect(two.events.some((e) => e.type === 'UpkeepStarted')).toBe(false);
     expect(two.state.phase).toBe('over');

@@ -197,7 +197,7 @@ describe('home port guns (rules §8.2.4)', () => {
 });
 
 describe('sinking and coming back (rules §7.8, §7.9)', () => {
-  it('a sunk ship leaves a wreck; at Upkeep she comes back at her port, heading of her player’s choice, repaired, 3 crew, no Captain', () => {
+  it('a sunk ship leaves a wreck; at Upkeep she comes back at her port, heading of her player’s choice, repaired, 4 crew (v0.152), no Captain', () => {
     const g = createGame(ONE_SHIP);
     let s = game(map({}, { startWrecks: [k(hex(1, 1))] }));
     expect(s.wrecks).toEqual([k(hex(1, 1))]);
@@ -223,8 +223,8 @@ describe('sinking and coming back (rules §7.8, §7.9)', () => {
     expect(kinds).toContain(RETURN_HEADING);
     expect(s.wrecks).toEqual([k(hex(1, 1)), k(hex(2, 0))]);
     expect(ship(s, 'B')).toMatchObject({ status: 'afloat', pos: hex(5, -5), heading: S, sail: 'none', blocked: [] });
-    expect(ship(s, 'B').crew.map((c) => c.captain)).toEqual([false, false, false]);
-    expect(ship(s, 'B').hand).toHaveLength(3);
+    expect(ship(s, 'B').crew.map((c) => c.captain)).toEqual([false, false, false, false]);
+    expect(ship(s, 'B').hand).toHaveLength(4);
   });
 
   it('if her port is occupied she comes back at the nearest free sea hex, her choice among equally near ones (Q71)', () => {

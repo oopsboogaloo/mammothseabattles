@@ -6,6 +6,7 @@ import {
   DEFAULT_CONFIG,
   REFIT,
   createGame,
+  makeConfig,
   newGame,
   refit,
   refitOptions,
@@ -30,12 +31,14 @@ function map(overrides: Record<string, MapHex> = {}, wrecks: string[] = []): Gam
   for (let q = -4; q <= 4; q++) for (let r = -4; r <= 4; r++) if (distance(O, hex(q, r)) <= 4) hexes[k(hex(q, r))] = { terrain: 'sea' };
   return { id: 'test', hexes: { ...hexes, ...overrides }, startWrecks: wrecks };
 }
+// These tests count crew around a 3-person crew (the pre-v0.152 size); the default of 4 is tested in game.test.ts.
+const THREE_CREW = makeConfig({ startingCrew: 3 });
 function game(m: GameMap = map()): GameState {
   const seats = [
     { player: 'A', team: 'red', name: 'A', homePort: PORT_A, heading: N },
     { player: 'B', team: 'blue', name: 'B', homePort: hex(4, -4), heading: N },
   ];
-  const s = newGame({ seed: 5, map: m, seats, commandCards: TEST_CARDS, weatherCards: CALM_WEATHER });
+  const s = newGame({ seed: 5, map: m, seats, commandCards: TEST_CARDS, weatherCards: CALM_WEATHER }, THREE_CREW);
   s.ships['B-ship']!.pos = hex(3, -2); // out of port, so only A is asked about refitting
   return s;
 }
@@ -73,7 +76,7 @@ describe('refit at home port (rules §7.7)', () => {
   });
 
   it('a damaged ship refits fully by default: repaired, healed, 3 recruits, and she spends the next turn refitting', () => {
-    const g = createGame();
+    const g = createGame(THREE_CREW);
     let s = game();
     ship(s, 'A').blocked = ['steer2'];
     ship(s, 'A').crew = wound(ship(s, 'A').crew);
@@ -114,7 +117,7 @@ describe('refit at home port (rules §7.7)', () => {
   });
 
   it('a refitting ship doesn’t move, steer or act', () => {
-    const g = createGame();
+    const g = createGame(THREE_CREW);
     let s = game();
     ship(s, 'A').refitting = true;
     ship(s, 'A').program = { sail1: TEST_CARDS.find((c) => c.sail === 'full')!.id, action1: TEST_CARDS.find((c) => c.action === 'fire')!.id };

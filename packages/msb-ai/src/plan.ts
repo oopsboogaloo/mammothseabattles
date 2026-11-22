@@ -224,7 +224,7 @@ export function rankPrograms(state: GameState, shipId: string, config: RulesConf
             });
             // Every beam and every combination differ, so each program is new.
             const after = simulate(world, shipId, program, config);
-            next.push({ program, score: evaluate(world, after, shipId, dist, program, weather, style.weights) });
+            next.push({ program, score: evaluate(world, after, shipId, dist, program, config.windDrift ? weather : undefined, style.weights) });
           }
     }
     beams = next.sort((a, b) => b.score - a.score).slice(0, beam);

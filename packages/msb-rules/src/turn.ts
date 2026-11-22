@@ -70,7 +70,7 @@ function moveSteerDrift(state: GameState, part: Part, config: RulesConfig, ctx: 
   for (const ship of afloat(order)) steerShip(m, ship);
   if (state.winner === undefined) runCurrents(m, order);
   if (state.winner === undefined) runActions(state, shipsInSeatOrder(state), part, config, ctx);
-  if (state.winner === undefined && driftsInPart(currentWeatherOf(state).strength, part)) {
+  if (state.winner === undefined && config.windDrift && driftsInPart(currentWeatherOf(state).strength, part)) {
     for (const ship of order) if (ship.status === 'afloat' && state.winner === undefined) driftShip(m, ship);
   }
 }
@@ -122,7 +122,7 @@ function upkeep(state: GameState, config: RulesConfig, ctx: ResolutionContext<Ga
   // End of Part III: ships next to treasure on land dig it up (§8.2.2).
   digUpTreasure(state, shipsInSeatOrder(state), ctx);
   // §5.4 step 2: sunk ships come back.
-  const returned = returnSunkShips(state, shipsInSeatOrder(state), ctx);
+  const returned = returnSunkShips(state, shipsInSeatOrder(state), ctx, config);
   // Steps 3 and 4: refit in port (§7.7), then search wrecks (§7.9).
   refit(state, shipsInSeatOrder(state), config, ctx, returned);
   searchWrecks(state, shipsInSeatOrder(state), config, ctx);

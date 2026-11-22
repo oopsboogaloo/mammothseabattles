@@ -5,6 +5,7 @@
 
 import { createDecision, type ResolutionContext } from '@msb/engine';
 import { distance, hexEquals, hexKey, type Direction, type Hex } from '@msb/hex';
+import { DEFAULT_CONFIG, type RulesConfig } from './config';
 import type { GameEvent, SinkReason } from './events';
 import { isLand } from './map';
 import { parseHexKey } from './movement';
@@ -68,7 +69,7 @@ export function returnHexes(state: GameState, port: Hex): Hex[] {
  * heading of her player's choice, sail down, fully repaired, with 3 random crew and no Captain. Her old hand is discarded;
  * she draws a new hand with everyone else at the end of Upkeep.
  */
-export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: ResolutionContext<GameEvent>): Set<string> {
+export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: ResolutionContext<GameEvent>, config: RulesConfig = DEFAULT_CONFIG): Set<string> {
   const returned = new Set<string>();
   for (const ship of ships) {
     if (ship.status !== 'sunk') continue;
@@ -89,7 +90,7 @@ export function returnSunkShips(state: GameState, ships: readonly Ship[], ctx: R
       status: 'afloat',
       blocked: [],
       hand: [],
-      crew: recruitCrew(ship, 3, `t${state.turn}`),
+      crew: recruitCrew(ship, config.startingCrew, `t${state.turn}`),
       galeParts: 0,
     });
     ctx.emit({ type: 'ShipReturned', rule: '7.8', ship: ship.id, at, heading });

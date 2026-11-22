@@ -91,7 +91,7 @@ export function runGame(options: GameOptions): GameReport {
     Array.from({ length: options.players }, (_, i) => ({ name: `AI ${i + 1}` })),
     options.seed,
   );
-  let state: GameState = newGame(setup);
+  let state: GameState = newGame(setup, config);
   const maxTurns = options.maxTurns ?? 60;
   const tally = newTally();
   const note = (events: readonly GameEvent[]) => tallyEvents(tally, events);

@@ -431,6 +431,17 @@ describe('personalities and looking ahead (engineering design §10)', () => {
   });
 });
 
+describe('wind drift switched back on', () => {
+  it('the AI plans with drift when the rule is on (the edge it could drift off counts again)', () => {
+    const s = game(2);
+    const drifty = makeConfig({ windDrift: true });
+    expect(rankPrograms(s, 'P1-ship', drifty, 1)[0]!.program).toBeDefined();
+    const weather = planningWeather(s);
+    const dist = distanceMap(s, goals(s, ship(s)), weather, drifty);
+    expect(Number.isFinite(lookAhead(s, 'P1-ship', {}, drifty, BALANCED, dist, weather))).toBe(true);
+  }, 60_000);
+});
+
 describe('discarding down to the hand limit (rules §5.1)', () => {
   const s = game(2);
   const cards = new Map(s.setup.commandCards.map((c) => [c.id, c]));

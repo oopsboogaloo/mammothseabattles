@@ -40,6 +40,10 @@ export interface RulesConfig {
   readonly handLimit: number;
   /** §7.7 crew recruited at a refit. */
   readonly refitCrew: number;
+  /** §4 and §7.8: crew a ship starts with, and comes back with after sinking: the Captain (at the start) and Pirates. */
+  readonly startingCrew: number;
+  /** §5.2 step 5 wind drift. Off for now (designer, v0.152): ships don't drift. */
+  readonly windDrift: boolean;
   /** §5.3 initiative tie-break die. */
   readonly tieBreakDieSides: number;
   /** §3.1 optional rule Safe edge: the map edge acts as a beach instead of sinking ships. */
@@ -91,6 +95,8 @@ export const DEFAULT_CONFIG: RulesConfig = {
   crewCap: 6,
   handLimit: 9,
   refitCrew: 3,
+  startingCrew: 4,
+  windDrift: false,
   tieBreakDieSides: 6,
   safeEdge: false,
   treasureTarget: 3,
