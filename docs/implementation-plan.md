@@ -130,6 +130,19 @@ way, Normal vs Normal, 12 games each seating: **10 of 16 decided games** (4–4 
 **Client:** a ship that leaves the map is shown sailing over the edge, then sinking (`ShipSank` now carries the off-map hex).
 *Next:* a stronger opening for 3–4 player games.
 
+**Turn replay:** **↺ Replay turn** (by Ready, and on the pass-the-device screen) steps forward and back through the last turn.
+- **Beats:** `msb-rules/src/turn-replay.ts` rebuilds the turn from the action log and groups its events into beats: a whole move, a
+  steer, a current step, a shot, port guns, hazard damage, drift, and each Upkeep item. It works out the board after each beat. It's
+  tested so that, for every turn of random real games, stepping to the end gives exactly the engine's state.
+- **What each beat shows:**
+  - the cards revealed for its Part, with the one in play outlined;
+  - what happened, e.g. "Row Ahead (card 280): 1 hex NE";
+  - the rule behind it, e.g. "Heading SE with a Firm wind blowing SW: close hauled, so Half Sail moves 1 (§6.2)";
+  - the cause marked on the board: current, whirlpool ends, the hex that stopped her, the port guns' range, hazards.
+- **Controls:** forward animates with the same code as live play (`showEvent`). Back, ⏮ ⏭ and the scrubber jump instantly.
+  The arrow keys step, and Esc closes.
+- **Engine:** `ShipStopped` now says which hex blocked her.
+
 **Game log (for investigating odd moments):** Menu → **📋 Copy game log** or **💾 Save game log** gives the whole game as text.
 - **Replay data:** the setup, seed and every action, so the game can be rebuilt exactly.
 - **Trace:** every action with its card's three orders, every event, and the full ship and board state after each turn step

@@ -14,6 +14,13 @@ import {
   isLand,
   parseHexKey,
   SLOT_KEYS,
+  pointOfSail,
+  sailMove,
+  turnReplay,
+  type Beat,
+  type BeatKind,
+  type BoardSnapshot,
+  type TurnReplay,
   type Action,
   type CommandCard,
   type GameEvent,
@@ -214,8 +221,10 @@ function handOver(player: string) {
   const box = screen(`<h2>Turn ${turn}: pass the device to</h2>
     <h1 style="color:${colours[player]}">${esc(playerName(player))}</h1>
     <p>Everyone else, look away: your cards are secret.</p>
-    <div class="row"><button class="btn primary big" id="me">I'm ${esc(playerName(player))}: show my cards</button></div>`);
+    <div class="row"><button class="btn primary big" id="me">I'm ${esc(playerName(player))}: show my cards</button>${turn > 1 ? '<button class="btn big" id="rp">↺ Replay last turn</button>' : ''}</div>`);
   box.querySelector<HTMLElement>('#me')!.onclick = () => showHand(player);
+  const replayBtn = box.querySelector<HTMLElement>('#rp');
+  if (replayBtn) replayBtn.onclick = openReplay;
 }
 
 function showHand(player: string) {
@@ -260,6 +269,9 @@ function renderProgramming() {
     if (S().state.phase === 'programming') return next();
     void play(events);
   };
+  const replayBtn = $('#replay-btn');
+  replayBtn.hidden = S().state.turn <= 1;
+  replayBtn.onclick = openReplay;
   $('#clear').onclick = () => {
     const ship = myShip();
     if (!ship) return;
@@ -751,124 +763,7 @@ async function play(events: readonly GameEvent[]) {
       showLog();
       banner(text);
     }
-    const x = 'ship' in e && typeof e.ship === 'string' ? shown[e.ship] : undefined;
-    switch (e.type) {
-      case 'ShipMoved':
-        // Through a sea cave: the WentThroughCave that follows shows it (she doesn't glide across the island).
-        if (x && e.cave) break;
-        if (x) {
-          table.pulse(e.ship, MOVE_COLOUR[e.cause]);
-          table.trail(e.from, e.to, MOVE_COLOUR[e.cause], ms() * 3);
-          if (e.cause !== 'sail' && e.cause !== 'row') float(e.ship, MOVE_WORD[e.cause]);
-          x.hex = e.to;
-          await table.animateShip(e.ship, [e.to], x.heading, x.sail, ms() * 1.3);
-        }
-        break;
-      case 'ShipTurned':
-        if (x) {
-          table.pulse(e.ship, e.cause === 'steer' ? '#ffe08a' : MOVE_COLOUR.current);
-          float(e.ship, `${turnWord(x.heading, e.to)}${e.cause === 'steer' ? '' : ` (${e.cause})`}`);
-          x.heading = e.to;
-          await table.animateShip(e.ship, [], e.to, x.sail, ms() * 1.3);
-        }
-        break;
-      case 'SailSet':
-        if (x) {
-          x.sail = e.sail;
-          table.pulse(e.ship, '#ffffff', ms() * 1.5);
-          float(e.ship, `⛵ ${ORDER_WORD[e.order] ?? e.order}`);
-        }
-        renderTable();
-        await sleep(ms());
-        break;
-      case 'ShipStopped':
-        table.pulse(e.ship, '#e0402a', ms() * 2);
-        float(e.ship, `✋ stopped: ${STOP_WORD[e.by] ?? e.by}`);
-        await sleep(ms() * 1.5);
-        break;
-      case 'Teleported':
-      case 'WentThroughCave':
-        if (x) {
-          float(e.ship, e.type === 'Teleported' ? '🌀 whirlpool!' : '🕳 cave!');
-          await table.teleport(e.ship, e.to, x.heading, ms() * 2.4);
-          x.hex = e.to;
-          renderTable();
-          table.pulse(e.ship, MOVE_COLOUR.current, ms() * 2);
-        }
-        break;
-      case 'ShipSank':
-        // Off the map: show her sailing over the edge first, so it's clear why she sinks.
-        if (x && e.off) {
-          float(e.ship, '⚠ off the edge of the map!');
-          table.pulse(e.ship, '#e0402a', ms() * 2);
-          table.trail(x.hex, e.off, '#e0402a', ms() * 3);
-          await table.animateShip(e.ship, [e.off], x.heading, x.sail, ms() * 1.6);
-          await sleep(ms() * 0.5);
-        }
-        float(e.ship, '☠ sinks');
-        await table.sink(e.ship, ms() * 2.5);
-        if (x) x.afloat = false;
-        renderTable();
-        await sleep(ms());
-        break;
-      case 'ShipReturned':
-        if (x) Object.assign(x, { hex: e.at, heading: e.heading, afloat: true, sail: 'none' });
-        renderTable();
-        table.pulse(e.ship, '#7cff9a', ms() * 2);
-        float(e.ship, '⚓ back in play');
-        await sleep(ms() * 1.5);
-        break;
-      case 'CannonFired': {
-        const from = table.shipPosition(e.ship);
-        await Promise.all(
-          e.targets.map((t) => {
-            table.broadside(e.ship, t);
-            const to = table.shipPosition(t);
-            return from && to ? table.arc(from, to, '#ff7a2f', ms() * 1.4, true) : Promise.resolve();
-          }),
-        );
-        await sleep(ms());
-        break;
-      }
-      case 'PortGunsFired': {
-        const port = S().state.teams[e.team]?.homePort;
-        await Promise.all(
-          e.targets.map((t) => {
-            const to = table.shipPosition(t);
-            return port && to ? table.arc(table.hexToWorld(port), to, '#ff7a2f', ms() * 1.4, true) : Promise.resolve();
-          }),
-        );
-        await sleep(ms());
-        break;
-      }
-      case 'ShipRammed': {
-        const a = table.shipPosition(e.by), b = table.shipPosition(e.ship);
-        if (a && b) await table.arc(a, b, '#ffb03a', ms(), true);
-        break;
-      }
-      case 'DamageRolled': {
-        const at = table.shipPosition(e.ship) ?? (shown[e.ship] ? table.hexToWorld(shown[e.ship]!.hex) : undefined);
-        if (at) await table.rollDice(at, e.rolls, fast ? 500 : 1100, fast ? 700 : 1600);
-      }
-        float(e.ship, `🎲 ${e.rolls.join(' ')} → ${e.shipDamage ? `−${e.shipDamage} slot${e.shipDamage > 1 ? 's' : ''}` : ''}${e.shipDamage && e.crewDamage ? ', ' : ''}${e.crewDamage ? `−${e.crewDamage} crew` : ''}${!e.shipDamage && !e.crewDamage ? 'miss' : ''}`);
-        await sleep(ms() * 2);
-        break;
-      case 'TreasurePickedUp':
-      case 'TreasureScored':
-      case 'TreasureDropped':
-        if ('ship' in e) float(e.ship, e.type === 'TreasureScored' ? '🏆 +1' : e.type === 'TreasurePickedUp' ? '💎 picked up' : '💎 dropped');
-        renderTable();
-        await sleep(ms() * 2);
-        break;
-      case 'PartStarted':
-      case 'UpkeepStarted':
-      case 'SoloFinished':
-      case 'GameWon':
-        await sleep(ms() * 2);
-        break;
-      default:
-        if (text) await sleep(ms());
-    }
+    await showEvent(e, ms, text);
   }
   checkBoard();
   syncShown();
@@ -876,6 +771,455 @@ async function play(events: readonly GameEvent[]) {
   $('#banner').hidden = true;
   next();
 }
+
+/** Show one event on the board, animated: shared by the live playback of a turn and the turn replay. */
+async function showEvent(e: GameEvent, ms: () => number, text: string | null): Promise<void> {
+  const x = 'ship' in e && typeof e.ship === 'string' ? shown[e.ship] : undefined;
+  switch (e.type) {
+    case 'ShipMoved':
+      // Through a sea cave: the WentThroughCave that follows shows it (she doesn't glide across the island).
+      if (x && e.cave) break;
+      if (x) {
+        table.pulse(e.ship, MOVE_COLOUR[e.cause]);
+        table.trail(e.from, e.to, MOVE_COLOUR[e.cause], ms() * 3);
+        if (e.cause !== 'sail' && e.cause !== 'row') float(e.ship, MOVE_WORD[e.cause]);
+        x.hex = e.to;
+        await table.animateShip(e.ship, [e.to], x.heading, x.sail, ms() * 1.3);
+      }
+      break;
+    case 'ShipTurned':
+      if (x) {
+        table.pulse(e.ship, e.cause === 'steer' ? '#ffe08a' : MOVE_COLOUR.current);
+        float(e.ship, `${turnWord(x.heading, e.to)}${e.cause === 'steer' ? '' : ` (${e.cause})`}`);
+        x.heading = e.to;
+        await table.animateShip(e.ship, [], e.to, x.sail, ms() * 1.3);
+      }
+      break;
+    case 'SailSet':
+      if (x) {
+        x.sail = e.sail;
+        table.pulse(e.ship, '#ffffff', ms() * 1.5);
+        float(e.ship, `⛵ ${ORDER_WORD[e.order] ?? e.order}`);
+      }
+      renderTable();
+      await sleep(ms());
+      break;
+    case 'ShipStopped':
+      table.pulse(e.ship, '#e0402a', ms() * 2);
+      float(e.ship, `✋ stopped: ${STOP_WORD[e.by] ?? e.by}`);
+      await sleep(ms() * 1.5);
+      break;
+    case 'Teleported':
+    case 'WentThroughCave':
+      if (x) {
+        float(e.ship, e.type === 'Teleported' ? '🌀 whirlpool!' : '🕳 cave!');
+        await table.teleport(e.ship, e.to, x.heading, ms() * 2.4);
+        x.hex = e.to;
+        renderTable();
+        table.pulse(e.ship, MOVE_COLOUR.current, ms() * 2);
+      }
+      break;
+    case 'ShipSank':
+      // Off the map: show her sailing over the edge first, so it's clear why she sinks.
+      if (x && e.off) {
+        float(e.ship, '⚠ off the edge of the map!');
+        table.pulse(e.ship, '#e0402a', ms() * 2);
+        table.trail(x.hex, e.off, '#e0402a', ms() * 3);
+        await table.animateShip(e.ship, [e.off], x.heading, x.sail, ms() * 1.6);
+        await sleep(ms() * 0.5);
+      }
+      float(e.ship, '☠ sinks');
+      await table.sink(e.ship, ms() * 2.5);
+      if (x) x.afloat = false;
+      renderTable();
+      await sleep(ms());
+      break;
+    case 'ShipReturned':
+      if (x) Object.assign(x, { hex: e.at, heading: e.heading, afloat: true, sail: 'none' });
+      renderTable();
+      table.pulse(e.ship, '#7cff9a', ms() * 2);
+      float(e.ship, '⚓ back in play');
+      await sleep(ms() * 1.5);
+      break;
+    case 'CannonFired': {
+      const from = table.shipPosition(e.ship);
+      await Promise.all(
+        e.targets.map((t) => {
+          table.broadside(e.ship, t);
+          const to = table.shipPosition(t);
+          return from && to ? table.arc(from, to, '#ff7a2f', ms() * 1.4, true) : Promise.resolve();
+        }),
+      );
+      await sleep(ms());
+      break;
+    }
+    case 'PortGunsFired': {
+      const port = S().state.teams[e.team]?.homePort;
+      await Promise.all(
+        e.targets.map((t) => {
+          const to = table.shipPosition(t);
+          return port && to ? table.arc(table.hexToWorld(port), to, '#ff7a2f', ms() * 1.4, true) : Promise.resolve();
+        }),
+      );
+      await sleep(ms());
+      break;
+    }
+    case 'ShipRammed': {
+      const a = table.shipPosition(e.by), b = table.shipPosition(e.ship);
+      if (a && b) await table.arc(a, b, '#ffb03a', ms(), true);
+      break;
+    }
+    case 'DamageRolled': {
+      const at = table.shipPosition(e.ship) ?? (shown[e.ship] ? table.hexToWorld(shown[e.ship]!.hex) : undefined);
+      if (at) await table.rollDice(at, e.rolls, fast ? 500 : 1100, fast ? 700 : 1600);
+    }
+      float(e.ship, `🎲 ${e.rolls.join(' ')} → ${e.shipDamage ? `−${e.shipDamage} slot${e.shipDamage > 1 ? 's' : ''}` : ''}${e.shipDamage && e.crewDamage ? ', ' : ''}${e.crewDamage ? `−${e.crewDamage} crew` : ''}${!e.shipDamage && !e.crewDamage ? 'miss' : ''}`);
+      await sleep(ms() * 2);
+      break;
+    case 'TreasurePickedUp':
+    case 'TreasureScored':
+    case 'TreasureDropped':
+      if ('ship' in e) float(e.ship, e.type === 'TreasureScored' ? '🏆 +1' : e.type === 'TreasurePickedUp' ? '💎 picked up' : '💎 dropped');
+      renderTable();
+      await sleep(ms() * 2);
+      break;
+    case 'PartStarted':
+    case 'UpkeepStarted':
+    case 'SoloFinished':
+    case 'GameWon':
+      await sleep(ms() * 2);
+      break;
+    default:
+      if (text) await sleep(ms());
+  }
+}
+
+// ---------------- turn replay ----------------
+/**
+ * Step forward and back through the last turn (engineering design §11): the turn is rebuilt from the action log and split into
+ * beats (msb-rules/turn-replay.ts). Forward animates a beat with the same code as live play; back jumps to the board as it was.
+ * Each beat shows the cards in play for its Part, what happened, the rule behind it, and marks its cause on the board.
+ */
+let rp: { r: TurnReplay; at: number; busy: boolean; playing: boolean } | null = null;
+
+function openReplay() {
+  const r = turnReplay(S().setup, S().log, S().config);
+  if (!r) return toast('No turn has been played yet.');
+  rp = { r, at: 0, busy: false, playing: false };
+  $('#dock').hidden = true;
+  $('#playback').hidden = true;
+  $('#banner').hidden = true;
+  hideScreen();
+  table.resetView();
+  table.clearArcs();
+  showSnapshot(r.snapshots[0] as BoardSnapshot);
+  markBeat(null);
+  renderReplay();
+}
+
+function closeReplay() {
+  if (!rp) return;
+  rp = null;
+  $('#replay').hidden = true;
+  table.setMarks([]);
+  table.setLabels('replay', []);
+  table.clearArcs();
+  syncShown();
+  renderTable();
+  if (viewer) {
+    $('#dock').hidden = false;
+    renderProgramming();
+  } else next();
+}
+
+/** Put the board as it was at one moment of the replay. */
+function showSnapshot(snap: BoardSnapshot) {
+  shown = Object.fromEntries(
+    Object.entries(snap.ships).map(([id, x]) => [id, { hex: x.hex, heading: x.heading, sail: x.sail, afloat: x.afloat, ...(x.cargo ? { cargo: x.cargo } : {}) }]),
+  );
+  shownLoose = { ...snap.loose };
+  shownHolds = Object.fromEntries(Object.entries(snap.holds).map(([t, k]) => [t, [...k]]));
+  renderTable();
+}
+
+/** One beat forward, animated. */
+async function replayForward() {
+  if (!rp || rp.busy || rp.at >= rp.r.beats.length) return;
+  const here = rp;
+  const beat = here.r.beats[here.at] as Beat;
+  here.busy = true;
+  table.clearArcs();
+  markBeat(beat, here.r.snapshots[here.at]);
+  renderReplay(here.at + 1);
+  const ms = () => (fast ? 150 : 450);
+  for (const e of beat.events) {
+    if (rp !== here) return; // closed part-way
+    moveTreasure(e);
+    await showEvent(e, ms, caption(e));
+  }
+  if (rp !== here) return;
+  here.at++;
+  here.busy = false;
+  showSnapshot(here.r.snapshots[here.at] as BoardSnapshot);
+  renderReplay();
+  if (here.playing) {
+    if (here.at < here.r.beats.length) setTimeout(() => void replayForward(), 350);
+    else (here.playing = false), renderReplay();
+  }
+}
+
+/** Jump to just after beat `n` (0 = before the turn), without animation. */
+function replayJump(n: number) {
+  if (!rp || rp.busy) return;
+  rp.playing = false;
+  rp.at = Math.max(0, Math.min(rp.r.beats.length, n));
+  table.clearArcs();
+  showSnapshot(rp.r.snapshots[rp.at] as BoardSnapshot);
+  markBeat(rp.at > 0 ? (rp.r.beats[rp.at - 1] as Beat) : null, rp.r.snapshots[rp.at - 1]);
+  renderReplay();
+}
+
+const STEP_TITLE: Record<BeatKind, string> = {
+  reveal: 'Cards revealed',
+  sail: 'Move',
+  steer: 'Steer',
+  current: 'Currents',
+  fire: 'Action: cannons',
+  action: 'Action',
+  portGuns: 'Action: port guns',
+  hazard: 'Hazard damage',
+  drift: 'Wind drift',
+  upkeep: 'Upkeep',
+  return: 'Upkeep: back in play',
+  refit: 'Upkeep: refit',
+  wreck: 'Upkeep: wreck search',
+  treasure: 'Upkeep: new treasure',
+  weather: 'Upkeep: the weather moves on',
+  other: '',
+};
+const BEAT_ROW: Partial<Record<BeatKind, SlotRow>> = { sail: 'sail', steer: 'steer', fire: 'action', action: 'action' };
+const HAZARD_WORD: Record<string, string> = { roughWater: 'Rough water', storm: 'Storm', gale: 'Gale' };
+const strip = (html: string) => html.replace(/<[^>]+>/g, '');
+
+/** What happened in a beat, in words: for a Move or Steer, the card and what it did; otherwise the events' captions. */
+function beatWhat(beat: Beat, before: BoardSnapshot, after: BoardSnapshot): string {
+  const others = (skip: (e: GameEvent) => boolean) =>
+    beat.events.filter((e) => !skip(e)).map(caption).filter((t): t is string => !!t).map(strip);
+  const ship = beat.ship as string;
+  const card = (row: SlotRow) => after.revealed[ship]?.[row];
+  if (beat.kind === 'sail') {
+    const set = beat.events[0] as Extract<GameEvent, { type: 'SailSet' }>;
+    const moved = beat.events.filter((e) => e.type === 'ShipMoved' && e.ship === ship && (e.cause === 'sail' || e.cause === 'row')).length;
+    const id = card('sail');
+    const dir = DIRECTION_NAMES[(before.ships[ship] as BoardSnapshot['ships'][string]).heading];
+    const main = `${shipName(ship)}: ${ORDER_WORD[set.order] ?? set.order}${id ? ` (card ${id})` : ''}${moved ? `: ${moved} hex${moved === 1 ? '' : 'es'}${set.order === 'rowBack' ? ' backwards' : ` ${dir}`}` : ': stays put'}`;
+    return [main, ...others((e) => e.type === 'SailSet' || (e.type === 'ShipMoved' && e.ship === ship && (e.cause === 'sail' || e.cause === 'row')))].join(' · ');
+  }
+  if (beat.kind === 'steer') {
+    const t = beat.events[0] as Extract<GameEvent, { type: 'ShipTurned' }>;
+    const id = card('steer');
+    const c = id ? cards.get(id) : undefined;
+    return `${shipName(ship)}: ${c ? `${STEER_LABEL[c.steer]} (card ${id})` : 'steers'}: ${turnWord(t.from, t.to)}`;
+  }
+  return others(() => false).join(' · ');
+}
+
+/** The rule behind a beat, in a sentence. */
+function beatWhy(beat: Beat, before: BoardSnapshot): string {
+  const c = S().config;
+  switch (beat.kind) {
+    case 'reveal':
+      return "Each Part, everyone's cards for it are turned face up together (§5.1).";
+    case 'sail': {
+      const set = beat.events.find((e) => e.type === 'SailSet') as Extract<GameEvent, { type: 'SailSet' }>;
+      const ship = before.ships[set.ship] as BoardSnapshot['ships'][string];
+      const moved = beat.events.filter((e) => e.type === 'ShipMoved' && e.ship === set.ship).length;
+      const stop = beat.events.find((e) => e.type === 'ShipStopped' && e.ship === set.ship) as Extract<GameEvent, { type: 'ShipStopped' }> | undefined;
+      const stopped = stop ? ` She was stopped by ${STOP_WORD[stop.by] ?? stop.by} after ${moved} hex${moved === 1 ? '' : 'es'} (§3.2.0).` : '';
+      if (set.order === 'rowAhead' || set.order === 'rowBack') return `Rowing ignores the wind: 1 hex ${set.order === 'rowBack' ? 'backwards' : 'forwards'} (§6.1).${stopped}`;
+      if (set.order === 'anchor') return "Anchor: she doesn't move, and nothing can move her this Part (§6.1).";
+      if (set.order === 'none') return "No Sail card in this Part's Move slot: she doesn't sail (§6.1).";
+      const card = S().setup.weatherCards.find((w) => w.id === before.weather);
+      if (!card || card.strength === 'deadCalm' || card.strength === 'newFront') return `Dead Calm: no sail moves (§3.5).${stopped}`;
+      const wind = { strength: card.strength, direction: (card.direction ?? 0) as Direction };
+      const move = sailMove(set.sail, ship.heading, wind, c);
+      const point = POINT_NAME[pointOfSail(ship.heading, wind.direction)];
+      return `Heading ${DIRECTION_NAMES[ship.heading]} with a ${STRENGTH_NAME[card.strength]} wind blowing ${DIRECTION_NAMES[wind.direction]}: ${point.toLowerCase()}, so ${ORDER_WORD[set.order]} moves ${move < 0 ? `${-move} backwards` : move} (§6.2).${stopped}`;
+    }
+    case 'steer':
+      return 'Steering turns the ship where she is: Ease 60°, Hard 120°, Hard About 180° (§5.2).';
+    case 'current':
+      return 'After steering, currents move and turn ships, one hex a step, and never push (§6.6).';
+    case 'drift':
+      return 'Wind drift: 1 hex downwind; drift never pushes (§5.2).';
+    case 'fire':
+      return 'Fire Cannons: 1 DD to every rival ship in her broadsides (§7.1).';
+    case 'action':
+      return 'Repair fixes one damaged slot; Heal brings one wounded crew member back (§7.6).';
+    case 'portGuns':
+      return `A home port's guns hit every rival ship within ${c.homePortGunRange} hexes for ${c.dd.homePortGuns} DD, every Action phase (§8.2.4).`;
+    case 'hazard': {
+      const d = beat.events.find((e) => e.type === 'DamageRolled') as Extract<GameEvent, { type: 'DamageRolled' }>;
+      if (d.source === 'gale') return 'Gale: 1 DD for each Part she sailed at Full Sail, taken at Upkeep (§3.5).';
+      return `${HAZARD_WORD[d.source] ?? d.source}: ${d.dd} DD at the end of every Part she ends in it (§3.2.0).`;
+    }
+    case 'upkeep':
+      return 'Upkeep: sunk ships come back, refits, wreck searches, new treasure, the weather moves on, and everyone draws (§5.4).';
+    case 'return':
+      return 'A sunk ship comes back at her home port at Upkeep, repaired, with a new crew (§7.8).';
+    case 'refit':
+      return 'Ending a turn in her home port, a ship may refit, but spends the next turn there (§7.7).';
+    case 'wreck':
+      return 'A ship on a wreck (or next to one on land) searches it and gains a crew card (§7.9).';
+    case 'treasure':
+      return 'A new treasure appears for each one brought home (§8.2.1).';
+    case 'weather':
+      return 'The weather board moves on one space: new wind, maybe a new tide (§3.5, §6.4).';
+    default:
+      return '';
+  }
+}
+
+/** Mark a beat's cause on the board: the ship's path, what moved or stopped her, the port guns' range, hazards. */
+function markBeat(beat: Beat | null, before?: BoardSnapshot) {
+  const marks: { hex: Hex; colour: string; opacity?: number }[] = [];
+  const labels: { text: string; hex: Hex }[] = [];
+  if (beat && before) {
+    const pos: Record<string, Hex> = Object.fromEntries(Object.entries(before.ships).map(([id, x]) => [id, x.hex]));
+    const add = (hex: Hex, colour: string, label?: string, opacity?: number) => {
+      marks.push({ hex, colour, ...(opacity ? { opacity } : {}) });
+      if (label) labels.push({ text: label, hex });
+    };
+    if (beat.ship && pos[beat.ship]) add(pos[beat.ship] as Hex, '#ffffff', undefined, 0.35);
+    for (const e of beat.events) {
+      switch (e.type) {
+        case 'ShipMoved':
+          if (e.cause === 'current') add(e.from, MOVE_COLOUR.current, '🌊 current');
+          add(e.to, MOVE_COLOUR[e.cause], e.cave ? `🕳 cave ${e.cave}` : undefined, 0.5);
+          pos[e.ship] = e.to;
+          break;
+        case 'ShipTurned':
+          if (e.cause === 'current' && pos[e.ship]) add(pos[e.ship] as Hex, MOVE_COLOUR.current, '🌊 turned by the water');
+          break;
+        case 'ShipStopped':
+          add(e.blocked ?? e.at, '#e0402a', `✋ ${STOP_WORD[e.by] ?? e.by}`, 0.5);
+          break;
+        case 'Teleported':
+          add(e.from, '#b06cff', '🌀 whirlpool', 0.5);
+          add(e.to, '#b06cff', '🌀 out here', 0.5);
+          pos[e.ship] = e.to;
+          break;
+        case 'WentThroughCave':
+          pos[e.ship] = e.to;
+          break;
+        case 'DamageRolled':
+          if (HAZARD_WORD[e.source] && pos[e.ship]) add(pos[e.ship] as Hex, '#ff5a3c', `⚠ ${HAZARD_WORD[e.source]}: ${e.dd} DD`, 0.5);
+          break;
+        case 'PortGunsFired': {
+          const port = S().state.teams[e.team]?.homePort;
+          if (!port) break;
+          const range = S().config.homePortGunRange;
+          for (const k of Object.keys(S().setup.map.hexes)) {
+            const h2 = parseHexKey(k);
+            if (Math.max(Math.abs(h2.q - port.q), Math.abs(h2.r - port.r), Math.abs(h2.s - port.s)) <= range) add(h2, '#ff7a2f', undefined, 0.16);
+          }
+          add(port, '#ff7a2f', `💥 port guns: range ${range}`, 0.45);
+          for (const t of e.targets) if (pos[t]) add(pos[t] as Hex, '#ff3b1f', '🎯', 0.45);
+          break;
+        }
+        case 'CannonFired':
+          for (const t of e.targets) if (pos[t]) add(pos[t] as Hex, '#ff3b1f', '🎯', 0.45);
+          break;
+        case 'TreasurePickedUp':
+        case 'TreasureSpawned':
+          add(parseHexKey(e.at), '#ffd34d', e.type === 'TreasureSpawned' ? '💎 new treasure' : '💎', 0.45);
+          break;
+        case 'ShipReturned':
+          add(e.at, '#7cff9a', '⚓ back in play', 0.45);
+          pos[e.ship] = e.at;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  table.setMarks(marks);
+  table.setLabels('replay', labels.map((l) => ({ text: l.text, pos: table.hexToWorld(l.hex, 0.35), cls: 'rp-label' })));
+}
+
+/** The replay bar: the cards in play this Part, what the beat is and why, and the controls. `showing` is the beat being shown. */
+function renderReplay(showing = rp?.at ?? 0) {
+  if (!rp) return;
+  const { r } = rp;
+  const el = $('#replay');
+  el.hidden = false;
+  const beat = showing > 0 ? (r.beats[showing - 1] as Beat) : null;
+  const before = r.snapshots[Math.max(0, showing - 1)] as BoardSnapshot;
+  const after = r.snapshots[showing] as BoardSnapshot;
+  const part = beat ? beat.part : 0;
+  const active = beat ? BEAT_ROW[beat.kind] : undefined;
+  const ROWS: SlotRow[] = ['sail', 'steer', 'action'];
+  const cardsHtml =
+    part >= 1 && part <= 3
+      ? Object.keys(after.ships)
+          .map((id) => {
+            const cardsFor = after.revealed[id] ?? {};
+            const blocked = after.ships[id]?.blocked ?? [];
+            const me = beat?.ship === id;
+            return `<div class="rp-ship ${me ? 'me' : ''}"><span class="sw" style="--c:${colours[S().state.ships[id]!.player]}"></span><b>${esc(shipName(id))}</b>${ROWS.map((row) => {
+              const card = cardsFor[row];
+              const on = me && active === row;
+              if (!card) return `<span class="rp-band empty ${on ? 'on' : ''}" title="${ROW_NAME[row]}: ${blocked.includes(`${row}${part}`) ? 'damaged' : 'empty'}">${blocked.includes(`${row}${part}`) ? '✖' : '—'}</span>`;
+              return `<span class="rp-band ${on ? 'on' : ''}" style="${bandStyle(row, card)}" title="${ROW_NAME[row]}: ${esc(describeBand(card, row))} (card ${esc(card)})"></span>`;
+            }).join('')}</div>`;
+          })
+          .join('')
+      : '';
+  // The wind the beat was played in (the weather panel shows today's).
+  const wind = `wind: ${weatherName(before.weather)}`;
+  const title = !beat ? `Turn ${r.turn}: before the turn · ${wind}` : `${beat.part <= 3 ? `Part ${PART_NAME[beat.part]} · ` : ''}${STEP_TITLE[beat.kind]} · ${wind}`;
+  const text = beat ? beatWhat(beat, before, after) : 'Step forward to see each move, card and board effect of the turn.';
+  const why = beat ? beatWhy(beat, before) : '';
+  // The scrubber: one tick per beat, grouped by Part.
+  const ticks = r.beats
+    .map((b, i) => `${i === 0 || (r.beats[i - 1] as Beat).part !== b.part ? `<span class="rp-part">${b.part <= 3 ? `Part ${PART_NAME[b.part]}` : 'Upkeep'}</span>` : ''}<button class="rp-tick ${i < showing ? 'done' : ''} ${i === showing - 1 ? 'now' : ''}" data-i="${i + 1}" title="${esc(`${b.part <= 3 ? `Part ${PART_NAME[b.part]} · ` : ''}${STEP_TITLE[b.kind]}${b.ship ? `: ${shipName(b.ship)}` : ''}`)}"></button>`)
+    .join('');
+  el.innerHTML = `<div class="rp-cards">${cardsHtml}</div>
+    <div class="rp-text"><div class="rp-title">${esc(title)}</div><div class="rp-what">${esc(text)}</div>${why ? `<div class="rp-why">📖 ${esc(why)}</div>` : ''}</div>
+    <div class="rp-ctl">
+      <button class="btn sq" data-go="start" title="Start of the turn" aria-label="Start of the turn">⏮</button>
+      <button class="btn sq" data-go="back" title="Back one step (←)" aria-label="Back one step">◀</button>
+      <button class="btn sq primary" data-go="fwd" title="Forward one step (→)" aria-label="Forward one step">▶</button>
+      <button class="btn sq" data-go="end" title="End of the turn" aria-label="End of the turn">⏭</button>
+      <button class="btn" data-go="play">${rp.playing ? '⏸ Pause' : '▶▶ Play'}</button>
+      <span class="rp-count">${showing} / ${r.beats.length}</span>
+      <button class="btn" data-go="close">✕ Close</button>
+    </div>
+    <div class="rp-scrub">${ticks}</div>`;
+  el.querySelectorAll<HTMLElement>('[data-go]').forEach((b) => {
+    b.onclick = () => {
+      const go = b.dataset.go;
+      if (!rp) return;
+      if (go === 'close') return closeReplay();
+      if (go === 'start') return replayJump(0);
+      if (go === 'end') return replayJump(rp.r.beats.length);
+      if (go === 'back') return replayJump(rp.at - 1);
+      if (go === 'fwd') return void replayForward();
+      rp.playing = !rp.playing;
+      if (rp.playing && rp.at >= rp.r.beats.length) replayJump(0), (rp.playing = true);
+      renderReplay();
+      if (rp.playing) void replayForward();
+    };
+  });
+  el.querySelectorAll<HTMLElement>('.rp-tick').forEach((t) => (t.onclick = () => replayJump(Number(t.dataset.i))));
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!rp || (e.target as HTMLElement).matches('input, textarea')) return;
+  if (e.key === 'ArrowRight') void replayForward();
+  else if (e.key === 'ArrowLeft') replayJump(rp.at - 1);
+  else if (e.key === 'Escape') closeReplay();
+});
 
 /**
  * After a turn plays out, check that the board shows each ship where the game has her (for the game log): what the playback

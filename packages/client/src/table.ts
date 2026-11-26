@@ -53,6 +53,7 @@ export class Table {
   private ships = new Map<string, ShipObj>();
   private ghosts = new THREE.Group();
   private overlay = new THREE.Group();
+  private marks = new THREE.Group();
   private fx = new THREE.Group();
   private labels: { el: HTMLElement; pos: THREE.Vector3 }[] = [];
   private raycaster = new THREE.Raycaster();
@@ -615,6 +616,19 @@ export class Table {
       const m = new THREE.Mesh(this.hexGeo, mat);
       m.position.copy(this.hexToWorld(h, 0.08));
       this.overlay.add(m);
+    }
+  }
+
+  /** Hex markings in several colours at once (the turn replay: a ship's path, what caused it, what stopped her). */
+  setMarks(marks: { hex: Hex; colour: string; opacity?: number }[]) {
+    if (!this.marks.parent) this.scene.add(this.marks);
+    this.clearGroup(this.marks);
+    const onBoard = new Set(this.map.hexes.map(([c, r]) => `${c},${r}`));
+    for (const { hex, colour, opacity } of marks) {
+      if (!onBoard.has(hexToOffset(hex).join(','))) continue;
+      const m = new THREE.Mesh(this.hexGeo, new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: opacity ?? 0.38, depthWrite: false }));
+      m.position.copy(this.hexToWorld(hex, 0.09));
+      this.marks.add(m);
     }
   }
 
