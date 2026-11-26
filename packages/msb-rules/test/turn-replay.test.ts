@@ -85,6 +85,7 @@ describe('turn replay (engineering design §11)', () => {
       { type: 'DamageRolled', rule: '7.2', ship: 'A-ship', source: 'cliff', dd: 2, rolls: [1, 2], shipDamage: 1, crewDamage: 0 },
       { type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: 0, to: 1, cause: 'steer' },
       { type: 'ShipMoved', rule: '6', ship: 'A-ship', from: to, to: at, cause: 'current' },
+      { type: 'Teleported', rule: '3.2.1', ship: 'A-ship', from: at, to }, // a whirlpool between the move and the turn
       { type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: 1, to: 2, cause: 'current' },
       { type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: 2, to: 3, cause: 'current' }, // an eddy: turned without moving
       { type: 'ShipTurned', rule: '5.2', ship: 'A-ship', from: 3, to: 4, cause: 'cave' },
@@ -108,7 +109,7 @@ describe('turn replay (engineering design §11)', () => {
       'reveal@1/1',
       'sail:A-ship@1/4',
       'steer:A-ship@1/1',
-      'current:A-ship@1/2',
+      'current:A-ship@1/3',
       'current:A-ship@1/2', // the eddy's turn, with the cave turn after it
       'fire:A-ship@1/1',
       'action:A-ship@1/1',
@@ -159,6 +160,10 @@ describe('turn replay (engineering design §11)', () => {
     s = step(s, [
       { type: 'TreasureScored', rule: '8.2.4', ship: 'A-ship', team: 'T1', score: 1, kind: 'gold' },
       { type: 'ShipRefitted', rule: '7.7', ship: 'A-ship', repair: false, heal: true, recruit: 0 },
+    ]);
+    // A refit without repair leaves the damage.
+    expect(s.ships['A-ship']!.blocked).toEqual(['steer1']);
+    s = step(s, [
       { type: 'TreasureDropped', rule: '7.8', ship: 'B-ship', at: hex(2, 0), kind: 'pearl' },
       { type: 'ShipSank', rule: '7.8', ship: 'B-ship', reason: 'crew' },
       { type: 'WreckPlaced', rule: '7.9', at: hex(2, 0) },
@@ -173,7 +178,8 @@ describe('turn replay (engineering design §11)', () => {
     expect(s.ships['A-ship']!.cargo).toBeUndefined();
     expect(s.ships['B-ship']!.afloat).toBe(false);
     expect(s.wrecks).toEqual(['2,0']); // one placed, one searched away
-    s = step(s, [
+    // Coming back resets her sail and damage.
+    s = step({ ...s, ships: { ...s.ships, 'B-ship': { ...s.ships['B-ship']!, sail: 'full', blocked: ['sail2'] } } }, [
       { type: 'ShipReturned', rule: '7.8', ship: 'B-ship', at: hex(5, 0), heading: 4 },
       { type: 'TreasureScored', rule: '8.2.4', ship: 'B-ship', team: 'T2', score: 1, kind: 'rum' },
     ]);

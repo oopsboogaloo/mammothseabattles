@@ -903,7 +903,7 @@ async function showEvent(e: GameEvent, ms: () => number, text: string | null): P
  * beats (msb-rules/turn-replay.ts). Forward animates a beat with the same code as live play; back jumps to the board as it was.
  * Each beat shows the cards in play for its Part, what happened, the rule behind it, and marks its cause on the board.
  */
-let rp: { r: TurnReplay; at: number; busy: boolean; playing: boolean; timer?: number } | null = null;
+let rp: { r: TurnReplay; at: number; busy: boolean; playing: boolean; timer?: number; gen: number } | null = null;
 
 /** Stop Play: cancel the step it has scheduled. */
 function stopPlaying() {
@@ -915,7 +915,7 @@ function stopPlaying() {
 function openReplay() {
   const r = turnReplay(S().setup, S().log, S().config);
   if (!r) return toast('No turn has been played yet.');
-  rp = { r, at: 0, busy: false, playing: false };
+  rp = { r, at: 0, busy: false, playing: false, gen: 0 };
   $('#dock').hidden = true;
   $('#playback').hidden = true;
   $('#banner').hidden = true;
@@ -954,10 +954,21 @@ function showSnapshot(snap: BoardSnapshot) {
   renderTable();
 }
 
+/** The weather panel as it was at this step of the replay (the live one shows today's weather). */
+function replayWeather(snap: BoardSnapshot, ship?: string) {
+  const card = S().setup.weatherCards.find((c) => c.id === snap.weather);
+  const heading = ship && snap.ships[ship]?.afloat ? snap.ships[ship]!.heading : undefined;
+  $('#weather').innerHTML = `<h3>Weather &amp; tide <small>in the replayed turn</small></h3>
+    <div class="wx rose">${card ? sailRose(card, weatherArt(baseId(card.id)), heading) : ''}</div>
+    <div class="rose-key">${(['running', 'broadReach', 'closeHauled', 'windward'] as const).map((p) => `<span><i style="background:${POINT_COLOUR[p]}"></i>${POINT_NAME[p]}</span>`).join('')}${heading !== undefined ? `<span><i class="me"></i>${esc(shipName(ship as string))}'s heading</span>` : ''}</div>
+    <div class="wx-tide">Then: <b>${esc(weatherName(snap.weather))}</b> · Tide: <b>${TIDE_NAME[snap.tide]}</b></div>`;
+}
+
 /** One beat forward, animated. */
 async function replayForward() {
   if (!rp || rp.busy || rp.at >= rp.r.beats.length) return;
   const here = rp;
+  const gen = here.gen;
   const beat = here.r.beats[here.at] as Beat;
   here.busy = true;
   table.clearArcs();
@@ -972,6 +983,11 @@ async function replayForward() {
       if (!rp) (syncShown(), renderTable());
       return;
     }
+    // A jump while it animated: show where the jump went, over the animation's last frame.
+    if (here.gen !== gen) {
+      showSnapshot(here.r.snapshots[here.at] as BoardSnapshot);
+      return;
+    }
   }
   here.at++;
   here.busy = false;
@@ -983,10 +999,18 @@ async function replayForward() {
   }
 }
 
+/** One step back: while a step animates, back to just before it; otherwise to just before the last one shown. */
+function replayBack() {
+  if (rp) replayJump(rp.busy ? rp.at : rp.at - 1);
+}
+
 /** Jump to just after beat `n` (0 = before the turn), without animation. */
 function replayJump(n: number) {
-  if (!rp || rp.busy) return;
+  if (!rp) return;
   stopPlaying();
+  // During an animation the jump wins: the step that was playing stops after its current move (replayForward).
+  rp.gen++;
+  rp.busy = false;
   rp.at = Math.max(0, Math.min(rp.r.beats.length, n));
   table.clearArcs();
   showSnapshot(rp.r.snapshots[rp.at] as BoardSnapshot);
@@ -1173,6 +1197,7 @@ function renderReplay(showing = rp?.at ?? 0) {
   const after = r.snapshots[showing] as BoardSnapshot;
   const part = beat ? beat.part : 0;
   const active = beat ? BEAT_ROW[beat.kind] : undefined;
+  replayWeather(showing > 0 ? before : after, beat?.ship);
   const ROWS: SlotRow[] = ['sail', 'steer', 'action'];
   const cardsHtml =
     part >= 1 && part <= 3
@@ -1218,7 +1243,7 @@ function renderReplay(showing = rp?.at ?? 0) {
       if (go === 'close') return closeReplay();
       if (go === 'start') return replayJump(0);
       if (go === 'end') return replayJump(rp.r.beats.length);
-      if (go === 'back') return replayJump(rp.at - 1);
+      if (go === 'back') return replayBack();
       if (go === 'fwd') return void replayForward();
       if (rp.playing) {
         stopPlaying();
@@ -1236,7 +1261,7 @@ function renderReplay(showing = rp?.at ?? 0) {
 document.addEventListener('keydown', (e) => {
   if (!rp || (e.target as HTMLElement).matches('input, textarea')) return;
   if (e.key === 'ArrowRight') void replayForward();
-  else if (e.key === 'ArrowLeft') replayJump(rp.at - 1);
+  else if (e.key === 'ArrowLeft') replayBack();
   else if (e.key === 'Escape') closeReplay();
 });
 

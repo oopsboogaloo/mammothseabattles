@@ -111,7 +111,7 @@ export function lastTurn(setup: GameSetup, log: readonly LogEntry<Action>[], con
 }
 
 /** Does this event start a new beat? Returns the beat's kind and ship, or undefined to add it to the beat before. */
-function beatOf(e: GameEvent, prev: Beat | undefined, last: GameEvent | undefined): { kind: BeatKind; ship?: string } | undefined {
+function beatOf(e: GameEvent, prev: Beat | undefined): { kind: BeatKind; ship?: string } | undefined {
   switch (e.type) {
     case 'PartStarted':
       return { kind: 'reveal' };
@@ -123,9 +123,10 @@ function beatOf(e: GameEvent, prev: Beat | undefined, last: GameEvent | undefine
       return undefined;
     case 'ShipTurned':
       if (e.cause === 'steer') return { kind: 'steer', ship: e.ship };
-      // A current that turns her as it moves her is one beat.
+      // A current that moves her and then turns her is one beat, even with a whirlpool or treasure on the way between; a second
+      // turn (an eddy spinning her) starts a new one.
       if (e.cause === 'current') {
-        const sameStep = prev?.kind === 'current' && prev.ship === e.ship && last?.type === 'ShipMoved' && last.ship === e.ship;
+        const sameStep = prev?.kind === 'current' && prev.ship === e.ship && !prev.events.some((x) => x.type === 'ShipTurned');
         return sameStep ? undefined : { kind: 'current', ship: e.ship };
       }
       return undefined;
@@ -159,15 +160,13 @@ function beatOf(e: GameEvent, prev: Beat | undefined, last: GameEvent | undefine
 export function beatsOf(events: readonly GameEvent[]): Beat[] {
   const beats: { kind: BeatKind; part: number; ship?: string; events: GameEvent[] }[] = [];
   let part = 0;
-  let last: GameEvent | undefined;
   for (const e of events) {
     if (e.type === 'PlayerReady') continue;
     if (e.type === 'PartStarted') part = e.part;
     if (e.type === 'UpkeepStarted') part = 4;
-    const start = beatOf(e, beats.at(-1), last);
+    const start = beatOf(e, beats.at(-1));
     if (start) beats.push({ kind: start.kind, part, ...(start.ship ? { ship: start.ship } : {}), events: [e] });
     else (beats.at(-1) as { events: GameEvent[] }).events.push(e);
-    last = e;
   }
   return beats;
 }
