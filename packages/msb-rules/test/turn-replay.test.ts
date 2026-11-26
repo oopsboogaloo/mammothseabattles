@@ -60,6 +60,11 @@ describe('turn replay (engineering design §11)', () => {
 
   it('the last turn is the last one finished: none before the first, and not one still waiting on a decision', () => {
     expect(lastTurn(setup(2, 1), [], config)).toBeUndefined();
+    expect(turnReplay(setup(2, 1), [], config)).toBeUndefined();
+    // A ship carrying treasure shows her piece.
+    const carrying = game.init(setup(2, 1));
+    Object.assign(carrying.ships['P1-ship']!, { carrying: true, cargo: 'pearl' });
+    expect(snapshotOf(carrying).ships['P1-ship']!.cargo).toBe('pearl');
     const { log, turnEnds } = randomGame(2, 1, 6);
     const first = lastTurn(setup(2, 1), log.slice(0, turnEnds[0]), config)!;
     expect(first.turn).toBe(1);
