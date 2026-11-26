@@ -67,7 +67,8 @@ export type GameEvent =
   | { readonly type: 'SailSet'; readonly rule: '6.1'; readonly ship: ShipId; readonly sail: SailLevel; readonly order: string }
   /** `cave`: the letter of the sea cave she went through to get there (the two hexes aren't next to each other, rules §3.2.2). */
   | { readonly type: 'ShipMoved'; readonly rule: '6'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex; readonly cause: MoveCause; readonly cave?: string }
-  | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason }
+  /** `blocked`: the hex that stopped her (for a wall reef, the hex beyond it); none when her own anchor or stranding holds her. */
+  | { readonly type: 'ShipStopped'; readonly rule: '3.2.0'; readonly ship: ShipId; readonly at: Hex; readonly by: StopReason; readonly blocked?: Hex }
   | { readonly type: 'ShipRammed'; readonly rule: '6.5'; readonly ship: ShipId; readonly by: ShipId }
   | { readonly type: 'ShipTurned'; readonly rule: '5.2'; readonly ship: ShipId; readonly from: Direction; readonly to: Direction; readonly cause: 'steer' | 'cave' | 'current' }
   | { readonly type: 'Teleported'; readonly rule: '3.2.1'; readonly ship: ShipId; readonly from: Hex; readonly to: Hex }

@@ -173,7 +173,7 @@ describe('rowing and Anchor (rules §6.1)', () => {
     expect(pos(s, 'B-ship')).toEqual(neighbor(O, N));
     expect(events).toContainEqual({ type: 'ShipRammed', rule: '6.5', ship: 'B-ship', by: 'A-ship' });
     expect(events).toContainEqual(expect.objectContaining({ type: 'DamageRolled', ship: 'B-ship', source: 'ram', dd: 1 }));
-    expect(events).toContainEqual({ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'anchored' });
+    expect(events).toContainEqual({ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'anchored', blocked: neighbor(O, N) });
     expect(s.ships['B-ship']!.heading).toBe(S);
   });
 });
@@ -254,7 +254,7 @@ describe('pushing and ramming (rules §6.5)', () => {
     place(s, 'B-ship', neighbor(O, N));
     const events = run(s, (m) => driftShip(m, s.ships['A-ship']!));
     expect(pos(s, 'A-ship')).toEqual(O);
-    expect(events).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'ship' }]);
+    expect(events).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'ship', blocked: neighbor(O, N) }]);
   });
 
   it('a rammed ship that sinks frees the hex for the rammer', () => {
@@ -280,12 +280,12 @@ describe('obstacles (rules §3.2.0, §3.1)', () => {
     const s = game3(map({ [hexKey(hex(0, -1))]: { terrain: 'beach' }, [hexKey(hex(1, -1))]: { terrain: 'cliff' } }, { wallReefs: [{ hex: hexKey(O), side: S }] }));
     place(s, 'A-ship', O);
     const beach = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'));
-    expect(beach).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'beach' }]);
+    expect(beach).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'beach', blocked: hex(0, -1) }]);
     const cliff = run(s, (m) => stepShip(m, s.ships['A-ship']!, NE, 'drift'), NO_DAMAGE);
     expect(cliff[0]).toMatchObject({ type: 'DamageRolled', source: 'cliff', dd: 2 });
     const reef = run(s, (m) => stepShip(m, s.ships['A-ship']!, S, 'current'), NO_DAMAGE);
     expect(reef[0]).toMatchObject({ type: 'DamageRolled', source: 'wallReef', dd: 2 });
-    expect(reef.at(-1)).toMatchObject({ type: 'ShipStopped', by: 'wallReef' });
+    expect(reef.at(-1)).toMatchObject({ type: 'ShipStopped', by: 'wallReef', blocked: neighbor(O, S) });
     // The same wall reef, written on the other hex.
     const t = game3(map({}, { wallReefs: [{ hex: hexKey(neighbor(O, S)), side: N }] }));
     place(t, 'A-ship', O);
@@ -324,7 +324,7 @@ describe('obstacles (rules §3.2.0, §3.1)', () => {
     const s = game3(map());
     place(s, 'A-ship', hex(0, -4));
     const safe = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'), makeConfig({ safeEdge: true }));
-    expect(safe).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: hex(0, -4), by: 'edge' }]);
+    expect(safe).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: hex(0, -4), by: 'edge', blocked: hex(0, -5) }]);
     const events = run(s, (m) => stepShip(m, s.ships['A-ship']!, N, 'sail'));
     expect(events[0]).toEqual({ type: 'ShipSank', rule: '7.8', ship: 'A-ship', reason: 'edge', off: hex(0, -5) });
     expect(pos(s, 'A-ship')).toEqual(hex(0, -4));

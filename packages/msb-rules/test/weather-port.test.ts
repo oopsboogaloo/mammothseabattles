@@ -144,7 +144,7 @@ describe('tides and stranding (rules §6.4, §6.7)', () => {
     expect(events).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'stuck' }]);
     place(s, 'B', neighbor(O, S), N);
     const rammed = run(s, (m) => stepShip(m, ship(s, 'B'), N, 'sail'));
-    expect(rammed).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'B-ship', at: neighbor(O, S), by: 'beach' }]);
+    expect(rammed).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'B-ship', at: neighbor(O, S), by: 'beach', blocked: O }]);
     place(s, 'B', hex(2, 0));
     const acted = run(s, (m) => runActions(s, [ship(s, 'A'), ship(s, 'B')], 1, MISS, m.ctx));
     expect(acted.find((e) => e.type === 'CannonFired')).toMatchObject({ ship: 'A-ship', targets: ['B-ship'] });

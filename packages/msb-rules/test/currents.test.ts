@@ -167,7 +167,7 @@ describe('blocked and jumping currents (example 8)', () => {
     place(s, 'B', neighbor(O, N));
     const events = currents(s);
     expect(ship(s, 'A')).toMatchObject({ pos: O, heading: N });
-    expect(events).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'ship' }]);
+    expect(events).toEqual([{ type: 'ShipStopped', rule: '3.2.0', ship: 'A-ship', at: O, by: 'ship', blocked: neighbor(O, N) }]);
   });
 
   it('a jump goes straight to the end hex, ignoring the hexes between; if it is occupied she stays put', () => {
