@@ -103,3 +103,27 @@
 #hand .hand-arrow.left { left: 2px; }
 #hand .hand-arrow.right { right: 2px; }
 #hand .hand-arrow:disabled { opacity: .3; cursor: default; }
+
+/* Turn replay (engineering design §11): cards in play, what happened and why, controls and a scrubber. */
+#replay { display: grid; grid-template-columns: auto 1fr; grid-template-areas: 'cards text' 'ctl ctl' 'scrub scrub'; gap: calc(.6 * var(--u)) calc(1.4 * var(--u)); padding: calc(.8 * var(--u)) calc(1.2 * var(--u)); background: linear-gradient(#4a3524, var(--wood2)); color: #f4e6c8; box-shadow: 0 -6px 18px rgba(0,0,0,.5); position: relative; z-index: 4; }
+#replay .rp-cards { grid-area: cards; display: grid; gap: calc(.4 * var(--u)); align-content: center; }
+#replay .rp-ship { display: flex; align-items: center; gap: calc(.5 * var(--u)); opacity: .7; font-size: max(12px, calc(1.3 * var(--u))); }
+#replay .rp-ship.me { opacity: 1; }
+#replay .rp-ship b { min-width: 6em; }
+#replay .sw { width: .9em; height: .9em; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px rgba(0,0,0,.4); }
+#replay .rp-band { width: max(84px, calc(11 * var(--u))); aspect-ratio: 2.33; border-radius: 4px; background-color: #000; background-repeat: no-repeat; background-size: 108.7% var(--bs); background-position: 50% var(--bp); box-shadow: 0 2px 5px rgba(0,0,0,.45); display: grid; place-items: center; }
+#replay .rp-band.empty { background: rgba(0,0,0,.25); border: 1px dashed rgba(240,220,180,.35); color: #e9d8b5; }
+#replay .rp-band.on { outline: 3px solid var(--gold); outline-offset: 2px; }
+#replay .rp-text { grid-area: text; min-width: 0; display: grid; gap: calc(.3 * var(--u)); align-content: center; }
+#replay .rp-title { font: 800 max(15px, calc(1.9 * var(--u))) Georgia, serif; }
+#replay .rp-what { font-size: max(13px, calc(1.5 * var(--u))); }
+#replay .rp-why { font-size: max(12px, calc(1.35 * var(--u))); color: #ffe9a8; }
+#replay .rp-ctl { grid-area: ctl; display: flex; flex-wrap: wrap; align-items: center; gap: calc(.5 * var(--u)); }
+#replay .rp-count { margin-left: auto; opacity: .75; font-variant-numeric: tabular-nums; }
+#replay .rp-scrub { grid-area: scrub; display: flex; flex-wrap: wrap; align-items: center; gap: 3px; }
+#replay .rp-part { margin: 0 4px 0 10px; font-size: max(11px, calc(1.1 * var(--u))); font-weight: 700; opacity: .8; }
+#replay .rp-part:first-child { margin-left: 0; }
+#replay .rp-tick { width: max(14px, calc(1.6 * var(--u))); height: max(14px, calc(1.6 * var(--u))); border-radius: 3px; border: 0; padding: 0; background: rgba(243,231,204,.25); cursor: pointer; }
+#replay .rp-tick.done { background: rgba(243,231,204,.6); }
+#replay .rp-tick.now { background: var(--gold); box-shadow: 0 0 0 2px #fff; }
+.rp-label { background: rgba(20,14,10,.82); color: #fff; font-weight: 700; font-size: max(11px, calc(1.25 * var(--u))); padding: .15em .5em; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -100%); pointer-events: none; }

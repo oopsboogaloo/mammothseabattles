@@ -21,3 +21,4 @@ export * from './sinking';
 export * from './upkeep';
 export * from './treasure';
 export * from './audit';
+export * from './turn-replay';

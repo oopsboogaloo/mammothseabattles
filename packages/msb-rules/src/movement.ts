@@ -70,8 +70,9 @@ export interface MoveContext {
   readonly ctx: ResolutionContext<GameEvent>;
 }
 
-function stop(m: MoveContext, ship: Ship, by: StopReason): StepResult {
-  m.ctx.emit({ type: 'ShipStopped', rule: '3.2.0', ship: ship.id, at: ship.pos, by });
+/** She stops (§3.2.0); `blocked` is the hex (or, for a wall reef, the hex beyond the reef) that stopped her, if any. */
+function stop(m: MoveContext, ship: Ship, by: StopReason, blocked?: Hex): StepResult {
+  m.ctx.emit({ type: 'ShipStopped', rule: '3.2.0', ship: ship.id, at: ship.pos, by, ...(blocked ? { blocked } : {}) });
   return 'stopped';
 }
 
@@ -97,7 +98,7 @@ export function stepShip(m: MoveContext, ship: Ship, dir: Direction, cause: Move
   // 1. Edges: wall reef, then cave mouth.
   if (wallReefBetween(state, from, dir)) {
     damage(m, ship, config.dd.wallReef, 'wallReef');
-    return ship.status === 'afloat' ? stop(m, ship, 'wallReef') : 'sunk';
+    return ship.status === 'afloat' ? stop(m, ship, 'wallReef', neighbor(from, dir)) : 'sunk';
   }
   const cave = caveEntered(state, from, dir);
   if (cave) return throughCave(m, ship, cave, cause);
@@ -115,21 +116,21 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
   const from = ship.pos;
   // 2. Off the map: she sinks in the hex she was leaving, or stops with the Safe edge rule (§3.1).
   const hex = state.setup.map.hexes[hexKey(to)];
-  if (!hex) return config.safeEdge ? stop(m, ship, 'edge') : sink(m, ship, 'edge', to);
+  if (!hex) return config.safeEdge ? stop(m, ship, 'edge', to) : sink(m, ship, 'edge', to);
 
   // 3. Terrain at the current tide.
   if (hex.terrain === 'cliff') {
     damage(m, ship, config.dd.cliff, 'cliff');
-    return ship.status === 'afloat' ? stop(m, ship, 'cliff') : 'sunk';
+    return ship.status === 'afloat' ? stop(m, ship, 'cliff', to) : 'sunk';
   }
-  if (isLand(hex.terrain, tide(state.weather))) return stop(m, ship, 'beach');
+  if (isLand(hex.terrain, tide(state.weather))) return stop(m, ship, 'beach', to);
 
   // 4. Another ship: ship movement pushes her (chains); currents and drift stay put (§6.5).
   const other = shipAt(state, to);
   // A stranded ship's hex is dry land (§6.7): it stops ships like a beach, and she can't be pushed or rammed.
-  if (other?.stuck) return stop(m, ship, 'beach');
+  if (other?.stuck) return stop(m, ship, 'beach', to);
   if (other) {
-    if (!PUSHES.has(cause)) return stop(m, ship, 'ship');
+    if (!PUSHES.has(cause)) return stop(m, ship, 'ship', to);
     const firstHit = cause !== 'push';
     const anchored = other.anchored;
     const pushed = other.anchored ? 'stopped' : stepShip(m, other, dir as Direction, 'push');
@@ -139,8 +140,8 @@ export function enterHex(m: MoveContext, ship: Ship, to: Hex, dir: Direction | u
       if (!offerKnockLoose(state, ship, other, m.ctx)) damage(m, other, config.dd.ram, 'ram');
     }
     // An anchored ship stops the mover even if the ram sinks her (§6.1).
-    if (anchored) return stop(m, ship, 'anchored');
-    if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, 'ship');
+    if (anchored) return stop(m, ship, 'anchored', to);
+    if (pushed === 'stopped' && shipAt(state, to)) return stop(m, ship, 'ship', to);
   }
 
   // 5. Move in, then hex effects.
