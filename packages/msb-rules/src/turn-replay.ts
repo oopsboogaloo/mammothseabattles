@@ -61,6 +61,8 @@ export interface BoardSnapshot {
   readonly loose: Readonly<Record<string, TreasureKind>>;
   /** Pieces brought home, per team. */
   readonly holds: Readonly<Record<string, readonly TreasureKind[]>>;
+  /** Shipwreck tokens, as hex keys. */
+  readonly wrecks: readonly string[];
   /** The weather card now, and the tide. */
   readonly weather: string;
   readonly tide: Tide;
@@ -181,6 +183,7 @@ export function snapshotOf(state: GameState): BoardSnapshot {
     ),
     loose: Object.fromEntries(state.treasures.map((k) => [k, state.treasureKinds[k] as TreasureKind])),
     holds: Object.fromEntries(Object.values(state.teams).map((t) => [t.id, [...t.hold]])),
+    wrecks: [...state.wrecks],
     weather: state.weather.spaces[state.weather.now] as string,
     tide: tide(state.weather),
     part: state.part,
@@ -193,7 +196,7 @@ export function applyBeat(before: BoardSnapshot, beat: Beat): BoardSnapshot {
   const ships: Record<string, ReplayShip & { cargo?: TreasureKind }> = Object.fromEntries(Object.entries(before.ships).map(([id, s]) => [id, { ...s }]));
   const loose: Record<string, TreasureKind> = { ...before.loose };
   const holds: Record<string, TreasureKind[]> = Object.fromEntries(Object.entries(before.holds).map(([t, h]) => [t, [...h]]));
-  let { weather, tide: tideNow, part, revealed } = before;
+  let { weather, tide: tideNow, part, revealed, wrecks } = before;
   const set = (id: string, change: Partial<ReplayShip>) => Object.assign(ships[id] as object, change);
   const uncargo = (id: string) => delete (ships[id] as { cargo?: TreasureKind }).cargo;
   for (const e of beat.events) {
@@ -251,6 +254,12 @@ export function applyBeat(before: BoardSnapshot, beat: Beat): BoardSnapshot {
       case 'WeatherAdvanced':
         weather = e.now;
         break;
+      case 'WreckPlaced':
+        wrecks = [...wrecks, hexKey(e.at)];
+        break;
+      case 'WreckSearched':
+        wrecks = wrecks.filter((k) => k !== e.at);
+        break;
       case 'TideChanged':
         tideNow = e.tide;
         break;
@@ -258,7 +267,7 @@ export function applyBeat(before: BoardSnapshot, beat: Beat): BoardSnapshot {
         break;
     }
   }
-  return { ships, loose, holds, weather, tide: tideNow, part, revealed };
+  return { ships, loose, holds, wrecks, weather, tide: tideNow, part, revealed };
 }
 
 /** The last turn played, as beats and a board snapshot after each; undefined before the first turn has been played. */

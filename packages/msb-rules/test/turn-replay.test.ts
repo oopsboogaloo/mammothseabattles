@@ -38,7 +38,7 @@ function randomGame(players: number, seed: number, turns: number) {
 }
 
 /** What the board shows, without the replay-only fields. */
-const board = (s: BoardSnapshot) => ({ ships: s.ships, loose: s.loose, holds: s.holds, weather: s.weather, tide: s.tide });
+const board = (s: BoardSnapshot) => ({ ships: s.ships, loose: s.loose, holds: s.holds, wrecks: s.wrecks, weather: s.weather, tide: s.tide });
 
 describe('turn replay (engineering design §11)', () => {
   it('stepping through a turn beat by beat ends exactly where the engine ended it, every turn of real games', () => {
@@ -131,6 +131,7 @@ describe('turn replay (engineering design §11)', () => {
       ships: { 'A-ship': { hex: hex(0, 0), heading: 0, sail: 'none', afloat: true, blocked: [] }, 'B-ship': { hex: hex(2, 0), heading: 3, sail: 'none', afloat: true, cargo: 'ruby', blocked: [] } },
       loose: { '1,0': 'gold' },
       holds: { T1: [] },
+      wrecks: ['3,0'],
       weather: 'firm-n-1',
       tide: 'mid',
       part: 0,
@@ -160,6 +161,8 @@ describe('turn replay (engineering design §11)', () => {
       { type: 'ShipRefitted', rule: '7.7', ship: 'A-ship', repair: false, heal: true, recruit: 0 },
       { type: 'TreasureDropped', rule: '7.8', ship: 'B-ship', at: hex(2, 0), kind: 'pearl' },
       { type: 'ShipSank', rule: '7.8', ship: 'B-ship', reason: 'crew' },
+      { type: 'WreckPlaced', rule: '7.9', at: hex(2, 0) },
+      { type: 'WreckSearched', rule: '7.9', ship: 'A-ship', at: '3,0' },
       { type: 'UpkeepStarted', rule: '5.4', turn: 1 },
       { type: 'ShipRefitted', rule: '7.7', ship: 'A-ship', repair: true, heal: true, recruit: 0 },
       { type: 'WeatherAdvanced', rule: '3.5', now: 'light-s', next: 'dead-calm', space: 2, newFronts: 0 },
@@ -169,6 +172,7 @@ describe('turn replay (engineering design §11)', () => {
     expect(s.ships['A-ship']).toMatchObject({ blocked: [] });
     expect(s.ships['A-ship']!.cargo).toBeUndefined();
     expect(s.ships['B-ship']!.afloat).toBe(false);
+    expect(s.wrecks).toEqual(['2,0']); // one placed, one searched away
     s = step(s, [
       { type: 'ShipReturned', rule: '7.8', ship: 'B-ship', at: hex(5, 0), heading: 4 },
       { type: 'TreasureScored', rule: '8.2.4', ship: 'B-ship', team: 'T2', score: 1, kind: 'rum' },

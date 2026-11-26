@@ -83,6 +83,8 @@ let shown: Record<string, { hex: Hex; heading: Direction; sail: SailLevel; afloa
 /** Treasure as shown on the table: loose pieces by hex, and each team's pieces brought home (they lag the state during play-back). */
 let shownLoose: Record<string, TreasureKind> = {};
 let shownHolds: Record<string, TreasureKind[]> = {};
+/** Wreck tokens as the board shows them (the turn replay shows them as they were). */
+let shownWrecks: string[] = [];
 let log: string[] = [];
 
 const table = new Table($('#table'), $('#labels'));
@@ -609,6 +611,7 @@ function syncShown() {
     shown[ship.id] = { hex: ship.pos, heading: ship.heading, sail: ship.sail, afloat: ship.status === 'afloat', ...(ship.cargo ? { cargo: ship.cargo } : {}) };
   shownLoose = Object.fromEntries(s.treasures.map((k) => [k, s.treasureKinds[k] ?? 'gold']));
   shownHolds = Object.fromEntries(Object.values(s.teams).map((t) => [t.id, [...(t.hold ?? [])]]));
+  shownWrecks = [...s.wrecks];
 }
 
 /** Keep the shown treasure in step with an event as it plays. */
@@ -648,7 +651,7 @@ function renderTable() {
     Object.entries(shownHolds).map(([team, kinds]) => ({ hex: s.teams[team]!.homePort, kinds })),
   );
   const marks = [
-    ...s.wrecks.map((k) => ({ text: '⚓︎☠', pos: table.hexToWorld(parseHexKey(k), 0.3), cls: 'tok' })),
+    ...shownWrecks.map((k) => ({ text: '⚓︎☠', pos: table.hexToWorld(parseHexKey(k), 0.3), cls: 'tok' })),
   ];
   table.setLabels('tokens', marks);
 }
@@ -900,7 +903,14 @@ async function showEvent(e: GameEvent, ms: () => number, text: string | null): P
  * beats (msb-rules/turn-replay.ts). Forward animates a beat with the same code as live play; back jumps to the board as it was.
  * Each beat shows the cards in play for its Part, what happened, the rule behind it, and marks its cause on the board.
  */
-let rp: { r: TurnReplay; at: number; busy: boolean; playing: boolean } | null = null;
+let rp: { r: TurnReplay; at: number; busy: boolean; playing: boolean; timer?: number } | null = null;
+
+/** Stop Play: cancel the step it has scheduled. */
+function stopPlaying() {
+  if (!rp) return;
+  rp.playing = false;
+  clearTimeout(rp.timer);
+}
 
 function openReplay() {
   const r = turnReplay(S().setup, S().log, S().config);
@@ -919,6 +929,7 @@ function openReplay() {
 
 function closeReplay() {
   if (!rp) return;
+  stopPlaying();
   rp = null;
   $('#replay').hidden = true;
   table.setMarks([]);
@@ -939,6 +950,7 @@ function showSnapshot(snap: BoardSnapshot) {
   );
   shownLoose = { ...snap.loose };
   shownHolds = Object.fromEntries(Object.entries(snap.holds).map(([t, k]) => [t, [...k]]));
+  shownWrecks = [...snap.wrecks];
   renderTable();
 }
 
@@ -953,17 +965,20 @@ async function replayForward() {
   renderReplay(here.at + 1);
   const ms = () => (fast ? 150 : 450);
   for (const e of beat.events) {
-    if (rp !== here) return; // closed part-way
     moveTreasure(e);
     await showEvent(e, ms, caption(e));
+    // Closed part-way: the animation that was running has now finished, so put the live board back over it.
+    if (rp !== here) {
+      if (!rp) (syncShown(), renderTable());
+      return;
+    }
   }
-  if (rp !== here) return;
   here.at++;
   here.busy = false;
   showSnapshot(here.r.snapshots[here.at] as BoardSnapshot);
   renderReplay();
   if (here.playing) {
-    if (here.at < here.r.beats.length) setTimeout(() => void replayForward(), 350);
+    if (here.at < here.r.beats.length) here.timer = window.setTimeout(() => rp === here && here.playing && void replayForward(), 350);
     else (here.playing = false), renderReplay();
   }
 }
@@ -971,7 +986,7 @@ async function replayForward() {
 /** Jump to just after beat `n` (0 = before the turn), without animation. */
 function replayJump(n: number) {
   if (!rp || rp.busy) return;
-  rp.playing = false;
+  stopPlaying();
   rp.at = Math.max(0, Math.min(rp.r.beats.length, n));
   table.clearArcs();
   showSnapshot(rp.r.snapshots[rp.at] as BoardSnapshot);
@@ -1205,8 +1220,12 @@ function renderReplay(showing = rp?.at ?? 0) {
       if (go === 'end') return replayJump(rp.r.beats.length);
       if (go === 'back') return replayJump(rp.at - 1);
       if (go === 'fwd') return void replayForward();
-      rp.playing = !rp.playing;
-      if (rp.playing && rp.at >= rp.r.beats.length) replayJump(0), (rp.playing = true);
+      if (rp.playing) {
+        stopPlaying();
+        return renderReplay();
+      }
+      if (rp.at >= rp.r.beats.length) replayJump(0);
+      rp.playing = true;
       renderReplay();
       if (rp.playing) void replayForward();
     };
