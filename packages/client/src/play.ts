@@ -268,7 +268,9 @@ function renderProgramming() {
     const events = act({ type: 'ready' });
     viewer = null;
     $('#dock').hidden = true;
-    if (S().state.phase === 'programming') return next();
+    // Others still to program: nothing to show yet. (Not "phase is programming": a turn that resolves straight through, with no
+    // decision to pause it, is back in programming for the next turn, and must still be played out.)
+    if (!events.some((e) => e.type !== 'PlayerReady')) return next();
     void play(events);
   };
   const replayBtn = $('#replay-btn');
